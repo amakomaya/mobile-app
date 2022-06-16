@@ -2,8 +2,12 @@ import 'dart:ui';
 
 import 'package:aamako_maya/src/core/app_assets/app_assets.dart';
 import 'package:aamako_maya/src/core/theme/app_colors.dart';
-import 'package:aamako_maya/src/core/widgets/primary_action_button.dart';
+import 'package:aamako_maya/src/core/widgets/buttons/primary_action_button.dart';
+import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
+import 'package:aamako_maya/src/features/authentication/screens/login_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({Key? key}) : super(key: key);
@@ -29,13 +33,21 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset(AppAssets.logo),
-                  Text(
-                    'SKIP',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(fontWeight: FontWeight.w600),
+                  Image.asset(
+                    AppAssets.logo,
+                    height: 197.h,
+                    width: 197.h,
+                  ),
+                  GestureDetector(
+                    onTap: ()=> Navigator.of(context).push(MaterialPageRoute(
+                            builder: (ctx) => const LoginPage(),),),
+                    child: Text(
+                      'SKIP',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(fontWeight: FontWeight.w600),
+                    ),
                   )
                 ],
               ),
@@ -64,11 +76,13 @@ class _OnboardingPageState extends State<OnboardingPage> {
                               'All motherhood needs in one app',
                               style: Theme.of(context).textTheme.headlineMedium,
                             ),
-                            SizedBox(
-                              height: size.height * 0.03,
-                            ),
+                            VerticalSpace(20.h),
                             Flexible(
-                              child: Image.asset(AppAssets.profileImage),
+                              child: Image.asset(
+                                AppAssets.profileImage,
+                                height: 247.h,
+                                width: 247.h,
+                              ),
                             ),
                           ],
                         ),
@@ -80,7 +94,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   valueListenable: _currentIndex,
                   builder: (context, value, _) {
                     return ListView.builder(
-                    
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: _onboardList.length,
                         shrinkWrap: true,
@@ -88,8 +101,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         itemBuilder: (context, index) {
                           return Container(
                             margin: const EdgeInsets.only(right: 7),
-                            height: 8,
-                            width: 8,
+                            height: 8.h,
+                            width: 8.h,
                             decoration: BoxDecoration(
                                 color: value == index
                                     ? AppColors.primaryRed
@@ -99,21 +112,20 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         });
                   }),
             ),
-            SizedBox(
-              height: size.height * 0.02,
-            ),
+            VerticalSpace(15.h),
             ValueListenableBuilder(
                 valueListenable: _currentIndex,
                 builder: (context, value, _) {
                   return PrimaryActionButton(
                     title:
                         value == _onboardList.length - 1 ? 'Continue' : 'Next',
-                    onpress: () {},
+                    onpress: value == _onboardList.length - 1
+                        ? () => Navigator.of(context).push(MaterialPageRoute(
+                            builder: (ctx) => const LoginPage(),),)
+                        : ()=> _controller.nextPage(duration: const Duration(milliseconds: 400), curve: Curves.decelerate,),
                   );
                 }),
-            SizedBox(
-              height: size.height * 0.1,
-            ),
+           VerticalSpace(80.h)
           ],
         ),
       ),

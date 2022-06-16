@@ -1,0 +1,144 @@
+import 'dart:ui';
+
+import 'package:aamako_maya/src/core/app_assets/app_assets.dart';
+import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
+import 'package:aamako_maya/src/core/widgets/scaffold/primary_scaffold.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../theme/app_colors.dart';
+import '../helper_widgets/blank_space.dart';
+
+class DrawerWidget extends StatelessWidget {
+  const DrawerWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    final theme = Theme.of(context);
+    return BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+      child: Container(
+        color: Colors.white,
+        width: size.width * 0.8,
+        height: size.height,
+        child: Stack(
+          children: [
+            Container(
+              height: 225.h,
+              decoration: const BoxDecoration(
+                  color: AppColors.primaryRed,
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(25),
+                    bottomRight: Radius.circular(25),
+                  )),
+            ),
+            Padding(
+                padding: EdgeInsets.only(
+                  top: 30.h,
+                  left: 10,
+                  right: 10,
+                  bottom: 39.h,
+                ),
+                child: Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.topCenter,
+                      child: CircleAvatar(
+                        backgroundImage: AssetImage(AppAssets.girl),
+                        radius: 30.w,
+                      ),
+                    ),
+                    VerticalSpace(5.h),
+                    Align(
+                        alignment: Alignment.topCenter,
+                        child: Text('Rita Lama',style: theme.textTheme.titleSmall?.copyWith(
+
+                          fontSize: 34,
+                          color: AppColors.white
+                        ))),
+                    VerticalSpace(5.h),
+                    Align(
+                        alignment: Alignment.topCenter,
+                        child: Text('40 weeks 5 days',style: theme.textTheme.titleSmall?.copyWith(
+                          fontSize: 12,
+                          color: AppColors.white
+                        ))),
+                    VerticalSpace(15.h),
+                    Expanded(
+                      child: ShadowContainer(
+                        color: Colors.white,
+                        child: ListView(
+                          children: [
+                            ListTile(
+                              leading: Image.asset(AppAssets.homeIcon),
+                              title: Text('Home',style: theme.textTheme.titleSmall,),
+                            ),
+                            //profile
+                            ListTile(
+                              leading: Image.asset(AppAssets.personIcon),
+                              title: Text('profile',style: theme.textTheme.titleSmall),
+                            ),
+                            //ANC
+                            ListTile(
+                              leading: Image.asset(AppAssets.ancIcon),
+                              title: Text('ANC',style: theme.textTheme.titleSmall),
+                            ),
+                            //card
+                            ListTile(
+                              leading: Image.asset(AppAssets.cardIcon),
+                              title: Text('Card',style: theme.textTheme.titleSmall),
+                            ),
+                            //
+                            ListTile(
+                              leading: Image.asset(AppAssets.medIcon),
+                              title: Text('Symptoms Assessment',style: theme.textTheme.titleSmall),
+                            ),
+                            //Appointment
+                            ListTile(
+                              leading: Image.asset(AppAssets.pncIcon),
+                              title: Text('Appointment',style: theme.textTheme.titleSmall),
+                            ),
+                            //health Report
+                            ListTile(
+                              leading: Image.asset(AppAssets.testIcon),
+                              title: Text('Health Report',style: theme.textTheme.titleSmall),
+                            ),
+
+                            //Delivery
+                            ListTile(
+                              leading: Image.asset(AppAssets.cardIcon),
+                              title: Text('Delivery',style: theme.textTheme.titleSmall),
+                            ),
+                            //Medication
+                            ListTile(
+                              leading: Image.asset(AppAssets.medIcon),
+                              title: Text('Medication',style: theme.textTheme.titleSmall),
+                            ),
+                            //PNC
+                            ListTile(
+                              leading: Image.asset(AppAssets.pncIcon),
+                              title: Text('PNC',style: theme.textTheme.titleSmall),
+                            ),
+                            //Lab Test
+                            ListTile(
+                              leading: Image.asset(AppAssets.testIcon),
+                              title: Text('Lab Test',style: theme.textTheme.titleSmall),
+                            ),
+                            //Baby
+                            ListTile(
+                              leading: Image.asset(AppAssets.babyIcon),
+                              title: Text('Baby',style: theme.textTheme.titleSmall),
+                            )
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                )),
+          ],
+        ),
+      ),
+    );
+  }
+}
