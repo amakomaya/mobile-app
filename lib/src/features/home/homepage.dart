@@ -36,25 +36,25 @@ class HomePage extends StatelessWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
-
                     children: [
-                      
-
-                     ClipRRect(
-                      borderRadius: BorderRadius.circular(40),
-                       child: Material(
-                        color: Colors.red,
-                         child: InkWell(
-                          splashColor: Colors.white.withOpacity(0.5),
-                          onTap: ()=>Scaffold.of(context).openDrawer(),
-                           child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 8),
-                            color: Colors.transparent,
-                            child: Icon(Icons.menu,color: Colors.white,),
-                           ),
-                         ),
-                       ),
-                     ),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(40),
+                        child: Material(
+                          color: Colors.red,
+                          child: InkWell(
+                            splashColor: Colors.white.withOpacity(0.5),
+                            onTap: () => Scaffold.of(context).openDrawer(),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 8),
+                              color: Colors.transparent,
+                              child: Icon(
+                                Icons.menu,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                       HorizSpace(20.w),
                       Text(
                         'Home',
@@ -96,11 +96,15 @@ class HomePage extends StatelessWidget {
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                               Text("Rita Lama",style: theme.textTheme.labelLarge,),
-                               Text(' 50 years 20 weeks',style: theme.textTheme.bodySmall?.copyWith(
-                                fontSize: 11,
-                                fontWeight: FontWeight.w600
-                               ),),
+                              Text(
+                                "Rita Lama",
+                                style: theme.textTheme.labelLarge,
+                              ),
+                              Text(
+                                ' 50 years 20 weeks',
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                    fontSize: 11, fontWeight: FontWeight.w600),
+                              ),
                               const Divider(
                                 height: 20,
                                 color: Colors.red,
@@ -110,23 +114,22 @@ class HomePage extends StatelessWidget {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   RichText(
-                                      text:  TextSpan(children: [
+                                      text: TextSpan(children: [
                                     TextSpan(
                                         text: '183\n',
-                                        style:theme.textTheme.bodySmall),
+                                        style: theme.textTheme.bodySmall),
                                     TextSpan(
                                         text: 'Days',
-                                        
-                                        style:theme.textTheme.bodySmall),
+                                        style: theme.textTheme.bodySmall),
                                   ])),
                                   RichText(
-                                      text:  TextSpan(children: [
+                                      text: TextSpan(children: [
                                     TextSpan(
                                         text: '7/77/2022\n',
-                                        style:theme.textTheme.bodySmall),
+                                        style: theme.textTheme.bodySmall),
                                     TextSpan(
                                         text: 'Delivery Date',
-                                        style:theme.textTheme.bodySmall),
+                                        style: theme.textTheme.bodySmall),
                                   ]))
                                 ],
                               )
@@ -178,10 +181,12 @@ class HomePage extends StatelessWidget {
                                 color: AppColors.primaryRed,
                               ),
                               HorizSpace(5.w),
-                               Text('Call us'.toUpperCase(),style: theme.textTheme.bodyMedium?.copyWith(
-                                color: AppColors.primaryRed,
-                                fontWeight: FontWeight.w700
-                               ),)
+                              Text(
+                                'Call us'.toUpperCase(),
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                    color: AppColors.primaryRed,
+                                    fontWeight: FontWeight.w700),
+                              )
                             ],
                           ),
                         ),
@@ -207,10 +212,12 @@ class HomePage extends StatelessWidget {
                                 color: AppColors.primaryRed,
                               ),
                               HorizSpace(5.w),
-                               Text('MSG  Us'.toUpperCase(),style: theme.textTheme.bodyMedium?.copyWith(
-                                color: AppColors.primaryRed,
-                                fontWeight: FontWeight.w700
-                               ),)
+                              Text(
+                                'MSG  Us'.toUpperCase(),
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                    color: AppColors.primaryRed,
+                                    fontWeight: FontWeight.w700),
+                              )
                             ],
                           ),
                         ),
@@ -218,13 +225,12 @@ class HomePage extends StatelessWidget {
                     ),
                     Expanded(
                         child: SingleChildScrollView(
-                          padding: EdgeInsets.symmetric(vertical: 40.h),
+                      padding: EdgeInsets.symmetric(vertical: 40.h),
                       physics: const BouncingScrollPhysics(),
                       child: Column(
                         children: [
                           Column(
                             children: [
-                             
                               ShadowContainer(
                                 width: 380.w,
                                 padding: const EdgeInsets.symmetric(
@@ -234,9 +240,12 @@ class HomePage extends StatelessWidget {
                                 color: Colors.white,
                                 child: Column(
                                   children: [
-                                     BorderContainer(
-                                      child:
-                                          Center(child: Text('Status Report',style: theme.textTheme.labelMedium,)),
+                                    BorderContainer(
+                                      child: Center(
+                                          child: Text(
+                                        'Status Report',
+                                        style: theme.textTheme.labelMedium,
+                                      )),
                                     ),
                                     Divider(
                                       color: AppColors.accentGrey,
@@ -250,55 +259,58 @@ class HomePage extends StatelessWidget {
                                           MainAxisAlignment.spaceEvenly,
                                       children: [
                                         RichText(
-                                            text:  TextSpan(children: [
+                                            text: TextSpan(children: [
                                           TextSpan(
                                               text: '3/4\n',
-                                              style:
-                                                  theme.textTheme.displaySmall?.copyWith(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: AppColors.primaryRed
-                                                  )),
+                                              style: theme
+                                                  .textTheme.displaySmall
+                                                  ?.copyWith(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: AppColors
+                                                          .primaryRed)),
                                           TextSpan(
                                               text: 'ANCs',
-                                                style:
-                                                  theme.textTheme.labelSmall?.copyWith(
-                                                 
-                                                    color: AppColors.accentGrey
-                                                  )),
+                                              style: theme.textTheme.labelSmall
+                                                  ?.copyWith(
+                                                      color: AppColors
+                                                          .accentGrey)),
                                         ])),
                                         RichText(
-                                            text:  TextSpan(children: [
+                                            text: TextSpan(children: [
                                           TextSpan(
                                               text: '0\n',
-                                              style:
-                                                  theme.textTheme.displaySmall?.copyWith(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: AppColors.primaryRed
-                                                  )),
+                                              style: theme
+                                                  .textTheme.displaySmall
+                                                  ?.copyWith(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: AppColors
+                                                          .primaryRed)),
                                           TextSpan(
                                               text: 'Deliveries',
-                                                style:
-                                                  theme.textTheme.labelSmall?.copyWith(
-                                                 
-                                                    color: AppColors.accentGrey
-                                                  )),
+                                              style: theme.textTheme.labelSmall
+                                                  ?.copyWith(
+                                                      color: AppColors
+                                                          .accentGrey)),
                                         ])),
                                         RichText(
-                                            text:  TextSpan(children: [
+                                            text: TextSpan(children: [
                                           TextSpan(
                                               text: '3/3\n',
-                                             style:
-                                                  theme.textTheme.displaySmall?.copyWith(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: AppColors.primaryRed
-                                                  )),
+                                              style: theme
+                                                  .textTheme.displaySmall
+                                                  ?.copyWith(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: AppColors
+                                                          .primaryRed)),
                                           TextSpan(
                                               text: 'PNCs',
-                                              style:
-                                                  theme.textTheme.labelSmall?.copyWith(
-                                                 
-                                                    color: AppColors.accentGrey
-                                                  )),
+                                              style: theme.textTheme.labelSmall
+                                                  ?.copyWith(
+                                                      color: AppColors
+                                                          .accentGrey)),
                                         ]))
                                       ],
                                     )
@@ -329,7 +341,8 @@ class HomePage extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                        'Things that are to be taken into consideration',  style: theme.textTheme.labelMedium),
+                                        'Things that are to be taken into consideration',
+                                        style: theme.textTheme.labelMedium),
                                     Divider(
                                       endIndent: 10,
                                       indent: 10,
@@ -337,7 +350,8 @@ class HomePage extends StatelessWidget {
                                       color: AppColors.accentGrey,
                                     ),
                                     Text(
-                                        'Lorem isum lorem ipsum.Lorem isum lorem ipsum Lorem isum lorem ipsum.Lorem isum lorem ipsum.Lorem isum lorem ipsumLorem isum lorem ipsum',  style: theme.textTheme.labelSmall)
+                                        'Lorem isum lorem ipsum.Lorem isum lorem ipsum Lorem isum lorem ipsum.Lorem isum lorem ipsum.Lorem isum lorem ipsumLorem isum lorem ipsum',
+                                        style: theme.textTheme.labelSmall)
                                   ],
                                 ),
                               ),
@@ -350,9 +364,11 @@ class HomePage extends StatelessWidget {
                                 width: 383.w,
                                 child: Row(children: [
                                   Image.asset(AppAssets.musicIcon),
-                                   Expanded(
+                                  Expanded(
                                       child: Text(
-                                          'Fetus growth from 5-10 weeks.mp3', style: theme.textTheme.labelSmall,))
+                                    'Fetus growth from 5-10 weeks.mp3',
+                                    style: theme.textTheme.labelSmall,
+                                  ))
                                 ]),
                               ),
                             ],
