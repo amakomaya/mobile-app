@@ -7,6 +7,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 typedef ValidatorFunc = String? Function(String?);
 
 class PrimaryTextField extends StatelessWidget {
+  final TextEditingController? controller;
+  final bool? obscureText;
+  final VoidCallback? sufixTap;
   final Decoration? decoration;
   final String? hintText;
   final String? labelText;
@@ -31,7 +34,7 @@ class PrimaryTextField extends StatelessWidget {
       this.boxMargin,
       this.textPadding,
       this.validator,
-      this.focus, this.nextFocus})
+      this.focus, this.nextFocus, this.controller, this.sufixTap, this.obscureText})
       : super(key: key);
 
   @override
@@ -52,16 +55,21 @@ class PrimaryTextField extends StatelessWidget {
         Padding(
           padding: defaultPadding,
           child: TextFormField(
+            obscureText:obscureText??false ,
+            controller: controller,
             cursorColor: Colors.grey,
             focusNode: focus,
             onFieldSubmitted: (value) => nextFocus!=null?
                 FocusScope.of(context).requestFocus(nextFocus):FocusScope.of(context).unfocus(),
             validator: validator,
             decoration: InputDecoration(
-              
-                suffixIcon: Icon(
-                  suffix,
-                  color: Colors.grey,
+            
+                suffixIcon: GestureDetector(
+                  onTap: sufixTap,
+                  child: Icon(
+                    suffix,
+                    color: Colors.grey,
+                  ),
                 ),
                 hintText: hintText,
                 hintStyle: Theme.of(context).textTheme.labelSmall,

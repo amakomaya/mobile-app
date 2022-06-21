@@ -1,9 +1,12 @@
 import 'package:aamako_maya/src/core/theme/app_colors.dart';
 import 'package:aamako_maya/src/core/theme/custom_theme.dart';
+import 'package:aamako_maya/src/features/authentication/bloc/login_bloc.dart';
+import 'package:aamako_maya/src/features/authentication/repository/login_repository.dart';
 import 'package:aamako_maya/src/features/authentication/screens/login_page.dart';
 import 'package:aamako_maya/src/features/onboarding/bloc/onboard_bloc.dart';
 import 'package:aamako_maya/src/features/onboarding/onboarding_repository/onboarding_repository.dart';
 import 'package:aamako_maya/src/features/onboarding/screens/onboarding_page.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,7 +24,16 @@ Future<void> main() async {
     statusBarColor: AppColors.primaryRed, // status bar color
   ));
   runApp(
-    const MyApp(),
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => LoginBloc(
+            LoginRepository(),
+          ),
+        )
+      ],
+      child: const MyApp(),
+    ),
   );
 }
 
@@ -37,6 +49,8 @@ class MyApp extends StatelessWidget {
       designSize: const Size(414, 896),
       builder: (context, child) => Builder(builder: (context) {
         return MaterialApp(
+          builder: BotToastInit(), 
+          navigatorObservers: [BotToastNavigatorObserver(),],
           debugShowCheckedModeBanner: false,
           theme: CustomTheme.lightTheme,
           home: ((show == null) || (show == true))

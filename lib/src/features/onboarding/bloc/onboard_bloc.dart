@@ -15,9 +15,9 @@ class OnboardBloc extends Bloc<OnboardEvent, OnboardState> {
       : _repo = repo,
         super(const _Initial()) {
     on<_StartOnboard>(
-        (event, emit) => eventToStateSignUpWithPhoneNumber(event, emit));
+        (event, emit) => onboardBloc(event, emit));
   }
-  Future<void> eventToStateSignUpWithPhoneNumber(
+  Future<void> onboardBloc(
       OnboardEvent event, Emitter<OnboardState> emit) async {
     try {
       final response = await _repo.getOnboardingList();
