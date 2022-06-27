@@ -265,13 +265,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.4"
-  flutter_native_splash:
-    dependency: "direct main"
-    description:
-      name: flutter_native_splash
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.6"
   flutter_screenutil:
     dependency: "direct main"
     description:
@@ -450,13 +443,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.5.0"
-  lint:
-    dependency: transitive
-    description:
-      name: lint
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.8.2"
   lints:
     dependency: transitive
     description:

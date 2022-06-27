@@ -1,13 +1,17 @@
+import 'dart:collection';
+
 import 'package:aamako_maya/src/core/theme/app_colors.dart';
 import 'package:aamako_maya/src/core/theme/custom_theme.dart';
 import 'package:aamako_maya/src/features/authentication/cubit/register_cubit.dart';
 import 'package:aamako_maya/src/features/authentication/cubit/toggle_district_municipality.dart';
+import 'package:aamako_maya/src/features/authentication/local_storage/authentication_local_storage.dart';
 import 'package:aamako_maya/src/features/authentication/repository/login_repository.dart';
 import 'package:aamako_maya/src/features/authentication/repository/register_repository.dart';
 import 'package:aamako_maya/src/features/authentication/screens/login/login_page.dart';
 import 'package:aamako_maya/src/features/onboarding/bloc/onboard_bloc.dart';
 import 'package:aamako_maya/src/features/onboarding/onboarding_repository/onboarding_repository.dart';
 import 'package:aamako_maya/src/features/onboarding/screens/onboarding_page.dart';
+import 'package:aamako_maya/src/features/splash/splash_page.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,12 +23,13 @@ import 'src/features/authentication/cubit/district_municipality_cubit.dart';
 import 'src/features/authentication/login_bloc/login_bloc.dart';
 import 'src/features/authentication/register_bloc/register_bloc.dart';
 
-bool? show;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  var box = await Hive.openBox('myBox');
-  show = box.get('onboard');
+
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
 
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: AppColors.primaryRed,
@@ -37,16 +42,18 @@ Future<void> main() async {
         ),
         BlocProvider(
           create: (context) => LoginBloc(
-            LoginRepository(),
+            LoginRepository(),AuthLocalData(),
           ),
         ),
-        
         BlocProvider(
           create: (context) => RegisterBloc(
             RegisterRepository(),
           ),
         ),
-        
+        BlocProvider(
+          create: (context) => OnboardBloc(repo: OnboardingRepo())
+            ..add(const OnboardEvent.onboardStart()),
+        ),
         BlocProvider(
           create: (context) => DistrictMunicipalityCubit(),
         ),
@@ -74,22 +81,23 @@ class MyApp extends StatelessWidget {
           ],
           debugShowCheckedModeBanner: false,
           theme: CustomTheme.lightTheme,
-          home: ((show == null) || (show == true))
-              ? BlocProvider<OnboardBloc>(
-                  create: (context) => OnboardBloc(repo: OnboardingRepo())
-                    ..add(const OnboardEvent.onboardStart()),
-                  child: BlocConsumer<OnboardBloc, OnboardState>(
-                    listener: (context, state) {},
-                    builder: (context, state) {
-                      return state.maybeWhen(
-                          success: ((isLoading, error, onboardList) {
-                            return const OnboardingPage();
-                          }),
-                          orElse: () => const LoginPage());
-                    },
-                  ),
-                )
-              : const LoginPage(),
+          home: const SplashPage(),
+          // home: ((show == null) || (show == true))
+          //     ? BlocProvider<OnboardBloc>(
+          //         create: (context) => OnboardBloc(repo: OnboardingRepo())
+          //           ..add(const OnboardEvent.onboardStart()),
+          //         child: BlocConsumer<OnboardBloc, OnboardState>(
+          //           listener: (context, state) {},
+          //           builder: (context, state) {
+          //             return state.maybeWhen(
+          //                 success: ((isLoading, error, onboardList) {
+          //                   return const OnboardingPage();
+          //                 }),
+          //                 orElse: () => const LoginPage());
+          //           },
+          //         ),
+          //       )
+          //     : const LoginPage(),
         );
       }),
     );

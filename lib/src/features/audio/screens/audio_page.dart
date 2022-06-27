@@ -11,37 +11,37 @@ class AudioPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme= Theme.of(context);
+    final theme = Theme.of(context);
     return PrimaryScaffold(
       appBartitle: 'Audio',
       body: SingleChildScrollView(
-        padding: defaultPadding.copyWith(
-          bottom: 20.h,
-          top: 20.h
-        ),
+        padding: defaultPadding.copyWith(bottom: 20.h, top: 20.h),
         primary: true,
         physics: BouncingScrollPhysics(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('This week Audio',
-                 style: theme.textTheme.labelMedium,
+            Text(
+              'This week Audio',
+              style: theme.textTheme.labelMedium,
             ),
             VerticalSpace(20.h),
             AudioContainerWidget(),
             VerticalSpace(20.h),
-            Text('Other week Audio',style: theme.textTheme.labelMedium,),
-                        VerticalSpace(20.h),
-
+            Text(
+              'Other week Audio',
+              style: theme.textTheme.labelMedium,
+            ),
+            VerticalSpace(20.h),
             ListView.separated(
-              primary: false,
+                primary: false,
                 shrinkWrap: true,
                 itemBuilder: ((context, index) {
                   return AudioContainerWidget();
                 }),
                 separatorBuilder: (ctx, ind) => VerticalSpace(20.h),
                 itemCount: 11),
-                        ],
+          ],
         ),
       ),
     );

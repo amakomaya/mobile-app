@@ -48,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
           BotToast.closeAllLoading();
         }
         if (state.isLoading == false && state.error != null) {
-          BotToast.showText(text: "Error Signing In");
+          BotToast.showText(text: state.error ?? 'Unexpected Error Occured');
         }
         state.when(
             initial: (isLoading, error) => '',
@@ -59,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
 
               Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(
-                    builder: (ctx) => const HomePage(),
+                    builder: (ctx) => const CustomBottomNavigation(),
                   ),
                   (route) => false);
             });

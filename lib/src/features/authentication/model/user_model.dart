@@ -8,7 +8,7 @@ class UserModel {
   int? municipalityId;
   String? ward;
   String? tole;
-  String? phone;
+  int? phone;
   String? bloodGroup;
   String? husbandName;
   String? lmpDateEn;
@@ -29,34 +29,34 @@ class UserModel {
   String? registerAs;
 
   UserModel(
-      {token,
-      name,
-      noOfPregnantBefore,
-      age,
-      height,
-      districtId,
-      municipalityId,
-      ward,
-      tole,
-      phone,
-      bloodGroup,
-      husbandName,
-      lmpDateEn,
-      lmpDateNp,
-      hpCode,
-      healthpostName,
-      hpDistrict,
-      hpMunicipality,
-      hpWard,
-      chronicIllness,
-      currentHealthpost,
-      moolDartaNo,
-      sewaDartaNo,
-      orcDartaNo,
-      healthWorkerFullName,
-      healthWorkerPost,
-      healthWorkerPhone,
-      registerAs});
+      {this.token,
+      this.name,
+      this.noOfPregnantBefore,
+      this.age,
+      this.height,
+      this.districtId,
+      this.municipalityId,
+      this.ward,
+      this.tole,
+      this.phone,
+      this.bloodGroup,
+      this.husbandName,
+      this.lmpDateEn,
+      this.lmpDateNp,
+      this.hpCode,
+      this.healthpostName,
+      this.hpDistrict,
+      this.hpMunicipality,
+      this.hpWard,
+      this.chronicIllness,
+      this.currentHealthpost,
+      this.moolDartaNo,
+      this.sewaDartaNo,
+      this.orcDartaNo,
+      this.healthWorkerFullName,
+      this.healthWorkerPost,
+      this.healthWorkerPhone,
+      this.registerAs});
 
   UserModel.fromJson(Map<String, dynamic> json) {
     token = json['token'];

@@ -23,7 +23,7 @@ class OnboardBloc extends Bloc<OnboardEvent, OnboardState> {
       final response = await _repo.getOnboardingList();
       //assign false to not show onboarding screens next time
       var box =await  Hive.openBox('myBox');
-      box.put('onboard', false);
+      box.put('onboard', true);
       emit(
         OnboardState.success(
           onboardList: response,
