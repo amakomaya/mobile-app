@@ -2,17 +2,19 @@ import 'package:aamako_maya/src/core/widgets/border_container.dart';
 import 'package:aamako_maya/src/core/widgets/buttons/primary_action_button.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
 import 'package:aamako_maya/src/core/widgets/textfield/primary_textfield.dart';
-import 'package:aamako_maya/src/features/authentication/bloc/login_bloc.dart';
 import 'package:aamako_maya/src/features/authentication/model/login_request_model.dart';
+import 'package:aamako_maya/src/features/authentication/screens/register/register_page.dart';
 import 'package:bot_toast/bot_toast.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../core/app_assets/app_assets.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../bottom_nav/bottom_navigation.dart';
-import '../../home/homepage.dart';
+import '../../../../core/app_assets/app_assets.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../bottom_nav/bottom_navigation.dart';
+import '../../../home/homepage.dart';
+import '../../login_bloc/login_bloc.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({
@@ -45,18 +47,22 @@ class _LoginPageState extends State<LoginPage> {
         if (state.isLoading == false) {
           BotToast.closeAllLoading();
         }
-        if(state.isLoading==false&&state.error!=null){
-          BotToast.showText(text: "Invalid Request");
+        if (state.isLoading == false && state.error != null) {
+          BotToast.showText(text: "Error Signing In");
         }
         state.when(
-          initial: (isLoading, error) => '',
-          // orElse: () => '',
-          success: (isLoading, error, user) => Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (ctx) => const HomePage(),
-            ),
-          ),
-        );
+            initial: (isLoading, error) => '',
+            // orElse: () => '',
+
+            success: (isLoading, error, user) {
+              BotToast.closeAllLoading();
+
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                    builder: (ctx) => const HomePage(),
+                  ),
+                  (route) => false);
+            });
       },
       builder: (context, state) {
         return Scaffold(
@@ -96,23 +102,24 @@ class _LoginPageState extends State<LoginPage> {
                       builder: (BuildContext context, bool i, _) {
                         return PrimaryTextField(
                           obscureText: i,
-                            controller: passwordController,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Password can\'t not be empty';
-                              }
-                              if (value.length < 5) {
-                                return 'Password must contain more than 5 characters ';
-                              }
-                              return null;
-                            },
-                            focus: passwordFocus,
-                            labelText: 'Password',
-                            hintText: 'Password',
-                            sufixTap: () {
-                              obscureBtn.value = !obscureBtn.value;
-                            },
-                            suffix:i? Icons.visibility : Icons.visibility_off,);
+                          controller: passwordController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Password can\'t not be empty';
+                            }
+                            if (value.length < 5) {
+                              return 'Password must contain more than 5 characters ';
+                            }
+                            return null;
+                          },
+                          focus: passwordFocus,
+                          labelText: 'Password',
+                          hintText: 'Password',
+                          sufixTap: () {
+                            obscureBtn.value = !obscureBtn.value;
+                          },
+                          suffix: i ? Icons.visibility : Icons.visibility_off,
+                        );
                       }),
                   VerticalSpace(20.h),
                   PrimaryActionButton(
@@ -120,8 +127,6 @@ class _LoginPageState extends State<LoginPage> {
                     width: 380.w,
                     onpress: () {
                       if (_formKey.currentState!.validate()) {
-                        print(usernameController.text);
-
                         BlocProvider.of<LoginBloc>(context).add(
                           LoginEvent.loginStarted(
                             user: LoginRequestModel(
@@ -187,12 +192,16 @@ class _LoginPageState extends State<LoginPage> {
                       style: Theme.of(context).textTheme.labelSmall,
                     ),
                     TextSpan(
-                        text: 'Create an Account',
-                        style:
-                            Theme.of(context).textTheme.labelMedium?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.primaryRed,
-                                )),
+                      text: 'Create an Account',
+                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.primaryRed,
+                          ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (ctx) => RegisterPage())),
+                    ),
                   ])),
                   VerticalSpace(50.h),
                   RichText(

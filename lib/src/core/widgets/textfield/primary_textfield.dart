@@ -18,6 +18,7 @@ class PrimaryTextField extends StatelessWidget {
   final IconData? suffix;
   final double? height;
   final double? width;
+  final bool? isPhone;
   final EdgeInsetsGeometry? boxMargin;
   final EdgeInsetsGeometry? textPadding;
   final ValidatorFunc? validator;
@@ -27,6 +28,7 @@ class PrimaryTextField extends StatelessWidget {
       this.decoration,
       this.height,
       this.width,
+      this.isPhone,
       this.padding,
       this.hintText,
       this.suffix,
@@ -55,6 +57,8 @@ class PrimaryTextField extends StatelessWidget {
         Padding(
           padding: defaultPadding,
           child: TextFormField(
+            
+            keyboardType: isPhone!=null&& isPhone==true?TextInputType.phone:null,
             obscureText:obscureText??false ,
             controller: controller,
             cursorColor: Colors.grey,
@@ -63,6 +67,7 @@ class PrimaryTextField extends StatelessWidget {
                 FocusScope.of(context).requestFocus(nextFocus):FocusScope.of(context).unfocus(),
             validator: validator,
             decoration: InputDecoration(
+            
             
                 suffixIcon: GestureDetector(
                   onTap: sufixTap,

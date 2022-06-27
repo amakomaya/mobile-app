@@ -11,20 +11,20 @@ class LoginRepository {
   var dio = Dio();
 
   Future login({required LoginRequestModel credential}) async {
-
-
     try {
       final response =
           await dio.post(Urls.loginUrl, data: jsonEncode(credential.toJson()));
       if (response.statusCode == 200) {
         final data = UserModel.fromJson(response.data);
         return data;
+      } else {
+        throw response.data['message'];
       }
-     else {
-        throw Exception();
-      }
-    } catch (e) {
-      rethrow;
-    }
+    } on DioError catch (e) {
+      if(e.response!=null){
+        throw(e.response?.data['message']);
+      }else{
+        throw('Unexpected Error Occured');
+      }}
   }
 }

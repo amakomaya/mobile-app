@@ -4,10 +4,10 @@ part of 'login_bloc.dart';
 class LoginState with _$LoginState {
   const factory LoginState.initial({
     @Default(false) bool isLoading,
-    Exception? error,
+    String? error,
   }) = _Initial;
   const factory LoginState.success(
       {@Default(false) bool isLoading,
-      Exception? error,
+      String? error,
       required UserModel user}) = _LoginSuccess;
 }

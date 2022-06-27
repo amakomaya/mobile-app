@@ -18,7 +18,6 @@ class PrimaryScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(height.toString());
     final Size size = MediaQuery.of(context).size;
     final theme = Theme.of(context);
     return SafeArea(

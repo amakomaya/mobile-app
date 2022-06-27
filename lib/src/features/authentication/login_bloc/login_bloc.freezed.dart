@@ -312,24 +312,24 @@ abstract class _LoginStart implements LoginEvent {
 /// @nodoc
 mixin _$LoginState {
   bool get isLoading => throw _privateConstructorUsedError;
-  Exception? get error => throw _privateConstructorUsedError;
+  String? get error => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(bool isLoading, Exception? error) initial,
-    required TResult Function(bool isLoading, Exception? error, UserModel user)
+    required TResult Function(bool isLoading, String? error) initial,
+    required TResult Function(bool isLoading, String? error, UserModel user)
         success,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(bool isLoading, Exception? error)? initial,
-    TResult Function(bool isLoading, Exception? error, UserModel user)? success,
+    TResult Function(bool isLoading, String? error)? initial,
+    TResult Function(bool isLoading, String? error, UserModel user)? success,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(bool isLoading, Exception? error)? initial,
-    TResult Function(bool isLoading, Exception? error, UserModel user)? success,
+    TResult Function(bool isLoading, String? error)? initial,
+    TResult Function(bool isLoading, String? error, UserModel user)? success,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -363,7 +363,7 @@ abstract class $LoginStateCopyWith<$Res> {
   factory $LoginStateCopyWith(
           LoginState value, $Res Function(LoginState) then) =
       _$LoginStateCopyWithImpl<$Res>;
-  $Res call({bool isLoading, Exception? error});
+  $Res call({bool isLoading, String? error});
 }
 
 /// @nodoc
@@ -387,7 +387,7 @@ class _$LoginStateCopyWithImpl<$Res> implements $LoginStateCopyWith<$Res> {
       error: error == freezed
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
-              as Exception?,
+              as String?,
     ));
   }
 }
@@ -398,7 +398,7 @@ abstract class _$$_InitialCopyWith<$Res> implements $LoginStateCopyWith<$Res> {
           _$_Initial value, $Res Function(_$_Initial) then) =
       __$$_InitialCopyWithImpl<$Res>;
   @override
-  $Res call({bool isLoading, Exception? error});
+  $Res call({bool isLoading, String? error});
 }
 
 /// @nodoc
@@ -423,7 +423,7 @@ class __$$_InitialCopyWithImpl<$Res> extends _$LoginStateCopyWithImpl<$Res>
       error: error == freezed
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
-              as Exception?,
+              as String?,
     ));
   }
 }
@@ -437,7 +437,7 @@ class _$_Initial implements _Initial {
   @JsonKey()
   final bool isLoading;
   @override
-  final Exception? error;
+  final String? error;
 
   @override
   String toString() {
@@ -467,8 +467,8 @@ class _$_Initial implements _Initial {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(bool isLoading, Exception? error) initial,
-    required TResult Function(bool isLoading, Exception? error, UserModel user)
+    required TResult Function(bool isLoading, String? error) initial,
+    required TResult Function(bool isLoading, String? error, UserModel user)
         success,
   }) {
     return initial(isLoading, error);
@@ -477,8 +477,8 @@ class _$_Initial implements _Initial {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(bool isLoading, Exception? error)? initial,
-    TResult Function(bool isLoading, Exception? error, UserModel user)? success,
+    TResult Function(bool isLoading, String? error)? initial,
+    TResult Function(bool isLoading, String? error, UserModel user)? success,
   }) {
     return initial?.call(isLoading, error);
   }
@@ -486,8 +486,8 @@ class _$_Initial implements _Initial {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(bool isLoading, Exception? error)? initial,
-    TResult Function(bool isLoading, Exception? error, UserModel user)? success,
+    TResult Function(bool isLoading, String? error)? initial,
+    TResult Function(bool isLoading, String? error, UserModel user)? success,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -529,13 +529,13 @@ class _$_Initial implements _Initial {
 }
 
 abstract class _Initial implements LoginState {
-  const factory _Initial({final bool isLoading, final Exception? error}) =
+  const factory _Initial({final bool isLoading, final String? error}) =
       _$_Initial;
 
   @override
   bool get isLoading => throw _privateConstructorUsedError;
   @override
-  Exception? get error => throw _privateConstructorUsedError;
+  String? get error => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$$_InitialCopyWith<_$_Initial> get copyWith =>
@@ -549,7 +549,7 @@ abstract class _$$_LoginSuccessCopyWith<$Res>
           _$_LoginSuccess value, $Res Function(_$_LoginSuccess) then) =
       __$$_LoginSuccessCopyWithImpl<$Res>;
   @override
-  $Res call({bool isLoading, Exception? error, UserModel user});
+  $Res call({bool isLoading, String? error, UserModel user});
 }
 
 /// @nodoc
@@ -576,7 +576,7 @@ class __$$_LoginSuccessCopyWithImpl<$Res> extends _$LoginStateCopyWithImpl<$Res>
       error: error == freezed
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
-              as Exception?,
+              as String?,
       user: user == freezed
           ? _value.user
           : user // ignore: cast_nullable_to_non_nullable
@@ -595,7 +595,7 @@ class _$_LoginSuccess implements _LoginSuccess {
   @JsonKey()
   final bool isLoading;
   @override
-  final Exception? error;
+  final String? error;
   @override
   final UserModel user;
 
@@ -629,8 +629,8 @@ class _$_LoginSuccess implements _LoginSuccess {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(bool isLoading, Exception? error) initial,
-    required TResult Function(bool isLoading, Exception? error, UserModel user)
+    required TResult Function(bool isLoading, String? error) initial,
+    required TResult Function(bool isLoading, String? error, UserModel user)
         success,
   }) {
     return success(isLoading, error, user);
@@ -639,8 +639,8 @@ class _$_LoginSuccess implements _LoginSuccess {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(bool isLoading, Exception? error)? initial,
-    TResult Function(bool isLoading, Exception? error, UserModel user)? success,
+    TResult Function(bool isLoading, String? error)? initial,
+    TResult Function(bool isLoading, String? error, UserModel user)? success,
   }) {
     return success?.call(isLoading, error, user);
   }
@@ -648,8 +648,8 @@ class _$_LoginSuccess implements _LoginSuccess {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(bool isLoading, Exception? error)? initial,
-    TResult Function(bool isLoading, Exception? error, UserModel user)? success,
+    TResult Function(bool isLoading, String? error)? initial,
+    TResult Function(bool isLoading, String? error, UserModel user)? success,
     required TResult orElse(),
   }) {
     if (success != null) {
@@ -693,13 +693,13 @@ class _$_LoginSuccess implements _LoginSuccess {
 abstract class _LoginSuccess implements LoginState {
   const factory _LoginSuccess(
       {final bool isLoading,
-      final Exception? error,
+      final String? error,
       required final UserModel user}) = _$_LoginSuccess;
 
   @override
   bool get isLoading => throw _privateConstructorUsedError;
   @override
-  Exception? get error => throw _privateConstructorUsedError;
+  String? get error => throw _privateConstructorUsedError;
   UserModel get user => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)

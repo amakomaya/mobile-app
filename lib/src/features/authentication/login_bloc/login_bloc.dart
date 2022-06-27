@@ -25,7 +25,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       emit(LoginState.success(user: response,isLoading: false,error: null));
     } catch (error) {
       emit(state.copyWith(
-        error: Exception(),
+        error: error.toString(),
         isLoading: false,
       ));
     }
