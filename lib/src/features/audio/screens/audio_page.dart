@@ -17,7 +17,7 @@ class AudioPage extends StatelessWidget {
       body: SingleChildScrollView(
         padding: defaultPadding.copyWith(bottom: 20.h, top: 20.h),
         primary: true,
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

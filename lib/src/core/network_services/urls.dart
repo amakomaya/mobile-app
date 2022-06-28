@@ -6,4 +6,5 @@ class Urls {
   //DISTRICT AND MUNICIPALITY
   static const getDistrict = "$baseUrl/district";
   static const getMunicipality = "$baseUrl/municipality";
+  static const getWeeklyTips="https://mnch.mohp.gov.np/api/v2/content-app/text";
 }

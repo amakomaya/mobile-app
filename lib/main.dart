@@ -12,6 +12,8 @@ import 'package:aamako_maya/src/features/onboarding/bloc/onboard_bloc.dart';
 import 'package:aamako_maya/src/features/onboarding/onboarding_repository/onboarding_repository.dart';
 import 'package:aamako_maya/src/features/onboarding/screens/onboarding_page.dart';
 import 'package:aamako_maya/src/features/splash/splash_page.dart';
+import 'package:aamako_maya/src/features/weekly_tips/cubit/weekly_tips_cubit.dart';
+import 'package:aamako_maya/src/features/weekly_tips/repository/weekly_tips_repository.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -56,6 +58,9 @@ Future<void> main() async {
         ),
         BlocProvider(
           create: (context) => DistrictMunicipalityCubit(),
+        ),
+         BlocProvider(
+          create: (context) => WeeklyTipsCubit(repo: WeeklyTipsRepo()),
         ),
       ],
       child: const MyApp(),
