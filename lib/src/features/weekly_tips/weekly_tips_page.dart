@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_html/flutter_html.dart';
 import '../../core/theme/app_colors.dart';
+import 'package:shimmer/shimmer.dart';
 
 class WeeklyTipsPage extends StatefulWidget {
   const WeeklyTipsPage({Key? key}) : super(key: key);
@@ -48,7 +49,25 @@ class _WeeklyTipsPageState extends State<WeeklyTipsPage> {
 // );
           builder: (context, state) {
             return state.maybeWhen(
-                orElse: () => Text(''),
+                orElse: () => Shimmer.fromColors(
+                      baseColor: Colors.grey[200]!,
+                      highlightColor: Colors.white,
+                      child: ListView.builder(
+                        padding: defaultPadding.copyWith(top: 20, bottom: 20),
+                        itemCount: 2,
+                        itemBuilder: (context, index) {
+                          return Card(
+                            elevation: 1.0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: SizedBox(
+                              height: 400.h,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
                 success: (loading, error, data) {
                   return SingleChildScrollView(
                       primary: true,
