@@ -49,10 +49,14 @@ class _WeeklyTipsPageState extends State<WeeklyTipsPage> {
 // );
           builder: (context, state) {
             return state.maybeWhen(
-                orElse: () => Shimmer.fromColors(
+                orElse: () => const Center(
+                      child: Text('Could not load!'),
+                    ),
+                initial: (isLoading, error) => Shimmer.fromColors(
                       baseColor: Colors.grey[200]!,
                       highlightColor: Colors.white,
                       child: ListView.builder(
+                        shrinkWrap: true,
                         padding: defaultPadding.copyWith(top: 20, bottom: 20),
                         itemCount: 2,
                         itemBuilder: (context, index) {

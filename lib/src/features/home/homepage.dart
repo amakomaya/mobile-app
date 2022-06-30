@@ -16,11 +16,8 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final Size size = MediaQuery.of(context).size;
-    return SafeArea(
-      child: Scaffold(
-        drawer: DrawerWidget(),
-        body: Builder(builder: (context) {
-          return Stack(clipBehavior: Clip.none, children: [
+
+    return Stack(clipBehavior: Clip.none, children: [
             Container(
               width: size.width,
               height: 200.h,
@@ -43,7 +40,9 @@ class HomePage extends StatelessWidget {
                           color: Colors.red,
                           child: InkWell(
                             splashColor: Colors.white.withOpacity(0.5),
-                            onTap: () => Scaffold.of(context).openDrawer(),
+                            onTap: (){
+                              Scaffold.of(context).openDrawer();
+                            },
                             child: Container(
                               padding: EdgeInsets.symmetric(horizontal: 8),
                               color: Colors.transparent,
@@ -381,9 +380,16 @@ class HomePage extends StatelessWidget {
               ),
             )
           ]);
-        }),
-      ),
-    );
+    // return SafeArea(
+    //   bottom: false,
+    //   child: Scaffold(
+    //     // backgroundColor: Colors.tra,
+    //     // drawer: DrawerWidget(),
+    //     body: Builder(builder: (ctx) {
+    //       return 
+    //     }),
+    //   ),
+    // );
   }
 }
 

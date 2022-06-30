@@ -37,31 +37,31 @@ class _RegisterSectionState extends State<RegisterSection> {
     return  SafeArea(
         child: SafeArea(
           child: Scaffold(
-            appBar: ContainerWidget(
-              width: size.width,
-              height: 70.h,
-              decoration: const BoxDecoration(
-                  color: AppColors.primaryRed,
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(50),
-                      bottomRight: Radius.circular(50))),
-              child: Padding(
-                  padding: defaultPadding.copyWith(
-                    top: 15.h,
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      HorizSpace(20.w),
-                      Text(
-                        'Register',
-                        style: Theme.of(context).textTheme.displaySmall,
-                      ),
-                      Spacer(),
-                      const Icon(Icons.more_vert)
-                    ],
-                  )),
-            ),
+            // appBar: ContainerWidget(
+            //   width: size.width,
+            //   height: 70.h,
+            //   decoration: const BoxDecoration(
+            //       color: AppColors.primaryRed,
+            //       borderRadius: BorderRadius.only(
+            //           bottomLeft: Radius.circular(50),
+            //           bottomRight: Radius.circular(50))),
+            //   child: Padding(
+            //       padding: defaultPadding.copyWith(
+            //         top: 15.h,
+            //       ),
+            //       child: Row(
+            //         crossAxisAlignment: CrossAxisAlignment.start,
+            //         children: [
+            //           HorizSpace(20.w),
+            //           Text(
+            //             'Register',
+            //             style: Theme.of(context).textTheme.displaySmall,
+            //           ),
+            //           Spacer(),
+            //           const Icon(Icons.more_vert)
+            //         ],
+            //       )),
+            // ),
             body: Form(
               key: _formKey,
               child: Column(

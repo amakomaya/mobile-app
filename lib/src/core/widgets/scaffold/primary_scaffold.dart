@@ -7,75 +7,71 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PrimaryScaffold extends StatelessWidget {
   final String? appBartitle;
-final VoidCallback? onMenuPressed;
+  final VoidCallback? onMenuPressed;
   final double? height;
   final Widget? body;
   const PrimaryScaffold({
     Key? key,
     this.height,
     this.body,
-    this.appBartitle, this.onMenuPressed,
+    this.appBartitle,
+    this.onMenuPressed,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final theme = Theme.of(context);
-    return SafeArea(
-      child: Scaffold(
-        drawer: const DrawerWidget(),
-        appBar: ContainerWidget(
-          width: size.width,
-          height: height ?? 70.h,
-          decoration: const BoxDecoration(
-              color: AppColors.primaryRed,
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(50),
-                  bottomRight: Radius.circular(50))),
-          child: Padding(
-              padding: defaultPadding.copyWith(
-                top: 15.h,
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  InkWell(
-                    splashColor: Colors.white.withOpacity(0.5),
-                    onTap: (){
-                      print('object');
-                      onMenuPressed;
-
-                    },
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8),
-                      color: Colors.transparent,
-                      child: Icon(
-                        Icons.menu,
-                        color: Colors.white,
-                      ),
+    return Column(children: [
+      ContainerWidget(
+        width: size.width,
+        height: height ?? 70.h,
+        decoration: const BoxDecoration(
+            color: AppColors.primaryRed,
+            borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(50),
+                bottomRight: Radius.circular(50))),
+        child: Padding(
+            padding: defaultPadding.copyWith(
+              top: 15.h,
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                InkWell(
+                  splashColor: Colors.white.withOpacity(0.5),
+                  onTap: () {
+                    Scaffold.of(context).openDrawer();
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    color: Colors.transparent,
+                    child: Icon(
+                      Icons.menu,
+                      color: Colors.white,
                     ),
                   ),
-                  HorizSpace(20.w),
-                  Text(
-                    appBartitle ?? 'Home',
-                    style: theme.textTheme.displaySmall,
-                  ),
-                  const Spacer(),
-                  const Icon(Icons.notifications_active),
-                  HorizSpace(10.w),
-                  const Icon(Icons.call),
-                  HorizSpace(10.w),
-                  const Icon(Icons.more_vert)
-                ],
-              )),
-        ),
-        body: body,
+                ),
+                HorizSpace(20.w),
+                Text(
+                  appBartitle ?? 'Home',
+                  style: theme.textTheme.displaySmall,
+                ),
+                const Spacer(),
+                const Icon(Icons.notifications_active),
+                HorizSpace(10.w),
+                const Icon(Icons.call),
+                HorizSpace(10.w),
+                const Icon(Icons.more_vert)
+              ],
+            )),
       ),
-    );
+      Expanded(child: body ?? Container())
+    ]);
   }
 }
 
-class ContainerWidget extends StatelessWidget with PreferredSizeWidget {
+class ContainerWidget extends StatelessWidget {
   final Decoration? decoration;
   final Widget child;
   final double height;
