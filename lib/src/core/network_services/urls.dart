@@ -8,4 +8,5 @@ class Urls {
   static const getMunicipality = "$baseUrl/municipality";
   static const getWeeklyTips="https://mnch.mohp.gov.np/api/v2/content-app/text";
   static const getVideosUrl="https://mnch.mohp.gov.np/api/v2/content-app/video";
+  static const audiourl="$baseUrl/v2/content-app/audio";
 }

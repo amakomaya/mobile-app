@@ -1,4 +1,5 @@
 import 'package:aamako_maya/src/core/padding/padding.dart';
+import 'package:aamako_maya/src/features/audio/model/audio_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -6,7 +7,8 @@ import '../../../core/app_assets/app_assets.dart';
 import '../../../core/widgets/helper_widgets/shadow_container.dart';
 
 class AudioContainerWidget extends StatelessWidget {
-  const AudioContainerWidget({Key? key}) : super(key: key);
+  final AudioModel audio;
+  const AudioContainerWidget({Key? key, required this.audio}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +19,7 @@ class AudioContainerWidget extends StatelessWidget {
       color: Colors.white,
       child: Row(children: [
         Image.asset(AppAssets.musicIcon),
-         Expanded(child: Text('Fetus growth from 5-10 weeks.mp3',style: theme.textTheme.labelSmall,))
+         Expanded(child: Text(audio.titleEn,style: theme.textTheme.labelSmall,))
       ]),
     );
   }

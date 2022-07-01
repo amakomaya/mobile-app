@@ -16,12 +16,14 @@ import 'package:aamako_maya/src/features/video/cubit/video_cubit.dart';
 import 'package:aamako_maya/src/features/weekly_tips/cubit/weekly_tips_cubit.dart';
 import 'package:aamako_maya/src/features/weekly_tips/repository/weekly_tips_repository.dart';
 import 'package:bot_toast/bot_toast.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import 'src/features/audio/cubit/audio_cubit.dart';
 import 'src/features/authentication/cubit/district_municipality_cubit.dart';
 import 'src/features/authentication/login_bloc/login_bloc.dart';
 import 'src/features/authentication/register_bloc/register_bloc.dart';
@@ -45,6 +47,7 @@ Future<void> main() async {
             LoginRepository(),AuthLocalData(),
           ),
         ),
+        BlocProvider(create:(context)=> AudioCubit(Dio())),
         BlocProvider(
           create: (context) => RegisterBloc(
             RegisterRepository(),

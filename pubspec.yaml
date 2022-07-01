@@ -35,6 +35,7 @@ dependencies:
   chewie: 
   video_player: 
   scrollable_positioned_list: ^0.3.1
+  audioplayers: ^1.0.1
 
 #native splash screens
 # flutter_native_splash:
