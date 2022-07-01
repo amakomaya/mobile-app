@@ -14,6 +14,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../video_change_cubit/video_change_cubit.dart';
 import '../widgets/video_playing_container_widget.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class VideoPage extends StatefulWidget {
   const VideoPage({Key? key}) : super(key: key);
@@ -28,6 +29,16 @@ class _VideoPageState extends State<VideoPage> {
   void initState() {
     context.read<VideoCubit>().getVideos();
     super.initState();
+  }
+
+  late BetterPlayerDataSource betterPlayerDataSource;
+  late BetterPlayerController _betterPlayerController;
+  final ItemScrollController _scrollController = ItemScrollController();
+
+  @override
+  void dispose() {
+    // _betterPlayerController.dispose();
+    super.dispose();
   }
 
   @override
@@ -53,67 +64,78 @@ class _VideoPageState extends State<VideoPage> {
                             defaultPadding.copyWith(top: 20.h, bottom: 20.h),
                         child: Column(
                           children: [
-                            BlocBuilder<VideoChangeCubit, VideoModel?>(
+                            BlocBuilder<VideoChangeCubit, VideoChangeState>(
                               builder: (c, s) {
-                                if (s != null) {
-                                  print('dkjfkdjf ${s.path}');
-                                  BetterPlayerDataSource
-                                      betterPlayerDataSource =
-                                      BetterPlayerDataSource(
+                                if (s.videoModel != null) {
+                                  // print('dkjfkdjf ${s.path}');
 
+                                  betterPlayerDataSource =
+                                      BetterPlayerDataSource(
                                           BetterPlayerDataSourceType.network,
-                                          
-                                          s.path,
-                                          headers: {"Access-Control-Allow-Origin":"*"}
-                                          );
-                                  BetterPlayerController
-                                      _betterPlayerController =
+                                          s.videoModel!.path,
+                                          headers: {
+                                        "Access-Control-Allow-Origin": "*"
+                                      });
+
+                                  _betterPlayerController =
                                       BetterPlayerController(
-                                    const BetterPlayerConfiguration(
-                                      
-                                    ),
+                                    const BetterPlayerConfiguration(),
                                     betterPlayerDataSource:
                                         betterPlayerDataSource,
                                   );
-                                  return BetterPlayer(
-                                    controller: _betterPlayerController,
-                                  );
+
+                                  return VideoPlayingContainerWidget(
+                                      videoModel: s.videoModel!,
+                                      betterPlayerController:
+                                          _betterPlayerController);
                                 }
-                                BetterPlayerDataSource betterPlayerDataSource =
-                                    BetterPlayerDataSource(
-                                        BetterPlayerDataSourceType.network,
-                                        videos[0].path);
-                                BetterPlayerController _betterPlayerController =
+                                betterPlayerDataSource = BetterPlayerDataSource(
+                                    BetterPlayerDataSourceType.network,
+                                    videos[0].path);
+                                _betterPlayerController =
                                     BetterPlayerController(
                                   const BetterPlayerConfiguration(),
                                   betterPlayerDataSource:
                                       betterPlayerDataSource,
                                 );
-                                return BetterPlayer(
-                                  controller: _betterPlayerController,
-                                );
+                                return VideoPlayingContainerWidget(
+                                    videoModel: videos[0],
+                                    betterPlayerController:
+                                        _betterPlayerController);
                               },
                             ),
                             VerticalSpace(30.h),
                             Expanded(
-                              child: ListView.separated(
+                              child: ScrollablePositionedList.builder(
+                                padding: EdgeInsets.only(bottom: 40),
+                                itemScrollController: _scrollController,
                                 itemBuilder: (ctx, ind) => GestureDetector(
                                   onTap: () {
+                                    _betterPlayerController.pause();
+                                    _scrollController.scrollTo(index: ind, duration: Duration(seconds: 1));
                                     context
                                         .read<VideoChangeCubit>()
-                                        .selectVideo(videos[ind]);
+                                        .selectVideo(
+                                            betterPlayerController:
+                                                _betterPlayerController,
+                                            value: videos[ind]);
                                   },
                                   child: BlocBuilder<VideoChangeCubit,
-                                      VideoModel?>(
+                                      VideoChangeState>(
                                     builder: (co, st) {
                                       return ShadowContainer(
                                           radius: 25,
-                                          width: 383.w,
+                                          width: 380.w,
+                                          margin: EdgeInsets.symmetric(vertical: 10),
                                           padding: EdgeInsets.symmetric(
                                               horizontal: 10.w, vertical: 20.h),
-                                          color: (st?.id == videos[ind].id)
+                                          color: (st.videoModel?.id ==
+                                                  videos[ind].id)
                                               ? Colors.grey.withOpacity(0.3)
-                                              : Colors.white,
+                                              : (ind == 0 &&
+                                                      st.videoModel == null)
+                                                  ? Colors.grey.withOpacity(0.3)
+                                                  : Colors.white,
                                           child: Row(
                                             children: [
                                               Container(
@@ -161,10 +183,10 @@ class _VideoPageState extends State<VideoPage> {
                                     },
                                   ),
                                 ),
-                                separatorBuilder: (ctx, ind) =>
-                                    VerticalSpace(20.h),
+                                // separatorBuilder: (ctx, ind) =>
+                                //     VerticalSpace(20.h),
                                 itemCount: videos.length,
-                                primary: false,
+                                // primary: false,
                               ),
                             )
                           ],

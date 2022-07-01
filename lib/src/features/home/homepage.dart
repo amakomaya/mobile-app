@@ -224,7 +224,7 @@ class HomePage extends StatelessWidget {
                     ),
                     Expanded(
                         child: SingleChildScrollView(
-                      padding: EdgeInsets.symmetric(vertical: 40.h),
+                      padding: EdgeInsets.symmetric(vertical: 40.h,horizontal: 0),
                       physics: const BouncingScrollPhysics(),
                       child: Column(
                         children: [
@@ -320,7 +320,7 @@ class HomePage extends StatelessWidget {
                               ShadowContainer(
                                 height: 148.h,
                                 radius: 20,
-                                width: 383.w,
+                                width: 380.w,
                                 color: Colors.black,
                                 child: const Center(
                                   child: Icon(
@@ -332,7 +332,7 @@ class HomePage extends StatelessWidget {
                               VerticalSpace(20.h),
                               ShadowContainer(
                                 radius: 20,
-                                width: 383.w,
+                                width: 380.w,
                                 color: Colors.white,
                                 padding: defaultPadding.copyWith(
                                     top: 10, bottom: 20),
@@ -360,7 +360,7 @@ class HomePage extends StatelessWidget {
                                     const EdgeInsets.symmetric(horizontal: 10),
                                 radius: 25,
                                 color: Colors.white,
-                                width: 383.w,
+                                width: 380.w,
                                 child: Row(children: [
                                   Image.asset(AppAssets.musicIcon),
                                   Expanded(
