@@ -7,10 +7,13 @@ import 'package:aamako_maya/src/core/widgets/scaffold/primary_scaffold.dart';
 import 'package:aamako_maya/src/features/video/cubit/video_cubit.dart';
 import 'package:aamako_maya/src/features/video/model/video_model.dart';
 import 'package:better_player/better_player.dart';
+import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:video_player/video_player.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 import '../video_change_cubit/video_change_cubit.dart';
 import '../widgets/video_playing_container_widget.dart';
@@ -56,145 +59,232 @@ class _VideoPageState extends State<VideoPage> {
               initial: (isLoading, error) =>
                   ShimmerLoading(boxHeight: 175.h, itemCount: 4),
               success: ((isLoading, error, videos) {
-                return BlocProvider(
-                  create: (context) => VideoChangeCubit(),
-                  child: Builder(builder: (context) {
-                    return Padding(
-                        padding:
-                            defaultPadding.copyWith(top: 20.h, bottom: 20.h),
-                        child: Column(
-                          children: [
-                            BlocBuilder<VideoChangeCubit, VideoChangeState>(
-                              builder: (c, s) {
-                                if (s.videoModel != null) {
-                                  // print('dkjfkdjf ${s.path}');
+                final urlList = [];
+                for (VideoModel path in videos) {
+                  final controller = VideoPlayerController.network(path.path);
+                  urlList.add(controller);
+                }
 
-                                  betterPlayerDataSource =
-                                      BetterPlayerDataSource(
-                                          BetterPlayerDataSourceType.network,
-                                          s.videoModel!.path,
-                                          headers: {
-                                        "Access-Control-Allow-Origin": "*"
-                                      });
-
-                                  _betterPlayerController =
-                                      BetterPlayerController(
-                                    const BetterPlayerConfiguration(),
-                                    betterPlayerDataSource:
-                                        betterPlayerDataSource,
-                                  );
-
-                                  return VideoPlayingContainerWidget(
-                                      videoModel: s.videoModel!,
-                                      betterPlayerController:
-                                          _betterPlayerController);
-                                }
-                                betterPlayerDataSource = BetterPlayerDataSource(
-                                    BetterPlayerDataSourceType.network,
-                                    videos[0].path);
-                                _betterPlayerController =
-                                    BetterPlayerController(
-                                  const BetterPlayerConfiguration(),
-                                  betterPlayerDataSource:
-                                      betterPlayerDataSource,
-                                );
-                                return VideoPlayingContainerWidget(
-                                    videoModel: videos[0],
-                                    betterPlayerController:
-                                        _betterPlayerController);
-                              },
-                            ),
-                            VerticalSpace(30.h),
-                            Expanded(
-                              child: ScrollablePositionedList.builder(
-                                padding: EdgeInsets.only(bottom: 40),
-                                itemScrollController: _scrollController,
-                                itemBuilder: (ctx, ind) => GestureDetector(
-                                  onTap: () {
-                                    _betterPlayerController.pause();
-                                    _scrollController.scrollTo(index: ind, duration: Duration(seconds: 1));
-                                    context
-                                        .read<VideoChangeCubit>()
-                                        .selectVideo(
-                                            betterPlayerController:
-                                                _betterPlayerController,
-                                            value: videos[ind]);
-                                  },
-                                  child: BlocBuilder<VideoChangeCubit,
-                                      VideoChangeState>(
-                                    builder: (co, st) {
-                                      return ShadowContainer(
-                                          radius: 25,
-                                          width: 380.w,
-                                          margin: EdgeInsets.symmetric(vertical: 10),
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 10.w, vertical: 20.h),
-                                          color: (st.videoModel?.id ==
-                                                  videos[ind].id)
-                                              ? Colors.grey.withOpacity(0.3)
-                                              : (ind == 0 &&
-                                                      st.videoModel == null)
-                                                  ? Colors.grey.withOpacity(0.3)
-                                                  : Colors.white,
-                                          child: Row(
-                                            children: [
-                                              Container(
-                                                height: 113.h,
-                                                width: 121.w,
-                                                decoration: BoxDecoration(
-                                                    image: DecorationImage(
-                                                        image: NetworkImage(
-                                                          videos[ind].thumbnail,
-                                                        ),
-                                                        fit: BoxFit.cover),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            25)),
-                                                child: const Center(
-                                                    child: Icon(
-                                                  Icons
-                                                      .play_circle_fill_rounded,
-                                                  size: 40,
-                                                )),
-                                              ),
-                                              HorizSpace(12.w),
-                                              Flexible(
-                                                child: Column(
-                                                  children: [
-                                                    Html(
-                                                      data: videos[ind].titleEn,
-                                                    ),
-                                                    Divider(
-                                                      endIndent: 5,
-                                                      indent: 5,
-                                                      height: 15.w,
-                                                      color:
-                                                          AppColors.accentGrey,
-                                                    ),
-                                                    Html(
-                                                      data: videos[ind]
-                                                          .descriptionEn,
-                                                    ),
-                                                  ],
-                                                ),
-                                              )
-                                            ],
-                                          ));
-                                    },
-                                  ),
-                                ),
-                                // separatorBuilder: (ctx, ind) =>
-                                //     VerticalSpace(20.h),
-                                itemCount: videos.length,
-                                // primary: false,
-                              ),
-                            )
-                          ],
-                        ));
-                  }),
+                return VideoListPage(
+                  videoPlayerController: urlList,
+                  list: videos,
                 );
+
+                // return BlocProvider(
+                //   create: (context) => VideoChangeCubit(),
+                //   child: Builder(builder: (context) {
+                //     return Padding(
+                //         padding:
+                //             defaultPadding.copyWith(top: 20.h, bottom: 20.h),
+                //         child: Column(
+                //           children: [
+                //             BlocBuilder<VideoChangeCubit, VideoChangeState>(
+                //               builder: (c, s) {
+                //                 // if (s.videoModel != null) {
+                //                 //   // print('dkjfkdjf ${s.path}');
+
+                //                 //   betterPlayerDataSource =
+                //                 //       BetterPlayerDataSource(
+                //                 //           BetterPlayerDataSourceType.network,
+                //                 //           s.videoModel!.path,
+                //                 //           headers: {
+                //                 //         "Access-Control-Allow-Origin": "*"
+                //                 //       });
+
+                //                 //   _betterPlayerController =
+                //                 //       BetterPlayerController(
+                //                 //     const BetterPlayerConfiguration(),
+                //                 //     betterPlayerDataSource:
+                //                 //         betterPlayerDataSource,
+                //                 //   );
+
+                //                 //   return VideoPlayingContainerWidget(
+                //                 //       videoModel: s.videoModel!,
+                //                 //       betterPlayerController:
+                //                 //           _betterPlayerController);
+                //                 // }
+                //                 // betterPlayerDataSource = BetterPlayerDataSource(
+                //                 //     BetterPlayerDataSourceType.network,
+                //                 //     videos[0].path);
+                //                 // _betterPlayerController =
+                //                 //     BetterPlayerController(
+                //                 //   const BetterPlayerConfiguration(),
+                //                 //   betterPlayerDataSource:
+                //                 //       betterPlayerDataSource,
+                //                 // );
+                //                 // return VideoPlayingContainerWidget(
+                //                 //     videoModel: videos[0],
+                //                 //     betterPlayerController:
+                //                 //         _betterPlayerController);
+
+                //              return   VideoPlayingContainerWidget();
+                //               },
+                //             ),
+                //             VerticalSpace(30.h),
+                //             Expanded(
+                //               child: ScrollablePositionedList.builder(
+                //                 padding: EdgeInsets.only(bottom: 40),
+                //                 itemScrollController: _scrollController,
+                //                 itemBuilder: (ctx, ind) => GestureDetector(
+                //                   onTap: () {
+                //                     _betterPlayerController.pause();
+                //                     _scrollController.scrollTo(index: ind, duration: Duration(seconds: 1));
+                //                     context
+                //                         .read<VideoChangeCubit>()
+                //                         .selectVideo(
+                //                             betterPlayerController:
+                //                                 _betterPlayerController,
+                //                             value: videos[ind]);
+                //                   },
+                //                   child: BlocBuilder<VideoChangeCubit,
+                //                       VideoChangeState>(
+                //                     builder: (co, st) {
+                                     
+                //                     },
+                //                   ),
+                //                 ),
+                //                 // separatorBuilder: (ctx, ind) =>
+                //                 //     VerticalSpace(20.h),
+                //                 itemCount: videos.length,
+                //                 // primary: false,
+                //               ),
+                //             )
+                //           ],
+                //         ));
+                //   }),
+                // );
               }));
         },
+      ),
+    );
+  }
+}
+
+class VideoListPage extends StatefulWidget {
+  List videoPlayerController;
+  List<VideoModel> list;
+  VideoListPage(
+      {Key? key, required this.list, required this.videoPlayerController})
+      : super(key: key);
+
+  @override
+  State<VideoListPage> createState() => _VideoListPageState();
+}
+
+class _VideoListPageState extends State<VideoListPage> {
+  // VideoPlayerController videoPlayerController= VideoPlayerController.network(
+  //     'https://assets.mixkit.co/videos/preview/mixkit-a-girl-blowing-a-bubble-gum-at-an-amusement-park-1226-large.mp4'
+  // );
+  late ChewieController _chewieController;
+
+  playVideo(int index) {
+    final old = _chewieController;
+    old.pause();
+    old.dispose();
+    _chewieController = ChewieController(
+      videoPlayerController: widget.videoPlayerController[index],
+      aspectRatio: 16 / 9,
+      autoInitialize: true,
+      autoPlay: true,
+      looping: true,
+      errorBuilder: (context, errorMessage) {
+        return Center(
+          child: Text(
+            errorMessage,
+            style: TextStyle(color: Colors.white),
+          ),
+        );
+      },
+    );
+
+    // _chewieController = ChewieController(
+    //   videoPlayerController: widget.videoPlayerController[index],
+    //   aspectRatio: 16 / 9,
+    //   autoInitialize: true,
+    //   autoPlay: true,
+    //   looping: true,
+    //   errorBuilder: (context, errorMessage) {
+    //     return Center(
+    //       child: Text(
+    //         errorMessage,
+    //         style: TextStyle(color: Colors.white),
+    //       ),
+    //     );
+    //   },
+    // );
+  }
+
+  @override
+  void initState() {
+    _chewieController = ChewieController(
+      videoPlayerController: widget.videoPlayerController[0],
+      aspectRatio: 16 / 9,
+      autoInitialize: true,
+
+      autoPlay: false,
+      // looping: widget.looping,
+      errorBuilder: (context, errorMessage) {
+        return Center(
+          child: Text(
+            errorMessage,
+            style: TextStyle(color: Colors.white),
+          ),
+        );
+      },
+    );
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _chewieController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return VisibilityDetector(
+      onVisibilityChanged: (visibilityInfo) {
+        var visiblePercentage = visibilityInfo.visibleFraction * 100;
+      if(visiblePercentage<100.0){
+       
+        _chewieController.pause();
+      }
+    
+     
+      debugPrint(
+          'Widget ${visibilityInfo.key} is ${visiblePercentage}% visible');
+    },
+      
+      key: ValueKey('VisiblekeyVideo'),
+      child: Column(
+        children: [
+          Visibility(
+            visible: _chewieController != null,
+            child: AspectRatio(
+              aspectRatio: 16 / 9,
+              child: Chewie(
+                controller: _chewieController,
+              ),
+            ),
+          ),
+          Expanded(
+              child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: widget.videoPlayerController.length,
+                  itemBuilder: (ctx, index) => GestureDetector(
+                        onTap: () {
+                          setState(() {
+                          playVideo(index);
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(18.0),
+                          child: Text(widget.list[index].path),
+                        ),
+                      ))),
+        ],
       ),
     );
   }

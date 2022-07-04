@@ -4,6 +4,7 @@ import 'package:aamako_maya/src/features/audio/model/audio_model.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 class AudioPlayerWidget extends StatefulWidget {
   final AudioModel? audio;
@@ -13,13 +14,12 @@ class AudioPlayerWidget extends StatefulWidget {
   State<AudioPlayerWidget> createState() => _AudioPlayerWidgetState();
 }
 
-class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
+class _AudioPlayerWidgetState extends State<AudioPlayerWidget>
+    with WidgetsBindingObserver {
   late AudioPlayer _audioPlayer;
 
   Duration duration = Duration.zero;
   Duration position = Duration.zero;
-  // final PlayerState _playerState = PlayerState.stopped;
-  // bool get _isPlaying => _playerState == PlayerState.playing;
   bool isPlaying = false;
 
   _play() async {
@@ -29,33 +29,46 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
   @override
   void initState() {
     _audioPlayer = AudioPlayer(playerId: widget.audio?.id.toString());
-    if (mounted) {
-      _play();
-      _audioPlayer.onPlayerStateChanged.listen((event) {
-        setState(() {
-          isPlaying = event == PlayerState.playing;
-        });
-      });
 
-      _audioPlayer.onDurationChanged.listen((event) {
-        setState(() {
-          duration = event;
-        });
-      });
+    _play();
+    _audioPlayer.onPlayerStateChanged.listen((event) {
+      // setState(() {
+      isPlaying = event == PlayerState.playing;
+      // });
+    });
 
-      _audioPlayer.onPositionChanged.listen((event) {
-        setState(() {
-          position = event;
-        });
-      });
-    }
+    _audioPlayer.onDurationChanged.listen((event) {
+      // setState(() {
+      duration = event;
+      // });
+    });
+
+    _audioPlayer.onPositionChanged.listen((event) {
+      // setState(() {
+      position = event;
+      // });s
+    });
+    WidgetsBinding.instance!.addObserver(this);
+
     super.initState();
   }
 
   @override
   void dispose() {
     _audioPlayer.dispose();
+    WidgetsBinding.instance!.removeObserver(this);
+
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      // Release the player's resources when not in use. We use "stop" so that
+      // if the app resumes later, it will still remember what position to
+      // resume from.
+      _audioPlayer.stop();
+    }
   }
 
   @override
