@@ -6,7 +6,6 @@ import '../model/user_model.dart';
 class AuthLocalData {
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
   Future<void> saveCredentialsDataToLocal(UserModel? user) async {
-    print(user?.token);
     try {
       _secureStorage.write(key: Consts.access_token, value: user?.token);
     } catch (e) {
@@ -19,6 +18,16 @@ class AuthLocalData {
     try {
       String? value = await _secureStorage.read(key: Consts.access_token) ?? '';
       return value;
+    } catch (e) {
+      rethrow;
+    }
+  }
+  //clear token
+
+  Future<bool> clearToken() async {
+    try {
+      await _secureStorage.delete(key: Consts.access_token);
+      return true;
     } catch (e) {
       rethrow;
     }

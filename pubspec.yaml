@@ -36,6 +36,7 @@ dependencies:
   video_player: 
   scrollable_positioned_list: ^0.3.1
   audioplayers: ^1.0.1
+  shared_preferences: ^2.0.15
 
 #native splash screens
 # flutter_native_splash:

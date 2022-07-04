@@ -39,6 +39,7 @@ class RegisterRequestModel {
       this.updatedAt});
 
   RegisterRequestModel.fromJson(Map<String, dynamic> json) {
+    
     name = json['name'];
     age = json['age'];
     isFirstTimeParent = json['is_first_time_parent'];

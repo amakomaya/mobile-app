@@ -71,7 +71,7 @@ class _AudioPageState extends State<AudioPage> {
                             onTap: () {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (ctx) => AudioPlayerWidget(
-                                      audio: (st.audioModel?[index]))));
+                                      audio: (st.audioModel?[index]),)));
                             },
                             child: AudioContainerWidget(
                               audio: st.audioModel![index],

@@ -3,6 +3,7 @@ import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
 import 'package:aamako_maya/src/features/authentication/cubit/district_municipality_cubit.dart';
 import 'package:aamako_maya/src/features/authentication/widgets/register_fields_section.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -38,31 +39,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
     return SafeArea(
       child: Scaffold(
-        // appBar: ContainerWidget(
-        //   width: size.width,
-        //   height: 70.h,
-        //   decoration: const BoxDecoration(
-        //       color: AppColors.primaryRed,
-        //       borderRadius: BorderRadius.only(
-        //           bottomLeft: Radius.circular(50),
-        //           bottomRight: Radius.circular(50))),
-        //   child: Padding(
-        //       padding: defaultPadding.copyWith(
-        //         top: 15.h,
-        //       ),
-        //       child: Row(
-        //         crossAxisAlignment: CrossAxisAlignment.start,
-        //         children: [
-        //           HorizSpace(20.w),
-        //           Text(
-        //             'Register',
-        //             style: Theme.of(context).textTheme.displaySmall,
-        //           ),
-        //           Spacer(),
-        //           const Icon(Icons.more_vert)
-        //         ],
-        //       )),
-        // ),
         body: Column(
           children: <Widget>[
             Expanded(
@@ -75,8 +51,11 @@ class _RegisterPageState extends State<RegisterPage> {
                 itemBuilder: (c, inde) {
                   return GestureDetector(
                     onTap: () {
-                      selected.value = inde;
-                      print(selected.value);
+                      selected.value = 1;
+                      if (inde == 0 || inde == 2) {
+                        BotToast.showText(
+                            text: "Option Unavailable at the moment");
+                      }
                     },
                     child: ValueListenableBuilder(
                         valueListenable: selected,
@@ -100,11 +79,13 @@ class _RegisterPageState extends State<RegisterPage> {
                 },
               ),
             )),
-            PrimaryActionButton(onpress: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>RegisterSection(
-               registerAs: registerAs[selected.value].name
-              )));
-            }, title: 'Next'),
+            PrimaryActionButton(
+                onpress: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (ctx) => RegisterSection(
+                          registerAs: registerAs[selected.value].name)));
+                },
+                title: 'Next'),
             VerticalSpace(50.h),
           ],
         ),

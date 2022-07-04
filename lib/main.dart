@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:aamako_maya/src/core/theme/app_colors.dart';
 import 'package:aamako_maya/src/core/theme/custom_theme.dart';
+import 'package:aamako_maya/src/features/audio/screens/audio_player_widget.dart';
 import 'package:aamako_maya/src/features/authentication/cubit/register_cubit.dart';
 import 'package:aamako_maya/src/features/authentication/cubit/toggle_district_municipality.dart';
 import 'package:aamako_maya/src/features/authentication/local_storage/authentication_local_storage.dart';
@@ -32,6 +33,7 @@ import 'src/features/video/repository/videoes_repository.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
+    // WidgetsBinding.instance?.addObserver(const AudioPlayerWidget());
 
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: AppColors.primaryRed,
@@ -50,7 +52,7 @@ Future<void> main() async {
         BlocProvider(create:(context)=> AudioCubit(Dio())),
         BlocProvider(
           create: (context) => RegisterBloc(
-            RegisterRepository(),
+            RegisterRepository(),AuthLocalData()
           ),
         ),
         BlocProvider(

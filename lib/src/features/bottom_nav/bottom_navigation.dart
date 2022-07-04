@@ -18,11 +18,13 @@ class CustomBottomNavigation extends StatefulWidget {
 }
 
 class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
-  final PageController _myPage = PageController(initialPage: 0);
-
-  // int index = 0;
-
   ValueNotifier<int> selectedindex = ValueNotifier(0);
+
+  @override
+  void initState() {
+  
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -123,23 +125,22 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                 );
               }),
           floatingActionButton: ValueListenableBuilder(
-            valueListenable: selectedindex,
-            builder: (context,v,b) {
-              return FloatingActionButton(
-                backgroundColor:
-                    selectedindex.value == 4? Colors.amber : Colors.white,
-                mini: true,
-                onPressed: () {
-                  selectedindex.value = 4;
-                },
-                clipBehavior: Clip.none,
-                child: Icon(
-                  Icons.shopping_cart_sharp,
-                  color: Colors.red,
-                ),
-              );
-            }
-          ),
+              valueListenable: selectedindex,
+              builder: (context, v, b) {
+                return FloatingActionButton(
+                  backgroundColor:
+                      selectedindex.value == 4 ? Colors.amber : Colors.white,
+                  mini: true,
+                  onPressed: () {
+                    selectedindex.value = 4;
+                  },
+                  clipBehavior: Clip.none,
+                  child: Icon(
+                    Icons.shopping_cart_sharp,
+                    color: Colors.red,
+                  ),
+                );
+              }),
         ),
       ),
     );

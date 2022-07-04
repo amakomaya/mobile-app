@@ -5,6 +5,8 @@ import 'package:aamako_maya/src/features/authentication/cubit/register_cubit.dar
 import 'package:aamako_maya/src/features/authentication/model/register_request_model.dart';
 import 'package:aamako_maya/src/features/authentication/register_bloc/register_bloc.dart';
 import 'package:aamako_maya/src/features/authentication/widgets/complete_profile_section.dart';
+import 'package:aamako_maya/src/features/bottom_nav/bottom_navigation.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,8 +18,8 @@ import '../../../core/widgets/scaffold/primary_scaffold.dart';
 import '../../../core/widgets/textfield/primary_textfield.dart';
 
 class RegisterSection extends StatefulWidget {
-final  String registerAs;
- const RegisterSection({Key? key,required this.registerAs}) : super(key: key);
+  final String registerAs;
+  const RegisterSection({Key? key, required this.registerAs}) : super(key: key);
   @override
   State<RegisterSection> createState() => _RegisterSectionState();
 }
@@ -26,6 +28,7 @@ class _RegisterSectionState extends State<RegisterSection> {
   DateTime selectedDate = DateTime.now();
   final DateFormat formatter = DateFormat('yyyy-MM-dd');
   final _name = TextEditingController();
+  final _username = TextEditingController();
   final _phone = TextEditingController();
   final _password = TextEditingController();
   DateTime? picked;
@@ -34,35 +37,30 @@ class _RegisterSectionState extends State<RegisterSection> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return  SafeArea(
+    return SafeArea(
         child: SafeArea(
-          child: Scaffold(
-            // appBar: ContainerWidget(
-            //   width: size.width,
-            //   height: 70.h,
-            //   decoration: const BoxDecoration(
-            //       color: AppColors.primaryRed,
-            //       borderRadius: BorderRadius.only(
-            //           bottomLeft: Radius.circular(50),
-            //           bottomRight: Radius.circular(50))),
-            //   child: Padding(
-            //       padding: defaultPadding.copyWith(
-            //         top: 15.h,
-            //       ),
-            //       child: Row(
-            //         crossAxisAlignment: CrossAxisAlignment.start,
-            //         children: [
-            //           HorizSpace(20.w),
-            //           Text(
-            //             'Register',
-            //             style: Theme.of(context).textTheme.displaySmall,
-            //           ),
-            //           Spacer(),
-            //           const Icon(Icons.more_vert)
-            //         ],
-            //       )),
-            // ),
-            body: Form(
+      child: Scaffold(
+        body: BlocConsumer<RegisterBloc, RegisterState>(
+          listener: (context, state) {
+            if (state.error != null&&state.isLoading==false) {
+              BotToast.showText(text: state.error.toString());
+            }  if (state.isLoading && state.error == null) {
+              BotToast.showLoading();
+            } if(state.isLoading==false) {
+              BotToast.closeAllLoading();
+            }
+            state.when(
+                initial: ((isLoading, error) => ''),
+                success: (isLoading, error, user) {
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (ctx) => CustomBottomNavigation()),
+                      (route) => false);
+                });
+          },
+          builder: (context, state) {
+            return Form(
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,6 +87,28 @@ class _RegisterSectionState extends State<RegisterSection> {
                               },
                               decoration: const InputDecoration(
                                 label: Text('Name'),
+                                isDense: true,
+                                border: InputBorder.none,
+                              ),
+                            )),
+                        VerticalSpace(20.h),
+                        ShadowContainer(
+                            width: size.width,
+                            padding: defaultPadding.copyWith(top: 6, bottom: 6),
+                            margin: defaultPadding,
+                            child: TextFormField(
+                              controller: _username,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Username number can\'t not be empty';
+                                }
+                                if (value.length < 5) {
+                                  return 'Invalid username ';
+                                }
+                                return null;
+                              },
+                              decoration: const InputDecoration(
+                                label: Text('Username'),
                                 isDense: true,
                                 border: InputBorder.none,
                               ),
@@ -132,7 +152,7 @@ class _RegisterSectionState extends State<RegisterSection> {
                                 if (value == null || value.isEmpty) {
                                   return 'Mobile number can\'t not be empty';
                                 }
-                                if (value.length == 10) {
+                                if (value.length < 10 || value.length > 10) {
                                   return 'Invalid mobile number ';
                                 }
                                 return null;
@@ -172,16 +192,36 @@ class _RegisterSectionState extends State<RegisterSection> {
                   PrimaryActionButton(
                       onpress: () {
                         if (_formKey.currentState!.validate()) {
-                        
-                                           }
+                          context.read<RegisterBloc>().add(
+                              RegisterEvent.gegisterStarted(
+                                  user: RegisterRequestModel(
+                                      age: 0,
+                                      createdAt: formatter.format(DateTime.now()),
+                                      updatedAt: formatter.format(DateTime.now()),
+                                      name: _name.text.trim(),
+                                      password: _password.text.trim(),
+                                      username: _username.text.trim(),
+                                      phone: _phone.text.trim(),
+                                      lmpDateEn: formatter.format(selectedDate),
+                                      lmpDateNp: '',
+                                      districtId: 0,
+                                      email: "",
+                                      isFirstTimeParent: 0,
+                                      latitude: "",
+                                      longitude: "",
+                                      municipalityId: 0,
+                                      registerAs: widget.registerAs,
+                                      tole: "")));
+                        }
                       },
                       title: 'Register'),
                   VerticalSpace(50.h),
                 ],
               ),
-            ),
-          ),
-        ));
-      
+            );
+          },
+        ),
+      ),
+    ));
   }
 }

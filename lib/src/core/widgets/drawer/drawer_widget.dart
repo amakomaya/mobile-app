@@ -3,9 +3,11 @@ import 'dart:ui';
 import 'package:aamako_maya/src/core/app_assets/app_assets.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
 import 'package:aamako_maya/src/core/widgets/scaffold/primary_scaffold.dart';
+import 'package:aamako_maya/src/features/authentication/screens/login/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../features/authentication/local_storage/authentication_local_storage.dart';
 import '../../theme/app_colors.dart';
 import '../helper_widgets/blank_space.dart';
 
@@ -52,18 +54,15 @@ class DrawerWidget extends StatelessWidget {
                     VerticalSpace(5.h),
                     Align(
                         alignment: Alignment.topCenter,
-                        child: Text('Rita Lama',style: theme.textTheme.titleSmall?.copyWith(
-
-                          fontSize: 34,
-                          color: AppColors.white
-                        ))),
+                        child: Text('Rita Lama',
+                            style: theme.textTheme.titleSmall?.copyWith(
+                                fontSize: 34, color: AppColors.white))),
                     VerticalSpace(5.h),
                     Align(
                         alignment: Alignment.topCenter,
-                        child: Text('40 weeks 5 days',style: theme.textTheme.titleSmall?.copyWith(
-                          fontSize: 12,
-                          color: AppColors.white
-                        ))),
+                        child: Text('40 weeks 5 days',
+                            style: theme.textTheme.titleSmall?.copyWith(
+                                fontSize: 12, color: AppColors.white))),
                     VerticalSpace(15.h),
                     Expanded(
                       child: ShadowContainer(
@@ -72,64 +71,106 @@ class DrawerWidget extends StatelessWidget {
                           children: [
                             ListTile(
                               leading: Image.asset(AppAssets.homeIcon),
-                              title: Text('Home',style: theme.textTheme.titleSmall,),
+                              title: Text(
+                                'Home',
+                                style: theme.textTheme.titleSmall,
+                              ),
                             ),
                             //profile
                             ListTile(
                               leading: Image.asset(AppAssets.personIcon),
-                              title: Text('profile',style: theme.textTheme.titleSmall),
+                              title: Text('profile',
+                                  style: theme.textTheme.titleSmall),
                             ),
                             //ANC
                             ListTile(
                               leading: Image.asset(AppAssets.ancIcon),
-                              title: Text('ANC',style: theme.textTheme.titleSmall),
+                              title: Text('ANC',
+                                  style: theme.textTheme.titleSmall),
                             ),
                             //card
                             ListTile(
                               leading: Image.asset(AppAssets.cardIcon),
-                              title: Text('Card',style: theme.textTheme.titleSmall),
+                              title: Text('Card',
+                                  style: theme.textTheme.titleSmall),
                             ),
                             //
                             ListTile(
                               leading: Image.asset(AppAssets.medIcon),
-                              title: Text('Symptoms Assessment',style: theme.textTheme.titleSmall),
+                              title: Text('Symptoms Assessment',
+                                  style: theme.textTheme.titleSmall),
                             ),
                             //Appointment
                             ListTile(
                               leading: Image.asset(AppAssets.pncIcon),
-                              title: Text('Appointment',style: theme.textTheme.titleSmall),
+                              title: Text('Appointment',
+                                  style: theme.textTheme.titleSmall),
                             ),
                             //health Report
                             ListTile(
                               leading: Image.asset(AppAssets.testIcon),
-                              title: Text('Health Report',style: theme.textTheme.titleSmall),
+                              title: Text('Health Report',
+                                  style: theme.textTheme.titleSmall),
                             ),
 
                             //Delivery
                             ListTile(
                               leading: Image.asset(AppAssets.cardIcon),
-                              title: Text('Delivery',style: theme.textTheme.titleSmall),
+                              title: Text('Delivery',
+                                  style: theme.textTheme.titleSmall),
                             ),
                             //Medication
                             ListTile(
                               leading: Image.asset(AppAssets.medIcon),
-                              title: Text('Medication',style: theme.textTheme.titleSmall),
+                              title: Text('Medication',
+                                  style: theme.textTheme.titleSmall),
                             ),
                             //PNC
                             ListTile(
                               leading: Image.asset(AppAssets.pncIcon),
-                              title: Text('PNC',style: theme.textTheme.titleSmall),
+                              title: Text('PNC',
+                                  style: theme.textTheme.titleSmall),
                             ),
                             //Lab Test
                             ListTile(
                               leading: Image.asset(AppAssets.testIcon),
-                              title: Text('Lab Test',style: theme.textTheme.titleSmall),
+                              title: Text('Lab Test',
+                                  style: theme.textTheme.titleSmall),
                             ),
                             //Baby
                             ListTile(
                               leading: Image.asset(AppAssets.babyIcon),
-                              title: Text('Baby',style: theme.textTheme.titleSmall),
-                            )
+                              title: Text('Baby',
+                                  style: theme.textTheme.titleSmall),
+                            ),
+                            //log out button
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left:12.0),
+                                child: TextButton.icon(
+                                  label: Text('Logout',style: Theme.of(context).textTheme.titleSmall,),
+
+                                    onPressed: () async {
+                                      final AuthLocalData _localData =
+                                          AuthLocalData();
+                                      String? token =
+                                          await _localData.getTokenFromocal();
+                                      if (token != null && token.isNotEmpty) {
+                                        final status =
+                                            await _localData.clearToken();
+                                        if (status) {
+                                          Navigator.pushAndRemoveUntil(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (ctx) => LoginPage()),
+                                              (route) => false);
+                                        }
+                                      }
+                                    },
+                                    icon: Icon(Icons.logout,color: Colors.red)),
+                              ),
+                            ),
                           ],
                         ),
                       ),

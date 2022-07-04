@@ -4,7 +4,7 @@ class UserModel {
   String? noOfPregnantBefore;
   int? age;
   String? height;
-  int? districtId;
+  dynamic districtId;
   int? municipalityId;
   String? ward;
   String? tole;
