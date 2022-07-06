@@ -139,7 +139,7 @@ class _VideoPageState extends State<VideoPage> {
                 //                   child: BlocBuilder<VideoChangeCubit,
                 //                       VideoChangeState>(
                 //                     builder: (co, st) {
-                                     
+
                 //                     },
                 //                   ),
                 //                 ),
@@ -161,9 +161,9 @@ class _VideoPageState extends State<VideoPage> {
 }
 
 class VideoListPage extends StatefulWidget {
-  List videoPlayerController;
-  List<VideoModel> list;
-  VideoListPage(
+  final List videoPlayerController;
+  final List<VideoModel> list;
+  const VideoListPage(
       {Key? key, required this.list, required this.videoPlayerController})
       : super(key: key);
 
@@ -176,6 +176,8 @@ class _VideoListPageState extends State<VideoListPage> {
   //     'https://assets.mixkit.co/videos/preview/mixkit-a-girl-blowing-a-bubble-gum-at-an-amusement-park-1226-large.mp4'
   // );
   late ChewieController _chewieController;
+    final ItemScrollController _scrollController = ItemScrollController();
+
 
   playVideo(int index) {
     final old = _chewieController;
@@ -186,32 +188,18 @@ class _VideoListPageState extends State<VideoListPage> {
       aspectRatio: 16 / 9,
       autoInitialize: true,
       autoPlay: true,
-      looping: true,
+      looping: false,
+
+      // looping: true,
       errorBuilder: (context, errorMessage) {
         return Center(
           child: Text(
-            errorMessage,
+            "Error Playing Video",
             style: TextStyle(color: Colors.white),
           ),
         );
       },
     );
-
-    // _chewieController = ChewieController(
-    //   videoPlayerController: widget.videoPlayerController[index],
-    //   aspectRatio: 16 / 9,
-    //   autoInitialize: true,
-    //   autoPlay: true,
-    //   looping: true,
-    //   errorBuilder: (context, errorMessage) {
-    //     return Center(
-    //       child: Text(
-    //         errorMessage,
-    //         style: TextStyle(color: Colors.white),
-    //       ),
-    //     );
-    //   },
-    // );
   }
 
   @override
@@ -226,7 +214,7 @@ class _VideoListPageState extends State<VideoListPage> {
       errorBuilder: (context, errorMessage) {
         return Center(
           child: Text(
-            errorMessage,
+            "Error Playing Video",
             style: TextStyle(color: Colors.white),
           ),
         );
@@ -247,41 +235,71 @@ class _VideoListPageState extends State<VideoListPage> {
     return VisibilityDetector(
       onVisibilityChanged: (visibilityInfo) {
         var visiblePercentage = visibilityInfo.visibleFraction * 100;
-      if(visiblePercentage<100.0){
-       
-        _chewieController.pause();
-      }
-    
-     
-      debugPrint(
-          'Widget ${visibilityInfo.key} is ${visiblePercentage}% visible');
-    },
-      
-      key: ValueKey('VisiblekeyVideo'),
+        if (visiblePercentage < 100.0) {
+          _chewieController.pause();
+        }
+
+        debugPrint(
+            'Widget ${visibilityInfo.key} is ${visiblePercentage}% visible');
+      },
+      key: const ValueKey('VisiblekeyVideo'),
       child: Column(
         children: [
           Visibility(
-            visible: _chewieController != null,
-            child: AspectRatio(
-              aspectRatio: 16 / 9,
-              child: Chewie(
-                controller: _chewieController,
+            child: Padding(
+              padding: defaultPadding.copyWith(top: 20,bottom: 20),
+              child: AspectRatio(
+                aspectRatio: 16 / 9,
+                child: Chewie(
+                  controller: _chewieController,
+                ),
               ),
             ),
           ),
           Expanded(
-              child: ListView.builder(
+              child: ScrollablePositionedList.builder(
+                itemScrollController: _scrollController,
+padding: defaultPadding.copyWith(bottom: 20,top: 20),
                   shrinkWrap: true,
                   itemCount: widget.videoPlayerController.length,
                   itemBuilder: (ctx, index) => GestureDetector(
                         onTap: () {
+                          _scrollController.scrollTo(index: index,duration: Duration(seconds: 1));
                           setState(() {
-                          playVideo(index);
+                            playVideo(index);
                           });
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.all(18.0),
-                          child: Text(widget.list[index].path),
+                       
+                        child: ShadowContainer(
+                          margin: const EdgeInsets.only(bottom:20),
+                          padding: EdgeInsets.all(10),
+                          child: Row(
+                            
+                            children: [
+                            Container(
+                              height: 100.w,
+                              width:100.w,
+                             decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(18),
+                              image: DecorationImage(image: NetworkImage(widget.list[index].thumbnail,),fit: BoxFit.cover)
+                             ),
+                             child: Align(child: Icon(Icons.play_circle,color: Colors.black,)),
+                             
+                             ),
+                             Expanded(
+                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                                        Html(data: widget.list[index].titleEn),
+                                Divider(color: Colors.grey,
+                                thickness: 2,
+                                indent: 10,
+                                endIndent: 10,
+                                ),
+                                   Html(data:widget.list[index].descriptionEn)
+                               ],),
+                             )
+                          ],),
                         ),
                       ))),
         ],

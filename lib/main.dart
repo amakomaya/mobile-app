@@ -64,7 +64,7 @@ Future<void> main() async {
           create: (context) => DistrictMunicipalityCubit(),
         ),
          BlocProvider(
-          create: (context) => WeeklyTipsCubit(repo: WeeklyTipsRepo(),cache: CachedValues()),
+          create: (context) => WeeklyTipsCubit(repo: WeeklyTipsRepo()),
         ),
         BlocProvider(
           create: (context) => VideoCubit(VideosRepo()),

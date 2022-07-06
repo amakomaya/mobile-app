@@ -14,48 +14,47 @@ class CachedValues {
     return box;
   }
 
-  openWeeklyBox() async {
-    // Open your boxes. Optional: Give it a type.
-    final box = await Hive.openBox(Consts.weekly_data);
-    return box;
-  }
 
-  //  Future<UserModel?> getUserInfo() async{
-
-  //   final box=openUserBox();
-
-  //   String? userInfo = box.put(Consts.user_info);
-  //   if (userInfo != null) {
-  //     // jsonDecode and parse the json to opject
-  //     UserModel userInfoDecoded =
-  //         UserModel.fromJson(jsonDecode(userInfo) as Map<String, dynamic>);
-  //     return userInfoDecoded;
-  //   }
-  //   return null;
-  // }
+  
 
   setUserInfo(UserModel userData) async {
     final box = await openUserBox();
     await box.put(Consts.user_info_key, userData.toJson());
   }
 
-  saveWeeklyTips(List<WeeklyTips> tips) async {
-    final box = await openWeeklyBox();
-    final v = await box.put(
-        Consts.weekly_data_key, tips.map((e) => e.toJson()).toList());
-  }
+  // saveWeeklyTips(List<WeeklyTips> tips) async {
+  //   final box = await openWeeklyBox();
+  //   // final v = await box.add(tips.map((e) => e.toJson()).toList());
+  //   for (int i = 0; i < tips.length; i++) {
+  //     final json = tips[i].toJson();
+  //     print(json);
+  //     box.add(json);
+  //   }
+  //   print(box.toString()+'hh');
+  // }
 
-Future<List<WeeklyTips>>?  getWeeklyTips() async {
-    final tipsBox = await openWeeklyBox();
-    print(tipsBox.name);
+  // getWeeklyTips() async {
+  //   final Box tipsBox = await openWeeklyBox();
 
-    final data = await tipsBox.get(Consts.weekly_data_key);
-    print(data.toString() + 'fff');
-    if (data != null) {
-      final list = (data).map((e) => WeeklyTips.fromJson(e)).toList();
-      print(list.toString() + 'sdds');
-      return list;
-    }
-    return data;
-  }
+  //  final list=[];
+  //  final li=(tipsBox.values as List).map((e) => WeeklyTips.fromJson(e)).toList();
+  //  print(li[0].descriptionEn);
+  //  return li;
+
+
+//     final map =
+//         tipsBox.toMap().values.toList().map((e) => WeeklyTips.fromJson(e)).toList();
+//     print(map[1].toString()+'kk');
+//  print(map[2].toString()+'kk');
+//     return map;
+
+    //   final data = await tipsBox.get(Consts.weekly_data_key);
+    //   print(data.toString() + 'fff');
+    //   if (data != null) {
+    //     final list = (data).map((e) => WeeklyTips.fromJson(e)).toList();
+    //     print(list.toString() + 'sdds');
+    //     return list;
+    //   }
+    //   return data;
+  // }
 }
