@@ -145,11 +145,7 @@ class _LoginPageState extends State<LoginPage> {
                   PrimaryActionButton(
                     padding: const EdgeInsets.symmetric(vertical: 20),
                     width: 380.w,
-                    onpress: () => Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (ctx) => CustomBottomNavigation(),
-                      ),
-                    ),
+                    onpress: () {},
                     title: '',
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -170,18 +166,21 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   VerticalSpace(20.h),
-                  BorderContainer(
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    width: 380.w,
-                    child: Center(
-                      child: Text('Guest Login',
-                          style: Theme.of(context)
-                              .textTheme
-                              .labelSmall!
-                              .copyWith(
-                                  fontSize: 18,
-                                  color: AppColors.primaryRed,
-                                  fontWeight: FontWeight.w600)),
+                  Visibility(
+                    visible: false,
+                    child: BorderContainer(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      width: 380.w,
+                      child: Center(
+                        child: Text('Guest Login',
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelSmall!
+                                .copyWith(
+                                    fontSize: 18,
+                                    color: AppColors.primaryRed,
+                                    fontWeight: FontWeight.w600)),
+                      ),
                     ),
                   ),
                   VerticalSpace(20.h),

@@ -27,7 +27,7 @@ class WeeklyTips {
   DateTime createdAt;
   DateTime updatedAt;
 
-  factory WeeklyTips.fromJson(Map<String, dynamic> json) => WeeklyTips(
+  factory WeeklyTips.fromJson(Map<dynamic, dynamic> json) => WeeklyTips(
         id: json["id"],
         titleEn: json["title_en"],
         titleNp: json["title_np"],
@@ -38,7 +38,7 @@ class WeeklyTips {
         updatedAt: DateTime.parse(json["updated_at"]),
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<dynamic, dynamic> toJson() => {
         "id": id,
         "title_en": titleEn,
         "title_np": titleNp,

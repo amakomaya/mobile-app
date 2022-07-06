@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:aamako_maya/src/core/theme/app_colors.dart';
 import 'package:aamako_maya/src/core/theme/custom_theme.dart';
 import 'package:aamako_maya/src/features/audio/screens/audio_player_widget.dart';
+import 'package:aamako_maya/src/features/authentication/cache/cache_values.dart';
 import 'package:aamako_maya/src/features/authentication/cubit/register_cubit.dart';
 import 'package:aamako_maya/src/features/authentication/cubit/toggle_district_municipality.dart';
 import 'package:aamako_maya/src/features/authentication/local_storage/authentication_local_storage.dart';
@@ -63,7 +64,7 @@ Future<void> main() async {
           create: (context) => DistrictMunicipalityCubit(),
         ),
          BlocProvider(
-          create: (context) => WeeklyTipsCubit(repo: WeeklyTipsRepo()),
+          create: (context) => WeeklyTipsCubit(repo: WeeklyTipsRepo(),cache: CachedValues()),
         ),
         BlocProvider(
           create: (context) => VideoCubit(VideosRepo()),

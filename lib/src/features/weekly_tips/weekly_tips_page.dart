@@ -20,7 +20,6 @@ class WeeklyTipsPage extends StatefulWidget {
 class _WeeklyTipsPageState extends State<WeeklyTipsPage> {
   @override
   void initState() {
-    context.read<WeeklyTipsCubit>().getWeeklyTips();
     super.initState();
   }
 

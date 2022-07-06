@@ -2,12 +2,14 @@ import 'package:aamako_maya/src/core/theme/app_colors.dart';
 import 'package:aamako_maya/src/features/bottom_nav/popup.dart';
 import 'package:aamako_maya/src/features/video/screens/video_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../core/widgets/drawer/drawer_widget.dart';
 import '../audio/screens/audio_page.dart';
 import '../home/homepage.dart';
 import '../shop/shop_page.dart';
+import '../weekly_tips/cubit/weekly_tips_cubit.dart';
 import '../weekly_tips/weekly_tips_page.dart';
 
 class CustomBottomNavigation extends StatefulWidget {
@@ -101,6 +103,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                                 : Colors.white,
                           ),
                           onPressed: () {
+                             context.read<WeeklyTipsCubit>().getWeeklyTips();
                             selectedindex.value = 3;
                           },
                         )
