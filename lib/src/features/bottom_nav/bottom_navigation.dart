@@ -7,7 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../core/widgets/drawer/drawer_widget.dart';
 import '../audio/screens/audio_page.dart';
-import '../home/homepage.dart';
+import '../home/screens/homepage.dart';
 import '../shop/shop_page.dart';
 import '../weekly_tips/cubit/weekly_tips_cubit.dart';
 import '../weekly_tips/weekly_tips_page.dart';
@@ -24,9 +24,9 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
 
   @override
   void initState() {
-  
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -103,7 +103,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                                 : Colors.white,
                           ),
                           onPressed: () {
-                             context.read<WeeklyTipsCubit>().getWeeklyTips();
+                            context.read<WeeklyTipsCubit>().getWeeklyTips();
                             selectedindex.value = 3;
                           },
                         )

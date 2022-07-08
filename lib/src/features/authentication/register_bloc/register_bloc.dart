@@ -14,8 +14,9 @@ part 'register_bloc.freezed.dart';
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   final RegisterRepository _repo;
   final AuthLocalData _local;
-  RegisterBloc(RegisterRepository repo,AuthLocalData local)
-      : _repo = repo,_local=local,
+  RegisterBloc(RegisterRepository repo, AuthLocalData local)
+      : _repo = repo,
+        _local = local,
         super(const _Initial()) {
     on<_RegisterStart>((event, emit) async {
       emit(state.copyWith(isLoading: true));

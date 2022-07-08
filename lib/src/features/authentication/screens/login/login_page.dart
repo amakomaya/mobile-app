@@ -13,7 +13,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/app_assets/app_assets.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../bottom_nav/bottom_navigation.dart';
-import '../../../home/homepage.dart';
+import '../../../home/screens/homepage.dart';
 import '../../login_bloc/login_bloc.dart';
 
 class LoginPage extends StatefulWidget {

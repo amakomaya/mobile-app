@@ -12,20 +12,19 @@ class RegisterRepository {
 
   register({required RegisterRequestModel credential}) async {
     try {
-      final response = await dio.post(Urls.registerUrl,
-          data: credential.toJson());
+      final response =
+          await dio.post(Urls.registerUrl, data: credential.toJson());
       if (response.statusCode == 200) {
         final data = UserModel.fromJson(response.data['user']);
         print(data);
         return data;
       }
     } on DioError catch (e) {
-      if(e.response!=null){
-        throw(e.response?.data['message']);
-      }else{
-        throw('Unexpected Error Occured');
+      if (e.response != null) {
+        throw (e.response?.data['message']);
+      } else {
+        throw ('Unexpected Error Occured');
       }
-      
     }
   }
 }

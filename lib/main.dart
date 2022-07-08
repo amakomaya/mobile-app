@@ -29,12 +29,13 @@ import 'src/features/audio/cubit/audio_cubit.dart';
 import 'src/features/authentication/cubit/district_municipality_cubit.dart';
 import 'src/features/authentication/login_bloc/login_bloc.dart';
 import 'src/features/authentication/register_bloc/register_bloc.dart';
+import 'src/features/home/cubit/newsfeed_cubit.dart';
 import 'src/features/video/repository/videoes_repository.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-    // WidgetsBinding.instance?.addObserver(const AudioPlayerWidget());
+  // WidgetsBinding.instance?.addObserver(const AudioPlayerWidget());
 
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: AppColors.primaryRed,
@@ -46,15 +47,19 @@ Future<void> main() async {
           create: (context) => DistrictFieldToggleCubit(),
         ),
         BlocProvider(
+            create: (context) => NewsfeedCubit(
+                  Dio(),
+                )),
+        BlocProvider(
           create: (context) => LoginBloc(
-            LoginRepository(),AuthLocalData(),
+            LoginRepository(),
+            AuthLocalData(),
           ),
         ),
-        BlocProvider(create:(context)=> AudioCubit(Dio())),
+        BlocProvider(create: (context) => AudioCubit(Dio())),
         BlocProvider(
-          create: (context) => RegisterBloc(
-            RegisterRepository(),AuthLocalData()
-          ),
+          create: (context) =>
+              RegisterBloc(RegisterRepository(), AuthLocalData()),
         ),
         BlocProvider(
           create: (context) => OnboardBloc(repo: OnboardingRepo())
@@ -63,7 +68,7 @@ Future<void> main() async {
         BlocProvider(
           create: (context) => DistrictMunicipalityCubit(),
         ),
-         BlocProvider(
+        BlocProvider(
           create: (context) => WeeklyTipsCubit(repo: WeeklyTipsRepo()),
         ),
         BlocProvider(

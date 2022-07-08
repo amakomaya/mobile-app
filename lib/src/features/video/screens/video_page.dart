@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:aamako_maya/src/core/padding/padding.dart';
 import 'package:aamako_maya/src/core/theme/app_colors.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
@@ -12,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -176,8 +179,7 @@ class _VideoListPageState extends State<VideoListPage> {
   //     'https://assets.mixkit.co/videos/preview/mixkit-a-girl-blowing-a-bubble-gum-at-an-amusement-park-1226-large.mp4'
   // );
   late ChewieController _chewieController;
-    final ItemScrollController _scrollController = ItemScrollController();
-
+  final ItemScrollController _scrollController = ItemScrollController();
 
   playVideo(int index) {
     final old = _chewieController;
@@ -236,7 +238,13 @@ class _VideoListPageState extends State<VideoListPage> {
       onVisibilityChanged: (visibilityInfo) {
         var visiblePercentage = visibilityInfo.visibleFraction * 100;
         if (visiblePercentage < 100.0) {
-          _chewieController.pause();
+          if (_chewieController.isPlaying == false) {
+            Timer(Duration(seconds: 2), () {
+              _chewieController.pause();
+            });
+          } else {
+            _chewieController.pause();
+          }
         }
 
         debugPrint(
@@ -247,7 +255,7 @@ class _VideoListPageState extends State<VideoListPage> {
         children: [
           Visibility(
             child: Padding(
-              padding: defaultPadding.copyWith(top: 20,bottom: 20),
+              padding: defaultPadding.copyWith(top: 20, bottom: 20),
               child: AspectRatio(
                 aspectRatio: 16 / 9,
                 child: Chewie(
@@ -258,48 +266,56 @@ class _VideoListPageState extends State<VideoListPage> {
           ),
           Expanded(
               child: ScrollablePositionedList.builder(
-                itemScrollController: _scrollController,
-padding: defaultPadding.copyWith(bottom: 20,top: 20),
+                  itemScrollController: _scrollController,
+                  padding: defaultPadding.copyWith(bottom: 20, top: 20),
                   shrinkWrap: true,
                   itemCount: widget.videoPlayerController.length,
                   itemBuilder: (ctx, index) => GestureDetector(
                         onTap: () {
-                          _scrollController.scrollTo(index: index,duration: Duration(seconds: 1));
+                          _scrollController.scrollTo(
+                              index: index, duration: Duration(seconds: 1));
                           setState(() {
                             playVideo(index);
                           });
                         },
-                       
                         child: ShadowContainer(
-                          margin: const EdgeInsets.only(bottom:20),
+                          margin: const EdgeInsets.only(bottom: 20),
                           padding: EdgeInsets.all(10),
                           child: Row(
-                            
                             children: [
-                            Container(
-                              height: 100.w,
-                              width:100.w,
-                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(18),
-                              image: DecorationImage(image: NetworkImage(widget.list[index].thumbnail,),fit: BoxFit.cover)
-                             ),
-                             child: Align(child: Icon(Icons.play_circle,color: Colors.black,)),
-                             
-                             ),
-                             Expanded(
-                               child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                                        Html(data: widget.list[index].titleEn),
-                                Divider(color: Colors.grey,
-                                thickness: 2,
-                                indent: 10,
-                                endIndent: 10,
+                              Container(
+                                height: 100.w,
+                                width: 100.w,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(18),
+                                    image: DecorationImage(
+                                        image: NetworkImage(
+                                          widget.list[index].thumbnail,
+                                        ),
+                                        fit: BoxFit.cover)),
+                                child: Align(
+                                    child: Icon(
+                                  Icons.play_circle,
+                                  color: Colors.black,
+                                )),
+                              ),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Html(data: widget.list[index].titleEn),
+                                    Divider(
+                                      color: Colors.grey,
+                                      thickness: 2,
+                                      indent: 10,
+                                      endIndent: 10,
+                                    ),
+                                    Html(data: widget.list[index].descriptionEn)
+                                  ],
                                 ),
-                                   Html(data:widget.list[index].descriptionEn)
-                               ],),
-                             )
-                          ],),
+                              )
+                            ],
+                          ),
                         ),
                       ))),
         ],

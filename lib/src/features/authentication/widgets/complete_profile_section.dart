@@ -4,7 +4,7 @@ import 'package:aamako_maya/src/features/authentication/cubit/register_cubit.dar
 import 'package:aamako_maya/src/features/authentication/model/municipality_district_model.dart';
 import 'package:aamako_maya/src/features/authentication/model/register_request_model.dart';
 import 'package:aamako_maya/src/features/authentication/widgets/municipality_dropdown_widget.dart';
-import 'package:aamako_maya/src/features/home/homepage.dart';
+import 'package:aamako_maya/src/features/home/screens/homepage.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

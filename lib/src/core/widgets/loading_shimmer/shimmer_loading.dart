@@ -7,9 +7,13 @@ import '../../padding/padding.dart';
 
 class ShimmerLoading extends StatelessWidget {
   final int itemCount;
-   double? inBetweenSpace;
+  double? inBetweenSpace;
   final double boxHeight;
-  ShimmerLoading({Key? key, required this.boxHeight, required this.itemCount, this.inBetweenSpace})
+  ShimmerLoading(
+      {Key? key,
+      required this.boxHeight,
+      required this.itemCount,
+      this.inBetweenSpace})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -17,10 +21,9 @@ class ShimmerLoading extends StatelessWidget {
       baseColor: Colors.grey[200]!,
       highlightColor: Colors.white,
       child: ListView.separated(
-      shrinkWrap: true,
+        shrinkWrap: true,
         padding: defaultPadding.copyWith(top: 20, bottom: 20),
         itemCount: itemCount,
-        
         itemBuilder: (context, index) {
           return Card(
             elevation: 1.0,
@@ -32,7 +35,7 @@ class ShimmerLoading extends StatelessWidget {
             ),
           );
         },
-        separatorBuilder: (context,ind)=>VerticalSpace(inBetweenSpace??0),
+        separatorBuilder: (context, ind) => VerticalSpace(inBetweenSpace ?? 0),
       ),
     );
   }

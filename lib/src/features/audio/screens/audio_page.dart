@@ -53,7 +53,7 @@ class _AudioPageState extends State<AudioPage> {
               listener: (ctx, st) {
                 if (st.error != null) {
                   BotToast.showText(
-                      text: 'There was an error fetching at the moment');
+                      text: 'There was an error fetching audio at the moment');
                 }
               },
               builder: (ctx, st) {
@@ -69,9 +69,10 @@ class _AudioPageState extends State<AudioPage> {
                         itemBuilder: ((context, index) {
                           return GestureDetector(
                             onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (ctx) => AudioPlayerWidget(
-                                      audio: (st.audioModel?[index]),)));
+                              // Navigator.of(context).push(MaterialPageRoute(
+                              //     builder: (ctx) => AudioPlayerWidget(
+                              //           audio: (st.audioModel?[index]),
+                              //         )));
                             },
                             child: AudioContainerWidget(
                               audio: st.audioModel![index],
