@@ -3,8 +3,10 @@ import 'dart:ui';
 import 'package:aamako_maya/src/core/app_assets/app_assets.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
 import 'package:aamako_maya/src/core/widgets/scaffold/primary_scaffold.dart';
+import 'package:aamako_maya/src/features/ancs/cubit/ancs_cubit.dart';
 import 'package:aamako_maya/src/features/authentication/screens/login/login_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../features/authentication/local_storage/authentication_local_storage.dart';
@@ -84,6 +86,9 @@ class DrawerWidget extends StatelessWidget {
                             ),
                             //ANC
                             ListTile(
+                              onTap: () {
+                                context.read<AncsCubit>().getAncs();
+                              },
                               leading: Image.asset(AppAssets.ancIcon),
                               title: Text('ANC',
                                   style: theme.textTheme.titleSmall),
@@ -147,10 +152,14 @@ class DrawerWidget extends StatelessWidget {
                             Align(
                               alignment: Alignment.topLeft,
                               child: Padding(
-                                padding: const EdgeInsets.only(left:12.0),
+                                padding: const EdgeInsets.only(left: 12.0),
                                 child: TextButton.icon(
-                                  label: Text('Logout',style: Theme.of(context).textTheme.titleSmall,),
-
+                                    label: Text(
+                                      'Logout',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall,
+                                    ),
                                     onPressed: () async {
                                       final AuthLocalData _localData =
                                           AuthLocalData();
@@ -163,12 +172,14 @@ class DrawerWidget extends StatelessWidget {
                                           Navigator.pushAndRemoveUntil(
                                               context,
                                               MaterialPageRoute(
-                                                  builder: (ctx) => LoginPage()),
+                                                  builder: (ctx) =>
+                                                      LoginPage()),
                                               (route) => false);
                                         }
                                       }
                                     },
-                                    icon: Icon(Icons.logout,color: Colors.red)),
+                                    icon:
+                                        Icon(Icons.logout, color: Colors.red)),
                               ),
                             ),
                           ],

@@ -13,4 +13,5 @@ class Urls {
   static const audiourl = "$baseUrl/v2/content-app/audio";
 
   static const newsFeedUrl = "$baseUrl/v2/content-app/newsfeed";
+  static const ancsUrl = "http://aamakomaya.com/api/v1/woman-ancs";
 }

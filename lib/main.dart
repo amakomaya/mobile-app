@@ -25,6 +25,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import 'src/features/ancs/cubit/ancs_cubit.dart';
 import 'src/features/audio/cubit/audio_cubit.dart';
 import 'src/features/authentication/cubit/district_municipality_cubit.dart';
 import 'src/features/authentication/login_bloc/login_bloc.dart';
@@ -46,6 +47,10 @@ Future<void> main() async {
         BlocProvider<DistrictFieldToggleCubit>(
           create: (context) => DistrictFieldToggleCubit(),
         ),
+        BlocProvider(
+            create: (context) => AncsCubit(
+                  Dio(),
+                )),
         BlocProvider(
             create: (context) => NewsfeedCubit(
                   Dio(),
