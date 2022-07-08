@@ -97,21 +97,21 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget>
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(formatTime(position)),
-              Text(formatTime(duration - position))
+              // Text(formatTime(position)),
+              // Text(formatTime(duration - position))
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              IconButton(
-                  onPressed: () async {
-                    await _audioPlayer.seek(position - Duration(seconds: 10));
-                  },
-                  icon: Icon(
-                    Icons.skip_previous,
-                    color: Colors.black,
-                  )),
+              // IconButton(
+              //     onPressed: () async {
+              //       await _audioPlayer.seek(position - Duration(seconds: 10));
+              //     },
+              //     icon: Icon(
+              //       Icons.skip_previous,
+              //       color: Colors.black,
+              //     )),
               IconButton(
                   onPressed: () async {
                     if (isPlaying) {
@@ -127,14 +127,14 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget>
                     size: 40,
                     color: Colors.black,
                   )),
-              IconButton(
-                  onPressed: () async {
-                    await _audioPlayer.seek(position + Duration(seconds: 10));
-                  },
-                  icon: Icon(
-                    Icons.skip_next,
-                    color: Colors.black,
-                  )),
+              // IconButton(
+              //     onPressed: () async {
+              //       await _audioPlayer.seek(position + Duration(seconds: 10));
+              //     },
+              //     icon: Icon(
+              //       Icons.skip_next,
+              //       color: Colors.black,
+              //     )),
             ],
           )
         ],

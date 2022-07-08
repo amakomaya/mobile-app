@@ -10,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../widgets/audio_container_widget.dart';
+import 'audio_player_section.dart';
 
 class AudioPage extends StatefulWidget {
   const AudioPage({Key? key}) : super(key: key);
@@ -27,33 +28,14 @@ class _AudioPageState extends State<AudioPage> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return PrimaryScaffold(
-      appBartitle: 'Audio',
-      body: SingleChildScrollView(
-        padding: defaultPadding.copyWith(bottom: 20.h, top: 20.h),
-        primary: true,
-        physics: const BouncingScrollPhysics(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Text(
-            //   'This week Audio',
-            //   style: theme.textTheme.labelMedium,
-            // ),
-            // VerticalSpace(20.h),
-            // AudioContainerWidget(),
-            // VerticalSpace(20.h),
-            Text(
-              'Other Week Audio',
-              style: theme.textTheme.labelMedium,
-            ),
-            VerticalSpace(20.h),
-            BlocConsumer<AudioCubit, AudioState>(
+        appBartitle: 'Audio',
+        body:  BlocConsumer<AudioCubit, AudioState>(
               listener: (ctx, st) {
                 if (st.error != null) {
                   BotToast.showText(
-                      text: 'There was an error fetching audio at the moment');
+                      text:
+                          'There was an error fetching audio at the moment');
                 }
               },
               builder: (ctx, st) {
@@ -63,29 +45,10 @@ class _AudioPageState extends State<AudioPage> {
                         itemCount: 10,
                         inBetweenSpace: 20.h,
                       )
-                    : ListView.separated(
-                        primary: false,
-                        shrinkWrap: true,
-                        itemBuilder: ((context, index) {
-                          return GestureDetector(
-                            onTap: () {
-                              // Navigator.of(context).push(MaterialPageRoute(
-                              //     builder: (ctx) => AudioPlayerWidget(
-                              //           audio: (st.audioModel?[index]),
-                              //         )));
-                            },
-                            child: AudioContainerWidget(
-                              audio: st.audioModel![index],
-                            ),
-                          );
-                        }),
-                        separatorBuilder: (ctx, ind) => VerticalSpace(20.h),
-                        itemCount: st.audioModel?.length ?? 0);
+                    : AudioPlayerSection(
+                      audios: st.audioModel??[],
+                    );
               },
-            ),
-          ],
-        ),
-      ),
-    );
+            ),);
   }
 }
