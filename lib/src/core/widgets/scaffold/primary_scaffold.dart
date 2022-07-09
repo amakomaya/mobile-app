@@ -66,7 +66,8 @@ class PrimaryScaffold extends StatelessWidget {
               ],
             )),
       ),
-      Expanded(child: body ?? Container())
+      Expanded(child: body ?? Container()),
+      
     ]);
   }
 }

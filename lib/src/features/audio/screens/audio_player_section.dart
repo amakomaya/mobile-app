@@ -1,4 +1,5 @@
 import 'package:aamako_maya/src/core/padding/padding.dart';
+import 'package:aamako_maya/src/core/theme/app_colors.dart';
 import 'package:aamako_maya/src/features/audio/model/audio_model.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,8 @@ class AudioPlayerSection extends StatefulWidget {
   State<AudioPlayerSection> createState() => _AudioPlayerSectionState();
 }
 
-class _AudioPlayerSectionState extends State<AudioPlayerSection> with WidgetsBindingObserver {
+class _AudioPlayerSectionState extends State<AudioPlayerSection>
+    with WidgetsBindingObserver {
   ValueNotifier<bool> isPlaying = ValueNotifier(false);
 
   late AudioPlayer _audioPlayer;
@@ -24,18 +26,20 @@ class _AudioPlayerSectionState extends State<AudioPlayerSection> with WidgetsBin
   ValueNotifier<Duration> dur = ValueNotifier(Duration.zero);
   ValueNotifier<Duration> pos = ValueNotifier(Duration.zero);
 
-  String? currentUrl;
+  ValueNotifier<String?> currentUrl = ValueNotifier(null);
+
   ValueNotifier<String?> currentAudio = ValueNotifier(null);
   ValueNotifier<String?> currentThumbnail = ValueNotifier(null);
 
-  _play(String url, String title) async {
-    if (url != currentUrl) {
+  _play(String url, String title, String thumbnail) async {
+    if (url != currentUrl.value) {
       _audioPlayer.pause();
 
       await _audioPlayer.play(UrlSource(url));
 
-      currentUrl = url;
+      currentUrl.value = url;
       currentAudio.value = title;
+      currentThumbnail.value = thumbnail;
     }
   }
 
@@ -54,16 +58,19 @@ class _AudioPlayerSectionState extends State<AudioPlayerSection> with WidgetsBin
     _audioPlayer.onPositionChanged.listen((event) {
       pos.value = event;
     });
+    WidgetsBinding.instance!.addObserver(this);
+
     super.initState();
   }
 
   @override
   void dispose() {
     _audioPlayer.dispose();
-        WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance!.removeObserver(this);
 
     super.dispose();
   }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused) {
@@ -98,12 +105,11 @@ class _AudioPlayerSectionState extends State<AudioPlayerSection> with WidgetsBin
               itemBuilder: ((context, index) {
                 return GestureDetector(
                   onTap: () {
-                    _play(widget.audios[index].path,
-                        widget.audios[index].titleEn);
-                    // Navigator.of(context).push(MaterialPageRoute(
-                    //     builder: (ctx) => AudioPlayerWidget(
-                    //           audio: (st.audioModel?[index]),
-                    //         )));
+                    _play(
+                      widget.audios[index].path,
+                      widget.audios[index].titleEn,
+                      widget.audios[index].thumbnail,
+                    );
                   },
                   child: AudioContainerWidget(
                     audio: widget.audios[index],
@@ -113,100 +119,138 @@ class _AudioPlayerSectionState extends State<AudioPlayerSection> with WidgetsBin
               separatorBuilder: (ctx, ind) => VerticalSpace(20.h),
               itemCount: widget.audios.length),
         ),
-        Container(
-          color: Colors.transparent.withOpacity(0.1),
-          height: 170.h,
-          width: double.infinity,
-          padding: defaultPadding.copyWith(top: 15, bottom: 15),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ValueListenableBuilder(
-                  valueListenable: currentThumbnail,
-                  builder: (context, snapshot, c) {
-                    return Container(
-                      height: 50.h,
-                      width: 50.h,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(17),
-                          image: DecorationImage(
-                              image: NetworkImage(currentThumbnail.value ??
-                                  widget.audios[0].thumbnail))),
-                    );
-                  }),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ValueListenableBuilder(
-                      valueListenable: currentAudio,
-                      builder: (context, obj, wi) {
-                        return Padding(
-                          padding: defaultPadding,
-                          child: Text(
-                              currentAudio.value ?? widget.audios[0].titleEn),
-                        );
-                      }),
-                  VerticalSpace(10.h),
-                  ValueListenableBuilder(
-                    valueListenable: dur,
-                    builder: (c,cc,ccc) {
-                      print(dur.value.toString()+"dffd");
-                      return ValueListenableBuilder(
-                        valueListenable: pos,
-                        builder: (context,c,g) {
-                          return Slider.adaptive(
-                            max: dur.value.inSeconds.toDouble(),
-                            min: 0,
-                            value: pos.value.inSeconds.toDouble(),
-                            onChanged: (double value) async {
-                              final position = Duration(seconds: value.toInt());
-                              await _audioPlayer.seek(position);
-                            },
-                          );
-                        }
-                      );
-                    }
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        formatTime(
-                          pos.value,
-                        ),
-                        style: TextStyle(fontSize: 12),
-                      ),
-                      HorizSpace(95.w),
-                      Text(
-                        formatTime(dur.value - pos.value),
-                        style: TextStyle(fontSize: 12),
+        ValueListenableBuilder(
+            valueListenable: currentUrl,
+            builder: (context, v, b) {
+              return AnimatedSwitcher(
+                duration: const Duration(milliseconds: 1000),
+                child: currentUrl.value == null
+                    ? Container(
+                        height: 60.h,
+                        color: Colors.transparent.withOpacity(0.1),
+                        key: ValueKey('switchAnimation1'),
                       )
-                    ],
-                  ),
-                ],
-              ),
-              Spacer(),
-              ValueListenableBuilder<bool>(
-                valueListenable: isPlaying,
-                builder: (context,s,c) {
-                  return IconButton(
-                      padding: EdgeInsets.only(right: 10),
-                      onPressed: () async {
-                        if (isPlaying.value) {
-                          await _audioPlayer.pause();
-                        } else {
-                          await _audioPlayer.resume();
-                        }
-                      },
-                      icon: Icon(
-                        isPlaying.value ? Icons.pause_circle_filled : Icons.play_circle,
-                        size: 40,
-                        color: Colors.grey,
-                      ));
-                }
-              ),
-            ],
-          ),
-        ),
+                    : Container(
+                      decoration: BoxDecoration(
+                         color: Colors.transparent.withOpacity(0.1),
+                         borderRadius: BorderRadius.only(topRight: Radius.circular(30.w))
+                      ),
+                        key: ValueKey('switchAnimation2'),
+                        // curve: Curves.fastOutSlowIn,
+                        // duration: Duration(seconds: 1),
+                       
+                        height: 170.h,
+                        width: double.infinity,
+                        padding: defaultPadding.copyWith(top: 15, bottom: 15),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ValueListenableBuilder(
+                                valueListenable: currentThumbnail,
+                                builder: (context, snapshot, c) {
+                                  print(currentThumbnail.toString() + 'ads');
+                                  return Container(
+                                    height: 50.h,
+                                    width: 50.h,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(17),
+                                        image: DecorationImage(
+                                            image: NetworkImage(currentThumbnail
+                                                    .value ??
+                                                widget.audios[0].thumbnail))),
+                                  );
+                                }),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ValueListenableBuilder(
+                                    valueListenable: currentAudio,
+                                    builder: (context, obj, wi) {
+                                      return Padding(
+                                        padding: defaultPadding,
+                                        child: Text(currentAudio.value ??
+                                            widget.audios[0].titleEn),
+                                      );
+                                    }),
+                                VerticalSpace(10.h),
+                                ValueListenableBuilder(
+                                    valueListenable: dur,
+                                    builder: (c, cc, ccc) {
+                                      print(dur.value.toString() + "dffd");
+                                      return ValueListenableBuilder(
+                                          valueListenable: pos,
+                                          builder: (context, c, g) {
+                                            return Slider.adaptive(
+                                              activeColor: AppColors.primaryRed,
+                                              inactiveColor: Colors.white,
+                                              max: dur.value.inSeconds
+                                                  .toDouble(),
+                                              min: 0,
+                                              value: pos.value.inSeconds
+                                                  .toDouble(),
+                                              onChanged: (double value) async {
+                                                final position = Duration(
+                                                    seconds: value.toInt());
+                                                await _audioPlayer
+                                                    .seek(position);
+                                              },
+                                            );
+                                          });
+                                    }),
+                                ValueListenableBuilder(
+                                    valueListenable: dur,
+                                    builder: (context, f, ff) {
+                                      return ValueListenableBuilder(
+                                          valueListenable: pos,
+                                          builder: (context, f, ff) {
+                                            return Row(
+                                              children: [
+                                                Text(
+                                                  formatTime(
+                                                    pos.value,
+                                                  ),
+                                                  style:
+                                                      TextStyle(fontSize: 12),
+                                                ),
+                                                HorizSpace(95.w),
+                                                Text(
+                                                  formatTime(
+                                                      dur.value - pos.value),
+                                                  style:
+                                                      TextStyle(fontSize: 12),
+                                                )
+                                              ],
+                                            );
+                                          });
+                                    }),
+                              ],
+                            ),
+                            Spacer(),
+                            ValueListenableBuilder<bool>(
+                                valueListenable: isPlaying,
+                                builder: (context, s, c) {
+                                  return IconButton(
+                                      padding: EdgeInsets.only(right: 10),
+                                      onPressed: () async {
+                                        if (isPlaying.value) {
+                                          await _audioPlayer.pause();
+                                        } else {
+                                          await _audioPlayer.resume();
+                                        }
+                                      },
+                                      icon: Icon(
+                                        isPlaying.value
+                                            ? Icons.pause_circle_filled
+                                            : Icons.play_circle,
+                                        size: 40,
+                                        color: Colors.grey,
+                                      ));
+                                }),
+                          ],
+                        ),
+                      ),
+              );
+            }),
       ],
     );
   }

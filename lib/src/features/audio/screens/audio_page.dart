@@ -3,7 +3,6 @@ import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
 import 'package:aamako_maya/src/core/widgets/loading_shimmer/shimmer_loading.dart';
 import 'package:aamako_maya/src/core/widgets/scaffold/primary_scaffold.dart';
 import 'package:aamako_maya/src/features/audio/cubit/audio_cubit.dart';
-import 'package:aamako_maya/src/features/audio/screens/audio_player_widget.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
