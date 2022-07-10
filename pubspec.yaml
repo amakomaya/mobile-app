@@ -30,17 +30,14 @@ dependencies:
   hive_flutter: ^1.1.0
   better_player: ^0.0.82
   intl: ^0.17.0
-  introduction_screen: ^3.0.2
   shimmer: ^2.0.0
   chewie: 
   video_player: 
   scrollable_positioned_list: ^0.3.1
   audioplayers: ^1.0.1
-  shared_preferences: ^2.0.15
   visibility_detector: ^0.2.2
-  just_audio: ^0.9.27
-  audio_session: ^0.1.8
   rxdart: ^0.27.4
+  animated_text_kit: ^4.2.1
 
 #native splash screens
 # flutter_native_splash:

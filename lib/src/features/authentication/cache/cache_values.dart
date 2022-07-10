@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/constant/app_constants.dart';
 import '../../weekly_tips/model/weekly_tips_model.dart';
