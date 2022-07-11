@@ -1,14 +1,12 @@
 import 'dart:async';
 
 import 'package:aamako_maya/src/core/padding/padding.dart';
-import 'package:aamako_maya/src/core/theme/app_colors.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
 import 'package:aamako_maya/src/core/widgets/loading_shimmer/shimmer_loading.dart';
 import 'package:aamako_maya/src/core/widgets/scaffold/primary_scaffold.dart';
 import 'package:aamako_maya/src/features/video/cubit/video_cubit.dart';
 import 'package:aamako_maya/src/features/video/model/video_model.dart';
-import 'package:better_player/better_player.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,7 +15,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-import '../video_change_cubit/video_change_cubit.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class VideoPage extends StatefulWidget {
@@ -46,9 +43,7 @@ class _VideoPageState extends State<VideoPage> {
   @override
   Widget build(BuildContext context) {
     // final theme = Theme.of(context);
-    return PrimaryScaffold(
-      appBartitle: 'Video',
-      body: BlocConsumer<VideoCubit, VideoState>(
+    return  BlocConsumer<VideoCubit, VideoState>(
         listener: (context, state) {},
         builder: (context, state) {
           return state.maybeWhen(
@@ -70,8 +65,7 @@ class _VideoPageState extends State<VideoPage> {
                 );
               }));
         },
-      ),
-    );
+      );
   }
 }
 

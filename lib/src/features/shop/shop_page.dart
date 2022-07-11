@@ -10,9 +10,7 @@ class ShopPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PrimaryScaffold(
-        appBartitle: 'Shop',
-        body: Column(
+    return Column(
           children: [
             Image.asset(
               "assets/images/shop.jpg",
@@ -20,6 +18,6 @@ class ShopPage extends StatelessWidget {
             ),
             VerticalSpace(60.h),
           ],
-        ));
+    );
   }
 }

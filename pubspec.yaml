@@ -28,7 +28,6 @@ dependencies:
   freezed_annotation: ^2.0.3
   hive: ^2.1.0
   hive_flutter: ^1.1.0
-  better_player: ^0.0.82
   intl: ^0.17.0
   shimmer: ^2.0.0
   chewie: 

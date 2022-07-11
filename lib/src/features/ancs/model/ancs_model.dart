@@ -9,37 +9,41 @@ AncModel ancModelFromJson(String str) => AncModel.fromJson(json.decode(str));
 String ancModelToJson(AncModel data) => json.encode(data.toJson());
 
 class AncModel {
-  AncModel({
-    this.weight,
-    this.anemia,
-    this.swelling,
-    this.bloodPressure,
-    this.uterusHeight,
-    this.babyPresentation,
-    this.babyHeartBeat,
-    this.other,
-    this.ironPills,
-    this.wormMedicine,
-    this.visitDate,
-    this.checkedBy,
-    this.nextVisitDate,
-  });
+    AncModel({
+        this.token,
+        this.womanToken,
+        this.weight,
+        this.anemia,
+        this.swelling,
+        this.bloodPressure,
+        this.uterusHeight,
+        this.babyPresentation,
+        this.babyHeartBeat,
+        this.other,
+        this.visitDate,
+        this.checkedBy,
+        this.nextVisitDate,
+        this.situation,
+    });
 
-  int? weight;
-  String? anemia;
-  String? swelling;
-  String? bloodPressure;
-  int? uterusHeight;
-  String? babyPresentation;
-  int? babyHeartBeat;
-  String? other;
-  int? ironPills;
-  int? wormMedicine;
-  String? visitDate;
-  String? checkedBy;
-  String? nextVisitDate;
+    String? token;
+    String? womanToken;
+    String? weight;
+    String? anemia;
+    String? swelling;
+    String? bloodPressure;
+    String? uterusHeight;
+    String? babyPresentation;
+    String? babyHeartBeat;
+    String? other;
+    DateTime? visitDate;
+    String? checkedBy;
+    String? nextVisitDate;
+    String? situation;
 
-  factory AncModel.fromJson(Map<String, dynamic> json) => AncModel(
+    factory AncModel.fromJson(Map<String, dynamic> json) => AncModel(
+        token: json["token"],
+        womanToken: json["woman_token"],
         weight: json["weight"],
         anemia: json["anemia"],
         swelling: json["swelling"],
@@ -48,14 +52,15 @@ class AncModel {
         babyPresentation: json["baby_presentation"],
         babyHeartBeat: json["baby_heart_beat"],
         other: json["other"],
-        ironPills: json["iron_pills"],
-        wormMedicine: json["worm_medicine"],
-        visitDate: json["visit_date"],
+        visitDate: DateTime.parse(json["visit_date"]),
         checkedBy: json["checked_by"],
         nextVisitDate: json["next_visit_date"],
-      );
+        situation: json["situation"],
+    );
 
-  Map<String, dynamic> toJson() => {
+    Map<String, dynamic> toJson() => {
+        "token": token,
+        "woman_token": womanToken,
         "weight": weight,
         "anemia": anemia,
         "swelling": swelling,
@@ -64,10 +69,9 @@ class AncModel {
         "baby_presentation": babyPresentation,
         "baby_heart_beat": babyHeartBeat,
         "other": other,
-        "iron_pills": ironPills,
-        "worm_medicine": wormMedicine,
-        "visit_date": visitDate,
+        "visit_date": "${visitDate?.year.toString().padLeft(4, '0')}-${visitDate?.month.toString().padLeft(2, '0')}-${visitDate?.day.toString().padLeft(2, '0')}",
         "checked_by": checkedBy,
         "next_visit_date": nextVisitDate,
-      };
+        "situation": situation,
+    };
 }

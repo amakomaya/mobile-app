@@ -27,9 +27,7 @@ class _AudioPageState extends State<AudioPage> {
 
   @override
   Widget build(BuildContext context) {
-    return PrimaryScaffold(
-        appBartitle: 'Audio',
-        body:  BlocConsumer<AudioCubit, AudioState>(
+    return  BlocConsumer<AudioCubit, AudioState>(
               listener: (ctx, st) {
                 if (st.error != null) {
                   BotToast.showText(
@@ -48,6 +46,6 @@ class _AudioPageState extends State<AudioPage> {
                       audios: st.audioModel??[],
                     );
               },
-            ),);
+            );
   }
 }

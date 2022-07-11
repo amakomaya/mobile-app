@@ -1,31 +1,22 @@
-import 'package:aamako_maya/src/core/padding/padding.dart';
-import 'package:aamako_maya/src/core/theme/app_colors.dart';
-import 'package:aamako_maya/src/core/widgets/drawer/drawer_widget.dart';
-import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class PrimaryScaffold extends StatelessWidget {
-  final String? appBartitle;
-  final VoidCallback? onMenuPressed;
+import '../../padding/padding.dart';
+import '../../theme/app_colors.dart';
+import '../helper_widgets/blank_space.dart';
+
+class PrimaryAppBar extends StatelessWidget {
   final double? height;
-  final Widget? body;
-  const PrimaryScaffold({
-    Key? key,
-    this.height,
-    this.body,
-    this.appBartitle,
-    this.onMenuPressed,
-  }) : super(key: key);
+  final String? title;
+  const PrimaryAppBar({ Key? key, this.height, this.title }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
-    final theme = Theme.of(context);
-    return Column(children: [
-      ContainerWidget(
+    Size size= MediaQuery.of(context).size;
+    return Container(
+      clipBehavior: Clip.none,
         width: size.width,
-        height: height ?? 70.h,
+        height: height?? 70.h,
         decoration: const BoxDecoration(
             color: AppColors.primaryRed,
             borderRadius: BorderRadius.only(
@@ -54,8 +45,8 @@ class PrimaryScaffold extends StatelessWidget {
                 ),
                 HorizSpace(20.w),
                 Text(
-                  appBartitle ?? 'Home',
-                  style: theme.textTheme.displaySmall,
+                  title??'',
+                  style: Theme.of(context).textTheme.displaySmall,
                 ),
                 const Spacer(),
                 ImageIcon(
@@ -74,43 +65,7 @@ class PrimaryScaffold extends StatelessWidget {
                 ),
               ],
             )),
-      ),
+      );
      
-      Expanded(child: body ?? Container()),
-    ]);
   }
-}
-
-class ContainerWidget extends StatelessWidget {
-  final Decoration? decoration;
-  final Widget child;
-  final double height;
-  final double? width;
-  final EdgeInsetsGeometry? margin;
-  final EdgeInsetsGeometry? padding;
-
-  ContainerWidget(
-      {Key? key,
-      required this.child,
-      this.decoration,
-      required this.height,
-      this.width,
-      this.margin,
-      this.padding})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: height,
-      width: width,
-      margin: margin,
-      padding: padding,
-      decoration: decoration,
-      child: child,
-    );
-  }
-
-  @override
-  Size get preferredSize => Size(double.infinity, height);
 }

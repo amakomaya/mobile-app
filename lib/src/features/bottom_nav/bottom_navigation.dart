@@ -1,4 +1,5 @@
 import 'package:aamako_maya/src/core/theme/app_colors.dart';
+import 'package:aamako_maya/src/core/widgets/scaffold/primary_appBar.dart';
 import 'package:aamako_maya/src/features/bottom_nav/popup.dart';
 import 'package:aamako_maya/src/features/video/screens/video_page.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,7 @@ class CustomBottomNavigation extends StatefulWidget {
 
 class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
   ValueNotifier<int> selectedindex = ValueNotifier(0);
-
+  ValueNotifier<String> selectedAppBar = ValueNotifier('Home');
   @override
   void initState() {
     super.initState();
@@ -66,6 +67,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                           ),
                           onPressed: () {
                             selectedindex.value = 0;
+                            selectedAppBar.value = 'Home';
                           },
                         ),
                         IconButton(
@@ -79,6 +81,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                           ),
                           onPressed: () {
                             selectedindex.value = 1;
+                            selectedAppBar.value = 'Audio';
                           },
                         ),
                         IconButton(
@@ -92,6 +95,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                           ),
                           onPressed: () {
                             selectedindex.value = 2;
+                            selectedAppBar.value = 'Video';
                           },
                         ),
                         IconButton(
@@ -104,8 +108,8 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                                 : Colors.grey,
                           ),
                           onPressed: () {
-                            context.read<WeeklyTipsCubit>().getWeeklyTips();
                             selectedindex.value = 3;
+                            selectedAppBar.value = 'Weekly Tips';
                           },
                         )
                       ],
@@ -113,20 +117,34 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                   }),
             ),
           ),
-          body: ValueListenableBuilder<int>(
-              valueListenable: selectedindex,
-              builder: (context, d, f) {
-                return IndexedStack(
-                  alignment: Alignment.center,
-                  index: selectedindex.value,
-                  children: const [
-                    HomePage(),
-                    AudioPage(),
-                    VideoPage(),
-                    WeeklyTipsPage(),
-                    ShopPage(),
-                  ],
-                );
+          body: ValueListenableBuilder(
+              valueListenable: selectedAppBar,
+              builder: (context, f, h) {
+                return ValueListenableBuilder<int>(
+                    valueListenable: selectedindex,
+                    builder: (context, d, f) {
+                      return Column(
+                        children: [
+                          PrimaryAppBar(
+                            title: selectedAppBar.value,
+                            height: selectedindex.value == 0 ? 100.h : null,
+                          ),
+                          Expanded(
+                            child: IndexedStack(
+                              alignment: Alignment.center,
+                              index: selectedindex.value,
+                              children: const [
+                                HomePage(),
+                                AudioPage(),
+                                VideoPage(),
+                                WeeklyTipsPage(),
+                                ShopPage(),
+                              ],
+                            ),
+                          )
+                        ],
+                      );
+                    });
               }),
           floatingActionButton: ValueListenableBuilder(
               valueListenable: selectedindex,
@@ -138,6 +156,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                   isExtended: true,
                   onPressed: () {
                     selectedindex.value = 4;
+                    selectedAppBar.value = 'Shopping';
                   },
                   clipBehavior: Clip.none,
                   child: Icon(

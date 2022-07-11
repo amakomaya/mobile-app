@@ -4,6 +4,7 @@ import 'package:aamako_maya/src/core/app_assets/app_assets.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
 import 'package:aamako_maya/src/core/widgets/scaffold/primary_scaffold.dart';
 import 'package:aamako_maya/src/features/ancs/cubit/ancs_cubit.dart';
+import 'package:aamako_maya/src/features/ancs/screens/ancs_page.dart';
 import 'package:aamako_maya/src/features/authentication/screens/login/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,8 +14,19 @@ import '../../../features/authentication/local_storage/authentication_local_stor
 import '../../theme/app_colors.dart';
 import '../helper_widgets/blank_space.dart';
 
-class DrawerWidget extends StatelessWidget {
+class DrawerWidget extends StatefulWidget {
   const DrawerWidget({Key? key}) : super(key: key);
+
+  @override
+  State<DrawerWidget> createState() => _DrawerWidgetState();
+}
+
+class _DrawerWidgetState extends State<DrawerWidget> {
+  @override
+  void initState() {
+    context.read<AncsCubit>().getAncs();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +102,24 @@ class DrawerWidget extends StatelessWidget {
                               title: Text('profile',
                                   style: theme.textTheme.titleSmall),
                             ),
-                            //ANC
+                            //ANCs
+
+                            Builder(
+                              builder: (context) {
+                                return ListTile(
+                                  onTap: () {
+                                    Navigator.of(context).push(MaterialPageRoute(
+                                        builder: (ctx) => AncsPage()));
+                                  },
+                                  leading: Image.asset(
+                                    AppAssets.cardIcon,
+                                    height: 30.sm,
+                                  ),
+                                  title: Text('ANC',
+                                      style: theme.textTheme.titleSmall),
+                                );
+                              }
+                            ),
 
                             //card
                             ListTile(
