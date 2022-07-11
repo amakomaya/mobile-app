@@ -72,7 +72,10 @@ class DrawerWidget extends StatelessWidget {
                         child: ListView(
                           children: [
                             ListTile(
-                              leading: Image.asset(AppAssets.homeIcon),
+                              leading: Image.asset(
+                                AppAssets.homeIcon,
+                                height: 30.sm,
+                              ),
                               title: Text(
                                 'Home',
                                 style: theme.textTheme.titleSmall,
@@ -80,72 +83,74 @@ class DrawerWidget extends StatelessWidget {
                             ),
                             //profile
                             ListTile(
-                              leading: Image.asset(AppAssets.personIcon),
+                              leading: Image.asset(
+                                AppAssets.profileIcon,
+                                height: 30.sm,
+                              ),
                               title: Text('profile',
                                   style: theme.textTheme.titleSmall),
                             ),
                             //ANC
-                            ListTile(
-                              onTap: () {
-                                context.read<AncsCubit>().getAncs();
-                              },
-                              leading: Image.asset(AppAssets.ancIcon),
-                              title: Text('ANC',
-                                  style: theme.textTheme.titleSmall),
-                            ),
+
                             //card
                             ListTile(
-                              leading: Image.asset(AppAssets.cardIcon),
+                              leading: Image.asset(
+                                AppAssets.cardIcon,
+                                height: 30.sm,
+                              ),
                               title: Text('Card',
                                   style: theme.textTheme.titleSmall),
                             ),
                             //
                             ListTile(
-                              leading: Image.asset(AppAssets.medIcon),
+                              leading: Image.asset(
+                                AppAssets.symptomIcon,
+                                height: 30.sm,
+                              ),
                               title: Text('Symptoms Assessment',
                                   style: theme.textTheme.titleSmall),
                             ),
                             //Appointment
                             ListTile(
-                              leading: Image.asset(AppAssets.pncIcon),
+                              leading: Image.asset(
+                                AppAssets.appoitnmentIcon,
+                                height: 30.sm,
+                              ),
                               title: Text('Appointment',
                                   style: theme.textTheme.titleSmall),
                             ),
                             //health Report
                             ListTile(
-                              leading: Image.asset(AppAssets.testIcon),
+                              leading: Image.asset(
+                                AppAssets.healthreportIcon,
+                                height: 30.sm,
+                              ),
                               title: Text('Health Report',
                                   style: theme.textTheme.titleSmall),
                             ),
 
                             //Delivery
-                            ListTile(
-                              leading: Image.asset(AppAssets.cardIcon),
-                              title: Text('Delivery',
-                                  style: theme.textTheme.titleSmall),
-                            ),
+
                             //Medication
-                            ListTile(
-                              leading: Image.asset(AppAssets.medIcon),
-                              title: Text('Medication',
-                                  style: theme.textTheme.titleSmall),
-                            ),
+
                             //PNC
-                            ListTile(
-                              leading: Image.asset(AppAssets.pncIcon),
-                              title: Text('PNC',
-                                  style: theme.textTheme.titleSmall),
-                            ),
-                            //Lab Test
-                            ListTile(
-                              leading: Image.asset(AppAssets.testIcon),
-                              title: Text('Lab Test',
-                                  style: theme.textTheme.titleSmall),
-                            ),
+
                             //Baby
                             ListTile(
-                              leading: Image.asset(AppAssets.babyIcon),
+                              leading: Image.asset(
+                                AppAssets.babyIcon,
+                                height: 30.sm,
+                                color: Colors.red,
+                              ),
                               title: Text('Baby',
+                                  style: theme.textTheme.titleSmall),
+                            ),
+                            ListTile(
+                              leading: Image.asset(
+                                AppAssets.faqsIcon,
+                                height: 30.sm,
+                              ),
+                              title: Text('Faqs',
                                   style: theme.textTheme.titleSmall),
                             ),
                             //log out button

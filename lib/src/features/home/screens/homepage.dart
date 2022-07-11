@@ -75,11 +75,26 @@ class _HomePageState extends State<HomePage> {
                   style: theme.textTheme.displaySmall,
                 ),
                 const Spacer(),
-                const Icon(Icons.notifications_active),
+                ImageIcon(
+                  const AssetImage(
+                    "assets/images/notification.png",
+                  ),
+                  size: 20.sm,
+                ),
                 HorizSpace(10.w),
-                const Icon(Icons.call),
+                ImageIcon(
+                  const AssetImage(
+                    "assets/images/siren.png",
+                  ),
+                  size: 20.sm,
+                ),
                 HorizSpace(10.w),
-                const Icon(Icons.more_vert)
+                ImageIcon(
+                  const AssetImage(
+                    "assets/images/language.png",
+                  ),
+                  size: 20.sm,
+                ),
               ],
             )),
       ),

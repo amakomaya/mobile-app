@@ -155,10 +155,19 @@ class _AudioPlayerSectionState extends State<AudioPlayerSection>
                 return AnimatedSwitcher(
                   duration: const Duration(milliseconds: 1000),
                   child: currentUrl.value == null
-                      ? Container(
-                          height: 60.h,
-                          color: Colors.transparent.withOpacity(0.1),
-                          key: ValueKey('switchAnimation1'),
+                      ? GestureDetector(
+                          onVerticalDragStart: ((details) {
+                            _play(
+                              widget.audios[0].path,
+                              widget.audios[0].titleEn,
+                              widget.audios[0].thumbnail,
+                            );
+                          }),
+                          child: Container(
+                            height: 60.h,
+                            color: Colors.transparent.withOpacity(0.1),
+                            key: ValueKey('switchAnimation1'),
+                          ),
                         )
                       : Container(
                           decoration: BoxDecoration(

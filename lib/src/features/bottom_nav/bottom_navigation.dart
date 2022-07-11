@@ -40,13 +40,14 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
           backgroundColor: Colors.white,
           resizeToAvoidBottomInset: true,
           drawer: const DrawerWidget(),
-          bottomNavigationBar: BottomAppBar(
-            color: AppColors.primaryRed,
-            elevation: 0,
-            notchMargin: 15,
-            shape: const CircularNotchedRectangle(),
-            child: SizedBox(
-              height: 60.h,
+          bottomNavigationBar: SizedBox(
+            height: 60.h,
+            child: BottomAppBar(
+              clipBehavior: Clip.hardEdge,
+              color: Colors.white,
+              elevation: 4,
+              notchMargin: 7,
+              shape: const CircularNotchedRectangle(),
               child: ValueListenableBuilder(
                   valueListenable: selectedindex,
                   builder: (context, s, d) {
@@ -57,11 +58,11 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                         IconButton(
                           iconSize: 30.0,
                           padding: const EdgeInsets.only(left: 28.0),
-                          icon: Icon(
-                            Icons.home,
+                          icon: ImageIcon(
+                            AssetImage("assets/images/home1.png"),
                             color: selectedindex.value == 0
-                                ? Colors.amber
-                                : Colors.white,
+                                ? Colors.red
+                                : Colors.grey,
                           ),
                           onPressed: () {
                             selectedindex.value = 0;
@@ -70,11 +71,11 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                         IconButton(
                           iconSize: 30.0,
                           padding: const EdgeInsets.only(right: 28.0),
-                          icon: Icon(
-                            Icons.music_note,
+                          icon: ImageIcon(
+                            AssetImage("assets/images/audio.png"),
                             color: selectedindex.value == 1
-                                ? Colors.amber
-                                : Colors.white,
+                                ? Colors.red
+                                : Colors.grey,
                           ),
                           onPressed: () {
                             selectedindex.value = 1;
@@ -83,11 +84,11 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                         IconButton(
                           iconSize: 30.0,
                           padding: const EdgeInsets.only(left: 28.0),
-                          icon: Icon(
-                            Icons.video_collection,
+                          icon: ImageIcon(
+                            AssetImage("assets/images/video.png"),
                             color: selectedindex.value == 2
-                                ? Colors.amber
-                                : Colors.white,
+                                ? Colors.red
+                                : Colors.grey,
                           ),
                           onPressed: () {
                             selectedindex.value = 2;
@@ -96,11 +97,11 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                         IconButton(
                           iconSize: 30.0,
                           padding: const EdgeInsets.only(right: 28.0),
-                          icon: Icon(
-                            Icons.insert_drive_file,
+                          icon: ImageIcon(
+                            AssetImage("assets/images/text.png"),
                             color: selectedindex.value == 3
-                                ? Colors.amber
-                                : Colors.white,
+                                ? Colors.red
+                                : Colors.grey,
                           ),
                           onPressed: () {
                             context.read<WeeklyTipsCubit>().getWeeklyTips();
@@ -131,16 +132,18 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
               valueListenable: selectedindex,
               builder: (context, v, b) {
                 return FloatingActionButton(
-                  backgroundColor:
-                      selectedindex.value == 4 ? Colors.amber : Colors.white,
-                  mini: true,
+                  backgroundColor: selectedindex.value == 4
+                      ? AppColors.primaryRed
+                      : Colors.white,
+                  isExtended: true,
                   onPressed: () {
                     selectedindex.value = 4;
                   },
                   clipBehavior: Clip.none,
                   child: Icon(
                     Icons.shopping_cart_sharp,
-                    color: Colors.red,
+                    size: 30.sm,
+                    color: selectedindex.value == 4 ? Colors.white : Colors.red,
                   ),
                 );
               }),
