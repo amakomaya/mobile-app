@@ -14,7 +14,7 @@ class PrimaryAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size= MediaQuery.of(context).size;
     return Container(
-      clipBehavior: Clip.none,
+      
         width: size.width,
         height: height?? 70.h,
         decoration: const BoxDecoration(

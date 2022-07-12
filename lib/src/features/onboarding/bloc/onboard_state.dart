@@ -9,6 +9,6 @@ class OnboardState with _$OnboardState {
   const factory OnboardState.success(
    { @Default(false) bool isLoading,
     Exception? error,
-   required List<GuidePagesList> onboardList,}
+   required List<WizardModel> onboardList,}
   ) = _OnboardSuccess;
 }

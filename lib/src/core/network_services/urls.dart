@@ -13,5 +13,8 @@ class Urls {
   static const audiourl = "$baseUrl/v2/content-app/audio";
 
   static const newsFeedUrl = "$baseUrl/v2/content-app/newsfeed";
-  static const ancsUrl = "http://aamakomaya.com/api/v1/woman-ancs";
+  static const ancsUrl = "$baseUrl/v1/woman-ancs";
+  static const onboardUrl = "$baseUrl/v2/content-app/wizard";
+  static const pncUrl = "$baseUrl/v1/woman-pnc";
+
 }

@@ -12,6 +12,7 @@ import 'package:aamako_maya/src/features/authentication/screens/login/login_page
 import 'package:aamako_maya/src/features/onboarding/bloc/onboard_bloc.dart';
 import 'package:aamako_maya/src/features/onboarding/onboarding_repository/onboarding_repository.dart';
 import 'package:aamako_maya/src/features/onboarding/screens/onboarding_page.dart';
+import 'package:aamako_maya/src/features/pnc/cubit/pnc_cubit.dart';
 import 'package:aamako_maya/src/features/splash/splash_page.dart';
 import 'package:aamako_maya/src/features/video/cubit/video_cubit.dart';
 import 'package:aamako_maya/src/features/weekly_tips/cubit/weekly_tips_cubit.dart';
@@ -48,7 +49,11 @@ Future<void> main() async {
         ),
         BlocProvider(
             create: (context) => AncsCubit(
-                  Dio(),
+                  Dio(),AuthLocalData()
+                )),
+                BlocProvider(
+            create: (context) => PncsCubit(
+                  Dio(),AuthLocalData()
                 )),
         BlocProvider(
             create: (context) => NewsfeedCubit(
@@ -103,22 +108,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           theme: CustomTheme.lightTheme,
           home: const SplashPage(),
-          // home: ((show == null) || (show == true))
-          //     ? BlocProvider<OnboardBloc>(
-          //         create: (context) => OnboardBloc(repo: OnboardingRepo())
-          //           ..add(const OnboardEvent.onboardStart()),
-          //         child: BlocConsumer<OnboardBloc, OnboardState>(
-          //           listener: (context, state) {},
-          //           builder: (context, state) {
-          //             return state.maybeWhen(
-          //                 success: ((isLoading, error, onboardList) {
-          //                   return const OnboardingPage();
-          //                 }),
-          //                 orElse: () => const LoginPage());
-          //           },
-          //         ),
-          //       )
-          //     : const LoginPage(),
+
         );
       }),
     );

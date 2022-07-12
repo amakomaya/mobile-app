@@ -43,29 +43,29 @@ class _VideoPageState extends State<VideoPage> {
   @override
   Widget build(BuildContext context) {
     // final theme = Theme.of(context);
-    return  BlocConsumer<VideoCubit, VideoState>(
-        listener: (context, state) {},
-        builder: (context, state) {
-          return state.maybeWhen(
-              orElse: () => const Center(
-                    child: Text('Can\'t load data!!'),
-                  ),
-              initial: (isLoading, error) =>
-                  ShimmerLoading(boxHeight: 175.h, itemCount: 4),
-              success: ((isLoading, error, videos) {
-                final urlList = [];
-                for (VideoModel path in videos) {
-                  final controller = VideoPlayerController.network(path.path);
-                  urlList.add(controller);
-                }
+    return BlocConsumer<VideoCubit, VideoState>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        return state.maybeWhen(
+            orElse: () => const Center(
+                  child: Text('Can\'t load data!!'),
+                ),
+            initial: (isLoading, error) =>
+                ShimmerLoading(boxHeight: 175.h, itemCount: 4),
+            success: ((isLoading, error, videos) {
+              final urlList = [];
+              for (VideoModel path in videos) {
+                final controller = VideoPlayerController.network(path.path);
+                urlList.add(controller);
+              }
 
-                return VideoListPage(
-                  videoPlayerController: urlList,
-                  list: videos,
-                );
-              }));
-        },
-      );
+              return VideoListPage(
+                videoPlayerController: urlList,
+                list: videos,
+              );
+            }));
+      },
+    );
   }
 }
 
@@ -112,35 +112,34 @@ class _VideoListPageState extends State<VideoListPage> {
 
       currentUrl.value = url;
       print(currentUrl.value);
-      setState(() {
-        _videoController = VideoPlayerController.network(url)..initialize();
 
-        _chewieController = ChewieController(
-          videoPlayerController: _videoController!,
-          aspectRatio: 16 / 9,
-          autoInitialize: true,
-          autoPlay: true,
-          errorBuilder: (context, errorMessage) {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Center(
-                  child: Text(
-                    "Error Playing Video",
-                    style: TextStyle(color: Colors.white),
-                  ),
+      _videoController = VideoPlayerController.network(url)..initialize();
+
+      _chewieController = ChewieController(
+        videoPlayerController: _videoController!,
+        aspectRatio: 16 / 9,
+        autoInitialize: false,
+        autoPlay: false,
+        errorBuilder: (context, errorMessage) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
+                child: Text(
+                  "Error Playing Video",
+                  style: TextStyle(color: Colors.white),
                 ),
-                HorizSpace(10.w),
-                IconButton(
-                    onPressed: () {
-                      playVideo(index, url);
-                    },
-                    icon: Icon(Icons.threesixty_sharp)),
-              ],
-            );
-          },
-        );
-      });
+              ),
+              HorizSpace(10.w),
+              IconButton(
+                  onPressed: () {
+                    playVideo(index, url);
+                  },
+                  icon: Icon(Icons.threesixty_sharp)),
+            ],
+          );
+        },
+      );
     }
   }
 
@@ -153,8 +152,8 @@ class _VideoListPageState extends State<VideoListPage> {
     _chewieController = ChewieController(
       videoPlayerController: _videoController!,
       aspectRatio: 16 / 9,
-      autoInitialize: true,
-      autoPlay: true,
+      autoInitialize: false,
+      autoPlay: false,
       errorBuilder: (context, errorMessage) {
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,

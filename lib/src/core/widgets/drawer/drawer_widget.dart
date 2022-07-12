@@ -6,6 +6,8 @@ import 'package:aamako_maya/src/core/widgets/scaffold/primary_scaffold.dart';
 import 'package:aamako_maya/src/features/ancs/cubit/ancs_cubit.dart';
 import 'package:aamako_maya/src/features/ancs/screens/ancs_page.dart';
 import 'package:aamako_maya/src/features/authentication/screens/login/login_page.dart';
+import 'package:aamako_maya/src/features/pnc/screens/pnc_page.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -24,7 +26,7 @@ class DrawerWidget extends StatefulWidget {
 class _DrawerWidgetState extends State<DrawerWidget> {
   @override
   void initState() {
-    context.read<AncsCubit>().getAncs();
+    
     super.initState();
   }
 
@@ -104,12 +106,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             ),
                             //ANCs
 
-                            Builder(
-                              builder: (context) {
-                                return ListTile(
+                           ListTile(
                                   onTap: () {
                                     Navigator.of(context).push(MaterialPageRoute(
-                                        builder: (ctx) => AncsPage()));
+                                        builder: (context) => AncsPage()));
                                   },
                                   leading: Image.asset(
                                     AppAssets.cardIcon,
@@ -117,9 +117,21 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   ),
                                   title: Text('ANC',
                                       style: theme.textTheme.titleSmall),
-                                );
-                              }
-                            ),
+                                ),
+                                //PNCS
+                                 ListTile(
+                                  onTap: () {
+                                    Navigator.of(context).push(MaterialPageRoute(
+                                        builder: (context) => PncsPage()));
+                                  },
+                                  leading: Image.asset(
+                                    AppAssets.cardIcon,
+                                    height: 30.sm,
+                                  ),
+                                  title: Text('PNC',
+                                      style: theme.textTheme.titleSmall),
+                                ),
+
 
                             //card
                             ListTile(
@@ -207,7 +219,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                               context,
                                               MaterialPageRoute(
                                                   builder: (ctx) =>
-                                                      LoginPage()),
+                                                      const LoginPage()),
                                               (route) => false);
                                         }
                                       }

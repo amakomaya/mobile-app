@@ -1,5 +1,6 @@
 import 'package:aamako_maya/src/features/onboarding/models/onboarding_model.dart';
 import 'package:bloc/bloc.dart';
+import 'package:flutter/rendering.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 
@@ -21,6 +22,7 @@ class OnboardBloc extends Bloc<OnboardEvent, OnboardState> {
       OnboardEvent event, Emitter<OnboardState> emit) async {
     try {
       final response = await _repo.getOnboardingList();
+      debugPrint(response.toString());
       //assign false to not show onboarding screens next time
       var box =await  Hive.openBox('myBox');
       box.put('onboard', true);

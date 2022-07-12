@@ -1,23 +1,30 @@
-class GuidePagesList {
-  int? pagePosition;
-  String? image;
+class WizardModel {
+  int? id;
   String? title;
-  String? description;
+  String? motto;
+  String? image;
+  String? createdAt;
+  String? updatedAt;
+  int? hierarchy;
 
-  GuidePagesList({this.pagePosition, this.image, this.title, this.description});
+  WizardModel(
+      {this.id,
+      this.image,
+      this.title,
+      this.motto,
+      this.createdAt,
+      this.hierarchy,
+      this.updatedAt});
 
-  factory GuidePagesList.fromJson(Map<String, dynamic> json) {
-    return GuidePagesList(
-        pagePosition: json['page_position'],
-        image: json['image'],
-        title: json['title'],
-        description: json['description']);
+  factory WizardModel.fromJson(Map<String, dynamic> json) {
+    return WizardModel(
+      image: json["image"],
+      title: json["title"],
+      createdAt: json["created_at"],
+      hierarchy: json["hierarchy"],
+      id: json["id"],
+      motto: json["motto"],
+      updatedAt: json["updated_at"],
+    );
   }
-
-  Map<String, dynamic> toJson(GuidePagesList model) => <String, dynamic>{
-        'page_position': model.pagePosition,
-        'image': model.image,
-        'title': model.title,
-        'description': model.title
-      };
 }

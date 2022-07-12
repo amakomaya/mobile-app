@@ -288,7 +288,7 @@ mixin _$OnboardState {
   TResult when<TResult extends Object?>({
     required TResult Function(bool isLoading, Exception? error) initial,
     required TResult Function(
-            bool isLoading, Exception? error, List<GuidePagesList> onboardList)
+            bool isLoading, Exception? error, List<WizardModel> onboardList)
         success,
   }) =>
       throw _privateConstructorUsedError;
@@ -296,7 +296,7 @@ mixin _$OnboardState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(bool isLoading, Exception? error)? initial,
     TResult Function(
-            bool isLoading, Exception? error, List<GuidePagesList> onboardList)?
+            bool isLoading, Exception? error, List<WizardModel> onboardList)?
         success,
   }) =>
       throw _privateConstructorUsedError;
@@ -304,7 +304,7 @@ mixin _$OnboardState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(bool isLoading, Exception? error)? initial,
     TResult Function(
-            bool isLoading, Exception? error, List<GuidePagesList> onboardList)?
+            bool isLoading, Exception? error, List<WizardModel> onboardList)?
         success,
     required TResult orElse(),
   }) =>
@@ -446,7 +446,7 @@ class _$_Initial implements _Initial {
   TResult when<TResult extends Object?>({
     required TResult Function(bool isLoading, Exception? error) initial,
     required TResult Function(
-            bool isLoading, Exception? error, List<GuidePagesList> onboardList)
+            bool isLoading, Exception? error, List<WizardModel> onboardList)
         success,
   }) {
     return initial(isLoading, error);
@@ -457,7 +457,7 @@ class _$_Initial implements _Initial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(bool isLoading, Exception? error)? initial,
     TResult Function(
-            bool isLoading, Exception? error, List<GuidePagesList> onboardList)?
+            bool isLoading, Exception? error, List<WizardModel> onboardList)?
         success,
   }) {
     return initial?.call(isLoading, error);
@@ -468,7 +468,7 @@ class _$_Initial implements _Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(bool isLoading, Exception? error)? initial,
     TResult Function(
-            bool isLoading, Exception? error, List<GuidePagesList> onboardList)?
+            bool isLoading, Exception? error, List<WizardModel> onboardList)?
         success,
     required TResult orElse(),
   }) {
@@ -531,8 +531,7 @@ abstract class _$$_OnboardSuccessCopyWith<$Res>
           _$_OnboardSuccess value, $Res Function(_$_OnboardSuccess) then) =
       __$$_OnboardSuccessCopyWithImpl<$Res>;
   @override
-  $Res call(
-      {bool isLoading, Exception? error, List<GuidePagesList> onboardList});
+  $Res call({bool isLoading, Exception? error, List<WizardModel> onboardList});
 }
 
 /// @nodoc
@@ -564,7 +563,7 @@ class __$$_OnboardSuccessCopyWithImpl<$Res>
       onboardList: onboardList == freezed
           ? _value._onboardList
           : onboardList // ignore: cast_nullable_to_non_nullable
-              as List<GuidePagesList>,
+              as List<WizardModel>,
     ));
   }
 }
@@ -575,7 +574,7 @@ class _$_OnboardSuccess implements _OnboardSuccess {
   const _$_OnboardSuccess(
       {this.isLoading = false,
       this.error,
-      required final List<GuidePagesList> onboardList})
+      required final List<WizardModel> onboardList})
       : _onboardList = onboardList;
 
   @override
@@ -583,9 +582,9 @@ class _$_OnboardSuccess implements _OnboardSuccess {
   final bool isLoading;
   @override
   final Exception? error;
-  final List<GuidePagesList> _onboardList;
+  final List<WizardModel> _onboardList;
   @override
-  List<GuidePagesList> get onboardList {
+  List<WizardModel> get onboardList {
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_onboardList);
   }
@@ -623,7 +622,7 @@ class _$_OnboardSuccess implements _OnboardSuccess {
   TResult when<TResult extends Object?>({
     required TResult Function(bool isLoading, Exception? error) initial,
     required TResult Function(
-            bool isLoading, Exception? error, List<GuidePagesList> onboardList)
+            bool isLoading, Exception? error, List<WizardModel> onboardList)
         success,
   }) {
     return success(isLoading, error, onboardList);
@@ -634,7 +633,7 @@ class _$_OnboardSuccess implements _OnboardSuccess {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(bool isLoading, Exception? error)? initial,
     TResult Function(
-            bool isLoading, Exception? error, List<GuidePagesList> onboardList)?
+            bool isLoading, Exception? error, List<WizardModel> onboardList)?
         success,
   }) {
     return success?.call(isLoading, error, onboardList);
@@ -645,7 +644,7 @@ class _$_OnboardSuccess implements _OnboardSuccess {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(bool isLoading, Exception? error)? initial,
     TResult Function(
-            bool isLoading, Exception? error, List<GuidePagesList> onboardList)?
+            bool isLoading, Exception? error, List<WizardModel> onboardList)?
         success,
     required TResult orElse(),
   }) {
@@ -691,13 +690,13 @@ abstract class _OnboardSuccess implements OnboardState {
   const factory _OnboardSuccess(
       {final bool isLoading,
       final Exception? error,
-      required final List<GuidePagesList> onboardList}) = _$_OnboardSuccess;
+      required final List<WizardModel> onboardList}) = _$_OnboardSuccess;
 
   @override
   bool get isLoading => throw _privateConstructorUsedError;
   @override
   Exception? get error => throw _privateConstructorUsedError;
-  List<GuidePagesList> get onboardList => throw _privateConstructorUsedError;
+  List<WizardModel> get onboardList => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$$_OnboardSuccessCopyWith<_$_OnboardSuccess> get copyWith =>

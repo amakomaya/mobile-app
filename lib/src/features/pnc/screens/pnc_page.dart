@@ -12,18 +12,19 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../core/padding/padding.dart';
 import '../../../core/theme/app_colors.dart';
+import '../cubit/pnc_cubit.dart';
 
-class AncsPage extends StatefulWidget {
-  const AncsPage({Key? key}) : super(key: key);
+class PncsPage extends StatefulWidget {
+  const PncsPage({Key? key}) : super(key: key);
 
   @override
-  State<AncsPage> createState() => _AncsPageState();
+  State<PncsPage> createState() => _PncsPageState();
 }
 
-class _AncsPageState extends State<AncsPage> {
+class _PncsPageState extends State<PncsPage> {
   @override
   void initState() {
-context.read<AncsCubit>().getAncs();
+context.read<PncsCubit>().getPncs();
     super.initState();
   }
   @override
@@ -52,7 +53,7 @@ context.read<AncsCubit>().getAncs();
                       icon: Icon(Icons.arrow_back_ios)),
                   Spacer(),
                   Text(
-                    'ANCS',
+                    'PNCS',
                     style: Theme.of(context).textTheme.displaySmall,
                   ),
                   Spacer()
@@ -60,12 +61,12 @@ context.read<AncsCubit>().getAncs();
               ),
             ),
           ),
-          Expanded(child: BlocBuilder<AncsCubit, AncsState>(
+          Expanded(child: BlocBuilder<PncsCubit, PncState>(
             builder: (context, state) {
-              if (state.ancs==null) {
+              if (state.pncs==null) {
                 return ShimmerLoading(boxHeight: 200.h, itemCount: 4);
-              } else if (state.ancs?.isEmpty ?? false) {
-                return const Text('NO ANC REPORTS FOUND');
+              } else if (state.pncs?.isEmpty ?? false) {
+                return Text('NO PNC REPORTS FOUND');
               } else {
                 return ListView.separated(
                     itemBuilder: ((context, index) {
@@ -73,19 +74,19 @@ context.read<AncsCubit>().getAncs();
       
                       return Column(
                         children: [
-                          Text("ANC Report${index + 1}".toUpperCase()),
+                          Text("PNC Report${index + 1}".toUpperCase()),
                           VerticalSpace(10.h),
                           ListTile(
                             trailing: Text(
-                                state.ancs?[index].swelling ?? ''),
+                                state.pncs?[index].advice ?? ''),
       
-                            leading: Text('Swelling'),
+                            leading: Text('Advice'),
                           ),
                           ListTile(
                             trailing: Text(
-                                state.ancs?[index].babyPresentation ?? ''),
+                                state.pncs?[index].familyPlan ?? ''),
       
-                            leading: Text('Baby Presentation'),
+                            leading: Text('Family plan'),
                           ),
       
                         ],
@@ -99,7 +100,7 @@ context.read<AncsCubit>().getAncs();
                         color: AppColors.accentGrey,
                       );
                     },
-                    itemCount: state.ancs?.length ?? 0);
+                    itemCount: state.pncs?.length ?? 0);
               }
             },
           ))

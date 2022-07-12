@@ -1,28 +1,34 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:aamako_maya/src/core/network_services/urls.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import '../models/onboarding_model.dart';
 
 class OnboardingRepo {
-  Future<List<GuidePagesList>> getOnboardingList() async {
-  
-    
-    Timer(const Duration(seconds: 3), () {
-    });
+  Dio dio = Dio();
+  Future<List<WizardModel>> getOnboardingList() async {
+    try {
+      final Response response = await dio.get(Urls.onboardUrl);
+      print(response.data.toString());
 
-    try{
+      if (response.statusCode == 200) {
+              print(200.toString());
 
-    final String response =
-        await rootBundle.loadString('assets/images/stepper.json');
-    List<GuidePagesList> onboarrdingList =
-        ((jsonDecode(response))['guide_pages_list'] as List)
-            .map((e) => GuidePagesList.fromJson(e))
+        List<WizardModel> wizardList = (response.data as List)
+            .map((e) => WizardModel.fromJson(e))
             .toList();
+      print(wizardList.toString());
 
-    return onboarrdingList;
-    }catch(e){
+        return wizardList;
+      } else {
+        return Future.error('error');
+      }
+    } catch (e) {
+      debugPrint('kklad');
       rethrow;
     }
   }

@@ -18,7 +18,7 @@ class OnboardingPage extends StatefulWidget {
 }
 
 class _OnboardingPageState extends State<OnboardingPage> {
-  final List _onboardList = ['1', '2', '3'];
+ 
   final PageController _controller = PageController();
   final ValueNotifier<int> _currentIndex = ValueNotifier(0);
   @override
@@ -32,7 +32,16 @@ class _OnboardingPageState extends State<OnboardingPage> {
         }
       },
       builder: (context, state) {
-        return Scaffold(
+         
+       return state.maybeWhen(
+        orElse: ()=>const Scaffold(
+          body: Center(child: CircularProgressIndicator(
+            color: AppColors.primaryRed,
+          ))),
+        
+        success: (isLoadind,exception,list){
+          final  _onboardList = list;
+          return Scaffold(
           body: SafeArea(
             child: Column(
               children: [
@@ -78,7 +87,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                             child: Column(
                               children: [
                                 Text(
-                                  'Welcome to Aamakomaya app',
+                                  _onboardList[index].title??'',
                                   style:
                                       Theme.of(context).textTheme.headlineLarge,
                                 ),
@@ -86,15 +95,16 @@ class _OnboardingPageState extends State<OnboardingPage> {
                                   height: size.height * 0.01,
                                 ),
                                 Text(
-                                  'All motherhood needs in one app',
+                                   _onboardList[index].motto??'',
                                   style: Theme.of(context)
                                       .textTheme
                                       .headlineMedium,
                                 ),
                                 VerticalSpace(20.h),
                                 Flexible(
-                                  child: Image.asset(
-                                    AppAssets.profileImage,
+                                  child: Image.network(
+                                   _onboardList[index].image??'',
+                                   errorBuilder: (context, error, stackTrace) => Icon(Icons.image_not_supported,color: Colors.red,),
                                     height: 247.h,
                                     width: 247.h,
                                   ),
@@ -153,6 +163,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
             ),
           ),
         );
+     
+     
+        });
+         
       },
     );
   }
