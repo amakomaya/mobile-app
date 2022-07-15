@@ -13,6 +13,7 @@ import 'package:aamako_maya/src/features/onboarding/bloc/onboard_bloc.dart';
 import 'package:aamako_maya/src/features/onboarding/onboarding_repository/onboarding_repository.dart';
 import 'package:aamako_maya/src/features/onboarding/screens/onboarding_page.dart';
 import 'package:aamako_maya/src/features/pnc/cubit/pnc_cubit.dart';
+import 'package:aamako_maya/src/features/qr_code/cubit/qr_code_cubit.dart';
 import 'package:aamako_maya/src/features/splash/splash_page.dart';
 import 'package:aamako_maya/src/features/video/cubit/video_cubit.dart';
 import 'package:aamako_maya/src/features/weekly_tips/cubit/weekly_tips_cubit.dart';
@@ -47,14 +48,9 @@ Future<void> main() async {
         BlocProvider<DistrictFieldToggleCubit>(
           create: (context) => DistrictFieldToggleCubit(),
         ),
-        BlocProvider(
-            create: (context) => AncsCubit(
-                  Dio(),AuthLocalData()
-                )),
-                BlocProvider(
-            create: (context) => PncsCubit(
-                  Dio(),AuthLocalData()
-                )),
+        BlocProvider(create: (context) => AncsCubit(Dio(), AuthLocalData())),
+        BlocProvider(create: (context) => QrCodeCubit()),
+        BlocProvider(create: (context) => PncsCubit(Dio(), AuthLocalData())),
         BlocProvider(
             create: (context) => NewsfeedCubit(
                   Dio(),
@@ -108,7 +104,6 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           theme: CustomTheme.lightTheme,
           home: const SplashPage(),
-
         );
       }),
     );

@@ -3,6 +3,7 @@ import 'package:aamako_maya/src/core/widgets/buttons/primary_action_button.dart'
 import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
 import 'package:aamako_maya/src/core/widgets/textfield/primary_textfield.dart';
 import 'package:aamako_maya/src/features/authentication/model/login_request_model.dart';
+import 'package:aamako_maya/src/features/authentication/screens/login/qr_code_page.dart';
 import 'package:aamako_maya/src/features/authentication/screens/register/register_page.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/gestures.dart';
@@ -145,7 +146,9 @@ class _LoginPageState extends State<LoginPage> {
                   PrimaryActionButton(
                     padding: const EdgeInsets.symmetric(vertical: 20),
                     width: 380.w,
-                    onpress: () {},
+                    onpress: () {
+                      Navigator.push(context, MaterialPageRoute(builder: ((context) => QRViewPage())));
+                    },
                     title: '',
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
