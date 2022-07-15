@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:nepali_date_picker/nepali_date_picker.dart' as picker;
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/buttons/primary_action_button.dart';
@@ -25,13 +26,12 @@ class RegisterSection extends StatefulWidget {
 }
 
 class _RegisterSectionState extends State<RegisterSection> {
-  DateTime selectedDate = DateTime.now();
+  DateTime selectedDate = picker.NepaliDateTime.now();
   final DateFormat formatter = DateFormat('yyyy-MM-dd');
   final _name = TextEditingController();
-  final _username = TextEditingController();
   final _phone = TextEditingController();
   final _password = TextEditingController();
-  DateTime? picked;
+  picker.NepaliDateTime? picked;
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -42,11 +42,13 @@ class _RegisterSectionState extends State<RegisterSection> {
       child: Scaffold(
         body: BlocConsumer<RegisterBloc, RegisterState>(
           listener: (context, state) {
-            if (state.error != null&&state.isLoading==false) {
+            if (state.error != null && state.isLoading == false) {
               BotToast.showText(text: state.error.toString());
-            }  if (state.isLoading && state.error == null) {
+            }
+            if (state.isLoading && state.error == null) {
               BotToast.showLoading();
-            } if(state.isLoading==false) {
+            }
+            if (state.isLoading == false) {
               BotToast.closeAllLoading();
             }
             state.when(
@@ -75,6 +77,7 @@ class _RegisterSectionState extends State<RegisterSection> {
                             padding: defaultPadding.copyWith(top: 6, bottom: 6),
                             margin: defaultPadding,
                             child: TextFormField(
+                              cursorColor: AppColors.primaryRed,
                               controller: _name,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -86,29 +89,8 @@ class _RegisterSectionState extends State<RegisterSection> {
                                 return null;
                               },
                               decoration: const InputDecoration(
+                                labelStyle: TextStyle(color: AppColors.black),
                                 label: Text('Name'),
-                                isDense: true,
-                                border: InputBorder.none,
-                              ),
-                            )),
-                        VerticalSpace(20.h),
-                        ShadowContainer(
-                            width: size.width,
-                            padding: defaultPadding.copyWith(top: 6, bottom: 6),
-                            margin: defaultPadding,
-                            child: TextFormField(
-                              controller: _username,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Username number can\'t not be empty';
-                                }
-                                if (value.length < 5) {
-                                  return 'Invalid username ';
-                                }
-                                return null;
-                              },
-                              decoration: const InputDecoration(
-                                label: Text('Username'),
                                 isDense: true,
                                 border: InputBorder.none,
                               ),
@@ -116,27 +98,46 @@ class _RegisterSectionState extends State<RegisterSection> {
                         VerticalSpace(20.h),
                         GestureDetector(
                           onTap: () async {
-                            picked = await showDatePicker(
+                            picked = await picker.showMaterialDatePicker(
                               context: context,
-                              initialDate: selectedDate,
-                              firstDate: DateTime(2000),
-                              lastDate: DateTime.now(),
+                              initialDate: picker.NepaliDateTime.now(),
+                              firstDate: picker.NepaliDateTime(2000),
+                              lastDate: picker.NepaliDateTime(2090),
+                              initialDatePickerMode: DatePickerMode.day,
                             );
+
+                            print(picked.toString());
+
                             if (picked != null && picked != selectedDate) {
                               setState(() {
-                                selectedDate = picked!;
+                                selectedDate =
+                                    picked ?? picker.NepaliDateTime.now();
                               });
                             }
                           },
+                          // onTap: () async {
+                          //   picked = await showDatePicker(
+                          //     context: context,
+                          //     initialDate: selectedDate,
+                          //     firstDate: DateTime(2000),
+                          //     lastDate: DateTime.now(),
+                          //   );
+                          //   if (picked != null && picked != selectedDate) {
+                          //     setState(() {
+                          //       selectedDate = picked!;
+                          //     });
+                          //   }
+                          // },
                           child: ShadowContainer(
                             width: size.width,
                             margin: defaultPadding,
                             padding:
-                                defaultPadding.copyWith(top: 15, bottom: 15),
+                                defaultPadding.copyWith(top: 23, bottom: 24),
                             child: Text(
                               picked != null
                                   ? formatter.format(selectedDate)
-                                  : 'LMP date',
+                                  : 'LMP ate',
+                              style: TextStyle(color: AppColors.black),
                             ),
                           ),
                         ),
@@ -146,6 +147,7 @@ class _RegisterSectionState extends State<RegisterSection> {
                             padding: defaultPadding.copyWith(top: 6, bottom: 6),
                             margin: defaultPadding,
                             child: TextFormField(
+                              cursorColor: AppColors.primaryRed,
                               keyboardType: TextInputType.phone,
                               controller: _phone,
                               validator: (value) {
@@ -158,6 +160,7 @@ class _RegisterSectionState extends State<RegisterSection> {
                                 return null;
                               },
                               decoration: const InputDecoration(
+                                labelStyle: TextStyle(color: AppColors.black),
                                 label: Text('Mobile Number'),
                                 isDense: true,
                                 border: InputBorder.none,
@@ -169,6 +172,7 @@ class _RegisterSectionState extends State<RegisterSection> {
                             padding: defaultPadding.copyWith(top: 6, bottom: 6),
                             margin: defaultPadding,
                             child: TextFormField(
+                              cursorColor: AppColors.primaryRed,
                               controller: _password,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -180,6 +184,7 @@ class _RegisterSectionState extends State<RegisterSection> {
                                 return null;
                               },
                               decoration: const InputDecoration(
+                                labelStyle: TextStyle(color: AppColors.black),
                                 label: Text('Password'),
                                 isDense: true,
                                 border: InputBorder.none,
@@ -196,11 +201,13 @@ class _RegisterSectionState extends State<RegisterSection> {
                               RegisterEvent.gegisterStarted(
                                   user: RegisterRequestModel(
                                       age: 0,
-                                      createdAt: formatter.format(DateTime.now()),
-                                      updatedAt: formatter.format(DateTime.now()),
+                                      createdAt:
+                                          formatter.format(DateTime.now()),
+                                      updatedAt:
+                                          formatter.format(DateTime.now()),
                                       name: _name.text.trim(),
                                       password: _password.text.trim(),
-                                      username: _username.text.trim(),
+                                      username: _phone.text.trim(),
                                       phone: _phone.text.trim(),
                                       lmpDateEn: formatter.format(selectedDate),
                                       lmpDateNp: '',

@@ -37,7 +37,7 @@ class PrimaryActionButton extends StatelessWidget {
             child: Container(
               padding: padding ??
                   const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-              width: width ?? 185.w,
+              width: width,
               height: height,
               decoration: BoxDecoration(color: Colors.transparent),
               child: child ??

@@ -36,7 +36,12 @@ class PrimaryTextField extends StatelessWidget {
       this.boxMargin,
       this.textPadding,
       this.validator,
-      this.focus, this.nextFocus, this.controller, this.sufixTap, this.obscureText})
+      this.focus,
+      this.nextFocus,
+      this.controller,
+      this.sufixTap,
+      this.obscureText,
+      required MaterialColor cursorColor})
       : super(key: key);
 
   @override
@@ -57,18 +62,17 @@ class PrimaryTextField extends StatelessWidget {
         Padding(
           padding: defaultPadding,
           child: TextFormField(
-            
-            keyboardType: isPhone!=null&& isPhone==true?TextInputType.phone:null,
-            obscureText:obscureText??false ,
+            keyboardType:
+                isPhone != null && isPhone == true ? TextInputType.phone : null,
+            obscureText: obscureText ?? false,
             controller: controller,
             cursorColor: Colors.grey,
             focusNode: focus,
-            onFieldSubmitted: (value) => nextFocus!=null?
-                FocusScope.of(context).requestFocus(nextFocus):FocusScope.of(context).unfocus(),
+            onFieldSubmitted: (value) => nextFocus != null
+                ? FocusScope.of(context).requestFocus(nextFocus)
+                : FocusScope.of(context).unfocus(),
             validator: validator,
             decoration: InputDecoration(
-            
-            
                 suffixIcon: GestureDetector(
                   onTap: sufixTap,
                   child: Icon(
@@ -77,7 +81,10 @@ class PrimaryTextField extends StatelessWidget {
                   ),
                 ),
                 hintText: hintText,
-                hintStyle: Theme.of(context).textTheme.labelSmall,
+                hintStyle: Theme.of(context)
+                    .textTheme
+                    .labelSmall
+                    ?.copyWith(color: Colors.grey),
                 focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(30),
                     borderSide: const BorderSide(
@@ -87,7 +94,7 @@ class PrimaryTextField extends StatelessWidget {
                     borderSide: const BorderSide(
                         color: AppColors.accentGrey, width: 1)),
                 contentPadding: const EdgeInsets.only(
-                    left: 10, right: 10, top: 15, bottom: 15)),
+                    left: 15, right: 10, top: 15, bottom: 15)),
           ),
         ),
       ],
