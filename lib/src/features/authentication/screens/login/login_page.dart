@@ -1,3 +1,4 @@
+import 'package:aamako_maya/src/core/padding/padding.dart';
 import 'package:aamako_maya/src/core/widgets/border_container.dart';
 import 'package:aamako_maya/src/core/widgets/buttons/primary_action_button.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
@@ -72,17 +73,33 @@ class _LoginPageState extends State<LoginPage> {
               key: _formKey,
               child: Column(
                 children: [
-                  Align(
-                    alignment: Alignment.center,
-                    child: Image.asset(
-                      AppAssets.logo,
-                      height: 197.h,
-                      width: 197.h,
-                      cacheHeight: 197,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Image.asset(
+                          AppAssets.logo,
+                          height: 197.h,
+                          width: 197.h,
+                          cacheHeight: 197,
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: ImageIcon(
+                          AssetImage(
+                            "assets/images/language.png",
+                          ),
+                          size: 20,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
                   ),
                   VerticalSpace(50.h),
                   PrimaryTextField(
+                    cursorColor: Colors.red,
                     controller: usernameController,
                     nextFocus: passwordFocus,
                     validator: (value) {
@@ -95,14 +112,14 @@ class _LoginPageState extends State<LoginPage> {
                       return null;
                     },
                     labelText: 'Username',
-                    hintText: 'Username',
+                    hintText: 'Enter Your Phone Number/ Username',
                   ),
                   VerticalSpace(15.h),
                   ValueListenableBuilder(
                       valueListenable: obscureBtn,
                       builder: (BuildContext context, bool i, _) {
                         return PrimaryTextField(
-                          obscureText: i,
+                          cursorColor: Colors.red,
                           controller: passwordController,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -115,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
                           },
                           focus: passwordFocus,
                           labelText: 'Password',
-                          hintText: 'Password',
+                          hintText: 'Enter Your Password',
                           sufixTap: () {
                             obscureBtn.value = !obscureBtn.value;
                           },
@@ -123,22 +140,24 @@ class _LoginPageState extends State<LoginPage> {
                         );
                       }),
                   VerticalSpace(20.h),
-                  PrimaryActionButton(
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    width: 380.w,
-                    onpress: () {
-                      if (_formKey.currentState!.validate()) {
-                        BlocProvider.of<LoginBloc>(context).add(
-                          LoginEvent.loginStarted(
-                            user: LoginRequestModel(
-                              password: passwordController.text.trim(),
-                              username: usernameController.text.trim(),
+                  Padding(
+                    padding: defaultPadding,
+                    child: PrimaryActionButton(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      onpress: () {
+                        if (_formKey.currentState!.validate()) {
+                          BlocProvider.of<LoginBloc>(context).add(
+                            LoginEvent.loginStarted(
+                              user: LoginRequestModel(
+                                password: passwordController.text.trim(),
+                                username: usernameController.text.trim(),
+                              ),
                             ),
-                          ),
-                        );
-                      }
-                    },
-                    title: 'Login',
+                          );
+                        }
+                      },
+                      title: 'Login',
+                    ),
                   ),
                   VerticalSpace(20.h),
                   Text('OR', style: Theme.of(context).textTheme.headlineMedium),

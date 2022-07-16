@@ -1,6 +1,7 @@
 import 'package:aamako_maya/src/core/widgets/buttons/primary_action_button.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
+import 'package:aamako_maya/src/core/widgets/scaffold/primary_appBar.dart';
 import 'package:aamako_maya/src/features/authentication/cubit/district_municipality_cubit.dart';
 import 'package:aamako_maya/src/features/authentication/widgets/register_fields_section.dart';
 import 'package:bot_toast/bot_toast.dart';
@@ -36,11 +37,34 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final theme = Theme.of(context);
 
     return SafeArea(
       child: Scaffold(
         body: Column(
           children: <Widget>[
+            PrimaryAppBar(
+              isUnauth: true,
+              unAuthChild: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: Text(
+                      'Register',
+                      style: TextStyle(
+                          fontFamily: 'lato',
+                          fontSize: 22,
+                          color: Colors.white),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: Icon(Icons.more_vert_outlined),
+                  ),
+                ],
+              ),
+            ),
             Expanded(
                 child: SingleChildScrollView(
               padding: EdgeInsets.symmetric(vertical: 20),
@@ -86,7 +110,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           registerAs: registerAs[selected.value].name)));
                 },
                 title: 'Next'),
-            VerticalSpace(50.h),
+            VerticalSpace(500.h),
           ],
         ),
       ),

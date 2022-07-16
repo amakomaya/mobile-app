@@ -26,7 +26,6 @@ class DrawerWidget extends StatefulWidget {
 class _DrawerWidgetState extends State<DrawerWidget> {
   @override
   void initState() {
-    
     super.initState();
   }
 
@@ -101,37 +100,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 AppAssets.profileIcon,
                                 height: 30.sm,
                               ),
-                              title: Text('profile',
+                              title: Text('Profile',
                                   style: theme.textTheme.titleSmall),
                             ),
-                            //ANCs
-
-                           ListTile(
-                                  onTap: () {
-                                    Navigator.of(context).push(MaterialPageRoute(
-                                        builder: (context) => AncsPage()));
-                                  },
-                                  leading: Image.asset(
-                                    AppAssets.cardIcon,
-                                    height: 30.sm,
-                                  ),
-                                  title: Text('ANC',
-                                      style: theme.textTheme.titleSmall),
-                                ),
-                                //PNCS
-                                 ListTile(
-                                  onTap: () {
-                                    Navigator.of(context).push(MaterialPageRoute(
-                                        builder: (context) => PncsPage()));
-                                  },
-                                  leading: Image.asset(
-                                    AppAssets.cardIcon,
-                                    height: 30.sm,
-                                  ),
-                                  title: Text('PNC',
-                                      style: theme.textTheme.titleSmall),
-                                ),
-
 
                             //card
                             ListTile(
@@ -161,22 +132,67 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   style: theme.textTheme.titleSmall),
                             ),
                             //health Report
-                            ListTile(
+                            ExpansionTile(
                               leading: Image.asset(
                                 AppAssets.healthreportIcon,
                                 height: 30.sm,
                               ),
                               title: Text('Health Report',
                                   style: theme.textTheme.titleSmall),
+                              children: [
+                                ListTile(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) => AncsPage()));
+                                  },
+                                  title: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 80, right: 50),
+                                    child: Text("ANC",
+                                        style: theme.textTheme.titleSmall),
+                                  ),
+                                ),
+                                ListTile(
+                                  title: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 80, right: 50),
+                                    child: Text("Delivery",
+                                        style: theme.textTheme.titleSmall),
+                                  ),
+                                ),
+                                ListTile(
+                                  title: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 80, right: 50),
+                                    child: Text("Medication",
+                                        style: theme.textTheme.titleSmall),
+                                  ),
+                                ),
+                                ListTile(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) => PncsPage()));
+                                  },
+                                  title: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 80, right: 50),
+                                    child: Text("PCN",
+                                        style: theme.textTheme.titleSmall),
+                                  ),
+                                ),
+                                ListTile(
+                                  title: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 80, right: 50),
+                                    child: Text("Lab Test",
+                                        style: theme.textTheme.titleSmall),
+                                  ),
+                                ),
+                              ],
                             ),
 
-                            //Delivery
-
-                            //Medication
-
-                            //PNC
-
-                            //Baby
                             ListTile(
                               leading: Image.asset(
                                 AppAssets.babyIcon,
@@ -186,17 +202,18 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               title: Text('Baby',
                                   style: theme.textTheme.titleSmall),
                             ),
+
                             ListTile(
                               leading: Image.asset(
                                 AppAssets.faqsIcon,
                                 height: 30.sm,
                               ),
-                              title: Text('Faqs',
+                              title: Text('FAQs',
                                   style: theme.textTheme.titleSmall),
                             ),
                             //log out button
                             Align(
-                              alignment: Alignment.topLeft,
+                              alignment: Alignment.bottomLeft,
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 12.0),
                                 child: TextButton.icon(
