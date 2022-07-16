@@ -19,4 +19,5 @@ class AppAssets {
 
   static const profileImage = 'assets/images/profile.png';
   static const girl = 'assets/images/image.png';
+  
 }

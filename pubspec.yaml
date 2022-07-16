@@ -36,7 +36,6 @@ dependencies:
   audioplayers: ^1.0.1
   visibility_detector: ^0.2.2
   animated_text_kit: ^4.2.1
-  qr_flutter: ^4.0.0
   qr_code_scanner: ^0.7.0
 
 #native splash screens

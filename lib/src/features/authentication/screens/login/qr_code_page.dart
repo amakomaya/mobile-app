@@ -2,9 +2,11 @@ import 'package:aamako_maya/src/features/bottom_nav/bottom_navigation.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-import '../../../qr_code/cubit/qr_code_cubit.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../qr_code_cubit/qr_code_cubit.dart';
 
 class QRViewPage extends StatefulWidget {
   const QRViewPage({Key? key}) : super(key: key);
@@ -27,7 +29,7 @@ class _QRViewPageState extends State<QRViewPage> {
         if (result != null) {
           controller.pauseCamera();
           BotToast.showLoading();
-          context.read<QrCodeCubit>().loginWithQr(result ?? '');
+          context.read<QrCodeCubit>().loginWithQr(result!);
         }
       },
       onError: (err) {},
@@ -85,11 +87,15 @@ class _QRViewPageState extends State<QRViewPage> {
                 child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
+                IconButton(
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: Text('Cancel'))
+                    icon: Icon(
+                      Icons.cancel,
+                      color: AppColors.primaryRed,
+                      size: 70.sm,
+                    ))
               ],
             ))
           ],

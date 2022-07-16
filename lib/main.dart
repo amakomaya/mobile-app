@@ -13,7 +13,6 @@ import 'package:aamako_maya/src/features/onboarding/bloc/onboard_bloc.dart';
 import 'package:aamako_maya/src/features/onboarding/onboarding_repository/onboarding_repository.dart';
 import 'package:aamako_maya/src/features/onboarding/screens/onboarding_page.dart';
 import 'package:aamako_maya/src/features/pnc/cubit/pnc_cubit.dart';
-import 'package:aamako_maya/src/features/qr_code/cubit/qr_code_cubit.dart';
 import 'package:aamako_maya/src/features/splash/splash_page.dart';
 import 'package:aamako_maya/src/features/video/cubit/video_cubit.dart';
 import 'package:aamako_maya/src/features/weekly_tips/cubit/weekly_tips_cubit.dart';
@@ -30,6 +29,7 @@ import 'src/features/ancs/cubit/ancs_cubit.dart';
 import 'src/features/audio/cubit/audio_cubit.dart';
 import 'src/features/authentication/cubit/district_municipality_cubit.dart';
 import 'src/features/authentication/login_bloc/login_bloc.dart';
+import 'src/features/authentication/qr_code_cubit/qr_code_cubit.dart';
 import 'src/features/authentication/register_bloc/register_bloc.dart';
 import 'src/features/home/cubit/newsfeed_cubit.dart';
 import 'src/features/video/repository/videoes_repository.dart';
@@ -49,7 +49,7 @@ Future<void> main() async {
           create: (context) => DistrictFieldToggleCubit(),
         ),
         BlocProvider(create: (context) => AncsCubit(Dio(), AuthLocalData())),
-        BlocProvider(create: (context) => QrCodeCubit()),
+        BlocProvider(create: (context) => QrCodeCubit(Dio(),AuthLocalData())),
         BlocProvider(create: (context) => PncsCubit(Dio(), AuthLocalData())),
         BlocProvider(
             create: (context) => NewsfeedCubit(

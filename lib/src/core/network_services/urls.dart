@@ -16,5 +16,7 @@ class Urls {
   static const ancsUrl = "$baseUrl/v1/woman-ancs";
   static const onboardUrl = "$baseUrl/v2/content-app/wizard";
   static const pncUrl = "$baseUrl/v1/woman-pnc";
+    static const qrcodeUrl = "$baseUrl/v1/woman-qrlogin?type=1&token=";
+
 
 }
