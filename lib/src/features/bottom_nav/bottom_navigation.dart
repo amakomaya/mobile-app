@@ -1,5 +1,7 @@
 import 'package:aamako_maya/src/core/theme/app_colors.dart';
 import 'package:aamako_maya/src/core/widgets/scaffold/primary_appBar.dart';
+import 'package:aamako_maya/src/features/ancs/screens/ancs_page.dart';
+import 'package:aamako_maya/src/features/baby/screen/babypage.dart';
 import 'package:aamako_maya/src/features/bottom_nav/popup.dart';
 import 'package:aamako_maya/src/features/video/screens/video_page.dart';
 import 'package:flutter/material.dart';
@@ -139,6 +141,8 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                                 VideoPage(),
                                 WeeklyTipsPage(),
                                 ShopPage(),
+                                AncsPage(),
+                                BabyPage(),
                               ],
                             ),
                           )

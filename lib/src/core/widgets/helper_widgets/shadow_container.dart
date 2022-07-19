@@ -22,7 +22,9 @@ class ShadowContainer extends StatelessWidget {
       this.child,
       this.color,
       this.radius,
-      this.decoration, this.shadowColor, this.gradient})
+      this.decoration,
+      this.shadowColor,
+      this.gradient})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -34,15 +36,15 @@ class ShadowContainer extends StatelessWidget {
       padding: padding,
       decoration: decoration ??
           BoxDecoration(
-            gradient: gradient,
-              color: color?? AppColors.white,
-              borderRadius: BorderRadius.circular(radius??10),
+              gradient: gradient,
+              color: color ?? AppColors.white,
+              borderRadius: BorderRadius.circular(radius ?? 10),
               boxShadow: [
                 BoxShadow(
                   blurRadius: 2,
                   spreadRadius: 1,
                   offset: const Offset(1, 1),
-                  color: shadowColor?? AppColors.accentGrey.withOpacity(0.3),
+                  color: shadowColor ?? AppColors.accentGrey.withOpacity(0.3),
                 )
               ]),
     );

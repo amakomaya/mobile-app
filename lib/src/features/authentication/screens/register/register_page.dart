@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:aamako_maya/src/core/widgets/buttons/primary_action_button.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
@@ -37,7 +39,6 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final theme = Theme.of(context);
 
     return SafeArea(
       child: Scaffold(
@@ -49,7 +50,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: const [
                   Padding(
-                    padding: EdgeInsets.all(10.0),
+                    padding: EdgeInsets.only(left: 18.0, bottom: 12),
                     child: Text(
                       'Register',
                       style: TextStyle(
@@ -59,15 +60,27 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.all(10.0),
+                    padding: EdgeInsets.only(right: 18, bottom: 12),
                     child: Icon(Icons.more_vert_outlined),
                   ),
                 ],
               ),
             ),
+            VerticalSpace(10),
+            Column(
+              children: const [
+                Text(
+                  "Choose Option that describe your need",
+                  style: TextStyle(fontSize: 17, fontFamily: 'lato'),
+                )
+              ],
+            ),
+            SizedBox(
+              height: 20,
+            ),
             Expanded(
                 child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(vertical: 20),
+              padding: const EdgeInsets.symmetric(vertical: 20),
               child: ListView.separated(
                 shrinkWrap: true,
                 separatorBuilder: (c, i) => VerticalSpace(20.h),
@@ -104,6 +117,7 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
             )),
             PrimaryActionButton(
+                width: 170.w,
                 onpress: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (ctx) => RegisterSection(

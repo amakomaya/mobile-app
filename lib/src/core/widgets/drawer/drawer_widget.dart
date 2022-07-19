@@ -6,6 +6,10 @@ import 'package:aamako_maya/src/core/widgets/scaffold/primary_scaffold.dart';
 import 'package:aamako_maya/src/features/ancs/cubit/ancs_cubit.dart';
 import 'package:aamako_maya/src/features/ancs/screens/ancs_page.dart';
 import 'package:aamako_maya/src/features/authentication/screens/login/login_page.dart';
+import 'package:aamako_maya/src/features/baby/screen/babypage.dart';
+import 'package:aamako_maya/src/features/bottom_nav/bottom_navigation.dart';
+import 'package:aamako_maya/src/features/delivery/screen/delivery_page.dart';
+import 'package:aamako_maya/src/features/labtest/screen/labtestpage.dart';
 import 'package:aamako_maya/src/features/pnc/screens/pnc_page.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
@@ -85,6 +89,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         child: ListView(
                           children: [
                             ListTile(
+                              onTap: () {},
                               leading: Image.asset(
                                 AppAssets.homeIcon,
                                 height: 30.sm,
@@ -154,6 +159,13 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   ),
                                 ),
                                 ListTile(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                DeliveryPage()));
+                                  },
                                   title: Padding(
                                     padding: const EdgeInsets.only(
                                         left: 80, right: 50),
@@ -183,6 +195,12 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   ),
                                 ),
                                 ListTile(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                Labtestpage()));
+                                  },
                                   title: Padding(
                                     padding: const EdgeInsets.only(
                                         left: 80, right: 50),
@@ -194,6 +212,12 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             ),
 
                             ListTile(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => BabyPage()));
+                              },
                               leading: Image.asset(
                                 AppAssets.babyIcon,
                                 height: 30.sm,

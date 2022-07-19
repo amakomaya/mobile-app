@@ -23,9 +23,10 @@ class AncsPage extends StatefulWidget {
 class _AncsPageState extends State<AncsPage> {
   @override
   void initState() {
-context.read<AncsCubit>().getAncs();
+    context.read<AncsCubit>().getAncs();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -62,32 +63,26 @@ context.read<AncsCubit>().getAncs();
           ),
           Expanded(child: BlocBuilder<AncsCubit, AncsState>(
             builder: (context, state) {
-              if (state.ancs==null) {
+              if (state.ancs == null) {
                 return ShimmerLoading(boxHeight: 200.h, itemCount: 4);
               } else if (state.ancs?.isEmpty ?? false) {
                 return const Text('NO ANC REPORTS FOUND');
               } else {
                 return ListView.separated(
                     itemBuilder: ((context, index) {
-                   
-      
                       return Column(
                         children: [
                           Text("ANC Report${index + 1}".toUpperCase()),
                           VerticalSpace(10.h),
                           ListTile(
-                            trailing: Text(
-                                state.ancs?[index].swelling ?? ''),
-      
+                            trailing: Text(state.ancs?[index].swelling ?? ''),
                             leading: Text('Swelling'),
                           ),
                           ListTile(
-                            trailing: Text(
-                                state.ancs?[index].babyPresentation ?? ''),
-      
+                            trailing:
+                                Text(state.ancs?[index].babyPresentation ?? ''),
                             leading: Text('Baby Presentation'),
                           ),
-      
                         ],
                       );
                     }),

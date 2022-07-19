@@ -43,45 +43,44 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 body: SafeArea(
                   child: Column(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Image.asset(
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 18.0),
+                            child: Image.asset(
                               AppAssets.logo,
                               height: 197.h,
                               width: 197.h,
                             ),
-                            GestureDetector(
-                              onTap: () => Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (ctx) => const LoginPage(),
+                          ),
+                          GestureDetector(
+                            onTap: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (ctx) => const LoginPage(),
+                              ),
+                            ),
+                            child: Container(
+                              height: 43.h,
+                              width: 104.w,
+                              decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(50),
+                                      bottomLeft: Radius.circular(50)),
+                                  color: AppColors.primaryRed.withOpacity(0.2)),
+                              child: Center(
+                                child: Text(
+                                  'SKIP',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .copyWith(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              child: Container(
-                                height: 43.h,
-                                width: 144.w,
-                                decoration: BoxDecoration(
-                                    borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(50),
-                                        bottomLeft: Radius.circular(50)),
-                                    color:
-                                        AppColors.primaryRed.withOpacity(0.2)),
-                                child: Center(
-                                  child: Text(
-                                    'SKIP',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium!
-                                        .copyWith(fontWeight: FontWeight.w600),
-                                  ),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
+                            ),
+                          )
+                        ],
                       ),
                       Expanded(
                           child: PageView.builder(
@@ -112,7 +111,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                                             .headlineMedium,
                                       ),
                                       VerticalSpace(20.h),
-                                      Flexible(
+                                      Expanded(
                                         child: Image.network(
                                           _onboardList[index].image ?? '',
                                           errorBuilder:
@@ -121,10 +120,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
                                             Icons.image_not_supported,
                                             color: Colors.red,
                                           ),
-                                          height: 247.h,
-                                          width: 247.h,
                                         ),
                                       ),
+                                      VerticalSpace(20.h),
                                     ],
                                   ),
                                 );
@@ -159,6 +157,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
                           valueListenable: _currentIndex,
                           builder: (context, value, _) {
                             return PrimaryActionButton(
+                              width: 185.w,
+                              height: 43.h,
                               title: value == _onboardList.length - 1
                                   ? 'Continue'
                                   : 'Next',

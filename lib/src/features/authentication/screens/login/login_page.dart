@@ -85,21 +85,23 @@ class _LoginPageState extends State<LoginPage> {
                           cacheHeight: 197,
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: ImageIcon(
-                          AssetImage(
-                            "assets/images/language.png",
+                      InkWell(
+                        onTap: () {},
+                        child: const Padding(
+                          padding: EdgeInsets.only(right: 18.0),
+                          child: ImageIcon(
+                            AssetImage(
+                              "assets/images/language.png",
+                            ),
+                            size: 20,
+                            color: Colors.red,
                           ),
-                          size: 20,
-                          color: Colors.grey,
                         ),
                       ),
                     ],
                   ),
                   VerticalSpace(50.h),
                   PrimaryTextField(
-                    cursorColor: Colors.red,
                     controller: usernameController,
                     nextFocus: passwordFocus,
                     validator: (value) {
@@ -119,7 +121,6 @@ class _LoginPageState extends State<LoginPage> {
                       valueListenable: obscureBtn,
                       builder: (BuildContext context, bool i, _) {
                         return PrimaryTextField(
-                          cursorColor: Colors.red,
                           controller: passwordController,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -166,7 +167,10 @@ class _LoginPageState extends State<LoginPage> {
                     padding: const EdgeInsets.symmetric(vertical: 20),
                     width: 380.w,
                     onpress: () {
-                      Navigator.push(context, MaterialPageRoute(builder: ((context) => QRViewPage())));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: ((context) => QRViewPage())));
                     },
                     title: '',
                     child: Row(

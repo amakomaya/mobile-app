@@ -98,7 +98,7 @@ class _HomePageState extends State<HomePage> {
       //         ],
       //       )),
       // ),
-     
+
       SizedBox(
         height: size.height - 60.h,
         child: Column(
@@ -183,7 +183,7 @@ class _HomePageState extends State<HomePage> {
             //         )),
             //   ],
             // ),
-           
+
             // const VerticalSpace(1),
             // Row(
             //   mainAxisAlignment: MainAxisAlignment.center,
@@ -257,7 +257,7 @@ class _HomePageState extends State<HomePage> {
                 return state.isLoading == true
                     ? ShimmerLoading(boxHeight: 150.h, itemCount: 2)
                     : ListView.separated(
-                      padding: EdgeInsets.symmetric(vertical: 15.h),
+                        padding: EdgeInsets.symmetric(vertical: 15.h),
                         itemBuilder: ((context, index) {
                           return Column(
                             children: [
@@ -284,8 +284,7 @@ class _HomePageState extends State<HomePage> {
                                 padding: defaultPadding.copyWith(
                                     top: 10, bottom: 20),
                                 child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Html(data: state.newsfeed?[index].title),
                                   ],
@@ -294,8 +293,8 @@ class _HomePageState extends State<HomePage> {
                               VerticalSpace(20.h),
                               //audio container
                               ShadowContainer(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
                                 radius: 25,
                                 color: Colors.white,
                                 width: 380.w,
@@ -303,8 +302,7 @@ class _HomePageState extends State<HomePage> {
                                   Image.asset(AppAssets.musicIcon),
                                   Expanded(
                                       child: Text(
-                                    state.newsfeed?[index].url ??
-                                        'Unknown.mp3',
+                                    state.newsfeed?[index].url ?? 'Unknown.mp3',
                                     style: theme.textTheme.labelSmall,
                                   ))
                                 ]),
