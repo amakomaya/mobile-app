@@ -10,6 +10,7 @@ import 'package:aamako_maya/src/features/baby/screen/babypage.dart';
 import 'package:aamako_maya/src/features/bottom_nav/bottom_navigation.dart';
 import 'package:aamako_maya/src/features/delivery/screen/delivery_page.dart';
 import 'package:aamako_maya/src/features/labtest/screen/labtestpage.dart';
+import 'package:aamako_maya/src/features/medication/screen/medicationpage.dart';
 import 'package:aamako_maya/src/features/pnc/screens/pnc_page.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
@@ -174,6 +175,13 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   ),
                                 ),
                                 ListTile(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                MedicationPage()));
+                                  },
                                   title: Padding(
                                     padding: const EdgeInsets.only(
                                         left: 80, right: 50),

@@ -8,6 +8,7 @@ import 'package:aamako_maya/src/features/authentication/repository/register_repo
 
 import 'package:aamako_maya/src/features/delivery/cubit/delivery_cubit.dart';
 import 'package:aamako_maya/src/features/labtest/cubit/labtest_cubit.dart';
+import 'package:aamako_maya/src/features/medication/cubit/medication_cubit.dart';
 
 import 'package:aamako_maya/src/features/onboarding/bloc/onboard_bloc.dart';
 import 'package:aamako_maya/src/features/onboarding/onboarding_repository/onboarding_repository.dart';
@@ -48,6 +49,8 @@ Future<void> main() async {
         BlocProvider<DistrictFieldToggleCubit>(
           create: (context) => DistrictFieldToggleCubit(),
         ),
+        BlocProvider(
+            create: (context) => MedicationCubit(Dio(), AuthLocalData())),
         BlocProvider(create: (context) => AncsCubit(Dio(), AuthLocalData())),
         BlocProvider(create: (context) => LabtestCubit(Dio(), AuthLocalData())),
         BlocProvider(create: (context) => AncsCubit(Dio(), AuthLocalData())),

@@ -20,4 +20,5 @@ class Urls {
 
   static const labtestUrl = "$baseUrl/v1/woman-labtest";
   static const deliveryUrl = "$baseUrl/v1/woman-delivery";
+  static const medicationUrl = "$baseUrl/v1/woman-vaccination";
 }
