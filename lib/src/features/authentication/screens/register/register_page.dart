@@ -13,7 +13,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/padding/padding.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/widgets/scaffold/primary_scaffold.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);

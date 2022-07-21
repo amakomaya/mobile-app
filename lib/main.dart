@@ -34,11 +34,12 @@ import 'src/features/authentication/cubit/district_municipality_cubit.dart';
 import 'src/features/authentication/login_bloc/login_bloc.dart';
 import 'src/features/authentication/qr_code_cubit/qr_code_cubit.dart';
 import 'src/features/authentication/register_bloc/register_bloc.dart';
+import 'src/features/bottom_nav/cubit/cubit/navigation_index_cubit.dart';
 import 'src/features/home/cubit/newsfeed_cubit.dart';
 import 'src/features/video/repository/videoes_repository.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding?.ensureInitialized();
   await Hive.initFlutter();
   // WidgetsBinding.instance?.addObserver(const AudioPlayerWidget());
 
@@ -51,6 +52,7 @@ Future<void> main() async {
         BlocProvider<DistrictFieldToggleCubit>(
           create: (context) => DistrictFieldToggleCubit(),
         ),
+        BlocProvider(create: (context)=>NavigationIndexCubit()),
         BlocProvider(
             create: (context) => SymptomsCubit(Dio(), AuthLocalData())),
         BlocProvider(create: (context) => DeliverCubit(Dio(), AuthLocalData())),

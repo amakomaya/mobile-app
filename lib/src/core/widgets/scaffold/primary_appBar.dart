@@ -10,8 +10,15 @@ class PrimaryAppBar extends StatelessWidget {
   final String? title;
   final bool? isUnauth;
   final Widget? unAuthChild;
+  final GlobalKey<ScaffoldState>? scaffoldKey;
+
   const PrimaryAppBar(
-      {Key? key, this.height, this.unAuthChild, this.isUnauth, this.title})
+      {Key? key,
+      this.height,
+      this.scaffoldKey,
+      this.unAuthChild,
+      this.isUnauth,
+      this.title})
       : super(key: key);
 
   @override
@@ -33,20 +40,21 @@ class PrimaryAppBar extends StatelessWidget {
               ? Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    GestureDetector(
-                      // splashColor: Colors.white.withOpacity(0.5),
-                      onTap: () {
-                        Scaffold.of(context).openDrawer();
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 8),
-                        color: Colors.transparent,
-                        child: Icon(
-                          Icons.menu,
-                          color: Colors.white,
+                    Builder(builder: (context) {
+                      return InkWell(
+                        onTap: () {
+                          scaffoldKey?.currentState?.openDrawer();
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10.w),
+                          color: Colors.transparent,
+                          child: Icon(
+                            Icons.menu,
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                    ),
+                      );
+                    }),
                     HorizSpace(20.w),
                     Text(
                       title ?? '',

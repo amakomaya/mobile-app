@@ -2,10 +2,12 @@ import 'dart:ui';
 
 import 'package:aamako_maya/src/core/app_assets/app_assets.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
+import 'package:aamako_maya/src/features/ancs/cubit/ancs_cubit.dart';
 
 import 'package:aamako_maya/src/features/ancs/screens/ancs_page.dart';
 import 'package:aamako_maya/src/features/authentication/screens/login/login_page.dart';
 import 'package:aamako_maya/src/features/baby/screen/babypage.dart';
+import 'package:aamako_maya/src/features/bottom_nav/cubit/cubit/navigation_index_cubit.dart';
 
 import 'package:aamako_maya/src/features/delivery/screen/delivery_page.dart';
 import 'package:aamako_maya/src/features/faqs/model/faqs_model.dart';
@@ -16,10 +18,12 @@ import 'package:aamako_maya/src/features/pnc/screens/pnc_page.dart';
 import 'package:aamako_maya/src/features/symptoms/screen/symptomspage.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../features/authentication/local_storage/authentication_local_storage.dart';
+import '../../../features/bottom_nav/bottom_navigation.dart';
 import '../../theme/app_colors.dart';
 import '../helper_widgets/blank_space.dart';
 
@@ -92,7 +96,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         child: ListView(
                           children: [
                             ListTile(
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=>CustomBottomNavigation()), (route) => false)
+;                              },
                               leading: Image.asset(
                                 AppAssets.homeIcon,
                                 height: 30.sm,
@@ -159,6 +165,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
                                             builder: (context) => AncsPage()));
+                                    context.read<AncsCubit>().getAncs();
                                   },
                                   title: Padding(
                                     padding: const EdgeInsets.only(
