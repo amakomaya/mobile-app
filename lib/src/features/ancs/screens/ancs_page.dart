@@ -31,7 +31,7 @@ class _AncsPageState extends State<AncsPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final thene=Theme.of(context);
+    final thene = Theme.of(context);
     return BlocProvider(
       create: (context) => PageChangeCubit(),
       child: Builder(builder: (context) {
@@ -52,10 +52,10 @@ class _AncsPageState extends State<AncsPage> {
                           onPageChanged: (value) {
                             context.read<PageChangeCubit>().togglePage(value);
                           },
-                          physics: const NeverScrollableScrollPhysics(),
+                          // physics: const NeverScrollableScrollPhysics(),
                           controller: controller,
                           children: [
-                            Center(
+                            const Center(
                               child: Text('INFO'),
                             ),
                             BlocBuilder<AncsCubit, AncsState>(
@@ -70,27 +70,153 @@ class _AncsPageState extends State<AncsPage> {
                                       padding:
                                           EdgeInsets.symmetric(vertical: 30.h),
                                       itemBuilder: ((context, index) {
-                                        return Column(
-                                          children: [
-                                            Text("ANC Report${0 + 1}"
-                                                .toUpperCase()),
-                                            VerticalSpace(10.h),
-                                            ListTile(
-                                              trailing: Text(
+                                        return Container(
+                                          decoration: const BoxDecoration(),
+                                          child: Column(
+                                            children: [
+                                              Text("ANC Report${0 + 1}"
+                                                  .toUpperCase()),
+                                              VerticalSpace(10.h),
 
-                                                  // state.ancs?[index].swelling ??
+                                              ShadowContainer(
+                                                radius: 20,
+                                                width: 380.w,
+                                                color: Colors.white,
+                                                padding:
+                                                    defaultPadding.copyWith(
+                                                        top: 5, bottom: 10),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    ListTile(
+                                                      leading: const Text(
+                                                          "Visited date"),
+                                                      trailing: Text(state
+                                                              .ancs?[index]
+                                                              .visitDate
+                                                              .toString() ??
+                                                          ''),
+                                                    ),
+                                                    ListTile(
+                                                      leading: const Text(
+                                                          " Next visit date"),
+                                                      trailing: Text(state
+                                                              .ancs?[index]
+                                                              .nextVisitDate
+                                                              .toString() ??
+                                                          ''),
+                                                    ),
+                                                    const Divider(),
+                                                    ListTile(
+                                                      leading:
+                                                          const Text(" Weight"),
+                                                      trailing: Text(state
+                                                              .ancs?[index]
+                                                              .weight
+                                                              .toString() ??
+                                                          ''),
+                                                    ),
+                                                    ListTile(
+                                                      leading:
+                                                          const Text("Anemia"),
+                                                      trailing: Text(state
+                                                              .ancs?[index]
+                                                              .anemia
+                                                              .toString() ??
+                                                          ''),
+                                                    ),
+                                                    ListTile(
+                                                      leading: const Text(
+                                                          " Swelling"),
+                                                      trailing: Text(state
+                                                              .ancs?[index]
+                                                              .swelling
+                                                              .toString() ??
+                                                          ''),
+                                                    ),
+                                                    ListTile(
+                                                      leading: const Text(
+                                                          " Blood pressure"),
+                                                      trailing: Text(state
+                                                              .ancs?[index]
+                                                              .bloodPressure
+                                                              .toString() ??
+                                                          ''),
+                                                    ),
+                                                    ListTile(
+                                                      leading: const Text(
+                                                          " Baby Presentation"),
+                                                      trailing: Text(state
+                                                              .ancs?[index]
+                                                              .babyPresentation
+                                                              .toString() ??
+                                                          ''),
+                                                    ),
+                                                    const Divider(
+                                                      color: Colors.black,
+                                                    ),
+                                                    const VerticalSpace(50),
+                                                    ListTile(
+                                                      leading: const Text(
+                                                          "Baby heart beat"),
+                                                      trailing: Text(state
+                                                              .ancs?[index]
+                                                              .babyHeartBeat
+                                                              .toString() ??
+                                                          ''),
+                                                    ),
+                                                    ListTile(
+                                                      leading: Text(
+                                                          "Other Problems"),
+                                                      trailing: Text(state
+                                                              .ancs?[index]
+                                                              .other
+                                                              .toString() ??
+                                                          ''),
+                                                    ),
+                                                    ListTile(
+                                                      leading:
+                                                          Text("Situation"),
+                                                      trailing: Text(state
+                                                              .ancs?[index]
+                                                              .situation
+                                                              .toString() ??
+                                                          ''),
+                                                    ),
+                                                    Divider(),
+                                                    VerticalSpace(30),
+                                                    ListTile(
+                                                      leading:
+                                                          Text("NextVisitDate"),
+                                                      trailing: Text(state
+                                                              .ancs?[index]
+                                                              .nextVisitDate
+                                                              .toString() ??
+                                                          ''),
+                                                    ),
+                                                    ListTile(
+                                                      leading: Text(
+                                                          "Next Visi Date"),
+                                                      trailing: Text(state
+                                                              .ancs?[index]
+                                                              .nextVisitDate
+                                                              .toString() ??
+                                                          ''),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              // const ListTile(
+                                              //   trailing: Text(
 
-                                                  ''),
-                                              leading: const Text('Swelling'),
-                                            ),
-                                            ListTile(
-                                              trailing: Text(
-                                                  // state.ancs?[index].babyPresentation ??
-                                                  'dssd'),
-                                              leading: const Text(
-                                                  'Baby Presentation'),
-                                            ),
-                                          ],
+                                              //       // state.ancs?[index].swelling ??
+
+                                              //       ''),
+                                              //   leading: Text('Swelling'),
+                                              // ),
+                                            ],
+                                          ),
                                         );
                                       }),
                                       separatorBuilder: (ctx, index) {
@@ -137,18 +263,18 @@ class _AncsPageState extends State<AncsPage> {
                                                   .togglePage(0);
                                               if (state == 1) {
                                                 controller.previousPage(
-                                                    duration: Duration(
+                                                    duration: const Duration(
                                                         milliseconds: 600),
                                                     curve: Curves.easeIn);
                                               }
                                             },
                                             child: Text(
                                               'INFO'.toUpperCase(),
-                                            style: thene.textTheme.labelSmall?.copyWith(
-                                                color:state==0 ? AppColors.primaryRed
-                                                      : Colors.black
-
-                                              ),
+                                              style: thene.textTheme.labelSmall
+                                                  ?.copyWith(
+                                                      color: state == 0
+                                                          ? AppColors.primaryRed
+                                                          : Colors.black),
                                             )),
                                       ),
                                       Expanded(
@@ -159,19 +285,18 @@ class _AncsPageState extends State<AncsPage> {
                                                   .togglePage(1);
                                               if (state == 0) {
                                                 controller.nextPage(
-                                                    duration: Duration(
+                                                    duration: const Duration(
                                                         milliseconds: 600),
                                                     curve: Curves.easeIn);
                                               }
                                             },
                                             child: Text(
                                               'REPORT'.toUpperCase(),
-                                           
-                                              style: thene.textTheme.labelSmall?.copyWith(
-                                                color:state==1 ? AppColors.primaryRed
-                                                      : Colors.black
-
-                                              ),
+                                              style: thene.textTheme.labelSmall
+                                                  ?.copyWith(
+                                                      color: state == 1
+                                                          ? AppColors.primaryRed
+                                                          : Colors.black),
                                             )),
                                       ),
                                     ],
