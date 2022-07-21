@@ -4,6 +4,7 @@ import 'package:aamako_maya/src/features/ancs/screens/ancs_page.dart';
 import 'package:aamako_maya/src/features/baby/screen/babypage.dart';
 import 'package:aamako_maya/src/features/bottom_nav/popup.dart';
 import 'package:aamako_maya/src/features/video/screens/video_page.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -46,7 +47,6 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
           bottomNavigationBar: SizedBox(
             height: 60.h,
             child: BottomAppBar(
-              clipBehavior: Clip.hardEdge,
               color: Colors.white,
               elevation: 4,
               notchMargin: 7,
@@ -56,13 +56,13 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                   builder: (context, s, d) {
                     return Row(
                       mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
                         IconButton(
                           iconSize: 30.0,
-                          padding: const EdgeInsets.only(left: 28.0),
+                          padding: const EdgeInsets.only(right: 28.0),
                           icon: ImageIcon(
-                            AssetImage("assets/images/home1.png"),
+                            const AssetImage("assets/images/home1.png"),
                             color: selectedindex.value == 0
                                 ? Colors.red
                                 : Colors.grey,
@@ -76,35 +76,35 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                           iconSize: 30.0,
                           padding: const EdgeInsets.only(right: 28.0),
                           icon: ImageIcon(
-                            AssetImage("assets/images/audio.png"),
+                            const AssetImage("assets/images/audio.png"),
                             color: selectedindex.value == 1
                                 ? Colors.red
                                 : Colors.grey,
                           ),
                           onPressed: () {
                             selectedindex.value = 1;
-                            selectedAppBar.value = 'Audio';
-                          },
-                        ),
-                        IconButton(
-                          iconSize: 30.0,
-                          padding: const EdgeInsets.only(left: 28.0),
-                          icon: ImageIcon(
-                            AssetImage("assets/images/video.png"),
-                            color: selectedindex.value == 2
-                                ? Colors.red
-                                : Colors.grey,
-                          ),
-                          onPressed: () {
-                            selectedindex.value = 2;
-                            selectedAppBar.value = 'Video';
+                            selectedAppBar.value = ' Audio';
                           },
                         ),
                         IconButton(
                           iconSize: 30.0,
                           padding: const EdgeInsets.only(right: 28.0),
                           icon: ImageIcon(
-                            AssetImage("assets/images/text.png"),
+                            const AssetImage("assets/images/video.png"),
+                            color: selectedindex.value == 2
+                                ? Colors.red
+                                : Colors.grey,
+                          ),
+                          onPressed: () {
+                            selectedindex.value = 2;
+                            selectedAppBar.value = ' Video';
+                          },
+                        ),
+                        IconButton(
+                          iconSize: 30.0,
+                          padding: const EdgeInsets.only(right: 28.0),
+                          icon: ImageIcon(
+                            const AssetImage("assets/images/text.png"),
                             color: selectedindex.value == 3
                                 ? Colors.red
                                 : Colors.grey,
@@ -140,9 +140,6 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                                 AudioPage(),
                                 VideoPage(),
                                 WeeklyTipsPage(),
-                                ShopPage(),
-                                AncsPage(),
-                                BabyPage(),
                               ],
                             ),
                           )

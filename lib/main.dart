@@ -7,6 +7,7 @@ import 'package:aamako_maya/src/features/authentication/repository/login_reposit
 import 'package:aamako_maya/src/features/authentication/repository/register_repository.dart';
 
 import 'package:aamako_maya/src/features/delivery/cubit/delivery_cubit.dart';
+import 'package:aamako_maya/src/features/faqs/cubit/faqs_cubit.dart';
 import 'package:aamako_maya/src/features/labtest/cubit/labtest_cubit.dart';
 import 'package:aamako_maya/src/features/medication/cubit/medication_cubit.dart';
 
@@ -15,6 +16,7 @@ import 'package:aamako_maya/src/features/onboarding/onboarding_repository/onboar
 
 import 'package:aamako_maya/src/features/pnc/cubit/pnc_cubit.dart';
 import 'package:aamako_maya/src/features/splash/splash_page.dart';
+import 'package:aamako_maya/src/features/symptoms/cubit/symptoms_cubit.dart';
 import 'package:aamako_maya/src/features/video/cubit/video_cubit.dart';
 import 'package:aamako_maya/src/features/weekly_tips/cubit/weekly_tips_cubit.dart';
 import 'package:aamako_maya/src/features/weekly_tips/repository/weekly_tips_repository.dart';
@@ -50,6 +52,8 @@ Future<void> main() async {
           create: (context) => DistrictFieldToggleCubit(),
         ),
         BlocProvider(
+            create: (context) => SymptomsCubit(Dio(), AuthLocalData())),
+        BlocProvider(
             create: (context) => MedicationCubit(Dio(), AuthLocalData())),
         BlocProvider(create: (context) => AncsCubit(Dio(), AuthLocalData())),
         BlocProvider(create: (context) => LabtestCubit(Dio(), AuthLocalData())),
@@ -82,6 +86,7 @@ Future<void> main() async {
         BlocProvider(
           create: (context) => WeeklyTipsCubit(repo: WeeklyTipsRepo()),
         ),
+        BlocProvider(create: (context) => FaqsCubit(Dio())),
         BlocProvider(
           create: (context) => VideoCubit(VideosRepo()),
         ),

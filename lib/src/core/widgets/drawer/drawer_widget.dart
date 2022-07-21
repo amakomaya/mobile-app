@@ -2,19 +2,21 @@ import 'dart:ui';
 
 import 'package:aamako_maya/src/core/app_assets/app_assets.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
-import 'package:aamako_maya/src/core/widgets/scaffold/primary_scaffold.dart';
-import 'package:aamako_maya/src/features/ancs/cubit/ancs_cubit.dart';
+
 import 'package:aamako_maya/src/features/ancs/screens/ancs_page.dart';
 import 'package:aamako_maya/src/features/authentication/screens/login/login_page.dart';
 import 'package:aamako_maya/src/features/baby/screen/babypage.dart';
-import 'package:aamako_maya/src/features/bottom_nav/bottom_navigation.dart';
+
 import 'package:aamako_maya/src/features/delivery/screen/delivery_page.dart';
+import 'package:aamako_maya/src/features/faqs/model/faqs_model.dart';
+import 'package:aamako_maya/src/features/faqs/screen/faqs_page.dart';
 import 'package:aamako_maya/src/features/labtest/screen/labtestpage.dart';
 import 'package:aamako_maya/src/features/medication/screen/medicationpage.dart';
 import 'package:aamako_maya/src/features/pnc/screens/pnc_page.dart';
-import 'package:bot_toast/bot_toast.dart';
+import 'package:aamako_maya/src/features/symptoms/screen/symptomspage.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../features/authentication/local_storage/authentication_local_storage.dart';
@@ -121,6 +123,12 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             ),
                             //
                             ListTile(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => SymptomsPAge()));
+                              },
                               leading: Image.asset(
                                 AppAssets.symptomIcon,
                                 height: 30.sm,
@@ -224,7 +232,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => BabyPage()));
+                                        builder: (context) =>
+                                            const BabyPage()));
                               },
                               leading: Image.asset(
                                 AppAssets.babyIcon,
@@ -236,6 +245,12 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             ),
 
                             ListTile(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => FaqsPage()));
+                              },
                               leading: Image.asset(
                                 AppAssets.faqsIcon,
                                 height: 30.sm,

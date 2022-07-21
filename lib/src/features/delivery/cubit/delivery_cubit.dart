@@ -20,8 +20,8 @@ class DeliverCubit extends Cubit<DeliveryState> {
   //inside class, function is called method
   void getDelivery() async {
     emit(const DeliveryState(delivery: null, loading: true, error: null));
-    // String token = await local.getTokenFromocal();s
-    String token = "4a66f714-9124-4cd1-a0fa-e48789021600";
+    String token = await local.getTokenFromocal();
+    // String token = "4a66f714-9124-4cd1-a0fa-e48789021600";
     try {
       final response = await dio.get("${Urls.deliveryUrl}/$token");
       if (response.statusCode == 200) {

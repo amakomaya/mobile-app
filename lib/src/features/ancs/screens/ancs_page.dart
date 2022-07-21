@@ -50,13 +50,13 @@ class _AncsPageState extends State<AncsPage> {
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      icon: Icon(Icons.arrow_back_ios)),
-                  Spacer(),
+                      icon: const Icon(Icons.arrow_back_ios)),
+                  const Spacer(),
                   Text(
                     'ANCS',
                     style: Theme.of(context).textTheme.displaySmall,
                   ),
-                  Spacer()
+                  const Spacer()
                 ],
               ),
             ),
@@ -76,12 +76,12 @@ class _AncsPageState extends State<AncsPage> {
                           VerticalSpace(10.h),
                           ListTile(
                             trailing: Text(state.ancs?[index].swelling ?? ''),
-                            leading: Text('Swelling'),
+                            leading: const Text('Swelling'),
                           ),
                           ListTile(
                             trailing:
                                 Text(state.ancs?[index].babyPresentation ?? ''),
-                            leading: Text('Baby Presentation'),
+                            leading: const Text('Baby Presentation'),
                           ),
                         ],
                       );
