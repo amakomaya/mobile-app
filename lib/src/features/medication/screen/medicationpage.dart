@@ -1,41 +1,35 @@
+import 'package:aamako_maya/src/core/padding/padding.dart';
+import 'package:aamako_maya/src/core/theme/app_colors.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
 import 'package:aamako_maya/src/core/widgets/loading_shimmer/shimmer_loading.dart';
-import 'package:aamako_maya/src/core/widgets/scaffold/primary_scaffold.dart';
-import 'package:aamako_maya/src/features/ancs/cubit/ancs_cubit.dart';
+import 'package:aamako_maya/src/features/medication/cubit/medication_cubit.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../core/padding/padding.dart';
-import '../../../core/theme/app_colors.dart';
-
-class AncsPage extends StatefulWidget {
-  const AncsPage({Key? key}) : super(key: key);
+class MedicationPage extends StatefulWidget {
+  const MedicationPage({Key? key}) : super(key: key);
 
   @override
-  State<AncsPage> createState() => _AncsPageState();
+  State<MedicationPage> createState() => _MedicationPageState();
 }
 
-class _AncsPageState extends State<AncsPage> {
-  @override
+class _MedicationPageState extends State<MedicationPage> {
   void initState() {
-    context.read<AncsCubit>().getAncs();
+    context.read<MedicationCubit>().getMedication();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
           body: Column(
         children: [
           Container(
-            width: size.width,
             height: 70.h,
             decoration: const BoxDecoration(
                 color: AppColors.primaryRed,
@@ -50,38 +44,34 @@ class _AncsPageState extends State<AncsPage> {
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      icon: const Icon(Icons.arrow_back_ios)),
-                  const Spacer(),
+                      icon: Icon(Icons.arrow_back_ios)),
+                  Spacer(),
                   Text(
-                    'ANCS',
+                    'Medication',
                     style: Theme.of(context).textTheme.displaySmall,
                   ),
-                  const Spacer()
+                  Spacer()
                 ],
               ),
             ),
           ),
-          Expanded(child: BlocBuilder<AncsCubit, AncsState>(
+          Expanded(child: BlocBuilder<MedicationCubit, MedicationState>(
             builder: (context, state) {
-              if (state.ancs == null) {
+              if (state.medication == null) {
                 return ShimmerLoading(boxHeight: 200.h, itemCount: 4);
-              } else if (state.ancs?.isEmpty ?? false) {
-                return const Text('NO ANC REPORTS FOUND');
+              } else if (state.medication?.isEmpty ?? false) {
+                return Text('NO  REPORTS FOUND');
               } else {
                 return ListView.separated(
                     itemBuilder: ((context, index) {
                       return Column(
                         children: [
-                          Text("ANC Report${index + 1}".toUpperCase()),
+                          Text(" Report${index + 1}".toUpperCase()),
                           VerticalSpace(10.h),
                           ListTile(
-                            trailing: Text(state.ancs?[index].swelling ?? ''),
-                            leading: const Text('Swelling'),
-                          ),
-                          ListTile(
-                            trailing:
-                                Text(state.ancs?[index].babyPresentation ?? ''),
-                            leading: const Text('Baby Presentation'),
+                            trailing: Text(
+                                state.medication?[index].vaccineRegNo ?? ''),
+                            leading: Text('Vaccine Reg No'),
                           ),
                         ],
                       );
@@ -94,7 +84,7 @@ class _AncsPageState extends State<AncsPage> {
                         color: AppColors.accentGrey,
                       );
                     },
-                    itemCount: state.ancs?.length ?? 0);
+                    itemCount: state.medication?.length ?? 0);
               }
             },
           ))

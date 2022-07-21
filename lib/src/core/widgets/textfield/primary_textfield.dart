@@ -23,26 +23,25 @@ class PrimaryTextField extends StatelessWidget {
   final EdgeInsetsGeometry? textPadding;
   final ValidatorFunc? validator;
   final EdgeInsetsGeometry? padding;
-  const PrimaryTextField(
-      {Key? key,
-      this.decoration,
-      this.height,
-      this.width,
-      this.isPhone,
-      this.padding,
-      this.hintText,
-      this.suffix,
-      this.labelText,
-      this.boxMargin,
-      this.textPadding,
-      this.validator,
-      this.focus,
-      this.nextFocus,
-      this.controller,
-      this.sufixTap,
-      this.obscureText,
-      required MaterialColor cursorColor})
-      : super(key: key);
+  const PrimaryTextField({
+    Key? key,
+    this.decoration,
+    this.height,
+    this.width,
+    this.isPhone,
+    this.padding,
+    this.hintText,
+    this.suffix,
+    this.labelText,
+    this.boxMargin,
+    this.textPadding,
+    this.validator,
+    this.focus,
+    this.nextFocus,
+    this.controller,
+    this.sufixTap,
+    this.obscureText,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +65,7 @@ class PrimaryTextField extends StatelessWidget {
                 isPhone != null && isPhone == true ? TextInputType.phone : null,
             obscureText: obscureText ?? false,
             controller: controller,
-            cursorColor: Colors.grey,
+            cursorColor: AppColors.primaryRed,
             focusNode: focus,
             onFieldSubmitted: (value) => nextFocus != null
                 ? FocusScope.of(context).requestFocus(nextFocus)

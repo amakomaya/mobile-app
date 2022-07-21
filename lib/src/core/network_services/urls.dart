@@ -16,7 +16,13 @@ class Urls {
   static const ancsUrl = "$baseUrl/v1/woman-ancs";
   static const onboardUrl = "$baseUrl/v2/content-app/wizard";
   static const pncUrl = "$baseUrl/v1/woman-pnc";
-    static const qrcodeUrl = "$baseUrl/v1/woman-qrlogin?type=1&token=";
+  static const qrcodeUrl = "$baseUrl/v1/woman-qrlogin?type=1&token=";
 
+  static const labtestUrl = "$baseUrl/v1/woman-labtest";
+  static const deliveryUrl = "$baseUrl/v1/woman-delivery";
+  static const medicationUrl = "$baseUrl/v1/woman-vaccination";
 
+  static const symptomsUrl = "$baseUrl/v1/woman-survey";
+
+  static const faqsUrl = "$baseUrl/v2/content-app/faq";
 }

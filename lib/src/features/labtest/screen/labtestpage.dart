@@ -1,42 +1,37 @@
+import 'package:aamako_maya/src/core/padding/padding.dart';
+import 'package:aamako_maya/src/core/theme/app_colors.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
 import 'package:aamako_maya/src/core/widgets/loading_shimmer/shimmer_loading.dart';
-import 'package:aamako_maya/src/core/widgets/scaffold/primary_scaffold.dart';
-import 'package:aamako_maya/src/features/ancs/cubit/ancs_cubit.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
+
+import 'package:aamako_maya/src/features/labtest/cubit/labtest_cubit.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../core/padding/padding.dart';
-import '../../../core/theme/app_colors.dart';
-import '../cubit/pnc_cubit.dart';
-
-class PncsPage extends StatefulWidget {
-  const PncsPage({Key? key}) : super(key: key);
+class Labtestpage extends StatefulWidget {
+  const Labtestpage({Key? key}) : super(key: key);
 
   @override
-  State<PncsPage> createState() => _PncsPageState();
+  State<Labtestpage> createState() => _LabtestpageState();
 }
 
-class _PncsPageState extends State<PncsPage> {
+class _LabtestpageState extends State<Labtestpage> {
   @override
   void initState() {
-    context.read<PncsCubit>().getPncs();
+    context.read<LabtestCubit>().getlabtest();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
           body: Column(
         children: [
           Container(
-            width: size.width,
             height: 70.h,
             decoration: const BoxDecoration(
                 color: AppColors.primaryRed,
@@ -54,7 +49,7 @@ class _PncsPageState extends State<PncsPage> {
                       icon: Icon(Icons.arrow_back_ios)),
                   Spacer(),
                   Text(
-                    'PNCS',
+                    'Lab Test',
                     style: Theme.of(context).textTheme.displaySmall,
                   ),
                   Spacer()
@@ -62,42 +57,59 @@ class _PncsPageState extends State<PncsPage> {
               ),
             ),
           ),
-          Expanded(child: BlocBuilder<PncsCubit, PncState>(
+          Expanded(child: BlocBuilder<LabtestCubit, labtestState>(
             builder: (context, state) {
-              if (state.pncs == null) {
+              if (state.labtest == null) {
                 return ShimmerLoading(boxHeight: 200.h, itemCount: 4);
-              } else if (state.pncs?.isEmpty ?? false) {
-                return Text('NO PNC REPORTS FOUND');
+              } else if (state.labtest?.isEmpty ?? false) {
+                return Text('NO labtest REPORTS FOUND');
               } else {
                 return ListView.separated(
                     itemBuilder: ((context, index) {
                       return Column(
                         children: [
-                          Text("PNC Report${index + 1}".toUpperCase()),
+                          Text("LabTest Report${index + 1}".toUpperCase()),
                           VerticalSpace(10.h),
                           ListTile(
-                            trailing: Text(
-                                state.pncs?[index].dateOfVisit != null
-                                    ? ''
-                                    : toString()),
-                            leading: Text('Visit of date'),
+                            trailing: Text(state.labtest?[0].testDate != null
+                                ? ''
+                                : toString()),
+                            leading: Text('TestDate'),
+                          ),
+                          ListTile(
+                            trailing: Text(state.labtest?[index].hb ?? ''),
+                            leading: Text('Hb'),
+                          ),
+                          ListTile(
+                            trailing: Text(state.labtest?[index].albumin ?? ''),
+                            leading: Text(' Albmin'),
                           ),
                           ListTile(
                             trailing:
-                                Text(state.pncs?[index].motherStatus ?? ''),
-                            leading: Text('Mother status'),
+                                Text(state.labtest?[index].urineProtein ?? ''),
+                            leading: Text(' Urine Prtein'),
                           ),
                           ListTile(
-                            trailing: Text(state.pncs?[index].babyStatus ?? ''),
-                            leading: Text('Baby Status'),
+                            trailing:
+                                Text(state.labtest?[index].urineSugar ?? ''),
+                            leading: Text(' Urine sugar'),
                           ),
                           ListTile(
-                            trailing: Text(state.pncs?[index].familyPlan ?? ''),
-                            leading: Text('Family Planning'),
+                            trailing: Text(state.labtest?[index].hbsag ?? ''),
+                            leading: Text(' HBsAg'),
                           ),
                           ListTile(
-                            trailing: Text(state.pncs?[index].advice ?? ''),
-                            leading: Text('Advices'),
+                            trailing: Text(state.labtest?[index].vdrl ?? ''),
+                            leading: Text(' VdRl'),
+                          ),
+                          ListTile(
+                            trailing:
+                                Text(state.labtest?[index].retroVirus ?? ''),
+                            leading: Text(' Retro Virus'),
+                          ),
+                          ListTile(
+                            trailing: Text(state.labtest?[index].other ?? ''),
+                            leading: Text(' Others'),
                           ),
                         ],
                       );
@@ -107,10 +119,10 @@ class _PncsPageState extends State<PncsPage> {
                         height: 10.h,
                         indent: 10.w,
                         endIndent: 10.w,
-                        color: AppColors.accentGrey,
+                        color: Color.fromARGB(255, 31, 6, 6),
                       );
                     },
-                    itemCount: state.pncs?.length ?? 0);
+                    itemCount: state.labtest?.length ?? 0);
               }
             },
           ))

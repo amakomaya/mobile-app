@@ -1,19 +1,22 @@
-import 'dart:collection';
-
 import 'package:aamako_maya/src/core/theme/app_colors.dart';
 import 'package:aamako_maya/src/core/theme/custom_theme.dart';
-import 'package:aamako_maya/src/features/authentication/cache/cache_values.dart';
-import 'package:aamako_maya/src/features/authentication/cubit/register_cubit.dart';
+
 import 'package:aamako_maya/src/features/authentication/cubit/toggle_district_municipality.dart';
 import 'package:aamako_maya/src/features/authentication/local_storage/authentication_local_storage.dart';
 import 'package:aamako_maya/src/features/authentication/repository/login_repository.dart';
 import 'package:aamako_maya/src/features/authentication/repository/register_repository.dart';
-import 'package:aamako_maya/src/features/authentication/screens/login/login_page.dart';
+
+import 'package:aamako_maya/src/features/delivery/cubit/delivery_cubit.dart';
+import 'package:aamako_maya/src/features/faqs/cubit/faqs_cubit.dart';
+import 'package:aamako_maya/src/features/labtest/cubit/labtest_cubit.dart';
+import 'package:aamako_maya/src/features/medication/cubit/medication_cubit.dart';
+
 import 'package:aamako_maya/src/features/onboarding/bloc/onboard_bloc.dart';
 import 'package:aamako_maya/src/features/onboarding/onboarding_repository/onboarding_repository.dart';
-import 'package:aamako_maya/src/features/onboarding/screens/onboarding_page.dart';
+
 import 'package:aamako_maya/src/features/pnc/cubit/pnc_cubit.dart';
 import 'package:aamako_maya/src/features/splash/splash_page.dart';
+import 'package:aamako_maya/src/features/symptoms/cubit/symptoms_cubit.dart';
 import 'package:aamako_maya/src/features/video/cubit/video_cubit.dart';
 import 'package:aamako_maya/src/features/weekly_tips/cubit/weekly_tips_cubit.dart';
 import 'package:aamako_maya/src/features/weekly_tips/repository/weekly_tips_repository.dart';
@@ -48,8 +51,15 @@ Future<void> main() async {
         BlocProvider<DistrictFieldToggleCubit>(
           create: (context) => DistrictFieldToggleCubit(),
         ),
+        BlocProvider(
+            create: (context) => SymptomsCubit(Dio(), AuthLocalData())),
+        BlocProvider(
+            create: (context) => MedicationCubit(Dio(), AuthLocalData())),
         BlocProvider(create: (context) => AncsCubit(Dio(), AuthLocalData())),
-        BlocProvider(create: (context) => QrCodeCubit(Dio(),AuthLocalData())),
+        BlocProvider(create: (context) => LabtestCubit(Dio(), AuthLocalData())),
+        BlocProvider(create: (context) => AncsCubit(Dio(), AuthLocalData())),
+        BlocProvider(create: (context) => DeliverCubit(Dio(), AuthLocalData())),
+        BlocProvider(create: (context) => QrCodeCubit(Dio(), AuthLocalData())),
         BlocProvider(create: (context) => PncsCubit(Dio(), AuthLocalData())),
         BlocProvider(
             create: (context) => NewsfeedCubit(
@@ -76,6 +86,7 @@ Future<void> main() async {
         BlocProvider(
           create: (context) => WeeklyTipsCubit(repo: WeeklyTipsRepo()),
         ),
+        BlocProvider(create: (context) => FaqsCubit(Dio())),
         BlocProvider(
           create: (context) => VideoCubit(VideosRepo()),
         ),
