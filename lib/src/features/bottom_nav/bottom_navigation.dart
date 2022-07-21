@@ -130,23 +130,27 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
           }),
           body: BlocBuilder<NavigationIndexCubit, NavigationIndexState>(
             builder: (context, state) {
-              return Column(
+              return Stack(
                 children: [
                   PrimaryAppBar(
                     scaffoldKey: _scaffoldKey,
                     title: state.appbarTitle,
                   ),
                   Expanded(
-                    child: IndexedStack(
-                      alignment: Alignment.center,
-                      index: state.index,
-                      children: const [
-                        HomePage(),
-                        AudioPage(),
-                        VideoPage(),
-                        WeeklyTipsPage(),
-                        ShopPage(),
-                      ],
+                    child: Padding(
+                      padding:  EdgeInsets.only(top:70.h),
+                      child: IndexedStack(
+                        alignment: Alignment.center,
+                        index: state.index,
+                        children: const [
+                          HomePage(),
+                          AudioPage(),
+                          VideoPage(),
+                          WeeklyTipsPage(),
+                          ShopPage(),
+                          AncsPage()
+                        ],
+                      ),
                     ),
                   )
                 ],

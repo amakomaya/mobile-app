@@ -97,7 +97,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           children: [
                             ListTile(
                               onTap: () {
-                                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=>CustomBottomNavigation()), (route) => false)
+                                // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=>CustomBottomNavigation()), (route) => false)
 ;                              },
                               leading: Image.asset(
                                 AppAssets.homeIcon,
@@ -162,9 +162,12 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               children: [
                                 ListTile(
                                   onTap: () {
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (context) => AncsPage()));
+                                    // Navigator.of(context).push(
+                                    //     MaterialPageRoute(
+                                    //         builder: (context) => AncsPage()));
+                                    Navigator.pop(context);
+
+                                    context.read<NavigationIndexCubit>().changeIndex(index: 5, title: 'ANC');
                                     context.read<AncsCubit>().getAncs();
                                   },
                                   title: Padding(
