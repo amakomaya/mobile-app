@@ -18,7 +18,6 @@ import 'package:nepali_date_picker/nepali_date_picker.dart' as picker;
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/buttons/primary_action_button.dart';
 import '../../../core/widgets/scaffold/primary_appBar.dart';
-import '../../../core/widgets/scaffold/primary_scaffold.dart';
 import '../../../core/widgets/textfield/primary_textfield.dart';
 
 class RegisterSection extends StatefulWidget {

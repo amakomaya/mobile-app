@@ -25,7 +25,6 @@ class _VideoPageState extends State<VideoPage> {
   // late BetterPlayerController _betterPlayerController;
   @override
   void initState() {
-    context.read<VideoCubit>().getVideos();
     super.initState();
   }
 

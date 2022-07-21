@@ -1,7 +1,6 @@
 import 'package:aamako_maya/src/core/padding/padding.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
-import 'package:aamako_maya/src/core/widgets/scaffold/primary_scaffold.dart';
 import 'package:aamako_maya/src/features/weekly_tips/cubit/weekly_tips_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,7 +19,7 @@ class WeeklyTipsPage extends StatefulWidget {
 class _WeeklyTipsPageState extends State<WeeklyTipsPage> {
   @override
   void initState() {
-    context.read<WeeklyTipsCubit>().getWeeklyTips();
+   
 
     super.initState();
   }

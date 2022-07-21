@@ -8,6 +8,18 @@ class CustomTheme {
       primaryColor: AppColors.accentGrey,
       scaffoldBackgroundColor: AppColors.white,
       fontFamily: 'Lato',
+      colorScheme:const ColorScheme(
+          brightness: Brightness.light,
+          primary: AppColors.primaryRed,
+          onPrimary: AppColors.primaryRed,
+          secondary: AppColors.primaryRed,
+          onSecondary: AppColors.accentGrey,
+          error: AppColors.primaryRed,
+          onError: Colors.red,
+          onBackground: Colors.white,
+          surface: Colors.white,
+          onSurface: Colors.white,
+          background: Colors.red),
       appBarTheme: const AppBarTheme(
           toolbarHeight: 0,
           elevation: 0,
