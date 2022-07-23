@@ -1,3 +1,4 @@
+import 'package:aamako_maya/src/core/theme/custom_theme.dart';
 import 'package:aamako_maya/src/core/widgets/drawer/drawer_widget.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
@@ -28,7 +29,8 @@ class _AncsPageState extends State<AncsPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final thene = Theme.of(context);
+
+    final theme = Theme.of(context);
     return BlocProvider(
       create: (context) => PageChangeCubit(),
       child: Builder(builder: (context) {
@@ -44,8 +46,8 @@ class _AncsPageState extends State<AncsPage> {
                 },
                 controller: controller,
                 children: [
-                  Center(
-                    child: Text('INFO'),
+                  const Center(
+                    child: Text('INFORMATION'),
                   ),
                   Column(
                     children: [
@@ -65,36 +67,184 @@ class _AncsPageState extends State<AncsPage> {
                                   itemBuilder: ((context, index) {
                                     return Column(
                                       children: [
-                                        Text(
-                                            "ANC Report${0 + 1}".toUpperCase()),
-                                        VerticalSpace(10.h),
-                                        ListTile(
-                                          trailing: Text(
-
-                                              // state.ancs?[index].swelling ??
-
-                                              ''),
-                                          leading: const Text('Swelling'),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                              "Visit ${index + 1}"
+                                                  .toUpperCase(),
+                                              style: const TextStyle(
+                                                  fontFamily: "lato",
+                                                  color: AppColors.primaryRed,
+                                                  fontSize: 17)),
                                         ),
-                                        ListTile(
-                                          trailing: Text(
-                                              // state.ancs?[index].babyPresentation ??
-                                              'dssd'),
-                                          leading:
-                                              const Text('Baby Presentation'),
+                                        VerticalSpace(15.h),
+                                        ShadowContainer(
+                                          radius: 20,
+                                          width: 380.w,
+                                          color: Colors.white,
+                                          padding: defaultPadding.copyWith(
+                                              top: 10, bottom: 20),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              ListTile(
+                                                leading: Text("Visited Date",
+                                                    style: theme
+                                                        .textTheme.labelSmall),
+                                                trailing: Text(
+                                                    state.ancs?[index].visitDate
+                                                            .toString() ??
+                                                        '',
+                                                    style: theme
+                                                        .textTheme.labelSmall),
+                                              ),
+                                              const Divider(),
+                                              ListTile(
+                                                leading: Text("Anemia",
+                                                    style: theme
+                                                        .textTheme.labelSmall),
+                                                trailing: Text(
+                                                    state.ancs?[index].anemia
+                                                            .toString() ??
+                                                        '',
+                                                    style: theme
+                                                        .textTheme.labelSmall),
+                                              ),
+                                              ListTile(
+                                                leading: Text("Weight",
+                                                    style: theme
+                                                        .textTheme.labelSmall),
+                                                trailing: Text(
+                                                    state.ancs?[index].weight
+                                                            .toString() ??
+                                                        '',
+                                                    style: theme
+                                                        .textTheme.labelSmall),
+                                              ),
+                                              ListTile(
+                                                leading: Text("Swelling",
+                                                    style: theme
+                                                        .textTheme.labelSmall),
+                                                trailing: Text(
+                                                    state.ancs?[index].swelling
+                                                            .toString() ??
+                                                        '',
+                                                    style: theme
+                                                        .textTheme.labelSmall),
+                                              ),
+                                              const Divider(),
+                                              ListTile(
+                                                leading: Text("Blood Pressure",
+                                                    style: theme
+                                                        .textTheme.labelSmall),
+                                                trailing: Text(
+                                                    state.ancs?[index]
+                                                            .bloodPressure
+                                                            .toString() ??
+                                                        '',
+                                                    style: theme
+                                                        .textTheme.labelSmall),
+                                              ),
+                                              ListTile(
+                                                leading: Text("UtersHeight",
+                                                    style: theme
+                                                        .textTheme.labelSmall),
+                                                trailing: Text(
+                                                    state.ancs?[index]
+                                                            .uterusHeight
+                                                            .toString() ??
+                                                        '',
+                                                    style: theme
+                                                        .textTheme.labelSmall),
+                                              ),
+                                              ListTile(
+                                                leading: Text(
+                                                    "Baby Presentation",
+                                                    style: theme
+                                                        .textTheme.labelSmall),
+                                                trailing: Text(
+                                                    state.ancs?[index]
+                                                            .babyPresentation
+                                                            .toString() ??
+                                                        '',
+                                                    style: theme
+                                                        .textTheme.labelSmall),
+                                              ),
+                                              ListTile(
+                                                leading: Text("Baby Heart Beat",
+                                                    style: theme
+                                                        .textTheme.labelSmall),
+                                                trailing: Text(
+                                                    state.ancs?[index]
+                                                            .babyHeartBeat
+                                                            .toString() ??
+                                                        '',
+                                                    style: theme
+                                                        .textTheme.labelSmall),
+                                              ),
+                                              ListTile(
+                                                leading: Text("Others Problems",
+                                                    style: theme
+                                                        .textTheme.labelSmall),
+                                                trailing: Text(
+                                                    state.ancs?[index].other
+                                                            .toString() ??
+                                                        '',
+                                                    style: theme
+                                                        .textTheme.labelSmall),
+                                              ),
+                                              ListTile(
+                                                leading: Text("Situation",
+                                                    style: theme
+                                                        .textTheme.labelSmall),
+                                                trailing: Text(
+                                                    state.ancs?[index].situation
+                                                            .toString() ??
+                                                        '',
+                                                    style: theme
+                                                        .textTheme.labelSmall),
+                                              ),
+                                              Divider(),
+                                              ListTile(
+                                                leading: Text("Checked By",
+                                                    style: theme
+                                                        .textTheme.labelSmall),
+                                                trailing: Text(
+                                                    state.ancs?[index].checkedBy
+                                                            .toString() ??
+                                                        '',
+                                                    style: theme
+                                                        .textTheme.labelSmall),
+                                              ),
+                                              ListTile(
+                                                leading: Text("Next Visit Date",
+                                                    style: theme
+                                                        .textTheme.labelSmall),
+                                                trailing: Text(
+                                                    state.ancs?[index]
+                                                            .nextVisitDate
+                                                            .toString() ??
+                                                        '',
+                                                    style: theme
+                                                        .textTheme.labelSmall),
+                                              ),
+                                            ],
+                                          ),
                                         ),
+                                        VerticalSpace(15.h),
                                       ],
                                     );
                                   }),
                                   separatorBuilder: (ctx, index) {
-                                    return Divider(
-                                      height: 10.h,
-                                      indent: 10.w,
-                                      endIndent: 10.w,
-                                      color: AppColors.accentGrey,
+                                    return const Divider(
+                                      // height: 10.h,
+                                      // indent: 10.w,
+                                      //  endIndent: 10.w,
+                                      color: AppColors.white,
                                     );
                                   },
-                                  itemCount: 9);
+                                  itemCount: state.ancs?.length ?? 0);
                             }
                           },
                         ),
@@ -124,14 +274,14 @@ class _AncsPageState extends State<AncsPage> {
                                           .togglePage(0);
                                       if (state == 1) {
                                         controller.previousPage(
-                                            duration:
-                                                Duration(milliseconds: 600),
+                                            duration: const Duration(
+                                                milliseconds: 600),
                                             curve: Curves.easeIn);
                                       }
                                     },
                                     child: Text(
                                       'INFO'.toUpperCase(),
-                                      style: thene.textTheme.labelSmall
+                                      style: theme.textTheme.labelSmall
                                           ?.copyWith(
                                               color: state == 0
                                                   ? AppColors.primaryRed
@@ -146,14 +296,14 @@ class _AncsPageState extends State<AncsPage> {
                                           .togglePage(1);
                                       if (state == 0) {
                                         controller.nextPage(
-                                            duration:
-                                                Duration(milliseconds: 600),
+                                            duration: const Duration(
+                                                milliseconds: 600),
                                             curve: Curves.easeIn);
                                       }
                                     },
                                     child: Text(
                                       'REPORT'.toUpperCase(),
-                                      style: thene.textTheme.labelSmall
+                                      style: theme.textTheme.labelSmall
                                           ?.copyWith(
                                               color: state == 1
                                                   ? AppColors.primaryRed

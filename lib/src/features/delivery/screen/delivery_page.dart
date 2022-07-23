@@ -3,6 +3,7 @@
 import 'package:aamako_maya/src/core/padding/padding.dart';
 import 'package:aamako_maya/src/core/theme/app_colors.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
+import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
 import 'package:aamako_maya/src/core/widgets/loading_shimmer/shimmer_loading.dart';
 import 'package:aamako_maya/src/features/delivery/cubit/delivery_cubit.dart';
 import 'package:aamako_maya/src/features/medication/cubit/medication_cubit.dart';
@@ -28,6 +29,7 @@ class _DeliveryPageState extends State<DeliveryPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return SafeArea(
       child: Scaffold(
           body: Column(
@@ -69,56 +71,102 @@ class _DeliveryPageState extends State<DeliveryPage> {
                     itemBuilder: ((context, index) {
                       return Column(
                         children: [
-                          Text("delivery Report${index + 1}".toUpperCase()),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                                "Delivery Report${index + 1}".toUpperCase(),
+                                style: const TextStyle(
+                                    fontFamily: "lato",
+                                    color: AppColors.primaryRed,
+                                    fontSize: 17)),
+                          ),
                           VerticalSpace(10.h),
-                          ListTile(
-                            trailing: Text(
-                                state.delivery?[0].deliveryDate != null
-                                    ? ''
-                                    : toString()),
-                            leading: Text('Delivery date'),
+                          ShadowContainer(
+                            radius: 20,
+                            width: 380.w,
+                            color: Colors.white,
+                            padding:
+                                defaultPadding.copyWith(top: 10, bottom: 20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ListTile(
+                                  leading: Text("Delivery Date",
+                                      style: theme.textTheme.labelSmall),
+                                  trailing: Text(state
+                                          .delivery?[index].deliveryDate
+                                          .toString() ??
+                                      ''),
+                                ),
+                                ListTile(
+                                  leading: Text("Delivery Time",
+                                      style: theme.textTheme.labelSmall),
+                                  trailing: Text(state
+                                          .delivery?[index].deliveryTime
+                                          .toString() ??
+                                      ''),
+                                ),
+                                ListTile(
+                                  leading: Text("Delivery Place",
+                                      style: theme.textTheme.labelSmall),
+                                  trailing: Text(state
+                                          .delivery?[index].deliveryPlace
+                                          .toString() ??
+                                      ''),
+                                ),
+                                Divider(),
+                                ListTile(
+                                  leading: Text("Delivery Date",
+                                      style: theme.textTheme.labelSmall),
+                                  trailing: Text(state
+                                          .delivery?[index].deliveryType
+                                          .toString() ??
+                                      ''),
+                                ),
+                                ListTile(
+                                  leading: Text("Presentation",
+                                      style: theme.textTheme.labelSmall),
+                                  trailing: Text(state
+                                          .delivery?[index].presentation
+                                          .toString() ??
+                                      ''),
+                                ),
+                                ListTile(
+                                  leading: Text("Complexity",
+                                      style: theme.textTheme.labelSmall),
+                                  trailing: Text(state
+                                          .delivery?[index].complexity
+                                          .toString() ??
+                                      ''),
+                                ),
+                                Divider(),
+                                ListTile(
+                                  leading: Text("Others Problems",
+                                      style: theme.textTheme.labelSmall),
+                                  trailing: Text(state
+                                          .delivery?[index].otherProblem
+                                          .toString() ??
+                                      ''),
+                                ),
+                                ListTile(
+                                  leading: Text("Advice",
+                                      style: theme.textTheme.labelSmall),
+                                  trailing: Text(state.delivery?[index].advice
+                                          .toString() ??
+                                      ''),
+                                ),
+                                ListTile(
+                                  leading: Text("Delivery By",
+                                      style: theme.textTheme.labelSmall),
+                                  trailing: Text(state
+                                          .delivery?[index].deliveryBy
+                                          .toString() ??
+                                      ''),
+                                ),
+                              ],
+                            ),
                           ),
-                          ListTile(
-                            trailing:
-                                Text(state.delivery?[index].deliveryTime ?? ''),
-                            leading: Text(' Delivery Time'),
-                          ),
-                          ListTile(
-                            trailing: Text(
-                                state.delivery?[index].deliveryPlace ?? ''),
-                            leading: Text(' Delivery Place'),
-                          ),
-                          Divider(),
-                          ListTile(
-                            trailing:
-                                Text(state.delivery?[0].deliveryType ?? ''),
-                            leading: Text("Delivery Type"),
-                          ),
-                          ListTile(
-                            trailing:
-                                Text(state.delivery?[0].presentation ?? ''),
-                            leading: Text("Presentation"),
-                          ),
-                          ListTile(
-                            trailing: Text(state.delivery?[0].complexity != null
-                                ? ''.toString()
-                                : toString()),
-                            leading: Text("Complexity"),
-                          ),
-                          Divider(),
-                          ListTile(
-                            trailing:
-                                Text(state.delivery?[0].otherProblem ?? ''),
-                            leading: Text("Other Problems"),
-                          ),
-                          ListTile(
-                            trailing: Text(state.delivery?[0].advice ?? ''),
-                            leading: Text("Advice"),
-                          ),
-                          ListTile(
-                            trailing: Text(state.delivery?[0].deliveryBy ?? ''),
-                            leading: Text("Delivery By"),
-                          ),
+                          VerticalSpace(15.h),
                         ],
                       );
                     }),

@@ -1,6 +1,7 @@
 import 'package:aamako_maya/src/core/padding/padding.dart';
 import 'package:aamako_maya/src/core/theme/app_colors.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
+import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
 import 'package:aamako_maya/src/core/widgets/loading_shimmer/shimmer_loading.dart';
 
 import 'package:aamako_maya/src/features/labtest/cubit/labtest_cubit.dart';
@@ -27,6 +28,7 @@ class _LabtestpageState extends State<Labtestpage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return SafeArea(
       child: Scaffold(
           body: Column(
@@ -68,58 +70,121 @@ class _LabtestpageState extends State<Labtestpage> {
                     itemBuilder: ((context, index) {
                       return Column(
                         children: [
-                          Text("LabTest Report${index + 1}".toUpperCase()),
-                          VerticalSpace(10.h),
-                          ListTile(
-                            trailing: Text(state.labtest?[0].testDate != null
-                                ? ''
-                                : toString()),
-                            leading: Text('TestDate'),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(" Report${index + 1}".toUpperCase(),
+                                style: const TextStyle(
+                                    fontFamily: "lato",
+                                    color: AppColors.primaryRed,
+                                    fontSize: 17)),
                           ),
-                          ListTile(
-                            trailing: Text(state.labtest?[index].hb ?? ''),
-                            leading: Text('Hb'),
-                          ),
-                          ListTile(
-                            trailing: Text(state.labtest?[index].albumin ?? ''),
-                            leading: Text(' Albmin'),
-                          ),
-                          ListTile(
-                            trailing:
-                                Text(state.labtest?[index].urineProtein ?? ''),
-                            leading: Text(' Urine Prtein'),
-                          ),
-                          ListTile(
-                            trailing:
-                                Text(state.labtest?[index].urineSugar ?? ''),
-                            leading: Text(' Urine sugar'),
-                          ),
-                          ListTile(
-                            trailing: Text(state.labtest?[index].hbsag ?? ''),
-                            leading: Text(' HBsAg'),
-                          ),
-                          ListTile(
-                            trailing: Text(state.labtest?[index].vdrl ?? ''),
-                            leading: Text(' VdRl'),
-                          ),
-                          ListTile(
-                            trailing:
-                                Text(state.labtest?[index].retroVirus ?? ''),
-                            leading: Text(' Retro Virus'),
-                          ),
-                          ListTile(
-                            trailing: Text(state.labtest?[index].other ?? ''),
-                            leading: Text(' Others'),
+                          VerticalSpace(12.h),
+                          ShadowContainer(
+                            radius: 20,
+                            width: 380.w,
+                            color: Colors.white,
+                            padding:
+                                defaultPadding.copyWith(top: 10, bottom: 20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ListTile(
+                                  leading: Text("Visit Date",
+                                      style: theme.textTheme.labelSmall),
+                                  trailing: Text(
+                                      state.labtest?[index].testDate
+                                              .toString() ??
+                                          '',
+                                      style: theme.textTheme.labelSmall),
+                                ),
+                                Divider(),
+                                ListTile(
+                                  leading: Text("HB",
+                                      style: theme.textTheme.labelSmall),
+                                  trailing: Text(
+                                      state.labtest?[index].hb.toString() ?? '',
+                                      style: theme.textTheme.labelSmall),
+                                ),
+                                ListTile(
+                                  leading: Text("Albumin",
+                                      style: theme.textTheme.labelSmall),
+                                  trailing: Text(
+                                      state.labtest?[index].albumin
+                                              .toString() ??
+                                          '',
+                                      style: theme.textTheme.labelSmall),
+                                ),
+                                ListTile(
+                                  leading: Text("Urine Protein",
+                                      style: theme.textTheme.labelSmall),
+                                  trailing: Text(
+                                      state.labtest?[index].urineProtein
+                                              .toString() ??
+                                          '',
+                                      style: theme.textTheme.labelSmall),
+                                ),
+                                ListTile(
+                                  leading: Text("Urine Sugar",
+                                      style: theme.textTheme.labelSmall),
+                                  trailing: Text(
+                                      state.labtest?[index].urineSugar
+                                              .toString() ??
+                                          '',
+                                      style: theme.textTheme.labelSmall),
+                                ),
+                                ListTile(
+                                  leading: Text("Blood Sugar",
+                                      style: theme.textTheme.labelSmall),
+                                  trailing: Text(
+                                      state.labtest?[index].bloodSugar
+                                              .toString() ??
+                                          '',
+                                      style: theme.textTheme.labelSmall),
+                                ),
+                                ListTile(
+                                  leading: Text("HBsAg",
+                                      style: theme.textTheme.labelSmall),
+                                  trailing: Text(
+                                      state.labtest?[index].hbsag.toString() ??
+                                          '',
+                                      style: theme.textTheme.labelSmall),
+                                ),
+                                ListTile(
+                                  leading: Text("VDRL",
+                                      style: theme.textTheme.labelSmall),
+                                  trailing: Text(
+                                      state.labtest?[index].vdrl.toString() ??
+                                          '',
+                                      style: theme.textTheme.labelSmall),
+                                ),
+                                ListTile(
+                                  leading: Text("Retro Virus",
+                                      style: theme.textTheme.labelSmall),
+                                  trailing: Text(
+                                      state.labtest?[index].retroVirus
+                                              .toString() ??
+                                          '',
+                                      style: theme.textTheme.labelSmall),
+                                ),
+                                Divider(),
+                                ListTile(
+                                  leading: Text("Others",
+                                      style: theme.textTheme.labelSmall),
+                                  trailing: Text(
+                                      state.labtest?[index].other.toString() ??
+                                          '',
+                                      style: theme.textTheme.labelSmall),
+                                ),
+                                VerticalSpace(12.h),
+                              ],
+                            ),
                           ),
                         ],
                       );
                     }),
                     separatorBuilder: (ctx, index) {
-                      return Divider(
-                        height: 10.h,
-                        indent: 10.w,
-                        endIndent: 10.w,
-                        color: Color.fromARGB(255, 31, 6, 6),
+                      return const Divider(
+                        color: Colors.white,
                       );
                     },
                     itemCount: state.labtest?.length ?? 0);
