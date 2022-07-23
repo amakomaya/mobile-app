@@ -169,6 +169,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
 
                                     context.read<NavigationIndexCubit>().changeIndex(index: 5, title: 'ANC');
                                     context.read<AncsCubit>().getAncs();
+                                  // BlocProvider.of<AncsCubit>(context).getAncs();
                                   },
                                   title: Padding(
                                     padding: const EdgeInsets.only(
