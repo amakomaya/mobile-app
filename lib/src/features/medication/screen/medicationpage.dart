@@ -1,6 +1,7 @@
 import 'package:aamako_maya/src/core/padding/padding.dart';
 import 'package:aamako_maya/src/core/theme/app_colors.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
+import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
 import 'package:aamako_maya/src/core/widgets/loading_shimmer/shimmer_loading.dart';
 import 'package:aamako_maya/src/features/medication/cubit/medication_cubit.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,6 +26,7 @@ class _MedicationPageState extends State<MedicationPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return SafeArea(
       child: Scaffold(
           body: Column(
@@ -66,22 +68,52 @@ class _MedicationPageState extends State<MedicationPage> {
                     itemBuilder: ((context, index) {
                       return Column(
                         children: [
-                          Text(" Report${index + 1}".toUpperCase()),
-                          VerticalSpace(10.h),
-                          ListTile(
-                            trailing: Text(
-                                state.medication?[index].vaccineRegNo ?? ''),
-                            leading: Text('Vaccine Reg No'),
+                          ShadowContainer(
+                            radius: 20,
+                            width: 380.w,
+                            color: Colors.white,
+                            padding:
+                                defaultPadding.copyWith(top: 10, bottom: 20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ListTile(
+                                  leading: Text(state
+                                          .medication?[index].vaccineType
+                                          .toString() ??
+                                      ''),
+                                ),
+                                Divider(),
+                                ListTile(
+                                  leading: Text("given date"),
+                                  trailing: Text(state
+                                          .medication?[index].vaccinatedDateNp
+                                          .toString() ??
+                                      ''),
+                                ),
+                                ListTile(
+                                  leading: Text("Iron Pill"),
+                                  trailing: Text(state
+                                          .medication?[index].noOfPills
+                                          .toString() ??
+                                      ''),
+                                ),
+                                ListTile(
+                                  leading: Text(" VaccineReg NO"),
+                                  trailing: Text(state
+                                          .medication?[index].vaccineRegNo
+                                          .toString() ??
+                                      ''),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       );
                     }),
                     separatorBuilder: (ctx, index) {
                       return Divider(
-                        height: 10.h,
-                        indent: 10.w,
-                        endIndent: 10.w,
-                        color: AppColors.accentGrey,
+                        color: AppColors.white,
                       );
                     },
                     itemCount: state.medication?.length ?? 0);

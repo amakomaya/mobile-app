@@ -8,7 +8,7 @@ class CustomTheme {
       primaryColor: AppColors.accentGrey,
       scaffoldBackgroundColor: AppColors.white,
       fontFamily: 'Lato',
-      colorScheme:const ColorScheme(
+      colorScheme: const ColorScheme(
           brightness: Brightness.light,
           primary: AppColors.primaryRed,
           onPrimary: AppColors.primaryRed,
@@ -59,6 +59,8 @@ class CustomTheme {
           fontSize: 22.sp,
         ),
 
+        //drawerfont healthreport inside size
+
         displaySmall: TextStyle(
           color: AppColors.white,
           fontFamily: 'Lato',
@@ -74,6 +76,14 @@ class CustomTheme {
         //   fontSize: 20.sp,
         // ),
         //weekly tips
+
+        //  labelSmall: TextStyle(
+        //   color: AppColors.black,
+        //   fontFamily: 'Lato',
+        //   fontWeight: FontWeight.normal,
+        //   fontSize: 16.sp,
+        //   letterSpacing: 0,
+        // ),
         labelMedium: TextStyle(
           color: AppColors.black,
           fontFamily: 'Lato',
