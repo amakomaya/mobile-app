@@ -7,6 +7,7 @@ import 'package:aamako_maya/src/features/authentication/local_storage/authentica
 import 'package:aamako_maya/src/features/authentication/repository/login_repository.dart';
 import 'package:aamako_maya/src/features/authentication/repository/register_repository.dart';
 import 'package:aamako_maya/src/features/authentication/screens/login/login_page.dart';
+import 'package:aamako_maya/src/features/card/card_cubit.dart';
 import 'package:aamako_maya/src/features/delivery/cubit/delivery_cubit.dart';
 import 'package:aamako_maya/src/features/faqs/cubit/faqs_cubit.dart';
 import 'package:aamako_maya/src/features/labtest/cubit/labtest_cubit.dart';
@@ -25,12 +26,14 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'src/features/ancs/cubit/ancs_cubit.dart';
 import 'src/features/audio/cubit/audio_cubit.dart';
 import 'src/features/authentication/cubit/district_municipality_cubit.dart';
+import 'src/features/authentication/drawer_cubit/drawer_cubit.dart';
 import 'src/features/authentication/login_bloc/login_bloc.dart';
 import 'src/features/authentication/qr_code_cubit/qr_code_cubit.dart';
 import 'src/features/authentication/register_bloc/register_bloc.dart';
@@ -40,6 +43,8 @@ import 'src/features/video/repository/videoes_repository.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding?.ensureInitialized();
+  await FlutterDownloader.initialize(debug: true, ignoreSsl: true);
+
   await Hive.initFlutter();
   // WidgetsBinding.instance?.addObserver(const AudioPlayerWidget());
 
@@ -52,7 +57,7 @@ Future<void> main() async {
         BlocProvider<DistrictFieldToggleCubit>(
           create: (context) => DistrictFieldToggleCubit(),
         ),
-        BlocProvider(create: (context)=>NavigationIndexCubit()),
+        BlocProvider(create: (context) => NavigationIndexCubit()),
         BlocProvider(
             create: (context) => SymptomsCubit(Dio(), AuthLocalData())),
         BlocProvider(create: (context) => DeliverCubit(Dio(), AuthLocalData())),
@@ -74,6 +79,8 @@ Future<void> main() async {
         ),
         BlocProvider(create: (context) => FaqsCubit(Dio())),
         BlocProvider(create: (context) => AudioCubit(Dio())),
+        BlocProvider(
+            create: (context) => DrawerCubit()..checkDrawerSelection(0)),
         BlocProvider(
           create: (context) =>
               RegisterBloc(RegisterRepository(), AuthLocalData()),

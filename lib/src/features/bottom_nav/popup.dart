@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 
-Future<bool> showExitPopup(context) async{
+Future<bool> showExitPopup(context) async {
   return await showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -11,17 +11,21 @@ Future<bool> showExitPopup(context) async{
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Do you want to exit?"),
+                Text(
+                  "Do you want to exit?",
+                ),
                 SizedBox(height: 20),
                 Row(
                   children: [
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
-                        
-                         Navigator.of(context).pop(true);
+                          Navigator.of(context).pop(true);
                         },
-                        child: Text("Yes"),
+                        child: Text(
+                          "Yes",
+                          style: TextStyle(color: Colors.white),
+                        ),
                         style: ElevatedButton.styleFrom(
                             primary: Colors.red.shade800),
                       ),
@@ -44,4 +48,4 @@ Future<bool> showExitPopup(context) async{
           ),
         );
       });
-} 
+}

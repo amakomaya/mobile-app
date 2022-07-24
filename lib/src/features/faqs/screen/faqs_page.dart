@@ -1,6 +1,7 @@
 import 'package:aamako_maya/src/core/padding/padding.dart';
 import 'package:aamako_maya/src/core/theme/app_colors.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
+import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
 import 'package:aamako_maya/src/core/widgets/loading_shimmer/shimmer_loading.dart';
 import 'package:aamako_maya/src/features/faqs/cubit/faqs_cubit.dart';
 import 'package:flutter/material.dart';
@@ -25,117 +26,72 @@ class _FaqsPageState extends State<FaqsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-          body: Column(
-        children: [
-          Container(
-            height: 70.h,
-            decoration: const BoxDecoration(
-                color: AppColors.primaryRed,
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(50),
-                    bottomRight: Radius.circular(50))),
-            child: Padding(
-              padding: defaultPadding,
-              child: Row(
-                children: [
-                  IconButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      icon: const Icon(Icons.arrow_back_ios)),
-                  const Spacer(),
-                  Text(
-                    'Faqs',
-                    style: Theme.of(context).textTheme.displaySmall,
-                  ),
-                  const Spacer()
-                ],
-              ),
-            ),
-          ),
-          Expanded(child: BlocBuilder<FaqsCubit, FaqsState>(
-            builder: (context, state) {
-              if (state.faqs == null) {
-                return ShimmerLoading(boxHeight: 200.h, itemCount: 4);
-              } else if (state.faqs?.isEmpty ?? false) {
-                return const Text('NO  REPORTS FOUND');
-              } else {
-                return ListView.separated(
-                    itemBuilder: ((context, index) {
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          //   Text(" Report${index + 1}".toUpperCase()),
-                          VerticalSpace(10.h),
-                          Container(
-                            child: Text(state.faqs?[index].question ?? ''),
-                          ),
-                          Container(
-                            child: Text(state.faqs?[index].answer ?? ''),
-                          ),
-                          Container(
-                            child: Text(state.faqs?[index].mediaLinks ?? ''),
-                          ),
-                        ],
-                      );
-                    }),
+    Size size = MediaQuery.of(context).size;
+    final theme = Theme.of(context);
+    return BlocBuilder<FaqsCubit, FaqsState>(
+      builder: (context, state) {
+        if (state.faqs == null) {
+          return ShimmerLoading(boxHeight: 200.h, itemCount: 4);
+        } else if (state.faqs?.isEmpty ?? false) {
+          return const Text('NO PNC REPORTS FOUND');
+        } else {
+          return ListView.separated(
+              itemBuilder: ((context, index) {
+                return Container(
+                  margin: const EdgeInsets.only(left: 18, right: 18),
+                  child: Column(
+                    children: [
+                      // Text("Faqs Report${index + 1}".toUpperCase(),
+                      //     style: const TextStyle(
+                      //         fontFamily: "lato",
+                      //         color: AppColors.primaryRed,
+                      //         fontSize: 17)),
+                      VerticalSpace(12.h),
+                      ShadowContainer(
+                        radius: 20,
+                        width: 380.w,
+                        color: Colors.white,
+                        padding: defaultPadding.copyWith(top: 10, bottom: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              state.faqs?[index].question.toString() ?? '',
+                              style: const TextStyle(
+                                  fontFamily: "lato",
+                                  color: AppColors.primaryRed,
+                                  fontSize: 17),
+                            ),
+                            Divider(),
 
-                    // Text(state.faqs?[index].answer ?? ''),
-                    separatorBuilder: (ctx, index) {
-                      return Divider(
-                        height: 10.h,
-                        indent: 10.w,
-                        endIndent: 10.w,
-                        color: AppColors.accentGrey,
-                      );
-                    },
-                    itemCount: state.faqs?.length ?? 0);
-              }
-            },
-          ))
-        ],
-      )),
+                            Text(
+                              state.faqs?[index].answer ?? '',
+                              style: theme.textTheme.labelSmall,
+                            )
+
+                            // ListTile(
+                            //   leading: Text(
+                            //       state.faqs?[index].question
+                            //               .toString() ??
+                            //           '',
+                            //       style: theme.textTheme.labelSmall),
+                            // ),
+                          ],
+                        ),
+                      ),
+                      VerticalSpace(15.h),
+                    ],
+                  ),
+                );
+              }),
+              separatorBuilder: (ctx, index) {
+                return const Divider(
+                  color: AppColors.white,
+                );
+              },
+              itemCount: state.faqs?.length ?? 0);
+        }
+      },
     );
   }
 }
-
-
-
-
-
-
-// Container(
-//                         margin: const EdgeInsets.only(left: 18, right: 18),
-//                         decoration: BoxDecoration(
-//                             borderRadius: BorderRadius.all(Radius.circular(35)),
-//                             border: Border.all(width: 1, color: Colors.grey),
-//                             boxShadow: [
-//                               BoxShadow(
-//                                   color: Colors.white10,
-//                                   blurRadius: 7,
-//                                   offset: Offset(0, 7))
-//                             ]),
-//                         child: Padding(
-//                           padding: const EdgeInsets.only(
-//                               left: 5, right: 5, top: 10, bottom: 10),
-//                           child: Column(
-//                             crossAxisAlignment: CrossAxisAlignment.start,
-//                             children: [
-//                               Text(state.faqs?[0].question.toString() ?? ''),
-//                               Divider(),
-//                               Container(
-//                                   decoration: BoxDecoration(
-//                                       borderRadius:
-//                                           BorderRadius.all(Radius.zero),
-//                                       border: Border.all(
-//                                           width: 0.5, color: Colors.grey)),
-//                                   child: Text(state.faqs?[0].answer ?? '')),
-//                               Text("hbdh"),
-//                               VerticalSpace(10.h),
-//                             ],
-//                           ),
-//                         ),
-//                       );

@@ -44,6 +44,7 @@ dependencies:
       ref: flutter-beta 
   eva_icons_flutter: ^3.1.0
   qr_flutter: ^4.0.0
+  flutter_downloader: ^1.8.1
 
 #native splash screens
 # flutter_native_splash:

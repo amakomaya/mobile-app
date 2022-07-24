@@ -1,9 +1,15 @@
 import 'package:aamako_maya/src/core/theme/app_colors.dart';
 import 'package:aamako_maya/src/core/widgets/scaffold/primary_appBar.dart';
 import 'package:aamako_maya/src/features/ancs/screens/ancs_page.dart';
+import 'package:aamako_maya/src/features/authentication/widgets/complete_profile_section.dart';
 import 'package:aamako_maya/src/features/baby/screen/babypage.dart';
 import 'package:aamako_maya/src/features/bottom_nav/cubit/cubit/navigation_index_cubit.dart';
 import 'package:aamako_maya/src/features/bottom_nav/popup.dart';
+import 'package:aamako_maya/src/features/delivery/screen/delivery_page.dart';
+import 'package:aamako_maya/src/features/faqs/screen/faqs_page.dart';
+import 'package:aamako_maya/src/features/labtest/screen/labtestpage.dart';
+import 'package:aamako_maya/src/features/medication/screen/medicationpage.dart';
+import 'package:aamako_maya/src/features/pnc/screens/pnc_page.dart';
 import 'package:aamako_maya/src/features/video/screens/video_page.dart';
 
 import 'package:flutter/material.dart';
@@ -13,6 +19,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../core/widgets/drawer/drawer_widget.dart';
 import '../audio/cubit/audio_cubit.dart';
 import '../audio/screens/audio_page.dart';
+import '../card/card_page.dart';
 import '../home/screens/homepage.dart';
 import '../shop/shop_page.dart';
 import '../video/cubit/video_cubit.dart';
@@ -136,21 +143,40 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                     scaffoldKey: _scaffoldKey,
                     title: state.appbarTitle,
                   ),
-                  Expanded(
-                    child: Padding(
-                      padding:  EdgeInsets.only(top:70.h),
-                      child: IndexedStack(
-                        alignment: Alignment.center,
-                        index: state.index,
-                        children: const [
-                          HomePage(),
-                          AudioPage(),
-                          VideoPage(),
-                          WeeklyTipsPage(),
-                          ShopPage(),
-                          AncsPage()
-                        ],
-                      ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 70.h),
+                    child: IndexedStack(
+                      alignment: Alignment.center,
+                      index: state.index,
+                      children: const [
+                        HomePage(),
+                        AudioPage(),
+                        VideoPage(),
+                        WeeklyTipsPage(),
+                        ShopPage(),
+                        //index =5
+                        AncsPage(),
+                        DeliveryPage(),
+                        MedicationPage(),
+                        PncsPage(),
+
+                        ///index 9
+                        Labtestpage(),
+
+                        //profile index=10
+                        CompleteProfileSection(),
+
+                        //card index =11
+
+                        CardPage(),
+
+                        //faq=12
+                        FaqsPage()
+
+                        //syztemassetment index=13
+
+                        //
+                      ],
                     ),
                   )
                 ],
