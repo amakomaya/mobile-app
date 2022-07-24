@@ -9,42 +9,14 @@ import 'package:flutter_html/flutter_html.dart';
 import '../../core/theme/app_colors.dart';
 import 'package:shimmer/shimmer.dart';
 
-class WeeklyTipsPage extends StatefulWidget {
+class WeeklyTipsPage extends StatelessWidget {
   const WeeklyTipsPage({Key? key}) : super(key: key);
-
-  @override
-  State<WeeklyTipsPage> createState() => _WeeklyTipsPageState();
-}
-
-class _WeeklyTipsPageState extends State<WeeklyTipsPage> {
-  @override
-  void initState() {
-   
-
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return BlocConsumer<WeeklyTipsCubit, WeeklyTipsState>(
-      listener: (context, state) {
-        // TODO: implement listener
-      },
-
-//           Html(
-//   data: """<div>
-//         <h1>Demo Page</h1>
-//         <p>This is a fantastic product that you should buy!</p>
-//         <h3>Features</h3>
-//         <ul>
-//           <li>It actually works</li>
-//           <li>It exists</li>
-//           <li>It doesn't cost much!</li>
-//         </ul>
-//         <!--You can pretty much put any html in here!-->
-//       </div>""",
-// );
+      listener: (context, state) {},
       builder: (context, state) {
         return state.maybeWhen(
             orElse: () => const Center(

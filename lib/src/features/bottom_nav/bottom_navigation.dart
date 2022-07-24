@@ -39,7 +39,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
           extendBody: true,
-          extendBodyBehindAppBar: true,
+          // extendBodyBehindAppBar: true,
           backgroundColor: Colors.white,
           resizeToAvoidBottomInset: true,
           drawer: const DrawerWidget(),
@@ -58,7 +58,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
                           IconButton(
-                            iconSize: 30.0,
+                            iconSize: 35.sm,
                             padding: const EdgeInsets.only(right: 28.0),
                             icon: ImageIcon(
                               const AssetImage("assets/images/home1.png"),
@@ -72,7 +72,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                             },
                           ),
                           IconButton(
-                            iconSize: 30.0,
+                            iconSize: 35.sm,
                             padding: const EdgeInsets.only(right: 28.0),
                             icon: ImageIcon(
                               const AssetImage("assets/images/audio.png"),
@@ -88,7 +88,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                             },
                           ),
                           IconButton(
-                            iconSize: 30.0,
+                            iconSize: 35.sm,
                             padding: const EdgeInsets.only(right: 28.0),
                             icon: ImageIcon(
                               const AssetImage("assets/images/video.png"),
@@ -101,16 +101,16 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                                   .changeIndex(index: 2, title: "Video");
 
                               context.read<VideoCubit>().getVideos();
-
-                              // selectedindex.value = 2;
-                              // selectedAppBar.value = ' Video';
                             },
                           ),
                           IconButton(
-                            iconSize: 30.0,
+                            alignment: Alignment.center,
+                            iconSize: 35.sm,
                             padding: const EdgeInsets.only(right: 28.0),
                             icon: ImageIcon(
-                              const AssetImage("assets/images/text.png"),
+                              const AssetImage(
+                                "assets/images/text.png",
+                              ),
                               color:
                                   state.index == 3 ? Colors.red : Colors.grey,
                             ),
@@ -136,21 +136,19 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                     scaffoldKey: _scaffoldKey,
                     title: state.appbarTitle,
                   ),
-                  Expanded(
-                    child: Padding(
-                      padding:  EdgeInsets.only(top:70.h),
-                      child: IndexedStack(
-                        alignment: Alignment.center,
-                        index: state.index,
-                        children: const [
-                          HomePage(),
-                          AudioPage(),
-                          VideoPage(),
-                          WeeklyTipsPage(),
-                          ShopPage(),
-                          AncsPage()
-                        ],
-                      ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 70.h),
+                    child: IndexedStack(
+                      alignment: Alignment.center,
+                      index: state.index,
+                      children: const [
+                        HomePage(),
+                        AudioPage(),
+                        VideoPage(),
+                        WeeklyTipsPage(),
+                        ShopPage(),
+                        AncsPage()
+                      ],
                     ),
                   )
                 ],
