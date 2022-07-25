@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:aamako_maya/src/core/padding/padding.dart';
 import 'package:aamako_maya/src/core/widgets/border_container.dart';
 import 'package:aamako_maya/src/core/widgets/buttons/primary_action_button.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
+import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
 import 'package:aamako_maya/src/core/widgets/textfield/primary_textfield.dart';
 import 'package:aamako_maya/src/features/authentication/model/login_request_model.dart';
 import 'package:aamako_maya/src/features/authentication/screens/login/qr_code_page.dart';
@@ -13,10 +16,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/app_assets/app_assets.dart';
+import '../../../../core/snackbar/error_snackbar.dart';
+import '../../../../core/snackbar/success_snackbar.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../bottom_nav/bottom_navigation.dart';
 import '../../../home/screens/homepage.dart';
-import '../../login_bloc/login_bloc.dart';
+import '../../authentication_cubit/auth_cubit.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({
@@ -41,30 +46,70 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<LoginBloc, LoginState>(
+    return BlocConsumer<AuthenticationCubit, LoggedInState>(
       listener: (context, state) {
-        if (state.isLoading) {
+        if (state.isLoading == true) {
           BotToast.showLoading();
         }
         if (state.isLoading == false) {
           BotToast.closeAllLoading();
         }
-        if (state.isLoading == false && state.error != null) {
-          BotToast.showText(text: state.error ?? 'Unexpected Error Occured');
+        if (state.error != null && state.isLoading == false) {
+          BotToast.showCustomText(toastBuilder: (toast) {
+            return ErrorSnackBar(
+              message: state.error ?? 'Unexpected Error',
+            );
+          });
         }
-        state.when(
-            initial: (isLoading, error) => '',
-            // orElse: () => '',
 
-            success: (isLoading, error, user) {
-              BotToast.closeAllLoading();
-
-              Navigator.of(context).pushAndRemoveUntil(
+        if (state.isAuthenticated == true) {
+          Navigator.of(context)
+              .pushAndRemoveUntil(
                   MaterialPageRoute(
                     builder: (ctx) => const CustomBottomNavigation(),
                   ),
                   (route) => false);
-            });
+
+                   Timer(const Duration(seconds: 3), (){
+                
+                     BotToast.showCustomText(toastBuilder: (ds){
+
+                      return SuccessSnackBar(message: 'Successfully Logged in!!');
+
+                     });
+                  });
+              // .then((value) {
+              //   WidgetsBinding.instance.addPostFrameCallback((timeStamp) { 
+              //     BotToast.showCustomText(toastBuilder: (toast) {
+              //       return const SuccessSnackBar(
+              //         message: 'Login Successful !!',
+              //       );
+              //     });
+              //   });
+              // });
+        }
+        // if (state.isLoading) {
+        //   BotToast.showLoading();
+        // }
+        // if (state.isLoading == false) {
+        //   BotToast.closeAllLoading();
+        // }
+        // if (state.isLoading == false && state.error != null) {
+        //   BotToast.showText(text: state.error ?? 'Unexpected Error Occured');
+        // }
+        // state.when(
+        //     initial: (isLoading, error) => '',
+        //     // orElse: () => '',
+
+        //     success: (isLoading, error, user) {
+        //       BotToast.closeAllLoading();
+
+        //   Navigator.of(context).pushAndRemoveUntil(
+        //       MaterialPageRoute(
+        //         builder: (ctx) => const CustomBottomNavigation(),
+        //       ),
+        //       (route) => false);
+        // });
       },
       builder: (context, state) {
         return Scaffold(
@@ -147,12 +192,10 @@ class _LoginPageState extends State<LoginPage> {
                       padding: const EdgeInsets.symmetric(vertical: 20),
                       onpress: () {
                         if (_formKey.currentState!.validate()) {
-                          BlocProvider.of<LoginBloc>(context).add(
-                            LoginEvent.loginStarted(
-                              user: LoginRequestModel(
-                                password: passwordController.text.trim(),
-                                username: usernameController.text.trim(),
-                              ),
+                          BlocProvider.of<AuthenticationCubit>(context).login(
+                            user: LoginRequestModel(
+                              password: passwordController.text.trim(),
+                              username: usernameController.text.trim(),
                             ),
                           );
                         }

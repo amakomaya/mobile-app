@@ -1,11 +1,10 @@
 import 'package:aamako_maya/src/core/theme/app_colors.dart';
 import 'package:aamako_maya/src/core/theme/custom_theme.dart';
+import 'package:aamako_maya/src/features/authentication/authentication_repository/authentication_repo.dart';
 import 'package:aamako_maya/src/features/authentication/cache/cache_values.dart';
 import 'package:aamako_maya/src/features/authentication/cubit/register_cubit.dart';
 import 'package:aamako_maya/src/features/authentication/cubit/toggle_district_municipality.dart';
 import 'package:aamako_maya/src/features/authentication/local_storage/authentication_local_storage.dart';
-import 'package:aamako_maya/src/features/authentication/repository/login_repository.dart';
-import 'package:aamako_maya/src/features/authentication/repository/register_repository.dart';
 import 'package:aamako_maya/src/features/authentication/screens/login/login_page.dart';
 import 'package:aamako_maya/src/features/card/card_cubit.dart';
 import 'package:aamako_maya/src/features/delivery/cubit/delivery_cubit.dart';
@@ -26,24 +25,22 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
+// import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'src/features/ancs/cubit/ancs_cubit.dart';
 import 'src/features/audio/cubit/audio_cubit.dart';
+import 'src/features/authentication/authentication_cubit/auth_cubit.dart';
 import 'src/features/authentication/cubit/district_municipality_cubit.dart';
 import 'src/features/authentication/drawer_cubit/drawer_cubit.dart';
-import 'src/features/authentication/login_bloc/login_bloc.dart';
-import 'src/features/authentication/qr_code_cubit/qr_code_cubit.dart';
-import 'src/features/authentication/register_bloc/register_bloc.dart';
 import 'src/features/bottom_nav/cubit/cubit/navigation_index_cubit.dart';
 import 'src/features/home/cubit/newsfeed_cubit.dart';
 import 'src/features/video/repository/videoes_repository.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding?.ensureInitialized();
-  await FlutterDownloader.initialize(debug: true, ignoreSsl: true);
+  // await FlutterDownloader.initialize(debug: true, ignoreSsl: true);
 
   await Hive.initFlutter();
   // WidgetsBinding.instance?.addObserver(const AudioPlayerWidget());
@@ -54,6 +51,8 @@ Future<void> main() async {
   runApp(
     MultiBlocProvider(
       providers: [
+
+        BlocProvider(create: (context)=>LoggedOutCubit(AuthLocalData())),
         BlocProvider<DistrictFieldToggleCubit>(
           create: (context) => DistrictFieldToggleCubit(),
         ),
@@ -65,26 +64,28 @@ Future<void> main() async {
             create: (context) => MedicationCubit(Dio(), AuthLocalData())),
         BlocProvider(create: (context) => LabtestCubit(Dio(), AuthLocalData())),
         BlocProvider(create: (context) => AncsCubit(Dio(), AuthLocalData())),
-        BlocProvider(create: (context) => QrCodeCubit(Dio(), AuthLocalData())),
+        BlocProvider(
+            create: (context) => AuthenticationCubit(
+                Dio(), AuthLocalData(), AuthenticationRepository())),
         BlocProvider(create: (context) => PncsCubit(Dio(), AuthLocalData())),
         BlocProvider(
             create: (context) => NewsfeedCubit(
                   Dio(),
                 )),
-        BlocProvider(
-          create: (context) => LoginBloc(
-            LoginRepository(),
-            AuthLocalData(),
-          ),
-        ),
+        // BlocProvider(
+        //   create: (context) => LoginBloc(
+        //     LoginRepository(),
+        //     AuthLocalData(),
+        //   ),
+        // ),
         BlocProvider(create: (context) => FaqsCubit(Dio())),
         BlocProvider(create: (context) => AudioCubit(Dio())),
         BlocProvider(
             create: (context) => DrawerCubit()..checkDrawerSelection(0)),
-        BlocProvider(
-          create: (context) =>
-              RegisterBloc(RegisterRepository(), AuthLocalData()),
-        ),
+        // BlocProvider(
+        //   create: (context) =>
+        //       RegisterBloc(RegisterRepository(), AuthLocalData()),
+        // ),
         BlocProvider(
             create: (context) => SymptomsCubit((Dio()), (AuthLocalData()))),
         BlocProvider(

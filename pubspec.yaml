@@ -36,15 +36,16 @@ dependencies:
   audioplayers: ^1.0.1
   visibility_detector: ^0.2.2
   animated_text_kit: ^4.2.1
-  # qr_code_scanner: ^0.7.0
+  qr_code_scanner: ^0.7.0
   nepali_date_picker: ^5.2.0
-  qr_code_scanner: 
-    git:
-      url: https://github.com/X-SLAYER/qr_code_scanner.git
-      ref: flutter-beta 
+  # qr_code_scanner: 
+  #   git:
+  #     url: https://github.com/X-SLAYER/qr_code_scanner.git
+  #     ref: flutter-beta 
   eva_icons_flutter: ^3.1.0
   qr_flutter: ^4.0.0
-  flutter_downloader: ^1.8.1
+  hydrated_bloc: ^8.1.0
+  path_provider: ^2.0.11
 
 #native splash screens
 # flutter_native_splash:

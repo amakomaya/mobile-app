@@ -6,7 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 import '../../../../core/theme/app_colors.dart';
-import '../../qr_code_cubit/qr_code_cubit.dart';
+import '../../authentication_cubit/auth_cubit.dart';
 
 class QRViewPage extends StatefulWidget {
   const QRViewPage({Key? key}) : super(key: key);
@@ -29,7 +29,7 @@ class _QRViewPageState extends State<QRViewPage> {
         if (result != null) {
           controller.pauseCamera();
           BotToast.showLoading();
-          context.read<QrCodeCubit>().loginWithQr(result!);
+          context.read<AuthenticationCubit>().loginWithQr(result!);
         }
       },
       onError: (err) {},
@@ -54,7 +54,7 @@ class _QRViewPageState extends State<QRViewPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<QrCodeCubit, LoggedInState>(
+    return BlocListener<AuthenticationCubit, LoggedInState>(
       listener: (context, state) {
         if (state.error != null) {
           BotToast.closeAllLoading();

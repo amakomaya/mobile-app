@@ -1,15 +1,16 @@
-import 'dart:async';
 
 import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
 import 'package:aamako_maya/src/features/authentication/local_storage/authentication_local_storage.dart';
 import 'package:aamako_maya/src/features/authentication/screens/login/login_page.dart';
 import 'package:aamako_maya/src/features/onboarding/screens/onboarding_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
 
 import '../../core/constant/app_constants.dart';
 import '../../core/theme/app_colors.dart';
+import '../authentication/authentication_cubit/auth_cubit.dart';
 import '../bottom_nav/bottom_navigation.dart';
 
 class SplashPage extends StatefulWidget {
@@ -43,11 +44,8 @@ class _SplashPageState extends State<SplashPage> {
               ));
         }
       } else {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (ctx) => const CustomBottomNavigation()),
-          (route) => false,
-        );
+        print('AAA');
+        context.read<AuthenticationCubit>().loginWithToken(token);
       }
     } catch (e) {
       Navigator.pushReplacement(
@@ -60,7 +58,7 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   void initState() {
-    Timer(const Duration(seconds: 2), () => _checkIfOnboard());
+    _checkIfOnboard();
 
     super.initState();
   }
@@ -68,34 +66,51 @@ class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: AppColors.primaryRed,
-        body: SizedBox(
-            height: size.height,
-            width: size.width,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Spacer(
-                  flex: 3,
-                ),
-                Image.asset(
-                  "assets/images/logo/logo_white.png",
-                  height: 363.w,
-                  width: 363.h,
-                 scale: 1.0,
-                ),
-                VerticalSpace(20.h),
-                Text('Making Pregnancy Healthy and Happy',
-                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                          color: Colors.white,
-                        )),
-                Spacer(
-                  flex: 7,
-                ),
-              ],
-            )),
+    return BlocListener<AuthenticationCubit, LoggedInState>(
+      listener: (context, state) {
+        if (state.isLoading == false && state.isAuthenticated == true) {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (ctx) => const CustomBottomNavigation()),
+            (route) => false,
+          );
+        } else {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const LoginPage(),
+              ));
+        }
+      },
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: AppColors.primaryRed,
+          body: SizedBox(
+              height: size.height,
+              width: size.width,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Spacer(
+                    flex: 3,
+                  ),
+                  Image.asset(
+                    "assets/images/logo/logo_white.png",
+                    height: 363.w,
+                    width: 363.h,
+                    scale: 1.0,
+                  ),
+                  VerticalSpace(20.h),
+                  Text('Making Pregnancy Healthy and Happy',
+                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                            color: Colors.white,
+                          )),
+                  Spacer(
+                    flex: 7,
+                  ),
+                ],
+              )),
+        ),
       ),
     );
   }

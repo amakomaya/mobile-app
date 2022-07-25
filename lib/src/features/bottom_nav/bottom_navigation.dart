@@ -11,6 +11,7 @@ import 'package:aamako_maya/src/features/labtest/screen/labtestpage.dart';
 import 'package:aamako_maya/src/features/medication/screen/medicationpage.dart';
 import 'package:aamako_maya/src/features/pnc/screens/pnc_page.dart';
 import 'package:aamako_maya/src/features/video/screens/video_page.dart';
+import 'package:bot_toast/bot_toast.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -124,7 +125,8 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                             onPressed: () {
                               context
                                   .read<NavigationIndexCubit>()
-                                  .changeIndex(index: 3, title: "Weekly Tips");
+                                  .changeIndex(
+                                      index: 3, title: "Weekly Tips");
 
                               context.read<WeeklyTipsCubit>().getWeeklyTips();
                             },
@@ -154,9 +156,6 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                         VideoPage(),
                         WeeklyTipsPage(),
                         ShopPage(),
-<<<<<<< HEAD
-                        AncsPage()
-=======
                         //index =5
                         AncsPage(),
                         DeliveryPage(),
@@ -179,7 +178,6 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                         //syztemassetment index=13
 
                         //
->>>>>>> d96bc783fffdaea7e40d4b7738e338ca4aa7fcab
                       ],
                     ),
                   )

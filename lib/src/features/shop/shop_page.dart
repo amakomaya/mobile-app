@@ -9,15 +9,13 @@ class ShopPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      child: Column(
-        children: [
-          Image.asset(
-            "assets/images/shop.jpg",
-            fit: BoxFit.fitHeight,
-          ),
-        ],
-      ),
+    return Column(
+      children: [
+        Image.asset(
+          "assets/images/shop.jpg",
+          fit: BoxFit.fitHeight,
+        ),
+      ],
     );
   }
 }

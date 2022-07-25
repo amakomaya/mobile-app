@@ -14,7 +14,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../core/widgets/buttons/primary_action_button.dart';
 import '../../../core/widgets/helper_widgets/blank_space.dart';
 import '../../bottom_nav/bottom_navigation.dart';
-import '../register_bloc/register_bloc.dart';
+import '../authentication_cubit/auth_cubit.dart';
 import 'district_dropdown_widget.dart';
 
 class CompleteProfileSection extends StatefulWidget {
@@ -34,28 +34,7 @@ class _CompleteProfileSectionState extends State<CompleteProfileSection> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<RegisterBloc, RegisterState>(
-      listener: (context, state) {
-        if (state.isLoading && state.error == null) {
-          BotToast.showLoading();
-        }
-        if (state.error != null) {
-          BotToast.closeAllLoading();
-          BotToast.showText(text: state.error ?? 'Something Went Wrong');
-        }
-        state.when(
-            initial: ((isLoading, error) {}),
-            success: ((isLoading, error, user) {
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) {
-                return const CustomBottomNavigation();
-              }), (route) => false);
-              BotToast.showText(
-                  text: state.error ?? 'Registered Successfully!!');
-            }));
-      },
-      builder: (context, state) {
-        return Scaffold(
+    return Scaffold(
             appBar: AppBar(),
             body: Column(
               children: [
@@ -65,7 +44,7 @@ class _CompleteProfileSectionState extends State<CompleteProfileSection> {
                     children: [
                       TextField(
                         controller: _name,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           label: Text('Name'),
                         ),
                       ),
@@ -105,10 +84,10 @@ class _CompleteProfileSectionState extends State<CompleteProfileSection> {
                 )),
                 PrimaryActionButton(
                     onpress: () {
-                      context.read<RegisterBloc>().add(
-                            RegisterEvent.gegisterStarted(
-                                user: RegisterRequestModel()),
-                          );
+                      // context.read<RegisterBloc>().add(
+                      //       RegisterEvent.gegisterStarted(
+                      //           user: RegisterRequestModel()),
+                      //     );
 
                       // print(widget.reg.toJson());
                     },
@@ -116,7 +95,5 @@ class _CompleteProfileSectionState extends State<CompleteProfileSection> {
                 VerticalSpace(50.h),
               ],
             ));
-      },
-    );
   }
 }

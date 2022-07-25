@@ -1,9 +1,9 @@
 import 'package:aamako_maya/src/core/padding/padding.dart';
+import 'package:aamako_maya/src/core/snackbar/error_snackbar.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
 import 'package:aamako_maya/src/features/authentication/cubit/register_cubit.dart';
 import 'package:aamako_maya/src/features/authentication/model/register_request_model.dart';
-import 'package:aamako_maya/src/features/authentication/register_bloc/register_bloc.dart';
 import 'package:aamako_maya/src/features/authentication/screens/login/login_page.dart';
 import 'package:aamako_maya/src/features/authentication/widgets/complete_profile_section.dart';
 import 'package:aamako_maya/src/features/bottom_nav/bottom_navigation.dart';
@@ -19,6 +19,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/buttons/primary_action_button.dart';
 import '../../../core/widgets/scaffold/primary_appBar.dart';
 import '../../../core/widgets/textfield/primary_textfield.dart';
+import '../authentication_cubit/auth_cubit.dart';
 
 class RegisterSection extends StatefulWidget {
   final String registerAs;
@@ -42,26 +43,42 @@ class _RegisterSectionState extends State<RegisterSection> {
     return SafeArea(
         child: SafeArea(
       child: Scaffold(
-        body: BlocConsumer<RegisterBloc, RegisterState>(
+        body: BlocConsumer<AuthenticationCubit, LoggedInState>(
           listener: (context, state) {
-            if (state.error != null && state.isLoading == false) {
-              BotToast.showText(text: state.error.toString());
-            }
-            if (state.isLoading && state.error == null) {
+            if (state.isLoading == true) {
               BotToast.showLoading();
             }
-            if (state.isLoading == false) {
+            if (state.isLoading == false || state.isLoading == null) {
               BotToast.closeAllLoading();
             }
-            state.when(
-                initial: ((isLoading, error) => ''),
-                success: (isLoading, error, user) {
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                          builder: (ctx) => CustomBottomNavigation()),
-                      (route) => false);
-                });
+            if (state.error != null && state.isLoading == false) {
+              BotToast.showCustomText(toastBuilder: (d) {
+                return ErrorSnackBar(
+                    message: state.error ?? 'Unexpected Error');
+              });
+            }
+
+            if (state.isAuthenticated == true&& state.error==null && state.isLoading==false) {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (ctx) => CustomBottomNavigation()),
+                  (route) => false);
+            }
+            // if (state.isLoading && state.error == null) {
+            //   BotToast.showLoading();
+            // }
+            // if (state.isLoading == false) {
+            //   BotToast.closeAllLoading();
+            // }
+            // state.when(
+            //     initial: ((isLoading, error) => ''),
+            //     success: (isLoading, error, user) {
+            //   Navigator.pushAndRemoveUntil(
+            //       context,
+            //       MaterialPageRoute(
+            //           builder: (ctx) => CustomBottomNavigation()),
+            //       (route) => false);
+            // });
           },
           builder: (context, state) {
             return Form(
@@ -214,7 +231,7 @@ class _RegisterSectionState extends State<RegisterSection> {
                                   border: InputBorder.none,
                                 ),
                               )),
-                          VerticalSpace(2),
+                          VerticalSpace(2.h),
                           const Text(
                             "By clicking in register you are in agreement of Terms and Conditions",
                             style: TextStyle(fontSize: 12, fontFamily: 'lato'),
@@ -223,29 +240,28 @@ class _RegisterSectionState extends State<RegisterSection> {
                           PrimaryActionButton(
                               onpress: () {
                                 if (_formKey.currentState!.validate()) {
-                                  context.read<RegisterBloc>().add(
-                                      RegisterEvent.gegisterStarted(
-                                          user: RegisterRequestModel(
-                                              age: 0,
-                                              createdAt: formatter
-                                                  .format(DateTime.now()),
-                                              updatedAt: formatter
-                                                  .format(DateTime.now()),
-                                              name: _name.text.trim(),
-                                              password: _password.text.trim(),
-                                              username: _phone.text.trim(),
-                                              phone: _phone.text.trim(),
-                                              lmpDateEn: formatter
-                                                  .format(selectedDate),
-                                              lmpDateNp: '',
-                                              districtId: 0,
-                                              email: "",
-                                              isFirstTimeParent: 0,
-                                              latitude: "",
-                                              longitude: "",
-                                              municipalityId: 0,
-                                              registerAs: widget.registerAs,
-                                              tole: "")));
+                                  context.read<AuthenticationCubit>().register(
+                                      user: RegisterRequestModel(
+                                          age: 0,
+                                          createdAt:
+                                              formatter.format(DateTime.now()),
+                                          updatedAt:
+                                              formatter.format(DateTime.now()),
+                                          name: _name.text.trim(),
+                                          password: _password.text.trim(),
+                                          username: _phone.text.trim(),
+                                          phone: _phone.text.trim(),
+                                          lmpDateEn:
+                                              formatter.format(selectedDate),
+                                          lmpDateNp: '',
+                                          districtId: 0,
+                                          email: "",
+                                          isFirstTimeParent: 0,
+                                          latitude: "",
+                                          longitude: "",
+                                          municipalityId: 0,
+                                          registerAs: widget.registerAs,
+                                          tole: ""));
                                 }
                               },
                               width: 170.w,
