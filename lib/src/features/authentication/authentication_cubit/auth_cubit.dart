@@ -23,7 +23,7 @@ class AuthenticationCubit extends Cubit<LoggedInState> {
 
   void loginWithToken(String token) async {
     try {
-      final Response res = await Dio().post(Urls.qrcodeUrl + token);
+      final Response res = await dio.post(Urls.qrcodeUrl + token);
       if (res.statusCode == 200) {
         print("AAAA");
         final user = UserModel.fromJson(res.data['user']);
@@ -87,9 +87,11 @@ class AuthenticationCubit extends Cubit<LoggedInState> {
   }
 
   void loginWithQr(String qrCode) async {
+    print(qrCode +'Dick');
     try {
       final Response res = await Dio().post(Urls.qrcodeUrl + qrCode);
       if (res.statusCode == 200) {
+        print(qrCode +'Pussy');
         final user = UserModel.fromJson(res.data['user']);
         // local.saveCredentialsDataToLocal(user);
         emit(LoggedInState(

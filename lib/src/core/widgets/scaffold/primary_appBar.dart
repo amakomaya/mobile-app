@@ -48,7 +48,7 @@ class PrimaryAppBar extends StatelessWidget {
                         child: Container(
                           padding: EdgeInsets.symmetric(horizontal: 10.w),
                           color: Colors.transparent,
-                          child: Icon(
+                          child: const Icon(
                             Icons.menu,
                             color: Colors.white,
                           ),

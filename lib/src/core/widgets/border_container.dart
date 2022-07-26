@@ -8,12 +8,14 @@ class BorderContainer extends StatelessWidget {
   final double? height;
   final Color? color;
   final double? width;
+  final  bool hasBorder;
   final Widget? child;
   final EdgeInsetsGeometry? margin;
   final EdgeInsetsGeometry? padding;
   const BorderContainer({
     Key? key,
     this.child,
+    required this.hasBorder,
     this.borderRadius,
     this.padding,
     this.color,
@@ -34,9 +36,18 @@ class BorderContainer extends StatelessWidget {
               width: width ?? 185.w,
               height: height,
           decoration: BoxDecoration(
+            boxShadow:const [
+              BoxShadow(
+                blurRadius: 2,
+                color: Colors.grey,
+                offset: Offset(1,1)
+                ,spreadRadius: 2
+              )
+            ],
+           
             color: color ?? Colors.white,
             borderRadius: borderRadius ?? BorderRadius.circular(22),
-            border: Border.all(color: AppColors.primaryRed,),
+            border: hasBorder? Border.all(color: AppColors.primaryRed,) :Border.all(color: color??Colors.white),
           ),
           child: child,
         ),

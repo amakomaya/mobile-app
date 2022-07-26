@@ -31,6 +31,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'injection_container.dart';
 import 'src/features/ancs/cubit/ancs_cubit.dart';
 import 'src/features/audio/cubit/audio_cubit.dart';
 import 'src/features/authentication/authentication_cubit/auth_cubit.dart';
@@ -39,6 +40,7 @@ import 'src/features/authentication/drawer_cubit/drawer_cubit.dart';
 import 'src/features/bottom_nav/cubit/cubit/navigation_index_cubit.dart';
 import 'src/features/home/cubit/newsfeed_cubit.dart';
 import 'src/features/video/repository/videoes_repository.dart';
+import 'injection_container.dart' as di;
 
 Future<void> main() async {
   WidgetsFlutterBinding?.ensureInitialized();
@@ -47,72 +49,60 @@ Future<void> main() async {
   await Hive.initFlutter();
   // WidgetsBinding.instance?.addObserver(const AudioPlayerWidget());
 
+  //initialize get_it
+  di.init();
+
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: AppColors.primaryRed,
   ));
 
-    final storage = await HydratedStorage.build(storageDirectory: await getApplicationDocumentsDirectory());
+  final storage = await HydratedStorage.build(
+      storageDirectory: await getApplicationDocumentsDirectory());
 
- HydratedBlocOverrides.runZoned(() =>  runApp(
-    MultiBlocProvider(
-      providers: [
-
-        BlocProvider(create: (context)=>LoggedOutCubit(AuthLocalData())),
-        BlocProvider<DistrictFieldToggleCubit>(
-          create: (context) => DistrictFieldToggleCubit(),
-        ),
-        BlocProvider(create: (context) => NavigationIndexCubit()),
-        BlocProvider(
-            create: (context) => SymptomsCubit(Dio(), AuthLocalData())),
-        BlocProvider(create: (context) => DeliverCubit(Dio(), AuthLocalData())),
-        BlocProvider(
-            create: (context) => MedicationCubit(Dio(), AuthLocalData())),
-        BlocProvider(create: (context) => LabtestCubit(Dio(), AuthLocalData())),
-        BlocProvider(create: (context) => AncsCubit(Dio(), AuthLocalData())),
-        BlocProvider(
-            create: (context) => AuthenticationCubit(
-                Dio(), AuthLocalData(), AuthenticationRepository())),
-        BlocProvider(create: (context) => PncsCubit(Dio(), AuthLocalData())),
-        BlocProvider(
-            create: (context) => NewsfeedCubit(
-                  Dio(),
-                )),
-        // BlocProvider(
-        //   create: (context) => LoginBloc(
-        //     LoginRepository(),
-        //     AuthLocalData(),
-        //   ),
-        // ),
-        BlocProvider(create: (context) => FaqsCubit(Dio())),
-        BlocProvider(create: (context) => AudioCubit(Dio())),
-        BlocProvider(
-            create: (context) => DrawerCubit()..checkDrawerSelection(0)),
-        // BlocProvider(
-        //   create: (context) =>
-        //       RegisterBloc(RegisterRepository(), AuthLocalData()),
-        // ),
-        BlocProvider(
-            create: (context) => SymptomsCubit((Dio()), (AuthLocalData()))),
-        BlocProvider(
-          create: (context) => OnboardBloc(repo: OnboardingRepo())
-            ..add(const OnboardEvent.onboardStart()),
-        ),
-        BlocProvider(
-          create: (context) => DistrictMunicipalityCubit(),
-        ),
-        BlocProvider(
-          create: (context) => WeeklyTipsCubit(repo: WeeklyTipsRepo()),
-        ),
-        BlocProvider(
-          create: (context) => VideoCubit(VideosRepo()),
-        ),
-      ],
-      child: const MyApp(),
-    ),
-  ),
-  storage: storage
-);
-
+  HydratedBlocOverrides.runZoned(
+      () => runApp(
+            MultiBlocProvider(
+              providers: [
+                BlocProvider(create: (context) => sl<LoggedOutCubit>()),
+                BlocProvider<DistrictFieldToggleCubit>(
+                  create: (context) => DistrictFieldToggleCubit(),
+                ),
+                BlocProvider(create: (context) => NavigationIndexCubit()),
+                BlocProvider(create: (context) => sl<SymptomsCubit>()),
+                BlocProvider(create: (context) => sl<DeliverCubit>()),
+                BlocProvider(create: (context) => sl<MedicationCubit>()),
+                BlocProvider(create: (context) => sl<LabtestCubit>()),
+                BlocProvider(create: (context) => sl<AncsCubit>()),
+                BlocProvider(create: (context) => sl<AuthenticationCubit>()),
+                BlocProvider(create: (context) => sl<PncsCubit>()),
+                BlocProvider(
+                    create: (context) => sl<NewsfeedCubit>(
+                         
+                        )),
+                BlocProvider(create: (context) => sl<FaqsCubit>()),
+                BlocProvider(create: (context) => sl<AudioCubit>()),
+                BlocProvider(
+                    create: (context) =>
+                        DrawerCubit()..checkDrawerSelection(0)),
+                BlocProvider(create: (context) => sl<SymptomsCubit>()),
+                BlocProvider(
+                  create: (context) =>
+                      sl<OnboardBloc>()..add(const OnboardEvent.onboardStart()),
+                ),
+                BlocProvider(
+                  create: (context) => DistrictMunicipalityCubit(),
+                ),
+                BlocProvider(
+                  create: (context) => sl<WeeklyTipsCubit>(),
+                ),
+                BlocProvider(
+                  create: (context) => sl<VideoCubit>(),
+                ),
+              ],
+              child: const MyApp(),
+            ),
+          ),
+      storage: storage);
 }
 
 class MyApp extends StatelessWidget {

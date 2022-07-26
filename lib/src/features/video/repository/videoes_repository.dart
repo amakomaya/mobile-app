@@ -6,8 +6,8 @@ import 'package:aamako_maya/src/features/weekly_tips/model/weekly_tips_model.dar
 import 'package:dio/dio.dart';
 
 class VideosRepo {
-  Response? response;
-  var dio = Dio();
+  Dio dio;
+ VideosRepo(this.dio);
   getVideos() async {
     try {
       final response = await dio.get(

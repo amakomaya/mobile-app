@@ -7,9 +7,10 @@ import '../model/login_request_model.dart';
 import '../model/register_request_model.dart';
 import '../model/user_model.dart';
 
-class AuthenticationRepository{
-   Response? response;
-  var dio = Dio();
+class AuthenticationRepository {
+  Dio dio;
+  AuthenticationRepository(this.dio);
+  Response? response;
 
   Future register({required RegisterRequestModel credential}) async {
     try {
@@ -17,7 +18,7 @@ class AuthenticationRepository{
           await dio.post(Urls.registerUrl, data: credential.toJson());
       if (response.statusCode == 200) {
         final data = UserModel.fromJson(response.data['user']);
-        print(data);
+
         return data;
       }
     } on DioError catch (e) {
@@ -28,7 +29,6 @@ class AuthenticationRepository{
       }
     }
   }
-
 
   Future login({required LoginRequestModel credential}) async {
     try {
@@ -41,10 +41,11 @@ class AuthenticationRepository{
         throw response.data['message'];
       }
     } on DioError catch (e) {
-      if(e.response!=null){
-        throw(e.response?.data['message']);
-      }else{
-        throw('Unexpected Error Occured');
-      }}
+      if (e.response != null) {
+        throw (e.response?.data['message']);
+      } else {
+        throw ('Unexpected Error Occured');
+      }
+    }
   }
 }

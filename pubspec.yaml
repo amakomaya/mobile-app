@@ -46,6 +46,7 @@ dependencies:
   qr_flutter: ^4.0.0
   hydrated_bloc: ^8.1.0
   path_provider: ^2.0.11
+  get_it: ^7.2.0
 
 #native splash screens
 # flutter_native_splash:

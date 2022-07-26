@@ -9,19 +9,20 @@ import 'package:flutter/services.dart';
 import '../models/onboarding_model.dart';
 
 class OnboardingRepo {
-  Dio dio = Dio();
+  Dio dio;
+  OnboardingRepo(this.dio);
   Future<List<WizardModel>> getOnboardingList() async {
     try {
       final Response response = await dio.get(Urls.onboardUrl);
       print(response.data.toString());
 
       if (response.statusCode == 200) {
-              print(200.toString());
+        print(200.toString());
 
         List<WizardModel> wizardList = (response.data as List)
             .map((e) => WizardModel.fromJson(e))
             .toList();
-      print(wizardList.toString());
+        print(wizardList.toString());
 
         return wizardList;
       } else {

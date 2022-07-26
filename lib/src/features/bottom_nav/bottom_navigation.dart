@@ -83,6 +83,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                                               .checkDrawerSelection(0);
                             },
                           ),
+                          
                           IconButton(
                             iconSize: 35.sm,
                             padding: const EdgeInsets.only(right: 28.0),

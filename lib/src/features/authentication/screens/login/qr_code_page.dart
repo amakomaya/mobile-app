@@ -27,14 +27,19 @@ class _QRViewPageState extends State<QRViewPage> {
       (onData) {
         result = onData.code;
         if (result != null) {
+
+          print((result??'') + 'DIimmm');
           controller.pauseCamera();
           BotToast.showLoading();
           context.read<AuthenticationCubit>().loginWithQr(result!);
         }
-      },
-      onError: (err) {},
-      cancelOnError: false,
-      onDone: () {},
+      // },
+      // onError: (err) {},
+      // cancelOnError: false,
+      // onDone: () {
+
+      // },
+      }
     );
   }
 

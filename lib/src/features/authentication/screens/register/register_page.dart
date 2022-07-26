@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:aamako_maya/src/core/widgets/border_container.dart';
 import 'package:aamako_maya/src/core/widgets/buttons/primary_action_button.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
@@ -96,18 +97,18 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: ValueListenableBuilder(
                         valueListenable: selected,
                         builder: (context, i, _) {
-                          return ShadowContainer(
-                            color: selected.value == inde ? Colors.red : null,
+                          return BorderContainer(
+
+                            hasBorder: selected.value==inde,
+
+                            // color: selected.value == inde ? Colors.red : null,
                             margin: defaultPadding,
                             padding:
                                 defaultPadding.copyWith(top: 15, bottom: 15),
                             width: size.width,
                             child: Text(
                               registerAs[inde].name,
-                              style: TextStyle(
-                                  color: selected.value == inde
-                                      ? Colors.white
-                                      : Colors.black),
+                            
                             ),
                           );
                         }),

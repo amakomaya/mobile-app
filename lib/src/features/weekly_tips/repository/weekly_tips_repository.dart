@@ -5,8 +5,10 @@ import 'package:aamako_maya/src/features/weekly_tips/model/weekly_tips_model.dar
 import 'package:dio/dio.dart';
 
 class WeeklyTipsRepo {
+  Dio dio;
+  WeeklyTipsRepo(this.dio);
   Response? response;
-  var dio = Dio();
+
   getWeeklyTips() async {
     try {
       final response = await dio.get(

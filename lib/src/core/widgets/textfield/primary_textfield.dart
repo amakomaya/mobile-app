@@ -72,6 +72,7 @@ class PrimaryTextField extends StatelessWidget {
                 : FocusScope.of(context).unfocus(),
             validator: validator,
             decoration: InputDecoration(
+              
                 suffixIcon: GestureDetector(
                   onTap: sufixTap,
                   child: Icon(

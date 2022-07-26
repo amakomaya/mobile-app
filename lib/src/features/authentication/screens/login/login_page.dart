@@ -238,6 +238,7 @@ class _LoginPageState extends State<LoginPage> {
                   Visibility(
                     visible: false,
                     child: BorderContainer(
+                      hasBorder: true,
                       padding: const EdgeInsets.symmetric(vertical: 20),
                       width: 380.w,
                       child: Center(
