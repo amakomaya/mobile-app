@@ -70,427 +70,424 @@ class _DrawerWidgetState extends State<DrawerWidget> {
             });
           });
         },
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-          child: BlocBuilder<DrawerCubit, DrawerState>(
-            builder: (context, state) {
-              return Container(
-                color: Colors.white,
-                width: size.width * 0.8,
-                height: size.height,
-                child: Stack(
-                  children: [
-                    Container(
-                      height: 225.h,
-                      decoration: const BoxDecoration(
-                          color: AppColors.primaryRed,
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(25),
-                            bottomRight: Radius.circular(25),
-                          )),
-                    ),
-                    Padding(
-                        padding: EdgeInsets.only(
-                          top: 30.h,
-                          left: 10,
-                          right: 10,
-                          bottom: 39.h,
-                        ),
-                        child: BlocBuilder<AuthenticationCubit, LoggedInState>(
-                          builder: (authCo, authSo) {
-                            return Column(
-                              children: [
-                                Align(
-                                  alignment: Alignment.topCenter,
-                                  child: CircleAvatar(
-                                    backgroundImage: AssetImage(AppAssets.girl),
-                                    radius: 40.h,
-                                  ),
+        child: BlocBuilder<DrawerCubit, DrawerState>(
+          builder: (context, state) {
+            return Container(
+              color: Colors.white,
+              width: size.width * 0.8,
+              height: size.height,
+              child: Stack(
+                children: [
+                  Container(
+                    height: 225.h,
+                    decoration: const BoxDecoration(
+                        color: AppColors.primaryRed,
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(25),
+                          bottomRight: Radius.circular(25),
+                        )),
+                  ),
+                  Padding(
+                      padding: EdgeInsets.only(
+                        top: 30.h,
+                        left: 10,
+                        right: 10,
+                        bottom: 39.h,
+                      ),
+                      child: BlocBuilder<AuthenticationCubit, LoggedInState>(
+                        builder: (authCo, authSo) {
+                          return Column(
+                            children: [
+                              Align(
+                                alignment: Alignment.topCenter,
+                                child: CircleAvatar(
+                                  backgroundImage: AssetImage(AppAssets.girl),
+                                  radius: 40.h,
                                 ),
-                                VerticalSpace(5.h),
-                                Align(
-                                    alignment: Alignment.topCenter,
-                                    child: Text(authSo.user?.name??'',
-                                        style: theme.textTheme.titleSmall
-                                            ?.copyWith(
-                                                fontSize: 34,
-                                                color: AppColors.white))),
-                                VerticalSpace(5.h),
-                                Align(
-                                    alignment: Alignment.topCenter,
-                                    child: Text('40 weeks 5 days',
-                                        style: theme.textTheme.titleSmall
-                                            ?.copyWith(
-                                                fontSize: 12,
-                                                color: AppColors.white))),
-                                VerticalSpace(15.h),
-                                Expanded(
-                                  child: ShadowContainer(
-                                    color: Colors.white,
-                                    child: ListView(
-                                      children: [
-                                        ListTile(
-                                          onTap: () {
-                                            Navigator.pop(context);
+                              ),
+                              VerticalSpace(5.h),
+                              Align(
+                                  alignment: Alignment.topCenter,
+                                  child: Text(authSo.user?.name??'',
+                                      style: theme.textTheme.titleSmall
+                                          ?.copyWith(
+                                              fontSize: 34,
+                                              color: AppColors.white))),
+                              VerticalSpace(5.h),
+                              Align(
+                                  alignment: Alignment.topCenter,
+                                  child: Text('40 weeks 5 days',
+                                      style: theme.textTheme.titleSmall
+                                          ?.copyWith(
+                                              fontSize: 12,
+                                              color: AppColors.white))),
+                              VerticalSpace(15.h),
+                              Expanded(
+                                child: ShadowContainer(
+                                  color: Colors.white,
+                                  child: ListView(
+                                    children: [
+                                      ListTile(
+                                        onTap: () {
+                                          Navigator.pop(context);
 
-                                            context
-                                                .read<DrawerCubit>()
-                                                .checkDrawerSelection(0);
+                                          context
+                                              .read<DrawerCubit>()
+                                              .checkDrawerSelection(0);
 
-                                            context
-                                                .read<NavigationIndexCubit>()
-                                                .changeIndex(
-                                                    index: 0, title: 'Home');
-                                          },
-                                          leading: Image.asset(
-                                            AppAssets.homeIcon,
-                                            height: 30.sm,
-                                          ),
-                                          title: Text(
-                                            'Home',
+                                          context
+                                              .read<NavigationIndexCubit>()
+                                              .changeIndex(
+                                                  index: 0, title: 'Home');
+                                        },
+                                        leading: Image.asset(
+                                          AppAssets.homeIcon,
+                                          height: 30.sm,
+                                        ),
+                                        title: Text(
+                                          'Home',
+                                          style: theme.textTheme.titleSmall
+                                              ?.copyWith(
+                                                  color: state.index == 0
+                                                      ? Colors.red
+                                                      : Colors.black),
+                                        ),
+                                      ),
+                                      //profile
+                                      ListTile(
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                          context
+                                              .read<DrawerCubit>()
+                                              .checkDrawerSelection(1);
+                                          context
+                                              .read<NavigationIndexCubit>()
+                                              .changeIndex(
+                                                  index: 10,
+                                                  title: 'Profile');
+                                        },
+                                        leading: Image.asset(
+                                          AppAssets.profileIcon,
+                                          height: 30.sm,
+                                        ),
+                                        title: Text('Profile',
                                             style: theme.textTheme.titleSmall
                                                 ?.copyWith(
-                                                    color: state.index == 0
-                                                        ? Colors.red
-                                                        : Colors.black),
-                                          ),
-                                        ),
-                                        //profile
-                                        ListTile(
-                                          onTap: () {
-                                            Navigator.pop(context);
-                                            context
-                                                .read<DrawerCubit>()
-                                                .checkDrawerSelection(1);
-                                            context
-                                                .read<NavigationIndexCubit>()
-                                                .changeIndex(
-                                                    index: 10,
-                                                    title: 'Profile');
-                                          },
-                                          leading: Image.asset(
-                                            AppAssets.profileIcon,
-                                            height: 30.sm,
-                                          ),
-                                          title: Text('Profile',
-                                              style: theme.textTheme.titleSmall
-                                                  ?.copyWith(
-                                                      color: state.index == 1
-                                                          ? AppColors.primaryRed
-                                                          : Colors.black)),
-                                        ),
+                                                    color: state.index == 1
+                                                        ? AppColors.primaryRed
+                                                        : Colors.black)),
+                                      ),
 
-                                        //card
-                                        ListTile(
-                                          onTap: () {
-                                            Navigator.pop(context);
-                                            context
-                                                .read<DrawerCubit>()
-                                                .checkDrawerSelection(2);
+                                      //card
+                                      ListTile(
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                          context
+                                              .read<DrawerCubit>()
+                                              .checkDrawerSelection(2);
 
-                                            context
-                                                .read<NavigationIndexCubit>()
-                                                .changeIndex(
-                                                    index: 11, title: 'Card');
-                                          },
-                                          leading: Image.asset(
-                                            AppAssets.cardIcon,
-                                            height: 30.sm,
-                                          ),
-                                          title: Text('Card',
-                                              style: theme.textTheme.titleSmall
-                                                  ?.copyWith(
-                                                      color: state.index == 2
-                                                          ? AppColors.primaryRed
-                                                          : Colors.black)),
+                                          context
+                                              .read<NavigationIndexCubit>()
+                                              .changeIndex(
+                                                  index: 11, title: 'Card');
+                                        },
+                                        leading: Image.asset(
+                                          AppAssets.cardIcon,
+                                          height: 30.sm,
                                         ),
-                                        //
-                                        ListTile(
-                                          onTap: () {
-                                            context
-                                                .read<DrawerCubit>()
-                                                .checkDrawerSelection(3);
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        SymptomsPAge()));
-                                          },
-                                          leading: Image.asset(
-                                            AppAssets.symptomIcon,
-                                            height: 30.sm,
-                                          ),
-                                          title: Text('Symptoms Assessment',
-                                              style: theme.textTheme.titleSmall
-                                                  ?.copyWith(
-                                                      color: state.index == 3
-                                                          ? AppColors.primaryRed
-                                                          : Colors.black)),
+                                        title: Text('Card',
+                                            style: theme.textTheme.titleSmall
+                                                ?.copyWith(
+                                                    color: state.index == 2
+                                                        ? AppColors.primaryRed
+                                                        : Colors.black)),
+                                      ),
+                                      //
+                                      ListTile(
+                                        onTap: () {
+                                          context
+                                              .read<DrawerCubit>()
+                                              .checkDrawerSelection(3);
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      SymptomsPAge()));
+                                        },
+                                        leading: Image.asset(
+                                          AppAssets.symptomIcon,
+                                          height: 30.sm,
                                         ),
-                                        //Appointment
-                                        ListTile(
-                                          onTap: (() {
-                                            context
-                                                .read<DrawerCubit>()
-                                                .checkDrawerSelection(4);
-                                          }),
-                                          leading: Image.asset(
-                                            AppAssets.appoitnmentIcon,
-                                            height: 30.sm,
-                                          ),
-                                          title: Text('Appointment',
-                                              style: theme.textTheme.titleSmall
-                                                  ?.copyWith(
-                                                      color: state.index == 4
-                                                          ? AppColors.primaryRed
-                                                          : Colors.black)),
+                                        title: Text('Symptoms Assessment',
+                                            style: theme.textTheme.titleSmall
+                                                ?.copyWith(
+                                                    color: state.index == 3
+                                                        ? AppColors.primaryRed
+                                                        : Colors.black)),
+                                      ),
+                                      //Appointment
+                                      ListTile(
+                                        onTap: (() {
+                                          context
+                                              .read<DrawerCubit>()
+                                              .checkDrawerSelection(4);
+                                        }),
+                                        leading: Image.asset(
+                                          AppAssets.appoitnmentIcon,
+                                          height: 30.sm,
                                         ),
-                                        //health Report
-                                        ExpansionTile(
-                                          initiallyExpanded:
-                                              (state.index! > 4 &&
-                                                      state.index! < 10)
-                                                  ? true
-                                                  : false,
-                                          leading: Image.asset(
-                                            AppAssets.healthreportIcon,
-                                            height: 30.sm,
+                                        title: Text('Appointment',
+                                            style: theme.textTheme.titleSmall
+                                                ?.copyWith(
+                                                    color: state.index == 4
+                                                        ? AppColors.primaryRed
+                                                        : Colors.black)),
+                                      ),
+                                      //health Report
+                                      ExpansionTile(
+                                        initiallyExpanded:
+                                            (state.index! > 4 &&
+                                                    state.index! < 10)
+                                                ? true
+                                                : false,
+                                        leading: Image.asset(
+                                          AppAssets.healthreportIcon,
+                                          height: 30.sm,
+                                        ),
+                                        title: Text('Health Report',
+                                            style:
+                                                theme.textTheme.titleSmall),
+                                        children: [
+                                          ListTile(
+                                            onTap: () {
+                                              // Navigator.of(context).push(
+                                              //     MaterialPageRoute(
+                                              //         builder: (context) => AncsPage()));
+                                              Navigator.pop(context);
+                                              context
+                                                  .read<DrawerCubit>()
+                                                  .checkDrawerSelection(5);
+
+                                              context
+                                                  .read<
+                                                      NavigationIndexCubit>()
+                                                  .changeIndex(
+                                                      index: 5, title: 'ANC');
+                                              context
+                                                  .read<AncsCubit>()
+                                                  .getAncs();
+                                            },
+                                            title: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 80, right: 50),
+                                              child: Text("ANC",
+                                                  style: theme
+                                                      .textTheme.titleSmall
+                                                      ?.copyWith(
+                                                          color: state.index ==
+                                                                  5
+                                                              ? AppColors
+                                                                  .primaryRed
+                                                              : Colors
+                                                                  .black)),
+                                            ),
                                           ),
-                                          title: Text('Health Report',
-                                              style:
-                                                  theme.textTheme.titleSmall),
-                                          children: [
-                                            ListTile(
-                                              onTap: () {
-                                                // Navigator.of(context).push(
-                                                //     MaterialPageRoute(
-                                                //         builder: (context) => AncsPage()));
+                                          ListTile(
+                                            onTap: () {
+                                              context
+                                                  .read<DrawerCubit>()
+                                                  .checkDrawerSelection(6);
+                                              Navigator.pop(context);
+
+                                              context
+                                                  .read<
+                                                      NavigationIndexCubit>()
+                                                  .changeIndex(
+                                                      index: 6,
+                                                      title: 'Delivery Page');
+                                            },
+                                            title: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 80, right: 50),
+                                              child: Text("Delivery",
+                                                  style: theme
+                                                      .textTheme.titleSmall
+                                                      ?.copyWith(
+                                                          color: state.index ==
+                                                                  6
+                                                              ? AppColors
+                                                                  .primaryRed
+                                                              : Colors
+                                                                  .black)),
+                                            ),
+                                          ),
+                                          ListTile(
+                                            onTap: () {
+                                              context
+                                                  .read<DrawerCubit>()
+                                                  .checkDrawerSelection(7);
+                                              Navigator.pop(context);
+
+                                              context
+                                                  .read<
+                                                      NavigationIndexCubit>()
+                                                  .changeIndex(
+                                                      index: 7,
+                                                      title: 'Medication');
+                                            },
+                                            title: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 80, right: 50),
+                                              child: Text("Medication",
+                                                  style: theme
+                                                      .textTheme.titleSmall
+                                                      ?.copyWith(
+                                                          color: state.index ==
+                                                                  7
+                                                              ? AppColors
+                                                                  .primaryRed
+                                                              : Colors
+                                                                  .black)),
+                                            ),
+                                          ),
+                                          ListTile(
+                                            onTap: () {
+                                              context
+                                                  .read<DrawerCubit>()
+                                                  .checkDrawerSelection(8);
+                                              Navigator.pop(context);
+
+                                              context
+                                                  .read<
+                                                      NavigationIndexCubit>()
+                                                  .changeIndex(
+                                                      index: 8,
+                                                      title:
+                                                          'Postnatal Care');
+                                            },
+                                            title: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 80, right: 50),
+                                              child: Text("PNC",
+                                                  style: theme
+                                                      .textTheme.titleSmall
+                                                      ?.copyWith(
+                                                          color: state.index ==
+                                                                  8
+                                                              ? AppColors
+                                                                  .primaryRed
+                                                              : Colors
+                                                                  .black)),
+                                            ),
+                                          ),
+                                          ListTile(
+                                            onTap: () {
+                                              context
+                                                  .read<DrawerCubit>()
+                                                  .checkDrawerSelection(9);
+                                              Navigator.pop(context);
+
+                                              context
+                                                  .read<
+                                                      NavigationIndexCubit>()
+                                                  .changeIndex(
+                                                      index: 9,
+                                                      title: 'Lab Test');
+                                            },
+                                            title: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 80, right: 50),
+                                              child: Text("Lab Test",
+                                                  style: theme
+                                                      .textTheme.titleSmall
+                                                      ?.copyWith(
+                                                          color: state.index ==
+                                                                  9
+                                                              ? AppColors
+                                                                  .primaryRed
+                                                              : Colors
+                                                                  .black)),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+
+                                      // ListTile(
+                                      //   onTap: () {
+                                      //     Navigator.push(
+                                      //         context,
+                                      //         MaterialPageRoute(
+                                      //             builder: (context) =>
+                                      //                 const BabyPage()));
+                                      //   },
+                                      //   leading: Image.asset(
+                                      //     AppAssets.babyIcon,
+                                      //     height: 30.sm,
+                                      //     color: Colors.red,
+                                      //   ),
+                                      //   title: Text('Baby',
+                                      //       style: theme.textTheme.titleSmall),
+                                      // ),
+
+                                      //faq button
+                                      ListTile(
+                                        onTap: () {
+                                          context
+                                              .read<DrawerCubit>()
+                                              .checkDrawerSelection(10);
+                                          Navigator.pop(context);
+
+                                          context
+                                              .read<NavigationIndexCubit>()
+                                              .changeIndex(
+                                                  index: 12, title: 'FAQ');
+                                        },
+                                        leading: Image.asset(
+                                          AppAssets.faqsIcon,
+                                          height: 30.sm,
+                                        ),
+                                        title: Text('FAQs',
+                                            style: theme.textTheme.titleSmall
+                                                ?.copyWith(
+                                                    color: state.index == 10
+                                                        ? AppColors.primaryRed
+                                                        : Colors.black)),
+                                      ),
+                                      //log out button
+                                      Align(
+                                        alignment: Alignment.bottomLeft,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 12.0),
+                                          child: TextButton.icon(
+                                              label: Text(
+                                                'Logout',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleSmall,
+                                              ),
+                                              onPressed: () {
                                                 Navigator.pop(context);
                                                 context
-                                                    .read<DrawerCubit>()
-                                                    .checkDrawerSelection(5);
-
-                                                context
-                                                    .read<
-                                                        NavigationIndexCubit>()
-                                                    .changeIndex(
-                                                        index: 5, title: 'ANC');
-                                                context
-                                                    .read<AncsCubit>()
-                                                    .getAncs();
+                                                    .read<LoggedOutCubit>()
+                                                    .logout();
                                               },
-                                              title: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 80, right: 50),
-                                                child: Text("ANC",
-                                                    style: theme
-                                                        .textTheme.titleSmall
-                                                        ?.copyWith(
-                                                            color: state.index ==
-                                                                    5
-                                                                ? AppColors
-                                                                    .primaryRed
-                                                                : Colors
-                                                                    .black)),
-                                              ),
-                                            ),
-                                            ListTile(
-                                              onTap: () {
-                                                context
-                                                    .read<DrawerCubit>()
-                                                    .checkDrawerSelection(6);
-                                                Navigator.pop(context);
-
-                                                context
-                                                    .read<
-                                                        NavigationIndexCubit>()
-                                                    .changeIndex(
-                                                        index: 6,
-                                                        title: 'Delivery Page');
-                                              },
-                                              title: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 80, right: 50),
-                                                child: Text("Delivery",
-                                                    style: theme
-                                                        .textTheme.titleSmall
-                                                        ?.copyWith(
-                                                            color: state.index ==
-                                                                    6
-                                                                ? AppColors
-                                                                    .primaryRed
-                                                                : Colors
-                                                                    .black)),
-                                              ),
-                                            ),
-                                            ListTile(
-                                              onTap: () {
-                                                context
-                                                    .read<DrawerCubit>()
-                                                    .checkDrawerSelection(7);
-                                                Navigator.pop(context);
-
-                                                context
-                                                    .read<
-                                                        NavigationIndexCubit>()
-                                                    .changeIndex(
-                                                        index: 7,
-                                                        title: 'Medication');
-                                              },
-                                              title: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 80, right: 50),
-                                                child: Text("Medication",
-                                                    style: theme
-                                                        .textTheme.titleSmall
-                                                        ?.copyWith(
-                                                            color: state.index ==
-                                                                    7
-                                                                ? AppColors
-                                                                    .primaryRed
-                                                                : Colors
-                                                                    .black)),
-                                              ),
-                                            ),
-                                            ListTile(
-                                              onTap: () {
-                                                context
-                                                    .read<DrawerCubit>()
-                                                    .checkDrawerSelection(8);
-                                                Navigator.pop(context);
-
-                                                context
-                                                    .read<
-                                                        NavigationIndexCubit>()
-                                                    .changeIndex(
-                                                        index: 8,
-                                                        title:
-                                                            'Postnatal Care');
-                                              },
-                                              title: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 80, right: 50),
-                                                child: Text("PNC",
-                                                    style: theme
-                                                        .textTheme.titleSmall
-                                                        ?.copyWith(
-                                                            color: state.index ==
-                                                                    8
-                                                                ? AppColors
-                                                                    .primaryRed
-                                                                : Colors
-                                                                    .black)),
-                                              ),
-                                            ),
-                                            ListTile(
-                                              onTap: () {
-                                                context
-                                                    .read<DrawerCubit>()
-                                                    .checkDrawerSelection(9);
-                                                Navigator.pop(context);
-
-                                                context
-                                                    .read<
-                                                        NavigationIndexCubit>()
-                                                    .changeIndex(
-                                                        index: 9,
-                                                        title: 'Lab Test');
-                                              },
-                                              title: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 80, right: 50),
-                                                child: Text("Lab Test",
-                                                    style: theme
-                                                        .textTheme.titleSmall
-                                                        ?.copyWith(
-                                                            color: state.index ==
-                                                                    9
-                                                                ? AppColors
-                                                                    .primaryRed
-                                                                : Colors
-                                                                    .black)),
-                                              ),
-                                            ),
-                                          ],
+                                              icon: Icon(Icons.logout,
+                                                  color: Colors.red)),
                                         ),
-
-                                        // ListTile(
-                                        //   onTap: () {
-                                        //     Navigator.push(
-                                        //         context,
-                                        //         MaterialPageRoute(
-                                        //             builder: (context) =>
-                                        //                 const BabyPage()));
-                                        //   },
-                                        //   leading: Image.asset(
-                                        //     AppAssets.babyIcon,
-                                        //     height: 30.sm,
-                                        //     color: Colors.red,
-                                        //   ),
-                                        //   title: Text('Baby',
-                                        //       style: theme.textTheme.titleSmall),
-                                        // ),
-
-                                        //faq button
-                                        ListTile(
-                                          onTap: () {
-                                            context
-                                                .read<DrawerCubit>()
-                                                .checkDrawerSelection(10);
-                                            Navigator.pop(context);
-
-                                            context
-                                                .read<NavigationIndexCubit>()
-                                                .changeIndex(
-                                                    index: 12, title: 'FAQ');
-                                          },
-                                          leading: Image.asset(
-                                            AppAssets.faqsIcon,
-                                            height: 30.sm,
-                                          ),
-                                          title: Text('FAQs',
-                                              style: theme.textTheme.titleSmall
-                                                  ?.copyWith(
-                                                      color: state.index == 10
-                                                          ? AppColors.primaryRed
-                                                          : Colors.black)),
-                                        ),
-                                        //log out button
-                                        Align(
-                                          alignment: Alignment.bottomLeft,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 12.0),
-                                            child: TextButton.icon(
-                                                label: Text(
-                                                  'Logout',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .titleSmall,
-                                                ),
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                  context
-                                                      .read<LoggedOutCubit>()
-                                                      .logout();
-                                                },
-                                                icon: Icon(Icons.logout,
-                                                    color: Colors.red)),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
-                                )
-                              ],
-                            );
-                          },
-                        )),
-                  ],
-                ),
-              );
-            },
-          ),
+                                ),
+                              )
+                            ],
+                          );
+                        },
+                      )),
+                ],
+              ),
+            );
+          },
         ),
       );
     });

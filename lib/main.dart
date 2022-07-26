@@ -28,6 +28,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'src/features/ancs/cubit/ancs_cubit.dart';
 import 'src/features/audio/cubit/audio_cubit.dart';
@@ -48,7 +50,10 @@ Future<void> main() async {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: AppColors.primaryRed,
   ));
-  runApp(
+
+    final storage = await HydratedStorage.build(storageDirectory: await getApplicationDocumentsDirectory());
+
+ HydratedBlocOverrides.runZoned(() =>  runApp(
     MultiBlocProvider(
       providers: [
 
@@ -104,7 +109,10 @@ Future<void> main() async {
       ],
       child: const MyApp(),
     ),
-  );
+  ),
+  storage: storage
+);
+
 }
 
 class MyApp extends StatelessWidget {

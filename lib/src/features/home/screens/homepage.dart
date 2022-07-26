@@ -4,7 +4,9 @@ import 'package:aamako_maya/src/core/widgets/border_container.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
 import 'package:aamako_maya/src/core/widgets/loading_shimmer/shimmer_loading.dart';
+import 'package:aamako_maya/src/features/authentication/drawer_cubit/drawer_cubit.dart';
 import 'package:aamako_maya/src/features/home/cubit/newsfeed_cubit.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -13,6 +15,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../core/padding/padding.dart';
 import '../../../core/widgets/drawer/drawer_widget.dart';
 import '../../authentication/authentication_cubit/auth_cubit.dart';
+import '../../bottom_nav/cubit/cubit/navigation_index_cubit.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -108,15 +111,57 @@ class _HomePageState extends State<HomePage> {
               children: [
                 authS.isProfileComplete == false
                     ? ShadowContainer(
-                      margin: EdgeInsets.only(top: 10.h),
-                      color: AppColors.primaryRed,
-                      padding: EdgeInsets.symmetric(vertical: 20.h,horizontal: 10.w),
+                        margin: EdgeInsets.only(top: 10.h),
+                        color: AppColors.primaryRed,
+                        padding: EdgeInsets.symmetric(
+                            vertical: 20.h, horizontal: 10.w),
                         width: 390.w,
-                        child: Text(
-                            'You have not completed your profile!! Please Complete Your Profile First!!',style: theme.textTheme.labelMedium?.copyWith(
-                              color: Colors.white
-                            ),),
-                      )
+
+                        // child: RichText(
+                        //   text: TextSpan(
+                        //       text: 'It looks like you have not completed profile ? ',
+                        //       children: [
+                        //         TextSpan(
+                        //             recognizer: TapGestureRecognizer()
+                        //               ..onTap = () {
+                        //                 context
+                        //                     .read<NavigationIndexCubit>()
+                        //                     .changeIndex(
+                        //                         index: 10, title: "Profile");
+                        //               },
+                        //             text:
+                        //                 ' Complete Now !!',
+                        //             style: TextStyle(
+                        //                 decoration: TextDecoration.underline))
+                        //       ]),
+                        // ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                'You have not completed your profile!! Please Complete Your Profile First !!',
+                                style: theme.textTheme.labelMedium?.copyWith(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+
+                            // HorizSpace(5.w),
+                            TextButton(
+                                onPressed: () {
+                                  context
+                                      .read<DrawerCubit>()
+                                      .checkDrawerSelection(1);
+                                  context
+                                      .read<NavigationIndexCubit>()
+                                      .changeIndex(index: 10, title: "Profile");
+                                },
+                                child: Text('Go to profile',
+                                    style: theme.textTheme.bodySmall?.copyWith(
+                                        fontSize: 20.sm, color: Colors.white)))
+                          ],
+                        ))
                     : Container(),
                 // VerticalSpace(50.h),
                 // Stack(

@@ -20,6 +20,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../core/widgets/drawer/drawer_widget.dart';
 import '../audio/cubit/audio_cubit.dart';
 import '../audio/screens/audio_page.dart';
+import '../authentication/drawer_cubit/drawer_cubit.dart';
 import '../card/card_page.dart';
 import '../home/screens/homepage.dart';
 import '../shop/shop_page.dart';
@@ -77,6 +78,9 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                               context
                                   .read<NavigationIndexCubit>()
                                   .changeIndex(index: 0, title: "Home");
+                                  context
+                                              .read<DrawerCubit>()
+                                              .checkDrawerSelection(0);
                             },
                           ),
                           IconButton(
@@ -93,6 +97,9 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                                   .changeIndex(index: 1, title: "Audio");
 
                               context.read<AudioCubit>().getAudio();
+                              context
+                                              .read<DrawerCubit>()
+                                              .checkDrawerSelection(-1);
                             },
                           ),
                           IconButton(
@@ -107,6 +114,9 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                               context
                                   .read<NavigationIndexCubit>()
                                   .changeIndex(index: 2, title: "Video");
+                                  context
+                                              .read<DrawerCubit>()
+                                              .checkDrawerSelection(-1);
 
                               context.read<VideoCubit>().getVideos();
                             },
@@ -127,6 +137,9 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                                   .read<NavigationIndexCubit>()
                                   .changeIndex(
                                       index: 3, title: "Weekly Tips");
+                                      context
+                                              .read<DrawerCubit>()
+                                              .checkDrawerSelection(-1);
 
                               context.read<WeeklyTipsCubit>().getWeeklyTips();
                             },
