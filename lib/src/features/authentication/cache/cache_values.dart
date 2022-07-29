@@ -7,18 +7,31 @@ import '../../weekly_tips/model/weekly_tips_model.dart';
 import '../model/user_model.dart';
 
 class CachedValues {
-  Future<Box<Map<dynamic, dynamic>>> openUserBox() async {
+  Future<Box> openUserBox() async {
     // Open your boxes. Optional: Give it a type.
     final box = await Hive.openBox<Map>(Consts.user_info);
     return box;
   }
 
-
-  
-
-  setUserInfo(UserModel userData) async {
+  setWeeklyTips(List<WeeklyTips> tips) async {
     final box = await openUserBox();
-    await box.put(Consts.user_info_key, userData.toJson());
+    await box.clear();
+    final data = tips.map((e) => e.toJson()).toList();
+    print(data.toString());
+    await box.put(Consts.user_info_key, {"data": data});
+  }
+
+  getWeeklyTips() async {
+    final box = await openUserBox();
+
+    final data = (box.get(Consts.user_info_key));
+    if (data != null) {
+      final tips =
+          (data["data"] as List).map((e) => WeeklyTips.fromJson(e)).toList();
+      return tips;
+    } else {
+      return null;
+    }
   }
 
   // saveWeeklyTips(List<WeeklyTips> tips) async {
@@ -40,20 +53,19 @@ class CachedValues {
   //  print(li[0].descriptionEn);
   //  return li;
 
-
 //     final map =
 //         tipsBox.toMap().values.toList().map((e) => WeeklyTips.fromJson(e)).toList();
 //     print(map[1].toString()+'kk');
 //  print(map[2].toString()+'kk');
 //     return map;
 
-    //   final data = await tipsBox.get(Consts.weekly_data_key);
-    //   print(data.toString() + 'fff');
-    //   if (data != null) {
-    //     final list = (data).map((e) => WeeklyTips.fromJson(e)).toList();
-    //     print(list.toString() + 'sdds');
-    //     return list;
-    //   }
-    //   return data;
+  //   final data = await tipsBox.get(Consts.weekly_data_key);
+  //   print(data.toString() + 'fff');
+  //   if (data != null) {
+  //     final list = (data).map((e) => WeeklyTips.fromJson(e)).toList();
+  //     print(list.toString() + 'sdds');
+  //     return list;
+  //   }
+  //   return data;
   // }
 }

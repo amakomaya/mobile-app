@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:aamako_maya/src/core/connection_checker/network_connection.dart';
 import 'package:aamako_maya/src/core/network_services/urls.dart';
 import 'package:aamako_maya/src/features/authentication/authentication_repository/authentication_repo.dart';
 import 'package:aamako_maya/src/features/authentication/model/login_request_model.dart';
@@ -9,6 +10,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 import '../local_storage/authentication_local_storage.dart';
@@ -17,37 +19,28 @@ import '../model/register_request_model.dart';
 class AuthenticationCubit extends Cubit<LoggedInState> {
   final Dio dio;
   final AuthenticationRepository _repo;
+  final NetworkInfo network;
   final AuthLocalData local;
-  AuthenticationCubit(this.dio, this.local, this._repo)
+  AuthenticationCubit(this.dio,this.network, this.local, this._repo)
       : super(LoggedInState(user: null, error: null, isLoading: false));
 
   void loginWithToken(String token) async {
     try {
-      final Response res = await dio.post(Urls.qrcodeUrl + token);
-      if (res.statusCode == 200) {
-        print("AAAA");
-        final user = UserModel.fromJson(res.data['user']);
-
-        print((user.age.toString()) + "age");
-        print(((user.tole != null && (user.tole?.isEmpty ?? false))));
-
-        emit(LoggedInState(
-            user: user,
-            error: null,
-            isLoading: false,
-            isAuthenticated: true,
-            isProfileComplete:
-                (user.tole != null && (user.tole?.isNotEmpty ?? false))));
-      } else {
-        emit(LoggedInState(user: null, error: 'Error', isLoading: false));
-      }
+      emit(LoggedInState(
+          user: null,
+          error: null,
+          isLoading: false,
+          isAuthenticated: true,
+          isProfileComplete: false));
     } catch (e) {
       emit(LoggedInState(user: null, error: 'Error', isLoading: false));
     }
   }
 
   void login({required LoginRequestModel user}) async {
-    emit(LoggedInState(user: null, error: null, isLoading: true));
+    final hasInternet= await network.isConnected;
+    if(hasInternet){
+      emit(LoggedInState(user: null, error: null, isLoading: true));
     try {
       final UserModel response = await _repo.login(credential: user);
       local.saveCredentialsDataToLocal(response);
@@ -64,6 +57,16 @@ class AuthenticationCubit extends Cubit<LoggedInState> {
         error: error.toString(),
         isLoading: false,
       ));
+    }
+    }
+    else{
+     emit( LoggedInState(
+      isLoading: false,
+      user: null,
+      isAuthenticated: false,
+      isProfileComplete: false,
+      error: 'No Internet Connection',));
+
     }
   }
 
@@ -87,11 +90,11 @@ class AuthenticationCubit extends Cubit<LoggedInState> {
   }
 
   void loginWithQr(String qrCode) async {
-    print(qrCode +'Dick');
+    print(qrCode + 'Dick');
     try {
       final Response res = await Dio().post(Urls.qrcodeUrl + qrCode);
       if (res.statusCode == 200) {
-        print(qrCode +'Pussy');
+        print(qrCode + 'Pussy');
         final user = UserModel.fromJson(res.data['user']);
         // local.saveCredentialsDataToLocal(user);
         emit(LoggedInState(
@@ -108,14 +111,29 @@ class AuthenticationCubit extends Cubit<LoggedInState> {
       emit(LoggedInState(user: null, error: 'Error', isLoading: false));
     }
   }
+
+  // @override
+  // LoggedInState? fromJson(Map<String, dynamic> json) {
+  //   try {
+  //     final user = UserModel.fromJson(json);
+  //     return LoggedInState(user: user, error: null, isLoading: false);
+  //   } catch (_) {
+  //     return null;
+  //   }
+  // }
+
+  // @override
+  // Map<String, dynamic>? toJson(LoggedInState state) {
+  //   if (state.user!=null) {
+  //     final user = state.user?.toJson();
+  //     return user;
+  //   } else {
+  //     return null;
+  //   }
+  // }
 }
 
-class AuthenticationState extends Equatable {
-  @override
-  List<Object?> get props => [];
-}
-
-class LoggedInState extends AuthenticationState {
+class LoggedInState extends Equatable {
   final UserModel? user;
   final String? error;
   final bool? isLoading;
@@ -130,30 +148,4 @@ class LoggedInState extends AuthenticationState {
       this.isAuthenticated = false});
   @override
   List<Object?> get props => [user, error, isLoading];
-}
-
-class LoggedOutState extends Equatable {
-  final bool? isLoading;
-  final bool? isLoggedOut;
-  const LoggedOutState(this.isLoggedOut, this.isLoading);
-
-  @override
-  List<Object?> get props => [isLoading, isLoggedOut];
-}
-
-class LoggedOutCubit extends Cubit<LoggedOutState> {
-  final AuthLocalData local;
-  LoggedOutCubit(this.local) : super(const LoggedOutState(null, false));
-
-  void logout() async {
-    emit(const LoggedOutState(null, true));
-
-    try {
-      await local.clearToken();
-
-      emit(const LoggedOutState(true, false));
-    } catch (e) {
-      emit(const LoggedOutState(false, false));
-    }
-  }
 }

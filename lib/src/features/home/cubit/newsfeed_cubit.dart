@@ -3,6 +3,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 import '../models/newsfeed_model.dart';
 
@@ -28,14 +29,34 @@ class NewsfeedCubit extends Cubit<NewsfeedState> {
       emit(NewsfeedState(newsfeed: state.newsfeed, isLoading: false));
     }
   }
+
+  // @override
+  // NewsfeedState? fromJson(Map<String, dynamic> json) {
+  //   try {
+  //     final data =
+  //         (json["data"] as List).map((e) => NewsFeedModel.fromJson(e)).toList();
+  //     return NewsfeedState(newsfeed: data, isLoading: false);
+  //   } catch (_) {
+  //     return null;
+  //   }
+  // }
+
+  // @override
+  // Map<String, dynamic>? toJson(NewsfeedState state) {
+  //   if (state.newsfeed != null) {
+  //     final data = state.newsfeed?.map((e) => e.toJson()).toList();
+  //     return {"data": data};
+  //   }
+  //   return null;
+  // }
 }
 
 class NewsfeedState extends Equatable {
-  bool isLoading;
+  final bool isLoading;
   final List<NewsFeedModel>? newsfeed;
 
-  NewsfeedState({required this.newsfeed, required this.isLoading});
+  const NewsfeedState({required this.newsfeed, required this.isLoading});
 
   @override
-  List<Object?> get props => [newsfeed];
+  List<Object?> get props => [newsfeed, isLoading];
 }

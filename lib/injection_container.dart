@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:aamako_maya/src/features/authentication/authentication_cubit/auth_cubit.dart';
 import 'package:aamako_maya/src/features/authentication/authentication_repository/authentication_repo.dart';
+import 'package:aamako_maya/src/features/authentication/cache/cache_values.dart';
 import 'package:aamako_maya/src/features/authentication/local_storage/authentication_local_storage.dart';
 import 'package:aamako_maya/src/features/video/repository/videoes_repository.dart';
 import 'package:aamako_maya/src/features/weekly_tips/repository/weekly_tips_repository.dart';
@@ -9,9 +10,12 @@ import 'package:dio/dio.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 
+import 'src/core/connection_checker/network_connection.dart';
 import 'src/features/ancs/cubit/ancs_cubit.dart';
 import 'src/features/audio/cubit/audio_cubit.dart';
+import 'src/features/authentication/authentication_cubit/logout_cubit.dart';
 import 'src/features/delivery/cubit/delivery_cubit.dart';
 import 'src/features/faqs/cubit/faqs_cubit.dart';
 import 'src/features/home/cubit/newsfeed_cubit.dart';
@@ -32,11 +36,10 @@ Future<void> init() async {
         sl(),
         sl(),
         sl(),
+        sl()
       ));
 
   sl.registerFactory<LoggedOutCubit>(() => LoggedOutCubit(sl()));
-
- 
 
   sl.registerFactory<DeliverCubit>(() => DeliverCubit(sl(), sl()));
   sl.registerFactory<MedicationCubit>(() => MedicationCubit(sl(), sl()));
@@ -48,7 +51,8 @@ Future<void> init() async {
   sl.registerFactory<AudioCubit>(() => AudioCubit(sl()));
   sl.registerFactory<SymptomsCubit>(() => SymptomsCubit(sl(), sl()));
   sl.registerFactory<OnboardBloc>(() => OnboardBloc(repo: sl()));
-  sl.registerFactory<WeeklyTipsCubit>(() => WeeklyTipsCubit(repo: sl()));
+  sl.registerFactory<WeeklyTipsCubit>(
+      () => WeeklyTipsCubit(repo: sl(), cache: sl(),network: sl()));
   sl.registerFactory<VideoCubit>(() => VideoCubit(sl()));
 
   //??Repositories ??//
@@ -64,7 +68,7 @@ Future<void> init() async {
   //??Repositories ??//
 
   //Authlocal Data
-
+  sl.registerLazySingleton<CachedValues>(() => CachedValues());
   sl.registerLazySingleton<AuthLocalData>(() => AuthLocalData());
 
   // Register secure storage
@@ -77,4 +81,12 @@ Future<void> init() async {
 
   final Dio dio = Dio();
   sl.registerLazySingleton<Dio>(() => dio);
+
+  //internet_connection_checker
+    final InternetConnectionChecker connectionChecker =
+      InternetConnectionChecker();
+
+  sl.registerLazySingleton(() => connectionChecker);
+
+  sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
 }

@@ -16,6 +16,7 @@ class WeeklyTipsRepo {
       );
       if (response.statusCode == 200) {
         final List<WeeklyTips> data = (response.data as List).map((json) => WeeklyTips.fromJson(json)).toList();
+      
         return data;
       }
     } on DioError catch (e) {

@@ -4,6 +4,7 @@ import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dar
 import 'package:aamako_maya/src/core/widgets/loading_shimmer/shimmer_loading.dart';
 import 'package:aamako_maya/src/features/video/cubit/video_cubit.dart';
 import 'package:aamako_maya/src/features/video/model/video_model.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -232,21 +233,35 @@ class _VideoListPageState extends State<VideoListPage> {
                           padding: EdgeInsets.all(10),
                           child: Row(
                             children: [
-                              Container(
-                                height: 100.w,
+                              // Container(
+                              //   height: 100.w,
+                              //   width: 100.w,
+                              //   decoration: BoxDecoration(
+                              //       borderRadius: BorderRadius.circular(18),
+                              //       image: DecorationImage(
+                              //           image: NetworkImage(
+                              //             widget.list[index].thumbnail,
+                              //           ),
+                              //           fit: BoxFit.cover)),
+                              //   child: Align(
+                              //       child: Icon(
+                              //     Icons.play_circle,
+                              //     color: Colors.black,
+                              //   )),
+                              // ),
+                              SizedBox(
                                 width: 100.w,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(18),
-                                    image: DecorationImage(
-                                        image: NetworkImage(
-                                          widget.list[index].thumbnail,
-                                        ),
-                                        fit: BoxFit.cover)),
-                                child: Align(
-                                    child: Icon(
-                                  Icons.play_circle,
-                                  color: Colors.black,
-                                )),
+                                height: 100.h,
+                                child: CachedNetworkImage(
+                                  fit: BoxFit.cover,
+                                  imageUrl: widget.list[index].thumbnail,
+                                  progressIndicatorBuilder:
+                                      (context, url, downloadProgress) =>
+                                          CircularProgressIndicator(
+                                              value: downloadProgress.progress),
+                                  errorWidget: (context, url, error) =>
+                                      Icon(Icons.error),
+                                ),
                               ),
                               Expanded(
                                 child: Column(

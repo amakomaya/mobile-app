@@ -1,52 +1,57 @@
-import 'package:aamako_maya/src/features/authentication/cache/cache_values.dart';
+import 'dart:convert';
+
+import 'package:aamako_maya/src/core/connection_checker/network_connection.dart';
 import 'package:aamako_maya/src/features/weekly_tips/model/weekly_tips_model.dart';
 import 'package:aamako_maya/src/features/weekly_tips/repository/weekly_tips_repository.dart';
-import 'package:bloc/bloc.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:equatable/equatable.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
-part 'weekly_tips_state.dart';
-part 'weekly_tips_cubit.freezed.dart';
+import '../../authentication/cache/cache_values.dart';
 
-class WeeklyTipsCubit extends HydratedCubit<WeeklyTipsState> {
+class WeeklyTipsCubit extends Cubit<WeeklyTipsState> {
   final WeeklyTipsRepo _repo;
+  final CachedValues _cache;
+  final NetworkInfo _network;
 
-  WeeklyTipsCubit({
-    required WeeklyTipsRepo repo,
-  })  : _repo = repo,
-        super(const WeeklyTipsState.initial());
+  WeeklyTipsCubit(
+      {required NetworkInfo network,
+      required WeeklyTipsRepo repo,
+      required CachedValues cache})
+      : _repo = repo,
+        _network = network,
+        _cache = cache,
+        super(WeeklyTipsState());
 
-  void getWeeklyTips() async {
+  void getWeeklyTips({bool? isRefreshed}) async {
+    emit(WeeklyTipsState(isLoading: true));
+
     try {
-      final List<WeeklyTips> response = await _repo.getWeeklyTips();
-
-      emit(WeeklyTipsState.success(
-          tips: response, isLoading: false, error: null));
+      final cache = await _cache.getWeeklyTips() as List<WeeklyTips>?;
+      if (cache == null || isRefreshed == true) {
+        final List<WeeklyTips> response = await _repo.getWeeklyTips();
+        await _cache.setWeeklyTips(response);
+        emit(WeeklyTipsState(
+            data: response,
+            error: null,
+            success: 'Successfully Fetched !',
+            isLoading: false));
+      } else {
+        emit(WeeklyTipsState(data: cache, isLoading: false, error: null));
+      }
     } catch (error) {
-      emit(state.copyWith(
-        error: "Can't fetch data at the moment",
-        isLoading: false,
-      ));
+      emit(WeeklyTipsState(
+          data: null, isLoading: false, error: error.toString()));
     }
   }
+}
 
+class WeeklyTipsState extends Equatable {
+  final List<WeeklyTips>? data;
+  final String? error;
+  final bool? isLoading;
+  final String? success;
+
+  WeeklyTipsState({this.data, this.success, this.error, this.isLoading});
   @override
-  WeeklyTipsState? fromJson(Map<String, dynamic> json) {
-
-    print(json.toString());
-    // return WeeklyTipsState.success(tips: (json["data"] as List).map((e) => e.WeeklyTips.fromJson()) );
-  }
-
-  @override
-  Map<String, dynamic>? toJson(WeeklyTipsState state) {
-    state.when(initial: (d, f) {
-      return;
-    }, success: (x, d, g) {
-       // ignore: unused_local_variable
-       final data=g.map((e) => e.toJson());
-
-       return {"data":data};
-       
-    });
-  }
+  List<Object?> get props => [data, success, error, isLoading];
 }

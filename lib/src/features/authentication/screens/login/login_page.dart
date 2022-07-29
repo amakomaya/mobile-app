@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:aamako_maya/localization_cubit/localization_cubit.dart';
 import 'package:aamako_maya/src/core/padding/padding.dart';
 import 'package:aamako_maya/src/core/widgets/border_container.dart';
 import 'package:aamako_maya/src/core/widgets/buttons/primary_action_button.dart';
@@ -10,11 +11,13 @@ import 'package:aamako_maya/src/features/authentication/model/login_request_mode
 import 'package:aamako_maya/src/features/authentication/screens/login/qr_code_page.dart';
 import 'package:aamako_maya/src/features/authentication/screens/register/register_page.dart';
 import 'package:bot_toast/bot_toast.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../l10n/locale_keys.g.dart';
 import '../../../../core/app_assets/app_assets.dart';
 import '../../../../core/snackbar/error_snackbar.dart';
 import '../../../../core/snackbar/success_snackbar.dart';
@@ -63,53 +66,18 @@ class _LoginPageState extends State<LoginPage> {
         }
 
         if (state.isAuthenticated == true) {
-          Navigator.of(context)
-              .pushAndRemoveUntil(
-                  MaterialPageRoute(
-                    builder: (ctx) => const CustomBottomNavigation(),
-                  ),
-                  (route) => false);
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (ctx) => const CustomBottomNavigation(),
+              ),
+              (route) => false);
 
-                   Timer(const Duration(seconds: 3), (){
-                
-                     BotToast.showCustomText(toastBuilder: (ds){
-
-                      return SuccessSnackBar(message: 'Successfully Logged in!!');
-
-                     });
-                  });
-              // .then((value) {
-              //   WidgetsBinding.instance.addPostFrameCallback((timeStamp) { 
-              //     BotToast.showCustomText(toastBuilder: (toast) {
-              //       return const SuccessSnackBar(
-              //         message: 'Login Successful !!',
-              //       );
-              //     });
-              //   });
-              // });
+          Timer(const Duration(seconds: 3), () {
+            BotToast.showCustomText(toastBuilder: (ds) {
+              return SuccessSnackBar(message: 'Successfully Logged in!!');
+            });
+          });
         }
-        // if (state.isLoading) {
-        //   BotToast.showLoading();
-        // }
-        // if (state.isLoading == false) {
-        //   BotToast.closeAllLoading();
-        // }
-        // if (state.isLoading == false && state.error != null) {
-        //   BotToast.showText(text: state.error ?? 'Unexpected Error Occured');
-        // }
-        // state.when(
-        //     initial: (isLoading, error) => '',
-        //     // orElse: () => '',
-
-        //     success: (isLoading, error, user) {
-        //       BotToast.closeAllLoading();
-
-        //   Navigator.of(context).pushAndRemoveUntil(
-        //       MaterialPageRoute(
-        //         builder: (ctx) => const CustomBottomNavigation(),
-        //       ),
-        //       (route) => false);
-        // });
       },
       builder: (context, state) {
         return Scaffold(
@@ -130,19 +98,31 @@ class _LoginPageState extends State<LoginPage> {
                           cacheHeight: 197,
                         ),
                       ),
-                      InkWell(
-                        onTap: () {},
-                        child: const Padding(
-                          padding: EdgeInsets.only(right: 18.0),
-                          child: ImageIcon(
+                      PopupMenuButton(
+                          icon:const ImageIcon(
                             AssetImage(
                               "assets/images/language.png",
                             ),
-                            size: 20,
                             color: Colors.red,
                           ),
-                        ),
-                      ),
+                          itemBuilder: (ctx) {
+                            return [
+                              PopupMenuItem(
+                                  onTap: () {
+                                    context
+                                        .read<AppLanguageCubit>()
+                                        .changeLocale('en', context);
+                                  },
+                                  child: Text('English')),
+                              PopupMenuItem(
+                                  onTap: () {
+                                    context
+                                        .read<AppLanguageCubit>()
+                                        .changeLocale('ne', context);
+                                  },
+                                  child: Text('Nepali')),
+                            ];
+                          })
                     ],
                   ),
                   VerticalSpace(50.h),
@@ -159,7 +139,7 @@ class _LoginPageState extends State<LoginPage> {
                       return null;
                     },
                     labelText: 'Username',
-                    hintText: 'Enter Your Phone Number/ Username',
+                    hintText: LocaleKeys.username.tr(),
                   ),
                   VerticalSpace(15.h),
                   ValueListenableBuilder(
@@ -178,7 +158,7 @@ class _LoginPageState extends State<LoginPage> {
                           },
                           focus: passwordFocus,
                           labelText: 'Password',
-                          hintText: 'Enter Your Password',
+                          hintText: LocaleKeys.password.tr(),
                           sufixTap: () {
                             obscureBtn.value = !obscureBtn.value;
                           },
@@ -200,7 +180,7 @@ class _LoginPageState extends State<LoginPage> {
                           );
                         }
                       },
-                      title: 'Login',
+                      title: LocaleKeys.login.tr(),
                     ),
                   ),
                   VerticalSpace(20.h),
@@ -222,7 +202,7 @@ class _LoginPageState extends State<LoginPage> {
                         const Icon(Icons.qr_code),
                         const HorizSpace(10),
                         Flexible(
-                          child: Text('Login With QR-code',
+                          child: Text(LocaleKeys.login.tr() + ' with QR-code',
                               style: Theme.of(context)
                                   .textTheme
                                   .labelSmall!
@@ -237,19 +217,27 @@ class _LoginPageState extends State<LoginPage> {
                   VerticalSpace(20.h),
                   Visibility(
                     visible: false,
-                    child: BorderContainer(
-                      hasBorder: true,
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      width: 380.w,
-                      child: Center(
-                        child: Text('Guest Login',
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelSmall!
-                                .copyWith(
-                                    fontSize: 18,
-                                    color: AppColors.primaryRed,
-                                    fontWeight: FontWeight.w600)),
+                    child: InkWell(
+                      onTap: () {
+                        // Navigator.of(context).pushAndRemoveUntil(
+                        //     MaterialPageRoute(
+                        //         builder: (ctx) => CustomBottomNavigation()),
+                        //     (route) => false);
+                      },
+                      child: BorderContainer(
+                        hasBorder: true,
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        width: 380.w,
+                        child: Center(
+                          child: Text(LocaleKeys.appTitle.tr(),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelSmall!
+                                  .copyWith(
+                                      fontSize: 18,
+                                      color: AppColors.primaryRed,
+                                      fontWeight: FontWeight.w600)),
+                        ),
                       ),
                     ),
                   ),
@@ -261,7 +249,7 @@ class _LoginPageState extends State<LoginPage> {
                       style: Theme.of(context).textTheme.labelSmall,
                     ),
                     TextSpan(
-                      text: 'Create an Account',
+                      text: LocaleKeys.register.tr(),
                       style: Theme.of(context).textTheme.labelMedium?.copyWith(
                             fontWeight: FontWeight.bold,
                             color: AppColors.primaryRed,
@@ -298,4 +286,10 @@ class _LoginPageState extends State<LoginPage> {
       },
     );
   }
+}
+
+class LanguageModel {
+  String title;
+  String value;
+  LanguageModel({required this.title, required this.value});
 }

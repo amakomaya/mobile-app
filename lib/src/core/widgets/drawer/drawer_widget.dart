@@ -26,6 +26,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../features/authentication/authentication_cubit/auth_cubit.dart';
+import '../../../features/authentication/authentication_cubit/logout_cubit.dart';
 import '../../../features/authentication/drawer_cubit/drawer_cubit.dart';
 import '../../../features/authentication/local_storage/authentication_local_storage.dart';
 import '../../../features/bottom_nav/bottom_navigation.dart';

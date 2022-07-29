@@ -28,7 +28,7 @@ class _AudioPageState extends State<AudioPage> {
         }
       },
       builder: (ctx, st) {
-        return st.audioModel == null
+        return (st.audioModel == null )
             ? ShimmerLoading(
                 boxHeight: 45.h,
                 itemCount: 10,

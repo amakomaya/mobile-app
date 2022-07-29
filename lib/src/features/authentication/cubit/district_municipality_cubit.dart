@@ -1,6 +1,5 @@
 import 'package:aamako_maya/src/features/authentication/model/municipality_district_model.dart';
 import 'package:bloc/bloc.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../repository/municipality_district_repository.dart';
 

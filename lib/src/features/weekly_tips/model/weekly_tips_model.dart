@@ -38,7 +38,7 @@ class WeeklyTips {
         updatedAt: DateTime.parse(json["updated_at"]),
       );
 
-  Map<dynamic, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "id": id,
         "title_en": titleEn,
         "title_np": titleNp,
