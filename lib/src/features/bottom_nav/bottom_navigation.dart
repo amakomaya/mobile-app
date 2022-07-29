@@ -112,7 +112,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                             onPressed: () {
                               context
                                   .read<VideoCubit>()
-                                  .getVideos();
+                                  .getVideos(isRefreshed: true);
 
                               context
                                   .read<NavigationIndexCubit>()

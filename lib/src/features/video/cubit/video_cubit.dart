@@ -29,9 +29,11 @@ class VideoCubit extends Cubit<VideoState> {
         emit(VideoState.success(
             videos: response, isLoading: false, error: null));
       } else {
+        print('object + lda');
         emit(VideoState.success(videos: cache, isLoading: false, error: null));
       }
-    } catch (error) {
+    } catch (error ) {
+      print(error.toString() +'eror');
       emit(state.copyWith(
         error: "Can't fetch data at the moment!",
         isLoading: false,
