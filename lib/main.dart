@@ -33,7 +33,6 @@ import 'src/features/authentication/authentication_cubit/auth_cubit.dart';
 import 'src/features/authentication/authentication_cubit/logout_cubit.dart';
 import 'src/features/authentication/cubit/district_municipality_cubit.dart';
 import 'src/features/authentication/drawer_cubit/drawer_cubit.dart';
-import 'src/features/authentication/get_all_data/cubit/fetch_all_data_cubit.dart';
 import 'src/features/bottom_nav/cubit/cubit/navigation_index_cubit.dart';
 import 'src/features/home/cubit/newsfeed_cubit.dart';
 import 'injection_container.dart' as di;

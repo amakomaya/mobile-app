@@ -1,10 +1,10 @@
 import 'dart:convert';
 
+import 'package:aamako_maya/src/features/video/model/video_model.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../../core/constant/app_constants.dart';
 import '../../weekly_tips/model/weekly_tips_model.dart';
-import '../model/user_model.dart';
 
 class CachedValues {
   Future<Box> openUserBox() async {
@@ -12,6 +12,37 @@ class CachedValues {
     final box = await Hive.openBox<Map>(Consts.user_info);
     return box;
   }
+
+  Future<Box> openVideosBox() async {
+    // Open your boxes. Optional: Give it a type.
+    final box = await Hive.openBox<Map>('videoBox');
+    return box;
+  }
+
+  //VideoList
+  getVideosList() async {
+    final box = await openVideosBox();
+
+    final data = await (box.get("videoKey"));
+
+    if (data != null) {
+      final videos =
+          (data["videos"] as List).map((e) => VideoModel.fromJson(e)).toList();
+      return videos;
+    } else {
+      return null;
+    }
+  }
+
+  setVideoList(List<VideoModel> videos) async {
+    final box = await openVideosBox();
+    await box.clear();
+    final data = videos.map((e) => e.toJson()).toList();
+
+    await box.put("videoKey", {"videos": data});
+  }
+
+  //end videoslist
 
   setWeeklyTips(List<WeeklyTips> tips) async {
     final box = await openUserBox();
@@ -24,7 +55,7 @@ class CachedValues {
   getWeeklyTips() async {
     final box = await openUserBox();
 
-    final data = (box.get(Consts.user_info_key));
+    final data = await (box.get(Consts.user_info_key));
     if (data != null) {
       final tips =
           (data["data"] as List).map((e) => WeeklyTips.fromJson(e)).toList();

@@ -18,6 +18,12 @@ class AudioPage extends StatefulWidget {
 }
 
 class _AudioPageState extends State<AudioPage> {
+
+  @override
+  void initState() {
+context.read<AudioCubit>().getAudio();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AudioCubit, AudioState>(

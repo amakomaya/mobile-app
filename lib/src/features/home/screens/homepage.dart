@@ -4,8 +4,12 @@ import 'package:aamako_maya/src/core/widgets/border_container.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
 import 'package:aamako_maya/src/core/widgets/loading_shimmer/shimmer_loading.dart';
+import 'package:aamako_maya/src/features/audio/cubit/audio_cubit.dart';
 import 'package:aamako_maya/src/features/authentication/drawer_cubit/drawer_cubit.dart';
 import 'package:aamako_maya/src/features/home/cubit/newsfeed_cubit.dart';
+import 'package:aamako_maya/src/features/video/cubit/video_cubit.dart';
+import 'package:aamako_maya/src/features/weekly_tips/cubit/weekly_tips_cubit.dart';
+import 'package:aamako_maya/src/features/weekly_tips/model/weekly_tips_model.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,7 +40,15 @@ class _HomePageState extends State<HomePage> {
     final theme = Theme.of(context);
     final Size size = MediaQuery.of(context).size;
 
-    return BlocBuilder<AuthenticationCubit, LoggedInState>(
+    return BlocConsumer<AuthenticationCubit, LoggedInState>(
+      listener: (authC, authS) {
+        if(authS.isAuthenticated==true){
+          print('object');
+          // context.read<WeeklyTipsCubit>().getWeeklyTips();
+          // context.read<AudioCubit>().getAudio();
+          // context.read<VideoCubit>().getVideos();
+        }
+      },
       builder: (authC, authS) {
         return Stack(clipBehavior: Clip.none, children: [
           // Container(

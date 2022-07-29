@@ -53,7 +53,7 @@ Future<void> init() async {
   sl.registerFactory<OnboardBloc>(() => OnboardBloc(repo: sl()));
   sl.registerFactory<WeeklyTipsCubit>(
       () => WeeklyTipsCubit(repo: sl(), cache: sl(),network: sl()));
-  sl.registerFactory<VideoCubit>(() => VideoCubit(sl()));
+  sl.registerFactory<VideoCubit>(() => VideoCubit(sl(),sl()));
 
   //??Repositories ??//
   sl.registerLazySingleton<OnboardingRepo>(() => OnboardingRepo(sl()));

@@ -14,7 +14,7 @@ class NewsfeedCubit extends Cubit<NewsfeedState> {
         super(NewsfeedState(newsfeed: null, isLoading: false));
 
   void getNewsFeed() async {
-    emit(NewsfeedState(newsfeed: null, isLoading: true));
+    emit(const NewsfeedState(newsfeed: null, isLoading: true));
     try {
       final Response response = await _dio.get(Urls.newsFeedUrl);
       if (response.statusCode == 200) {

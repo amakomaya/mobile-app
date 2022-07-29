@@ -26,6 +26,7 @@ class _VideoPageState extends State<VideoPage> {
   // late BetterPlayerController _betterPlayerController;
   @override
   void initState() {
+    // context.read<VideoCubit>().getVideos(isRefreshed: false);
     super.initState();
   }
 
@@ -50,6 +51,8 @@ class _VideoPageState extends State<VideoPage> {
             initial: (isLoading, error) =>
                 ShimmerLoading(boxHeight: 175.h, itemCount: 4),
             success: ((isLoading, error, videos) {
+
+              print(videos.length.toString() +'saas');
               final urlList = [];
               for (VideoModel path in videos) {
                 final controller = VideoPlayerController.network(path.path);

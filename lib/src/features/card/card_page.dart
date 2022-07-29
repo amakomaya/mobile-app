@@ -15,61 +15,21 @@ class CardPage extends StatefulWidget {
 }
 
 class _CardPageState extends State<CardPage> {
-    GlobalKey<FormState> formKey =  GlobalKey();
+  GlobalKey<FormState> formKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => CardCubit(AuthLocalData()),
+      create: (context) => CardCubit(AuthLocalData())..getTokenForQr(),
       child: Builder(builder: (context) {
         return BlocBuilder<CardCubit, String>(
-          buildWhen: (previous, current) => current.isNotEmpty,
           builder: (context, state) {
-            List fist = ["ds", "es", "wd"];
+            print(state + "QRCODE");
 
             return QrImage(
               data: state,
               version: QrVersions.auto,
               size: 200.sm,
-            );
-
-            List<TextEditingController> list = [];
-            for (int i = 0; i <= fist.length; i++) {
-              final s =TextEditingController();
-              list.add(s);
-            }
-
-            print(list.toString());
-
-            return Form(
-              key: formKey,
-              child: Column(children: [
-                Expanded(child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: fist.length,
-                  itemBuilder: (c, i) {
-                    return TextField(
-                      
-                      controller: list[i],
-                      onChanged: (d){
-                        print(d);
-                      },
-                      decoration: InputDecoration(
-                        
-                        
-                        
-                        label: Text(fist[i]),
-                        filled: true,
-                      ),
-                    );
-                  }),),
-                  ElevatedButton(onPressed: (){
-                    print(list[0].text);
-                    print(list[1].text);
-                    print(list[2].text);
-                  }, child: Text('Submit')),
-                  VerticalSpace(90.h),
-              ],),
             );
           },
         );

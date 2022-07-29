@@ -14,8 +14,19 @@ import 'package:flutter_html/flutter_html.dart';
 import '../../../injection_container.dart';
 import '../../core/theme/app_colors.dart';
 
-class WeeklyTipsPage extends StatelessWidget {
+class WeeklyTipsPage extends StatefulWidget {
   const WeeklyTipsPage({Key? key}) : super(key: key);
+
+  @override
+  State<WeeklyTipsPage> createState() => _WeeklyTipsPageState();
+}
+
+class _WeeklyTipsPageState extends State<WeeklyTipsPage> {
+  @override
+  void initState() {
+    context.read<WeeklyTipsCubit>().getWeeklyTips();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -4,21 +4,33 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
+import '../../authentication/cache/cache_values.dart';
+
 part 'video_state.dart';
 part 'video_cubit.freezed.dart';
 
 class VideoCubit extends Cubit<VideoState> {
   final VideosRepo _repo;
-
-  VideoCubit(VideosRepo repo)
+  final CachedValues _cache;
+  VideoCubit(VideosRepo repo, CachedValues cache)
       : _repo = repo,
-        super(VideoState.initial());
+        _cache = cache,
+        super(const VideoState.initial());
 
-  void getVideos() async {
+  void getVideos({bool? isRefreshed}) async {
+    emit(state.copyWith(isLoading: true));
     try {
-      final List<VideoModel> response = await _repo.getVideos();
+      final cache = await _cache.getVideosList() as List<VideoModel>?;
+      print((cache?[0].descriptionEn.toString() ?? '') + 'GGG');
+      if (cache == null || isRefreshed == true) {
+        final List<VideoModel> response = await _repo.getVideos();
 
-      emit(VideoState.success(videos: response, isLoading: false, error: null));
+        await _cache.setVideoList(response);
+        emit(VideoState.success(
+            videos: response, isLoading: false, error: null));
+      } else {
+        emit(VideoState.success(videos: cache, isLoading: false, error: null));
+      }
     } catch (error) {
       emit(state.copyWith(
         error: "Can't fetch data at the moment!",
@@ -26,16 +38,4 @@ class VideoCubit extends Cubit<VideoState> {
       ));
     }
   }
-
-  // @override
-  // VideoState? fromJson(Map<String, dynamic> json) {
-  //   try {
-  //     final data =
-  //         (json["videos"] as List).map((e) => VideoModel.fromJson(e)).toList();
-  //     return VideoState.success(videos: data);
-  //   } catch (_) {
-  //     return null;
-  //   }
-  // }
-
 }

@@ -78,12 +78,11 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                               context
                                   .read<NavigationIndexCubit>()
                                   .changeIndex(index: 0, title: "Home");
-                                  context
-                                              .read<DrawerCubit>()
-                                              .checkDrawerSelection(0);
+                              context
+                                  .read<DrawerCubit>()
+                                  .checkDrawerSelection(0);
                             },
                           ),
-                          
                           IconButton(
                             iconSize: 35.sm,
                             padding: const EdgeInsets.only(right: 28.0),
@@ -97,10 +96,9 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                                   .read<NavigationIndexCubit>()
                                   .changeIndex(index: 1, title: "Audio");
 
-                              context.read<AudioCubit>().getAudio();
                               context
-                                              .read<DrawerCubit>()
-                                              .checkDrawerSelection(-1);
+                                  .read<DrawerCubit>()
+                                  .checkDrawerSelection(-1);
                             },
                           ),
                           IconButton(
@@ -113,13 +111,15 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                             ),
                             onPressed: () {
                               context
+                                  .read<VideoCubit>()
+                                  .getVideos();
+
+                              context
                                   .read<NavigationIndexCubit>()
                                   .changeIndex(index: 2, title: "Video");
-                                  context
-                                              .read<DrawerCubit>()
-                                              .checkDrawerSelection(-1);
-
-                              context.read<VideoCubit>().getVideos();
+                              context
+                                  .read<DrawerCubit>()
+                                  .checkDrawerSelection(-1);
                             },
                           ),
                           IconButton(
@@ -136,13 +136,10 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                             onPressed: () {
                               context
                                   .read<NavigationIndexCubit>()
-                                  .changeIndex(
-                                      index: 3, title: "Weekly Tips");
-                                      context
-                                              .read<DrawerCubit>()
-                                              .checkDrawerSelection(-1);
-
-                              context.read<WeeklyTipsCubit>().getWeeklyTips();
+                                  .changeIndex(index: 3, title: "Weekly Tips");
+                              context
+                                  .read<DrawerCubit>()
+                                  .checkDrawerSelection(-1);
                             },
                           )
                         ],
