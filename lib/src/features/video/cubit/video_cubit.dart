@@ -21,7 +21,6 @@ class VideoCubit extends Cubit<VideoState> {
     emit(state.copyWith(isLoading: true));
     try {
       final cache = await _cache.getVideosList() as List<VideoModel>?;
-      print((cache?[0].descriptionEn.toString() ?? '') + 'GGG');
       if (cache == null || isRefreshed == true) {
         final List<VideoModel> response = await _repo.getVideos();
 
@@ -29,11 +28,9 @@ class VideoCubit extends Cubit<VideoState> {
         emit(VideoState.success(
             videos: response, isLoading: false, error: null));
       } else {
-        print('object + lda');
         emit(VideoState.success(videos: cache, isLoading: false, error: null));
       }
     } catch (error ) {
-      print(error.toString() +'eror');
       emit(state.copyWith(
         error: "Can't fetch data at the moment!",
         isLoading: false,

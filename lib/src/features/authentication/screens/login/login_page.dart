@@ -22,6 +22,7 @@ import '../../../../core/app_assets/app_assets.dart';
 import '../../../../core/snackbar/error_snackbar.dart';
 import '../../../../core/snackbar/success_snackbar.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/buttons/localization_button.dart';
 import '../../../bottom_nav/bottom_navigation.dart';
 import '../../../home/screens/homepage.dart';
 import '../../authentication_cubit/auth_cubit.dart';
@@ -74,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
 
           Timer(const Duration(seconds: 3), () {
             BotToast.showCustomText(toastBuilder: (ds) {
-              return SuccessSnackBar(message: 'Successfully Logged in!!');
+              return const SuccessSnackBar(message: 'Successfully Logged in!!');
             });
           });
         }
@@ -98,31 +99,10 @@ class _LoginPageState extends State<LoginPage> {
                           cacheHeight: 197,
                         ),
                       ),
-                      PopupMenuButton(
-                          icon:const ImageIcon(
-                            AssetImage(
-                              "assets/images/language.png",
-                            ),
-                            color: Colors.red,
-                          ),
-                          itemBuilder: (ctx) {
-                            return [
-                              PopupMenuItem(
-                                  onTap: () {
-                                    context
-                                        .read<AppLanguageCubit>()
-                                        .changeLocale('en', context);
-                                  },
-                                  child: Text('English')),
-                              PopupMenuItem(
-                                  onTap: () {
-                                    context
-                                        .read<AppLanguageCubit>()
-                                        .changeLocale('ne', context);
-                                  },
-                                  child: Text('Nepali')),
-                            ];
-                          })
+                       const LocalizationButton(
+                    color: AppColors.primaryRed,
+                   ),
+                    
                     ],
                   ),
                   VerticalSpace(50.h),
@@ -131,15 +111,15 @@ class _LoginPageState extends State<LoginPage> {
                     nextFocus: passwordFocus,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Username can\'t be empty';
+                        return LocaleKeys.usernamenotempty.tr();
                       }
                       if (value.length < 4) {
-                        return 'Username must at least be 5 chars';
+                        return LocaleKeys.leastcharsforusername.tr();
                       }
                       return null;
                     },
-                    labelText: 'Username',
-                    hintText: LocaleKeys.username.tr(),
+                    labelText: LocaleKeys.username.tr(),
+                    hintText: LocaleKeys.usernameHint.tr(),
                   ),
                   VerticalSpace(15.h),
                   ValueListenableBuilder(
@@ -149,16 +129,16 @@ class _LoginPageState extends State<LoginPage> {
                           controller: passwordController,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Password can\'t not be empty';
+                              return LocaleKeys.passwordnotempty.tr();
                             }
                             if (value.length < 5) {
-                              return 'Password must contain more than 5 characters ';
+                              return LocaleKeys.leastcharsforpassword.tr();
                             }
                             return null;
                           },
                           focus: passwordFocus,
-                          labelText: 'Password',
-                          hintText: LocaleKeys.password.tr(),
+                          labelText: LocaleKeys.password.tr(),
+                          hintText: LocaleKeys.passwordHint.tr(),
                           sufixTap: () {
                             obscureBtn.value = !obscureBtn.value;
                           },
@@ -202,7 +182,7 @@ class _LoginPageState extends State<LoginPage> {
                         const Icon(Icons.qr_code),
                         const HorizSpace(10),
                         Flexible(
-                          child: Text(LocaleKeys.login.tr() + ' with QR-code',
+                          child: Text(LocaleKeys.loginwithqr.tr(),
                               style: Theme.of(context)
                                   .textTheme
                                   .labelSmall!
@@ -229,7 +209,7 @@ class _LoginPageState extends State<LoginPage> {
                         padding: const EdgeInsets.symmetric(vertical: 20),
                         width: 380.w,
                         child: Center(
-                          child: Text(LocaleKeys.appTitle.tr(),
+                          child: Text('',
                               style: Theme.of(context)
                                   .textTheme
                                   .labelSmall!
@@ -245,7 +225,7 @@ class _LoginPageState extends State<LoginPage> {
                   RichText(
                       text: TextSpan(children: [
                     TextSpan(
-                      text: 'Not registered yet?  ',
+                      text: LocaleKeys.notregisteryet.tr(),
                       style: Theme.of(context).textTheme.labelSmall,
                     ),
                     TextSpan(
@@ -257,25 +237,25 @@ class _LoginPageState extends State<LoginPage> {
                       recognizer: TapGestureRecognizer()
                         ..onTap = () => Navigator.of(context).push(
                             MaterialPageRoute(
-                                builder: (ctx) => RegisterPage())),
+                                builder: (ctx) => const RegisterPage())),
                     ),
                   ])),
                   VerticalSpace(50.h),
                   RichText(
                       text: TextSpan(children: [
                     TextSpan(
-                      text: 'Call ',
+                      text: LocaleKeys.call.tr(),
                       style: Theme.of(context).textTheme.labelSmall,
                     ),
                     TextSpan(
-                        text: '9860-3434-3434',
+                        text: LocaleKeys.number.tr(),
                         style:
                             Theme.of(context).textTheme.labelMedium?.copyWith(
                                   fontWeight: FontWeight.w500,
                                   color: AppColors.primaryRed,
                                 )),
                     TextSpan(
-                        text: '  for an enquiry',
+                        text: LocaleKeys.forenquiry.tr(),
                         style: Theme.of(context).textTheme.labelSmall),
                   ]))
                 ],

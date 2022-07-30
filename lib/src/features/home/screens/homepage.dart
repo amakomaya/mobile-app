@@ -1,3 +1,4 @@
+import 'package:aamako_maya/l10n/locale_keys.g.dart';
 import 'package:aamako_maya/src/core/app_assets/app_assets.dart';
 import 'package:aamako_maya/src/core/theme/app_colors.dart';
 import 'package:aamako_maya/src/core/widgets/border_container.dart';
@@ -10,6 +11,7 @@ import 'package:aamako_maya/src/features/home/cubit/newsfeed_cubit.dart';
 import 'package:aamako_maya/src/features/video/cubit/video_cubit.dart';
 import 'package:aamako_maya/src/features/weekly_tips/cubit/weekly_tips_cubit.dart';
 import 'package:aamako_maya/src/features/weekly_tips/model/weekly_tips_model.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -152,7 +154,7 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             Expanded(
                               child: Text(
-                                'You have not completed your profile!! Please Complete Your Profile First !!',
+                                LocaleKeys.completeProfile.tr(),
                                 style: theme.textTheme.labelMedium?.copyWith(
                                   color: Colors.white,
                                 ),
@@ -167,7 +169,7 @@ class _HomePageState extends State<HomePage> {
                                       .checkDrawerSelection(1);
                                   context
                                       .read<NavigationIndexCubit>()
-                                      .changeIndex(index: 10, title: "Profile");
+                                      .changeIndex(index: 10, title: LocaleKeys.profile.tr());
                                 },
                                 child: Text('Go to profile',
                                     style: theme.textTheme.bodySmall?.copyWith(

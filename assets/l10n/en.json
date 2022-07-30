@@ -1,8 +1,30 @@
 {
-    "appTitle": "Aamako Maya",
+  
     "login":"Log In",
-    "username":"Enter Your Phone Number/Username",
-    "password":"Enter Your Password",
-    "register":"Create an Account"
+    "username":"Username",
+    "password":"Password",
+    "completeProfile":"You have not completed your profile!! Please complete your profile first !!",
+    "usernameHint":"Enter Your Phone Number/Username",
+    "passwordHint":"Enter Your Password",
+    "register":"Create an Account",
+    "usernamenotempty":"Username can not be empty",
+    "passwordnotempty":"Password can not be empty",
+    "loginwithqr":"Login with QR code",
+    "notregisteryet":"Not registered yet? ",
+    "createaccount":"Create an account",
+    "call":"Call ",
+    "number":"९८६o-३४३४-३४३४",
+    "forenquiry":" for an enquiry",
+    "leastcharsforusername":"Username must be at least 5 characters",
+    "leastcharsforpassword":"Password must be at least 5 characters",
+    "home":"Home",
+    "audio":"Audio",
+    "video":"Video",
+    "weeklytips":"Weekly Tips",
+    "profile":"Profile",
+    "card":"Card",
+    "symptoms":"Symptoms Assessment",
+    "appointment":"Appointment",
+    "healthreport":"Health Reports"
 
   }

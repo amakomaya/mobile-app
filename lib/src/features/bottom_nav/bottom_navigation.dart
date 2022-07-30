@@ -12,11 +12,14 @@ import 'package:aamako_maya/src/features/medication/screen/medicationpage.dart';
 import 'package:aamako_maya/src/features/pnc/screens/pnc_page.dart';
 import 'package:aamako_maya/src/features/video/screens/video_page.dart';
 import 'package:bot_toast/bot_toast.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../l10n/locale_keys.g.dart';
+import '../../core/widgets/buttons/localization_button.dart';
 import '../../core/widgets/drawer/drawer_widget.dart';
 import '../audio/cubit/audio_cubit.dart';
 import '../audio/screens/audio_page.dart';
@@ -24,6 +27,7 @@ import '../authentication/drawer_cubit/drawer_cubit.dart';
 import '../card/card_page.dart';
 import '../home/screens/homepage.dart';
 import '../shop/shop_page.dart';
+import '../symptoms/screen/symptomspage.dart';
 import '../video/cubit/video_cubit.dart';
 import '../weekly_tips/cubit/weekly_tips_cubit.dart';
 import '../weekly_tips/weekly_tips_page.dart';
@@ -75,9 +79,8 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                                   state.index == 0 ? Colors.red : Colors.grey,
                             ),
                             onPressed: () {
-                              context
-                                  .read<NavigationIndexCubit>()
-                                  .changeIndex(index: 0, title: "Home");
+                              context.read<NavigationIndexCubit>().changeIndex(
+                                  index: 0, title: LocaleKeys.home.tr());
                               context
                                   .read<DrawerCubit>()
                                   .checkDrawerSelection(0);
@@ -92,9 +95,8 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                                   state.index == 1 ? Colors.red : Colors.grey,
                             ),
                             onPressed: () {
-                              context
-                                  .read<NavigationIndexCubit>()
-                                  .changeIndex(index: 1, title: "Audio");
+                              context.read<NavigationIndexCubit>().changeIndex(
+                                  index: 1, title: LocaleKeys.audio.tr());
 
                               context
                                   .read<DrawerCubit>()
@@ -114,9 +116,8 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                                   .read<VideoCubit>()
                                   .getVideos(isRefreshed: true);
 
-                              context
-                                  .read<NavigationIndexCubit>()
-                                  .changeIndex(index: 2, title: "Video");
+                              context.read<NavigationIndexCubit>().changeIndex(
+                                  index: 2, title: LocaleKeys.video.tr());
                               context
                                   .read<DrawerCubit>()
                                   .checkDrawerSelection(-1);
@@ -134,9 +135,8 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                                   state.index == 3 ? Colors.red : Colors.grey,
                             ),
                             onPressed: () {
-                              context
-                                  .read<NavigationIndexCubit>()
-                                  .changeIndex(index: 3, title: "Weekly Tips");
+                              context.read<NavigationIndexCubit>().changeIndex(
+                                  index: 3, title: LocaleKeys.weeklytips.tr());
                               context
                                   .read<DrawerCubit>()
                                   .checkDrawerSelection(-1);
@@ -154,8 +154,19 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                 children: [
                   PrimaryAppBar(
                     scaffoldKey: _scaffoldKey,
-                    title: state.appbarTitle,
+                    title: LocaleKeys.home.tr(),
                   ),
+                  
+                //  Row(children: [
+                //    Container(
+                //     height: 50,
+                //     color: Colors.red,
+                //     child: Text(state.appbarTitle.tr()),
+                //   ),
+                //    LocalizationButton(
+                //     color: AppColors.black,
+                //    ),
+                //  ],),
                   Padding(
                     padding: EdgeInsets.only(top: 70.h),
                     child: IndexedStack(
@@ -184,14 +195,15 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                         CardPage(),
 
                         //faq=12
-                        FaqsPage()
+                        FaqsPage(),
 
                         //syztemassetment index=13
+                        SymptomsPAge()
 
                         //
                       ],
                     ),
-                  )
+                  ),
                 ],
               );
             },

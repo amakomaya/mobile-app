@@ -1,4 +1,3 @@
-
 import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
 import 'package:aamako_maya/src/features/authentication/local_storage/authentication_local_storage.dart';
 import 'package:aamako_maya/src/features/authentication/screens/login/login_page.dart';
@@ -44,7 +43,6 @@ class _SplashPageState extends State<SplashPage> {
               ));
         }
       } else {
-        print('AAA');
         context.read<AuthenticationCubit>().loginWithToken(token);
       }
     } catch (e) {
@@ -61,6 +59,13 @@ class _SplashPageState extends State<SplashPage> {
     _checkIfOnboard();
 
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    Hive.close();
+
+    super.dispose();
   }
 
   @override

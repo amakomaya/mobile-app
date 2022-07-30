@@ -19,12 +19,14 @@ import 'package:aamako_maya/src/features/medication/screen/medicationpage.dart';
 import 'package:aamako_maya/src/features/pnc/screens/pnc_page.dart';
 import 'package:aamako_maya/src/features/symptoms/screen/symptomspage.dart';
 import 'package:bot_toast/bot_toast.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../l10n/locale_keys.g.dart';
 import '../../../features/authentication/authentication_cubit/auth_cubit.dart';
 import '../../../features/authentication/authentication_cubit/logout_cubit.dart';
 import '../../../features/authentication/drawer_cubit/drawer_cubit.dart';
@@ -109,7 +111,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               VerticalSpace(5.h),
                               Align(
                                   alignment: Alignment.topCenter,
-                                  child: Text(authSo.user?.name??'',
+                                  child: Text(authSo.user?.name ?? '',
                                       style: theme.textTheme.titleSmall
                                           ?.copyWith(
                                               fontSize: 34,
@@ -139,14 +141,14 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                           context
                                               .read<NavigationIndexCubit>()
                                               .changeIndex(
-                                                  index: 0, title: 'Home');
+                                                  index: 0, title: LocaleKeys.home.tr());
                                         },
                                         leading: Image.asset(
                                           AppAssets.homeIcon,
                                           height: 30.sm,
                                         ),
                                         title: Text(
-                                          'Home',
+                                        LocaleKeys.home.tr(),
                                           style: theme.textTheme.titleSmall
                                               ?.copyWith(
                                                   color: state.index == 0
@@ -164,14 +166,13 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                           context
                                               .read<NavigationIndexCubit>()
                                               .changeIndex(
-                                                  index: 10,
-                                                  title: 'Profile');
+                                                  index: 10, title: LocaleKeys.profile.tr());
                                         },
                                         leading: Image.asset(
                                           AppAssets.profileIcon,
                                           height: 30.sm,
                                         ),
-                                        title: Text('Profile',
+                                        title: Text(LocaleKeys.profile.tr(),
                                             style: theme.textTheme.titleSmall
                                                 ?.copyWith(
                                                     color: state.index == 1
@@ -190,13 +191,13 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                           context
                                               .read<NavigationIndexCubit>()
                                               .changeIndex(
-                                                  index: 11, title: 'Card');
+                                                  index: 11, title: LocaleKeys.card.tr());
                                         },
                                         leading: Image.asset(
                                           AppAssets.cardIcon,
                                           height: 30.sm,
                                         ),
-                                        title: Text('Card',
+                                        title: Text(LocaleKeys.card.tr(),
                                             style: theme.textTheme.titleSmall
                                                 ?.copyWith(
                                                     color: state.index == 2
@@ -206,20 +207,21 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                       //
                                       ListTile(
                                         onTap: () {
+                                          Navigator.pop(context);
                                           context
                                               .read<DrawerCubit>()
                                               .checkDrawerSelection(3);
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      SymptomsPAge()));
+                                          context
+                                              .read<NavigationIndexCubit>()
+                                              .changeIndex(
+                                                  index: 13,
+                                                  title: LocaleKeys.symptoms.tr());
                                         },
                                         leading: Image.asset(
                                           AppAssets.symptomIcon,
                                           height: 30.sm,
                                         ),
-                                        title: Text('Symptoms Assessment',
+                                        title: Text(LocaleKeys.symptoms.tr(),
                                             style: theme.textTheme.titleSmall
                                                 ?.copyWith(
                                                     color: state.index == 3
@@ -237,7 +239,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                           AppAssets.appoitnmentIcon,
                                           height: 30.sm,
                                         ),
-                                        title: Text('Appointment',
+                                        title: Text(LocaleKeys.appointment.tr(),
                                             style: theme.textTheme.titleSmall
                                                 ?.copyWith(
                                                     color: state.index == 4
@@ -246,18 +248,16 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                       ),
                                       //health Report
                                       ExpansionTile(
-                                        initiallyExpanded:
-                                            (state.index! > 4 &&
-                                                    state.index! < 10)
-                                                ? true
-                                                : false,
+                                        initiallyExpanded: (state.index! > 4 &&
+                                                state.index! < 10)
+                                            ? true
+                                            : false,
                                         leading: Image.asset(
                                           AppAssets.healthreportIcon,
                                           height: 30.sm,
                                         ),
-                                        title: Text('Health Report',
-                                            style:
-                                                theme.textTheme.titleSmall),
+                                        title: Text(LocaleKeys.healthreport.tr(),
+                                            style: theme.textTheme.titleSmall),
                                         children: [
                                           ListTile(
                                             onTap: () {
@@ -270,11 +270,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                                   .checkDrawerSelection(5);
 
                                               context
-                                                  .read<
-                                                      NavigationIndexCubit>()
+                                                  .read<NavigationIndexCubit>()
                                                   .changeIndex(
                                                       index: 5, title: 'ANC');
-                                              
                                             },
                                             title: Padding(
                                               padding: const EdgeInsets.only(
@@ -287,8 +285,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                                                   5
                                                               ? AppColors
                                                                   .primaryRed
-                                                              : Colors
-                                                                  .black)),
+                                                              : Colors.black)),
                                             ),
                                           ),
                                           ListTile(
@@ -299,8 +296,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                               Navigator.pop(context);
 
                                               context
-                                                  .read<
-                                                      NavigationIndexCubit>()
+                                                  .read<NavigationIndexCubit>()
                                                   .changeIndex(
                                                       index: 6,
                                                       title: 'Delivery Page');
@@ -316,8 +312,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                                                   6
                                                               ? AppColors
                                                                   .primaryRed
-                                                              : Colors
-                                                                  .black)),
+                                                              : Colors.black)),
                                             ),
                                           ),
                                           ListTile(
@@ -328,8 +323,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                               Navigator.pop(context);
 
                                               context
-                                                  .read<
-                                                      NavigationIndexCubit>()
+                                                  .read<NavigationIndexCubit>()
                                                   .changeIndex(
                                                       index: 7,
                                                       title: 'Medication');
@@ -345,8 +339,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                                                   7
                                                               ? AppColors
                                                                   .primaryRed
-                                                              : Colors
-                                                                  .black)),
+                                                              : Colors.black)),
                                             ),
                                           ),
                                           ListTile(
@@ -357,12 +350,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                               Navigator.pop(context);
 
                                               context
-                                                  .read<
-                                                      NavigationIndexCubit>()
+                                                  .read<NavigationIndexCubit>()
                                                   .changeIndex(
                                                       index: 8,
-                                                      title:
-                                                          'Postnatal Care');
+                                                      title: 'Postnatal Care');
                                             },
                                             title: Padding(
                                               padding: const EdgeInsets.only(
@@ -375,8 +366,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                                                   8
                                                               ? AppColors
                                                                   .primaryRed
-                                                              : Colors
-                                                                  .black)),
+                                                              : Colors.black)),
                                             ),
                                           ),
                                           ListTile(
@@ -387,8 +377,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                               Navigator.pop(context);
 
                                               context
-                                                  .read<
-                                                      NavigationIndexCubit>()
+                                                  .read<NavigationIndexCubit>()
                                                   .changeIndex(
                                                       index: 9,
                                                       title: 'Lab Test');
@@ -404,8 +393,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                                                   9
                                                               ? AppColors
                                                                   .primaryRed
-                                                              : Colors
-                                                                  .black)),
+                                                              : Colors.black)),
                                             ),
                                           ),
                                         ],
@@ -456,8 +444,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                       Align(
                                         alignment: Alignment.bottomLeft,
                                         child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 12.0),
+                                          padding:
+                                              const EdgeInsets.only(left: 12.0),
                                           child: TextButton.icon(
                                               label: Text(
                                                 'Logout',

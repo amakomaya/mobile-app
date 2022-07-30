@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../padding/padding.dart';
 import '../../theme/app_colors.dart';
+import '../buttons/localization_button.dart';
 import '../helper_widgets/blank_space.dart';
 
 class PrimaryAppBar extends StatelessWidget {
@@ -61,20 +62,19 @@ class PrimaryAppBar extends StatelessWidget {
                       style: Theme.of(context).textTheme.displaySmall,
                     ),
                     const Spacer(),
-                    ImageIcon(
-                      AssetImage("assets/images/notification.png"),
-                      size: 20.sm,
-                    ),
-                    HorizSpace(10.w),
-                    ImageIcon(
-                      AssetImage("assets/images/siren.png"),
-                      size: 20.sm,
-                    ),
-                    HorizSpace(10.w),
-                    ImageIcon(
-                      AssetImage("assets/images/language.png"),
-                      size: 20.sm,
-                    ),
+                    // ImageIcon(
+                    //   AssetImage("assets/images/notification.png"),
+                    //   size: 20.sm,
+                    // ),
+                    // HorizSpace(20.w),
+                    // ImageIcon(
+                    //   AssetImage("assets/images/siren.png"),
+                    //   size: 20.sm,
+                    // ),
+                    // HorizSpace(20.w),
+                   const LocalizationButton(
+                    color: AppColors.white,
+                   ),
                   ],
                 )
               : unAuthChild,
