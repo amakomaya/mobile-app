@@ -8,6 +8,7 @@ import 'package:aamako_maya/src/core/widgets/loading_shimmer/shimmer_loading.dar
 import 'package:aamako_maya/src/features/audio/cubit/audio_cubit.dart';
 import 'package:aamako_maya/src/features/authentication/drawer_cubit/drawer_cubit.dart';
 import 'package:aamako_maya/src/features/home/cubit/newsfeed_cubit.dart';
+import 'package:aamako_maya/src/features/home/screens/home_audio_player.dart';
 import 'package:aamako_maya/src/features/video/cubit/video_cubit.dart';
 import 'package:aamako_maya/src/features/weekly_tips/cubit/weekly_tips_cubit.dart';
 import 'package:aamako_maya/src/features/weekly_tips/model/weekly_tips_model.dart';
@@ -44,7 +45,7 @@ class _HomePageState extends State<HomePage> {
 
     return BlocConsumer<AuthenticationCubit, LoggedInState>(
       listener: (authC, authS) {
-        if(authS.isAuthenticated==true){
+        if (authS.isAuthenticated == true) {
           print('object');
           // context.read<WeeklyTipsCubit>().getWeeklyTips();
           // context.read<AudioCubit>().getAudio();
@@ -130,25 +131,6 @@ class _HomePageState extends State<HomePage> {
                         padding: EdgeInsets.symmetric(
                             vertical: 20.h, horizontal: 10.w),
                         width: 390.w,
-
-                        // child: RichText(
-                        //   text: TextSpan(
-                        //       text: 'It looks like you have not completed profile ? ',
-                        //       children: [
-                        //         TextSpan(
-                        //             recognizer: TapGestureRecognizer()
-                        //               ..onTap = () {
-                        //                 context
-                        //                     .read<NavigationIndexCubit>()
-                        //                     .changeIndex(
-                        //                         index: 10, title: "Profile");
-                        //               },
-                        //             text:
-                        //                 ' Complete Now !!',
-                        //             style: TextStyle(
-                        //                 decoration: TextDecoration.underline))
-                        //       ]),
-                        // ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -169,7 +151,9 @@ class _HomePageState extends State<HomePage> {
                                       .checkDrawerSelection(1);
                                   context
                                       .read<NavigationIndexCubit>()
-                                      .changeIndex(index: 10, title: LocaleKeys.profile.tr());
+                                      .changeIndex(
+                                          index: 10,
+                                          title: LocaleKeys.profile.tr());
                                 },
                                 child: Text('Go to profile',
                                     style: theme.textTheme.bodySmall?.copyWith(
@@ -341,6 +325,12 @@ class _HomePageState extends State<HomePage> {
                                     radius: 20,
                                     width: 380.w,
                                     color: Colors.black,
+                                    decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                            image: NetworkImage(state
+                                                    .newsfeed?[index]
+                                                    .urlToImage ??
+                                                ''))),
                                     child: const Center(
                                       child: Icon(
                                         Icons.play_circle_sharp,
@@ -368,21 +358,29 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   VerticalSpace(20.h),
                                   //audio container
-                                  ShadowContainer(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10),
-                                    radius: 25,
-                                    color: Colors.white,
-                                    width: 380.w,
-                                    child: Row(children: [
-                                      Image.asset(AppAssets.musicIcon),
-                                      Expanded(
-                                          child: Text(
-                                        state.newsfeed?[index].url ??
-                                            'Unknown.mp3',
-                                        style: theme.textTheme.labelSmall,
-                                      ))
-                                    ]),
+                                  InkWell(
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  HomeAudioPlayerPage()));
+                                    },
+                                    child: ShadowContainer(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
+                                      radius: 25,
+                                      color: Colors.white,
+                                      width: 380.w,
+                                      child: Row(children: [
+                                        Image.asset(AppAssets.musicIcon),
+                                        Expanded(
+                                            child: Text(
+                                          state.newsfeed?[index].url ??
+                                              'Unknown.mp3',
+                                          style: theme.textTheme.labelSmall,
+                                        ))
+                                      ]),
+                                    ),
                                   ),
                                 ],
                               );
@@ -398,16 +396,6 @@ class _HomePageState extends State<HomePage> {
         ]);
       },
     );
-    // return SafeArea(
-    //   bottom: false,
-    //   child: Scaffold(
-    //     // backgroundColor: Colors.tra,
-    //     // drawer: DrawerWidget(),
-    //     body: Builder(builder: (ctx) {
-    //       return
-    //     }),
-    //   ),
-    // );
   }
 }
 

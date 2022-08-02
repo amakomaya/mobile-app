@@ -148,65 +148,65 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
               },
             );
           }),
-          body: BlocBuilder<NavigationIndexCubit, NavigationIndexState>(
-            builder: (context, state) {
-              return Stack(
-                children: [
-                  PrimaryAppBar(
-                    scaffoldKey: _scaffoldKey,
-                    title: LocaleKeys.home.tr(),
-                  ),
+          body: Builder(
+            builder: (context) {
+              return BlocBuilder<NavigationIndexCubit, NavigationIndexState>(
+                builder: (navCont, navState) {
+                  print(navState.appbarTitle +'kk' );
+
+                print(LocaleKeys.audio);
+                  return Stack(
+                    children: [
+
+                      
+                      PrimaryAppBar(
+                        scaffoldKey: _scaffoldKey,
+                        title:navState.appbarTitle,
+                      ),
+                     
                   
-                //  Row(children: [
-                //    Container(
-                //     height: 50,
-                //     color: Colors.red,
-                //     child: Text(state.appbarTitle.tr()),
-                //   ),
-                //    LocalizationButton(
-                //     color: AppColors.black,
-                //    ),
-                //  ],),
-                  Padding(
-                    padding: EdgeInsets.only(top: 70.h),
-                    child: IndexedStack(
-                      alignment: Alignment.center,
-                      index: state.index,
-                      children: const [
-                        HomePage(),
-                        AudioPage(),
-                        VideoPage(),
-                        WeeklyTipsPage(),
-                        ShopPage(),
-                        //index =5
-                        AncsPage(),
-                        DeliveryPage(),
-                        MedicationPage(),
-                        PncsPage(),
+                      Padding(
+                        padding: EdgeInsets.only(top: 70.h),
+                        child: IndexedStack(
+                          alignment: Alignment.center,
+                          index: navState.index,
+                          children: const [
+                            HomePage(),
+                            AudioPage(),
+                            VideoPage(),
+                            WeeklyTipsPage(),
+                            ShopPage(),
+                            //index =5
+                            AncsPage(),
+                            DeliveryPage(),
+                            MedicationPage(),
+                            PncsPage(),
 
-                        ///index 9
-                        Labtestpage(),
+                            ///index 9
+                            Labtestpage(),
 
-                        //profile index=10
-                        CompleteProfileSection(),
+                            //profile index=10
+                            CompleteProfileSection(),
 
-                        //card index =11
+                            //card index =11
 
-                        CardPage(),
+                            CardPage(),
 
-                        //faq=12
-                        FaqsPage(),
+                            //faq=12
+                            FaqsPage(),
 
-                        //syztemassetment index=13
-                        SymptomsPAge()
+                            //syztemassetment index=13
+                            SymptomsPAge()
 
-                        //
-                      ],
-                    ),
-                  ),
-                ],
+                            //
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                },
               );
-            },
+            }
           ),
           floatingActionButton:
               BlocBuilder<NavigationIndexCubit, NavigationIndexState>(

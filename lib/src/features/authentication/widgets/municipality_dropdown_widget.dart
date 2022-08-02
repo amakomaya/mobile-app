@@ -12,18 +12,20 @@ class MunicipalityDropdownListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<DistrictFieldToggleCubit, int>(
-      listener: (ctx, id) {
-      },
+      listener: (ctx, id) {},
       builder: (ctx, id) {
         return BlocConsumer<DistrictMunicipalityCubit,
             DistrictMunicipalityState>(
           listener: (context, state) {},
           builder: (context, state) {
-            final List<MunicipalityModel> municipalityList =
-                state.municipalityModelList.where((element) => int.parse(element.districtId!)==id).toList();
+            final List<MunicipalityModel> municipalityList = state
+                .municipalityModelList
+                .where((element) => int.parse(element.districtId!) == id)
+                .toList();
 
             String? selectedItem;
             return DropdownButton<String>(
+              borderRadius: BorderRadius.circular(33),
               isExpanded: true,
               onChanged: ((value) {
                 selectedItem = value;

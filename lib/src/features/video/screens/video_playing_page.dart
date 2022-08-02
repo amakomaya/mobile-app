@@ -130,6 +130,26 @@ class _VideoPlayingPageState extends State<VideoPlayingPage> {
           //      );
           //    }
           //  ),
+          ValueListenableBuilder(
+              valueListenable: duration,
+              builder: (context, r, t) {
+                return ValueListenableBuilder(
+                    valueListenable: position,
+                    builder: (context, m, j) {
+                      return Slider(
+                        thumbColor: Colors.white,
+                        activeColor: AppColors.primaryRed,
+                        inactiveColor: AppColors.primaryRed.withOpacity(0.2),
+                        max: duration.value.inSeconds.toDouble(),
+                        min: 0,
+                        value: position.value.inSeconds.toDouble(),
+                        onChanged: (double value) async {
+                          final position = Duration(seconds: value.toInt());
+                          await _controller.seekTo(position);
+                        },
+                      );
+                    });
+              }),
           Padding(
             padding: defaultPadding,
             child: Row(

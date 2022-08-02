@@ -1,4 +1,6 @@
 import 'package:aamako_maya/src/core/padding/padding.dart';
+import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
+import 'package:aamako_maya/src/core/widgets/textfield/primary_textfield.dart';
 import 'package:aamako_maya/src/features/authentication/cubit/district_municipality_cubit.dart';
 import 'package:aamako_maya/src/features/authentication/cubit/register_cubit.dart';
 import 'package:aamako_maya/src/features/authentication/model/municipality_district_model.dart';
@@ -33,67 +35,119 @@ class _CompleteProfileSectionState extends State<CompleteProfileSection> {
       TextEditingController(text: DateTime.now().toString());
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-            appBar: AppBar(),
-            body: Column(
-              children: [
-                Expanded(
-                    child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      TextField(
-                        controller: _name,
-                        decoration: const InputDecoration(
-                          label: Text('Name'),
-                        ),
-                      ),
-                      TextField(
-                        controller: _age,
-                        decoration: InputDecoration(
-                          label: Text('Age'),
-                        ),
-                      ),
-                      TextField(
-                        controller: _lmp,
-                        decoration: InputDecoration(
-                          label: Text('LMP'),
-                        ),
-                      ),
-                      DistrictDropDownListWidget(),
-                      MunicipalityDropdownListWidget(),
-                      TextField(
-                        controller: _ward,
-                        decoration: InputDecoration(
-                          label: Text('Ward no'),
-                        ),
-                      ),
-                      TextField(
-                        controller: _tole,
-                        decoration: InputDecoration(
-                          label: Text('Tole'),
-                        ),
-                      ),
-                      TextField(
-                        decoration: InputDecoration(
-                          label: Text('Mobile Number'),
-                        ),
-                      ),
-                    ],
-                  ),
-                )),
-                PrimaryActionButton(
-                    onpress: () {
-                      // context.read<RegisterBloc>().add(
-                      //       RegisterEvent.gegisterStarted(
-                      //           user: RegisterRequestModel()),
-                      //     );
+  void initState() {
+    context.read<DistrictMunicipalityCubit>().startDistrictMunicipalityFetch();
+    super.initState();
+  }
 
-                      // print(widget.reg.toJson());
-                    },
-                    title: 'Register'),
-                VerticalSpace(50.h),
-              ],
-            ));
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      padding: defaultPadding.copyWith(top: 20.h, bottom: 45.h),
+      child: Column(
+        children: [
+          ShadowContainer(
+            width: 380.w,
+            radius: 35,
+            padding: EdgeInsets.symmetric(vertical: 20.h),
+            child: Column(children: [
+              Text(
+                'Your Personal Details',
+                style: Theme.of(context)
+                    .textTheme
+                    .labelLarge
+                    ?.copyWith(fontSize: 16),
+              ),
+              PrimaryTextField(
+                controller: _name,
+                labelText: 'Name',
+              ),
+              VerticalSpace(10.h),
+              PrimaryTextField(
+                controller: _age,
+                labelText: 'Age',
+              ),
+              VerticalSpace(10.h),
+              PrimaryTextField(
+                controller: _lmp,
+                labelText: 'LMP Date',
+              ),
+            ]),
+          ),
+          VerticalSpace(30.h),
+          ShadowContainer(
+            width: 380.w,
+            radius: 35,
+            padding: EdgeInsets.symmetric(vertical: 20.h),
+            child: Column(children: [
+              Text(
+                'Your Address',
+                style: Theme.of(context)
+                    .textTheme
+                    .labelLarge
+                    ?.copyWith(fontSize: 16),
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 18.0),
+                  child: Text(
+                    'District',
+                    style: Theme.of(context)
+                        .textTheme
+                        .labelLarge
+                        ?.copyWith(fontSize: 16),
+                  ),
+                ),
+              ),
+              VerticalSpace(10.h),
+              const DistrictDropDownListWidget(),
+              VerticalSpace(10.h),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 18.0),
+                  child: Text(
+                    'Municipality/VDC',
+                    style: Theme.of(context)
+                        .textTheme
+                        .labelLarge
+                        ?.copyWith(fontSize: 16),
+                  ),
+                ),
+              ),
+              VerticalSpace(10.h),
+              const MunicipalityDropdownListWidget(),
+              VerticalSpace(10.h),
+              PrimaryTextField(
+                labelText: 'Ward No.',
+                controller: _ward,
+              ),
+              VerticalSpace(10.h),
+              PrimaryTextField(
+                controller: _tole,
+                labelText: 'Tole',
+              ),
+              VerticalSpace(10.h),
+              const PrimaryTextField(
+                labelText: 'Mobile Number',
+              ),
+            ]),
+          ),
+          VerticalSpace(50.h),
+          PrimaryActionButton(
+              onpress: () {
+                // context.read<RegisterBloc>().add(
+                //       RegisterEvent.gegisterStarted(
+                //           user: RegisterRequestModel()),
+                //     );
+
+                // print(widget.reg.toJson());
+              },
+              title: 'Register'),
+          VerticalSpace(50.h),
+        ],
+      ),
+    );
   }
 }

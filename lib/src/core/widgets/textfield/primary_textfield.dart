@@ -85,14 +85,19 @@ class PrimaryTextField extends StatelessWidget {
                     .textTheme
                     .labelSmall
                     ?.copyWith(color: Colors.grey),
-                focusedBorder: OutlineInputBorder(
+                  
+                    enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(30),
                     borderSide: const BorderSide(
                         color: AppColors.accentGrey, width: 1)),
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: const BorderSide(
-                        color: AppColors.accentGrey, width: 1)),
+                // focusedBorder: OutlineInputBorder(
+                //     borderRadius: BorderRadius.circular(30),
+                //     borderSide: const BorderSide(
+                //         color: AppColors.accentGrey, width: 1)),
+                // border: OutlineInputBorder(
+                //     borderRadius: BorderRadius.circular(30),
+                //     borderSide: const BorderSide(
+                //         color: AppColors.accentGrey, width: 1)),
                 contentPadding: const EdgeInsets.only(
                     left: 15, right: 10, top: 15, bottom: 15)),
           ),
