@@ -326,14 +326,17 @@ class _HomePageState extends State<HomePage> {
                                     width: 380.w,
                                     color: Colors.black,
                                     decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      
                                         image: DecorationImage(
+                                          fit: BoxFit.cover,
                                             image: NetworkImage(state
                                                     .newsfeed?[index]
                                                     .urlToImage ??
                                                 ''))),
                                     child: const Center(
                                       child: Icon(
-                                        Icons.play_circle_sharp,
+                                        Icons.play_circle_outline_rounded,
                                         size: 50,
                                       ),
                                     ),

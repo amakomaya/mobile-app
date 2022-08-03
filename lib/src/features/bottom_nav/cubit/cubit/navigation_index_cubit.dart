@@ -5,7 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 class NavigationIndexCubit extends Cubit<NavigationIndexState> {
   NavigationIndexCubit()
       : super(
-            const NavigationIndexState(appbarTitle: LocaleKeys.home, index: 0));
+             NavigationIndexState(appbarTitle: LocaleKeys.home.tr(), index: 0));
 
 
   changeIndex({required int index, required String title}) {

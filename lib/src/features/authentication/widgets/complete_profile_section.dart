@@ -100,9 +100,9 @@ class _CompleteProfileSectionState extends State<CompleteProfileSection> {
                   ),
                 ),
               ),
-              VerticalSpace(10.h),
+              VerticalSpace(20.h),
               const DistrictDropDownListWidget(),
-              VerticalSpace(10.h),
+              VerticalSpace(20.h),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
@@ -116,9 +116,9 @@ class _CompleteProfileSectionState extends State<CompleteProfileSection> {
                   ),
                 ),
               ),
-              VerticalSpace(10.h),
+              VerticalSpace(20.h),
               const MunicipalityDropdownListWidget(),
-              VerticalSpace(10.h),
+              VerticalSpace(20.h),
               PrimaryTextField(
                 labelText: 'Ward No.',
                 controller: _ward,
@@ -137,12 +137,7 @@ class _CompleteProfileSectionState extends State<CompleteProfileSection> {
           VerticalSpace(50.h),
           PrimaryActionButton(
               onpress: () {
-                // context.read<RegisterBloc>().add(
-                //       RegisterEvent.gegisterStarted(
-                //           user: RegisterRequestModel()),
-                //     );
-
-                // print(widget.reg.toJson());
+              
               },
               title: 'Register'),
           VerticalSpace(50.h),

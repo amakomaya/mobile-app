@@ -1,3 +1,4 @@
+import 'package:aamako_maya/localization_cubit/localization_cubit.dart';
 import 'package:aamako_maya/src/core/connection_checker/network_connection.dart';
 import 'package:aamako_maya/src/core/padding/padding.dart';
 import 'package:aamako_maya/src/core/snackbar/error_snackbar.dart';
@@ -44,6 +45,8 @@ class _WeeklyTipsPageState extends State<WeeklyTipsPage> {
         });
       }
     }, builder: (context, state) {
+
+    // ignore: unused_local_variable
       if (state.data == null) {
         return ShimmerLoading(boxHeight: 400.h, itemCount: 2);
       } else {

@@ -1,6 +1,7 @@
 import 'package:aamako_maya/src/core/theme/app_colors.dart';
 import 'package:aamako_maya/src/core/theme/custom_theme.dart';
 import 'package:aamako_maya/src/features/audio/repository/audio_repository.dart';
+import 'package:aamako_maya/src/features/authentication/cubit/select_district_municipality_cubit.dart';
 import 'package:aamako_maya/src/features/authentication/cubit/toggle_district_municipality.dart';
 import 'package:aamako_maya/src/features/delivery/cubit/delivery_cubit.dart';
 import 'package:aamako_maya/src/features/faqs/cubit/faqs_cubit.dart';
@@ -83,6 +84,7 @@ Future<void> main() async {
                   BlocProvider(create: (context) => sl<NewsfeedCubit>()),
                   BlocProvider(create: (context) => sl<FaqsCubit>()),
                   BlocProvider(create: (context) => sl<AudioCubit>()),
+                  BlocProvider(create: (context)=>SelectDistrictMunicipalityCubit()),
                   BlocProvider(
                       create: (context) =>
                           DrawerCubit()..checkDrawerSelection(0)),
