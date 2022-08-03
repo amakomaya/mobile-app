@@ -64,16 +64,16 @@ class PrimaryAppBar extends StatelessWidget {
                       style: Theme.of(context).textTheme.displaySmall,
                     ),
                     const Spacer(),
-                    // ImageIcon(
-                    //   AssetImage("assets/images/notification.png"),
-                    //   size: 20.sm,
-                    // ),
-                    // HorizSpace(20.w),
-                    // ImageIcon(
-                    //   AssetImage("assets/images/siren.png"),
-                    //   size: 20.sm,
-                    // ),
-                    // HorizSpace(20.w),
+                    ImageIcon(
+                      const AssetImage("assets/images/notification.png"),
+                      size: 22.sm,
+                    ),
+                    HorizSpace(20.w),
+                    ImageIcon(
+                      const AssetImage("assets/images/siren.png"),
+                      size: 22.sm,
+                    ),
+                    HorizSpace(20.w),
                    const LocalizationButton(
                     color: AppColors.white,
                    ),

@@ -32,6 +32,7 @@ import '../../../features/authentication/authentication_cubit/logout_cubit.dart'
 import '../../../features/authentication/drawer_cubit/drawer_cubit.dart';
 import '../../../features/authentication/local_storage/authentication_local_storage.dart';
 import '../../../features/bottom_nav/bottom_navigation.dart';
+import '../../strings/app_strings.dart';
 import '../../theme/app_colors.dart';
 import '../helper_widgets/blank_space.dart';
 
@@ -141,7 +142,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                           context
                                               .read<NavigationIndexCubit>()
                                               .changeIndex(
-                                                  index: 0, title: LocaleKeys.home.tr());
+                                                  index: 0, titleEn :'Home',titleNp: AppStrings.home);
                                         },
                                         leading: Image.asset(
                                           AppAssets.homeIcon,
@@ -166,7 +167,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                           context
                                               .read<NavigationIndexCubit>()
                                               .changeIndex(
-                                                  index: 10, title: LocaleKeys.profile.tr());
+                                                  index: 10,titleNp:  AppStrings.profile, titleEn:'Profile');
                                         },
                                         leading: Image.asset(
                                           AppAssets.profileIcon,
@@ -191,7 +192,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                           context
                                               .read<NavigationIndexCubit>()
                                               .changeIndex(
-                                                  index: 11, title: LocaleKeys.card.tr());
+                                                  index: 11, titleEn:"card",titleNp:  AppStrings.card);
                                         },
                                         leading: Image.asset(
                                           AppAssets.cardIcon,
@@ -215,7 +216,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                               .read<NavigationIndexCubit>()
                                               .changeIndex(
                                                   index: 13,
-                                                  title: LocaleKeys.symptoms.tr());
+                                                  titleNp:  AppStrings.symptoms,
+                                                  titleEn: "Symptom Assessment");
                                         },
                                         leading: Image.asset(
                                           AppAssets.symptomIcon,
@@ -272,7 +274,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                               context
                                                   .read<NavigationIndexCubit>()
                                                   .changeIndex(
-                                                      index: 5, title: 'ANC');
+                                                      index: 5,titleNp: 'ANC', titleEn: 'ANC');
                                             },
                                             title: Padding(
                                               padding: const EdgeInsets.only(
@@ -298,8 +300,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                               context
                                                   .read<NavigationIndexCubit>()
                                                   .changeIndex(
+                                                    titleNp: 'Del',
                                                       index: 6,
-                                                      title: 'Delivery Page');
+                                                      titleEn: 'Delivery Page');
                                             },
                                             title: Padding(
                                               padding: const EdgeInsets.only(
@@ -325,8 +328,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                               context
                                                   .read<NavigationIndexCubit>()
                                                   .changeIndex(
+                                                    titleNp: 'Med',
                                                       index: 7,
-                                                      title: 'Medication');
+                                                      titleEn: 'Medication');
                                             },
                                             title: Padding(
                                               padding: const EdgeInsets.only(
@@ -352,8 +356,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                               context
                                                   .read<NavigationIndexCubit>()
                                                   .changeIndex(
+                                                    titleNp: 'Post',
                                                       index: 8,
-                                                      title: 'Postnatal Care');
+                                                      titleEn: 'Postnatal Care');
                                             },
                                             title: Padding(
                                               padding: const EdgeInsets.only(
@@ -379,8 +384,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                               context
                                                   .read<NavigationIndexCubit>()
                                                   .changeIndex(
+                                                    titleNp: 'Lab',
                                                       index: 9,
-                                                      title: 'Lab Test');
+                                                      titleEn: 'Lab Test');
                                             },
                                             title: Padding(
                                               padding: const EdgeInsets.only(
@@ -427,7 +433,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                           context
                                               .read<NavigationIndexCubit>()
                                               .changeIndex(
-                                                  index: 12, title: 'FAQ');
+                                                titleNp: 'Fa',
+                                                  index: 12, titleEn: 'FAQs');
                                         },
                                         leading: Image.asset(
                                           AppAssets.faqsIcon,

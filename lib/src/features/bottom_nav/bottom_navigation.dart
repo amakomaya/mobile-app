@@ -19,6 +19,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../l10n/locale_keys.g.dart';
+import '../../core/strings/app_strings.dart';
 import '../../core/widgets/buttons/localization_button.dart';
 import '../../core/widgets/drawer/drawer_widget.dart';
 import '../audio/cubit/audio_cubit.dart';
@@ -80,7 +81,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                             ),
                             onPressed: () {
                               context.read<NavigationIndexCubit>().changeIndex(
-                                  index: 0, title: LocaleKeys.home.tr());
+                                  index: 0, titleEn: 'Home', titleNp:  AppStrings.home);
                               context
                                   .read<DrawerCubit>()
                                   .checkDrawerSelection(0);
@@ -96,7 +97,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                             ),
                             onPressed: () {
                               context.read<NavigationIndexCubit>().changeIndex(
-                                  index: 1, title: LocaleKeys.audio.tr());
+                                  index: 1, titleNp:  AppStrings.audio, titleEn: "Audio");
 
                               context
                                   .read<DrawerCubit>()
@@ -117,7 +118,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                                   .getVideos(isRefreshed: true);
 
                               context.read<NavigationIndexCubit>().changeIndex(
-                                  index: 2, title: LocaleKeys.video.tr());
+                                  titleNp:  AppStrings.video, index: 2, titleEn: 'Video');
                               context
                                   .read<DrawerCubit>()
                                   .checkDrawerSelection(-1);
@@ -136,7 +137,9 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                             ),
                             onPressed: () {
                               context.read<NavigationIndexCubit>().changeIndex(
-                                  index: 3, title: LocaleKeys.weeklytips.tr());
+                                  titleNp:  AppStrings.weeklytips,
+                                  index: 3,
+                                  titleEn: 'Weekly Tips');
                               context
                                   .read<DrawerCubit>()
                                   .checkDrawerSelection(-1);
@@ -148,66 +151,62 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
               },
             );
           }),
-          body: Builder(
-            builder: (context) {
-              return BlocBuilder<NavigationIndexCubit, NavigationIndexState>(
-                builder: (navCont, navState) {
-                  print(navState.appbarTitle +'kk' );
+          body: Builder(builder: (context) {
+            return BlocBuilder<NavigationIndexCubit, NavigationIndexState>(
+              builder: (navCont, navState) {
+                final bool isEnglish =
+                    EasyLocalization.of(context)?.currentLocale?.languageCode ==
+                        'en';
+                return Stack(
+                  children: [
+                    PrimaryAppBar(
+                      scaffoldKey: _scaffoldKey,
+                      title: isEnglish
+                          ? navState.appbarTitleEn
+                          : navState.appbarTitleNp,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 70.h),
+                      child: IndexedStack(
+                        alignment: Alignment.center,
+                        index: navState.index,
+                        children: const [
+                          HomePage(),
+                          AudioPage(),
+                          VideoPage(),
+                          WeeklyTipsPage(),
+                          ShopPage(),
+                          //index =5
+                          AncsPage(),
+                          DeliveryPage(),
+                          MedicationPage(),
+                          PncsPage(),
 
-                print(LocaleKeys.audio);
-                  return Stack(
-                    children: [
+                          ///index 9
+                          Labtestpage(),
 
-                      
-                      PrimaryAppBar(
-                        scaffoldKey: _scaffoldKey,
-                        title:navState.appbarTitle,
+                          //profile index=10
+                          CompleteProfileSection(),
+
+                          //card index =11
+
+                          CardPage(),
+
+                          //faq=12
+                          FaqsPage(),
+
+                          //syztemassetment index=13
+                          SymptomsPAge()
+
+                          //
+                        ],
                       ),
-                     
-                  
-                      Padding(
-                        padding: EdgeInsets.only(top: 70.h),
-                        child: IndexedStack(
-                          alignment: Alignment.center,
-                          index: navState.index,
-                          children: const [
-                            HomePage(),
-                            AudioPage(),
-                            VideoPage(),
-                            WeeklyTipsPage(),
-                            ShopPage(),
-                            //index =5
-                            AncsPage(),
-                            DeliveryPage(),
-                            MedicationPage(),
-                            PncsPage(),
-
-                            ///index 9
-                            Labtestpage(),
-
-                            //profile index=10
-                            CompleteProfileSection(),
-
-                            //card index =11
-
-                            CardPage(),
-
-                            //faq=12
-                            FaqsPage(),
-
-                            //syztemassetment index=13
-                            SymptomsPAge()
-
-                            //
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              );
-            }
-          ),
+                    ),
+                  ],
+                );
+              },
+            );
+          }),
           floatingActionButton:
               BlocBuilder<NavigationIndexCubit, NavigationIndexState>(
             builder: (context, state) {
@@ -216,9 +215,8 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                     state.index == 4 ? AppColors.primaryRed : Colors.white,
                 isExtended: true,
                 onPressed: () {
-                  context
-                      .read<NavigationIndexCubit>()
-                      .changeIndex(index: 4, title: "Shopping");
+                  context.read<NavigationIndexCubit>().changeIndex(
+                      index: 4, titleNp: 'Sho', titleEn: "Shopping");
                 },
                 clipBehavior: Clip.none,
                 child: Icon(

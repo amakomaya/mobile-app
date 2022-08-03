@@ -153,7 +153,9 @@ class _HomePageState extends State<HomePage> {
                                       .read<NavigationIndexCubit>()
                                       .changeIndex(
                                           index: 10,
-                                          title: LocaleKeys.profile.tr());
+                                          titleEn: 'Profile',
+                                          titleNp: 'Por'
+                                          );
                                 },
                                 child: Text('Go to profile',
                                     style: theme.textTheme.bodySmall?.copyWith(

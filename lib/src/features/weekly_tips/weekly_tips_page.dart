@@ -8,6 +8,7 @@ import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dar
 import 'package:aamako_maya/src/core/widgets/loading_shimmer/shimmer_loading.dart';
 import 'package:aamako_maya/src/features/weekly_tips/cubit/weekly_tips_cubit.dart';
 import 'package:bot_toast/bot_toast.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -45,8 +46,9 @@ class _WeeklyTipsPageState extends State<WeeklyTipsPage> {
         });
       }
     }, builder: (context, state) {
+      final bool isEnglish =
+          EasyLocalization.of(context)?.currentLocale?.languageCode == 'en';
 
-    // ignore: unused_local_variable
       if (state.data == null) {
         return ShimmerLoading(boxHeight: 400.h, itemCount: 2);
       } else {
@@ -56,7 +58,8 @@ class _WeeklyTipsPageState extends State<WeeklyTipsPage> {
               context.read<WeeklyTipsCubit>().getWeeklyTips(isRefreshed: true);
             } else {
               BotToast.showCustomText(toastBuilder: (e) {
-                return ErrorSnackBar(message: 'No Internet Connectivity !!');
+                return const ErrorSnackBar(
+                    message: 'No Internet Connectivity !!');
               });
             }
           },
@@ -68,8 +71,6 @@ class _WeeklyTipsPageState extends State<WeeklyTipsPage> {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Text(data[index].titleEn,
-                    //     style: theme.textTheme.headlineMedium),
                     VerticalSpace(20.h),
                     ShadowContainer(
                       radius: 30,
@@ -78,14 +79,19 @@ class _WeeklyTipsPageState extends State<WeeklyTipsPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(state.data?[index].titleEn ?? '',
+                          Text(
+                              (isEnglish)
+                                  ? (state.data?[index].titleEn ?? "")
+                                  : (state.data?[index].titleNp ?? ""),
                               style: theme.textTheme.labelMedium),
                           Divider(
                             height: 15.w,
                             color: AppColors.accentGrey,
                           ),
                           Html(
-                            data: state.data?[index].descriptionEn,
+                            data: (isEnglish)
+                                ? (state.data?[index].descriptionEn ?? '')
+                                : (state.data?[index].descriptionNp ?? ''),
                             onImageError: (sd, f) {},
                           )
                         ],
