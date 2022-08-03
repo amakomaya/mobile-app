@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -11,7 +12,6 @@ class LocalizationButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
-      
         icon: ImageIcon(
           const AssetImage(
             "assets/images/language.png",
@@ -22,12 +22,12 @@ class LocalizationButton extends StatelessWidget {
           return [
             PopupMenuItem(
                 onTap: () {
-                  context.read<AppLanguageCubit>().changeLocale('en', context);
+                  EasyLocalization.of(context)?.setLocale(Locale('en', ''));
                 },
                 child: Text('English')),
             PopupMenuItem(
                 onTap: () {
-                  context.read<AppLanguageCubit>().changeLocale('ne', context);
+                  EasyLocalization.of(context)?.setLocale(Locale('ne', ''));
                 },
                 child: Text('Nepali')),
           ];

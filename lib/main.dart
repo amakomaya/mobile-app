@@ -93,8 +93,8 @@ Future<void> main() async {
                     create: (context) => sl<OnboardBloc>()
                       ..add(const OnboardEvent.onboardStart()),
                   ),
-                  BlocProvider(
-                      create: (context) => AppLanguageCubit()..getLocale()),
+                  // BlocProvider(
+                  //     create: (context) => AppLanguageCubit()),
                   BlocProvider(
                     create: (context) => DistrictMunicipalityCubit(),
                   ),
@@ -123,14 +123,10 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       designSize: const Size(414, 896),
       builder: (context, child) => Builder(builder: (context) {
-        return BlocBuilder<AppLanguageCubit, Locale?>(
-          builder: (langCtx, langState) {
-            print((langState ?? '').toString() + 'EEE');
-
-            return MaterialApp(
+        return MaterialApp(
               localizationsDelegates: context.localizationDelegates,
               supportedLocales: context.supportedLocales,
-              locale: langState,
+              locale: context.locale,
               builder: BotToastInit(),
               navigatorObservers: [
                 BotToastNavigatorObserver(),
@@ -139,8 +135,6 @@ class MyApp extends StatelessWidget {
               theme: CustomTheme.lightTheme,
               home: const SplashPage(),
             );
-          },
-        );
       }),
     );
   }
