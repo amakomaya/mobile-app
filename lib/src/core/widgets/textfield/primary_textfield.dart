@@ -90,10 +90,10 @@ class PrimaryTextField extends StatelessWidget {
                     borderRadius: BorderRadius.circular(30),
                     borderSide: const BorderSide(
                         color: AppColors.accentGrey, width: 1)),
-                // focusedBorder: OutlineInputBorder(
-                //     borderRadius: BorderRadius.circular(30),
-                //     borderSide: const BorderSide(
-                //         color: AppColors.accentGrey, width: 1)),
+                focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: const BorderSide(
+                        color: AppColors.accentGrey, width: 1)),
                 // border: OutlineInputBorder(
                 //     borderRadius: BorderRadius.circular(30),
                 //     borderSide: const BorderSide(

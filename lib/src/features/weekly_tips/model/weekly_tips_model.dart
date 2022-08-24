@@ -1,12 +1,18 @@
 import 'dart:convert';
 
+import 'package:hive/hive.dart';
+
+
+part 'weekly_tips_model.g.dart';
 List<WeeklyTips> weeklyTipsFromJson(String str) =>
     List<WeeklyTips>.from(json.decode(str).map((x) => WeeklyTips.fromJson(x)));
 
 String weeklyTipsToJson(List<WeeklyTips> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class WeeklyTips {
+
+@HiveType(typeId: 0)
+class WeeklyTips extends HiveObject{
   WeeklyTips({
     required this.id,
     required this.titleEn,
@@ -18,13 +24,21 @@ class WeeklyTips {
     required this.updatedAt,
   });
 
+  @HiveField(0)
   int id;
+  @HiveField(1)
   String titleEn;
+  @HiveField(2)
   String titleNp;
+  @HiveField(3)
   String descriptionEn;
+  @HiveField(4)
   String descriptionNp;
+  @HiveField(5)
   int weekId;
+  @HiveField(6)
   DateTime createdAt;
+  @HiveField(7)
   DateTime updatedAt;
 
   factory WeeklyTips.fromJson(Map<dynamic, dynamic> json) => WeeklyTips(

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:aamako_maya/localization_cubit/localization_cubit.dart';
 import 'package:aamako_maya/src/core/padding/padding.dart';
 import 'package:aamako_maya/src/core/widgets/border_container.dart';
 import 'package:aamako_maya/src/core/widgets/buttons/primary_action_button.dart';
@@ -99,9 +98,12 @@ class _LoginPageState extends State<LoginPage> {
                           cacheHeight: 197,
                         ),
                       ),
-                       const LocalizationButton(
+                       const Padding(
+                         padding: EdgeInsets.only(right:18.0),
+                         child: LocalizationButton(
                     color: AppColors.primaryRed,
                    ),
+                       ),
                     
                     ],
                   ),
@@ -173,7 +175,7 @@ class _LoginPageState extends State<LoginPage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: ((context) => QRViewPage())));
+                              builder: ((context) => const QRViewPage())));
                     },
                     title: '',
                     child: Row(

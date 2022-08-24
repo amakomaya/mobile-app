@@ -1,46 +1,64 @@
+import 'dart:convert';
+
 import 'package:aamako_maya/src/core/network_services/urls.dart';
 import 'package:aamako_maya/src/features/authentication/local_storage/authentication_local_storage.dart';
 import 'package:aamako_maya/src/features/labtest/model/labtest_model.dart';
-import 'package:aamako_maya/src/features/pnc/model/pnc_model.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class LabtestCubit extends Cubit<labtestState> {
+class LabtestCubit extends Cubit<LabtestState> {
   Dio dio;
+  SharedPreferences prefs;
   AuthLocalData local;
-  LabtestCubit(this.dio, this.local)
-      : super(labtestState(labtest: null, error: null, loading: false));
+  LabtestCubit(this.dio, this.local, this.prefs) : super(LabtestInitial());
 
-  void getlabtest() async {
-    emit(labtestState(labtest: null, loading: true, error: null));
+  void getlabtest(bool isRefreshed) async {
+    emit(LabtestLoading());
     // String token = await local.getTokenFromocal();s
     String token = "4a66f714-9124-4cd1-a0fa-e48789021600";
-    try {
-      final response = await dio.get("${Urls.labtestUrl}/$token");
-      if (response.statusCode == 200) {
-        final labtest = response.data as List;
-        List<Labtestmodel> list =
-            labtest.map((e) => Labtestmodel.fromJson(e)).toList();
-        emit(labtestState(labtest: list, error: null, loading: false));
-      } else {
-        emit(labtestState(
-            labtest: state.labtest, error: 'Error', loading: false));
+
+    final response = prefs.getString('labtest');
+    if (response != null && isRefreshed == false) {
+      final labtest = (jsonDecode(response) as List)
+          .map((e) => Labtestmodel.fromJson(e))
+          .toList();
+      emit(LabtestSuccess(labtest));
+    } else {
+      try {
+        final response = await dio.get("${Urls.labtestUrl}/$token");
+        if (response.statusCode == 200) {
+          final labtest = response.data as List;
+          prefs.setString('labtest', jsonEncode(labtest));
+          List<Labtestmodel> list =
+              labtest.map((e) => Labtestmodel.fromJson(e)).toList();
+          emit(LabtestSuccess(list));
+        } else {
+          emit(LabtestFailure());
+        }
+      } on DioError catch (e) {
+        emit(LabtestFailure());
       }
-    } on DioError catch (e) {
-      emit(labtestState(
-          labtest: state.labtest, error: e.message, loading: false));
     }
   }
 }
 
-class labtestState extends Equatable {
-  final bool loading;
-  final String? error;
-  final List<Labtestmodel>? labtest;
-  const labtestState(
-      {required this.labtest, required this.loading, required this.error});
+abstract class LabtestState extends Equatable {
   @override
-  List<Object?> get props => [loading, error, labtest];
+  List<Object?> get props => [];
+}
+
+class LabtestFailure extends LabtestState {}
+
+class LabtestInitial extends LabtestState {}
+
+class LabtestLoading extends LabtestState {}
+
+class LabtestSuccess extends LabtestState {
+  final List<Labtestmodel> data;
+
+  LabtestSuccess(this.data);
+  @override
+  List<Object?> get props => [data];
 }

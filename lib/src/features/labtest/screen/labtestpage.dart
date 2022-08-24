@@ -3,16 +3,22 @@ import 'package:aamako_maya/src/core/theme/app_colors.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
 import 'package:aamako_maya/src/core/widgets/loading_shimmer/shimmer_loading.dart';
+import 'package:aamako_maya/src/features/audio/screens/audio_player_section.dart';
 
 import 'package:aamako_maya/src/features/labtest/cubit/labtest_cubit.dart';
+import 'package:bot_toast/bot_toast.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 
+import '../../../../injection_container.dart';
+import '../../../core/connection_checker/network_connection.dart';
 import '../../authentication/authentication_cubit/auth_cubit.dart';
+import '../../delivery/cubit/delivery_cubit.dart';
 import '../cubit/lab_page_cubit.dart';
 
 class Labtestpage extends StatefulWidget {
@@ -23,10 +29,12 @@ class Labtestpage extends StatefulWidget {
 }
 
 class _LabtestpageState extends State<Labtestpage> {
+  final DateFormat formatter = DateFormat('yyyy-MM-dd');
+
   final controller = PageController();
   @override
   void initState() {
-    context.read<LabtestCubit>().getlabtest();
+    context.read<LabtestCubit>().getlabtest(false);
     super.initState();
   }
 
@@ -35,11 +43,8 @@ class _LabtestpageState extends State<Labtestpage> {
     final theme = Theme.of(context);
     final size = MediaQuery.of(context).size;
     return BlocBuilder<AuthenticationCubit, LoggedInState>(
-      
       builder: (authContext, authState) {
-
-        if(authState.isProfileComplete==true){
-           return BlocProvider(
+        return BlocProvider(
           create: (context) => LabPageCubit(),
           child: Builder(builder: (context) {
             return SizedBox(
@@ -57,167 +62,270 @@ class _LabtestpageState extends State<Labtestpage> {
                       const Center(
                         child: Text('INFORMATION'),
                       ),
-                      BlocBuilder<LabtestCubit, labtestState>(
+                      BlocBuilder<LabtestCubit, LabtestState>(
                         builder: (context, state) {
-                          if (state.labtest == null) {
-                            return ShimmerLoading(
-                                boxHeight: 200.h, itemCount: 4);
-                          } else if (state.labtest?.isEmpty ?? false) {
-                            return const Text('NO LABTEST REPORTS FOUND');
-                          } else {
-                            return ListView.separated(
-                                itemBuilder: ((context, index) {
-                                  return Column(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                            " Report${index + 1}".toUpperCase(),
-                                            style: const TextStyle(
-                                                fontFamily: "lato",
-                                                color: AppColors.primaryRed,
-                                                fontSize: 17)),
-                                      ),
-                                      VerticalSpace(12.h),
-                                      ShadowContainer(
-                                        radius: 20,
-                                        width: 380.w,
-                                        color: Colors.white,
-                                        padding: defaultPadding.copyWith(
-                                            top: 10, bottom: 20),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            ListTile(
-                                              leading: Text("Visit Date",
-                                                  style: theme
-                                                      .textTheme.labelSmall),
-                                              trailing: Text(
-                                                  state.labtest?[index].testDate
-                                                          .toString() ??
-                                                      '',
-                                                  style: theme
-                                                      .textTheme.labelSmall),
-                                            ),
-                                            Divider(),
-                                            ListTile(
-                                              leading: Text("HB",
-                                                  style: theme
-                                                      .textTheme.labelSmall),
-                                              trailing: Text(
-                                                  state.labtest?[index].hb
-                                                          .toString() ??
-                                                      '',
-                                                  style: theme
-                                                      .textTheme.labelSmall),
-                                            ),
-                                            ListTile(
-                                              leading: Text("Albumin",
-                                                  style: theme
-                                                      .textTheme.labelSmall),
-                                              trailing: Text(
-                                                  state.labtest?[index].albumin
-                                                          .toString() ??
-                                                      '',
-                                                  style: theme
-                                                      .textTheme.labelSmall),
-                                            ),
-                                            ListTile(
-                                              leading: Text("Urine Protein",
-                                                  style: theme
-                                                      .textTheme.labelSmall),
-                                              trailing: Text(
-                                                  state.labtest?[index]
-                                                          .urineProtein
-                                                          .toString() ??
-                                                      '',
-                                                  style: theme
-                                                      .textTheme.labelSmall),
-                                            ),
-                                            ListTile(
-                                              leading: Text("Urine Sugar",
-                                                  style: theme
-                                                      .textTheme.labelSmall),
-                                              trailing: Text(
-                                                  state.labtest?[index]
-                                                          .urineSugar
-                                                          .toString() ??
-                                                      '',
-                                                  style: theme
-                                                      .textTheme.labelSmall),
-                                            ),
-                                            ListTile(
-                                              leading: Text("Blood Sugar",
-                                                  style: theme
-                                                      .textTheme.labelSmall),
-                                              trailing: Text(
-                                                  state.labtest?[index]
-                                                          .bloodSugar
-                                                          .toString() ??
-                                                      '',
-                                                  style: theme
-                                                      .textTheme.labelSmall),
-                                            ),
-                                            ListTile(
-                                              leading: Text("HBsAg",
-                                                  style: theme
-                                                      .textTheme.labelSmall),
-                                              trailing: Text(
-                                                  state.labtest?[index].hbsag
-                                                          .toString() ??
-                                                      '',
-                                                  style: theme
-                                                      .textTheme.labelSmall),
-                                            ),
-                                            ListTile(
-                                              leading: Text("VDRL",
-                                                  style: theme
-                                                      .textTheme.labelSmall),
-                                              trailing: Text(
-                                                  state.labtest?[index].vdrl
-                                                          .toString() ??
-                                                      '',
-                                                  style: theme
-                                                      .textTheme.labelSmall),
-                                            ),
-                                            ListTile(
-                                              leading: Text("Retro Virus",
-                                                  style: theme
-                                                      .textTheme.labelSmall),
-                                              trailing: Text(
-                                                  state.labtest?[index]
-                                                          .retroVirus
-                                                          .toString() ??
-                                                      '',
-                                                  style: theme
-                                                      .textTheme.labelSmall),
-                                            ),
-                                            Divider(),
-                                            ListTile(
-                                              leading: Text("Others",
-                                                  style: theme
-                                                      .textTheme.labelSmall),
-                                              trailing: Text(
-                                                  state.labtest?[index].other
-                                                          .toString() ??
-                                                      '',
-                                                  style: theme
-                                                      .textTheme.labelSmall),
-                                            ),
-                                            VerticalSpace(12.h),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                }),
-                                separatorBuilder: (ctx, index) {
-                                  return const Divider(
-                                    color: Colors.white,
-                                  );
+                          if (state is LabtestSuccess) {
+                            return RefreshIndicator(
+                                onRefresh: () async {
+                                  if (await sl<NetworkInfo>().isConnected) {
+                                    context
+                                        .read<LabtestCubit>()
+                                        .getlabtest(true);
+                                  } else {
+                                    BotToast.showText(
+                                        text: 'No Internet Connection !');
+                                  }
                                 },
-                                itemCount: state.labtest?.length ?? 0);
+                                child: ListView.separated(
+                                    padding: EdgeInsets.only(
+                                      top: 27.h,
+                                      bottom: 20.h),
+                                    itemBuilder: ((context, index) {
+                                      
+                                      return (state.data.isEmpty)
+                                          ? Center(
+                                              child: Padding(
+                                                padding:
+                                                    EdgeInsets.only(top: 30.h),
+                                                child: Text('No Records Found!',
+                                                    style: theme
+                                                        .textTheme.bodySmall
+                                                        ?.copyWith(
+                                                            color: Colors.black,
+                                                            fontSize: 15.sm)),
+                                              ),
+                                            )
+                                          : Column(
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Text(
+                                                      " Report${index + 1}"
+                                                          .toUpperCase(),
+                                                      style: const TextStyle(
+                                                          fontFamily: "lato",
+                                                          color: AppColors
+                                                              .primaryRed,
+                                                          fontSize: 17)),
+                                                ),
+                                                VerticalSpace(12.h),
+                                                ShadowContainer(
+                                                  radius: 20,
+                                                  width: 380.w,
+                                                  color: Colors.white,
+                                                  padding:
+                                                      defaultPadding.copyWith(
+                                                          top: 10, bottom: 20),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      ListTile(
+                                                        leading: Text(
+                                                            "Visit Date",
+                                                            style: theme
+                                                                .textTheme
+                                                                .labelSmall),
+                                                        trailing: Text(
+                                                            (state.data[index]
+                                                                        .testDate ==
+                                                                    null)
+                                                                ? 'N/A'
+                                                                : formatter
+                                                                    .format(state
+                                                                        .data[
+                                                                            index]
+                                                                        .testDate!),
+                                                            style: theme
+                                                                .textTheme
+                                                                .labelSmall),
+                                                      ),
+                                                      Divider(),
+                                                      ListTile(
+                                                        leading: Text("HB",
+                                                            style: theme
+                                                                .textTheme
+                                                                .labelSmall),
+                                                        trailing: Text(
+                                                            state.data[index].hb
+                                                                    .isNullOrEmpty
+                                                                ? 'N/A'
+                                                                : state
+                                                                    .data[index]
+                                                                    .hb!,
+                                                            style: theme
+                                                                .textTheme
+                                                                .labelSmall),
+                                                      ),
+                                                      ListTile(
+                                                        leading: Text("Albumin",
+                                                            style: theme
+                                                                .textTheme
+                                                                .labelSmall),
+                                                        trailing: Text(
+                                                            state
+                                                                    .data[index]
+                                                                    .albumin
+                                                                    .isNullOrEmpty
+                                                                ? 'N/A'
+                                                                : state
+                                                                    .data[index]
+                                                                    .albumin!,
+                                                            style: theme
+                                                                .textTheme
+                                                                .labelSmall),
+                                                      ),
+                                                      ListTile(
+                                                        leading: Text(
+                                                            "Urine Protein",
+                                                            style: theme
+                                                                .textTheme
+                                                                .labelSmall),
+                                                        trailing: Text(
+                                                            state
+                                                                    .data[index]
+                                                                    .urineProtein
+                                                                    .isNullOrEmpty
+                                                                ? 'N/A'
+                                                                : state
+                                                                    .data[index]
+                                                                    .urineProtein!,
+                                                            style: theme
+                                                                .textTheme
+                                                                .labelSmall),
+                                                      ),
+                                                      ListTile(
+                                                        leading: Text(
+                                                            "Urine Sugar",
+                                                            style: theme
+                                                                .textTheme
+                                                                .labelSmall),
+                                                        trailing: Text(
+                                                            state
+                                                                    .data[index]
+                                                                    .urineSugar
+                                                                    .isNullOrEmpty
+                                                                ? 'N/A'
+                                                                : state
+                                                                    .data[index]
+                                                                    .urineSugar!,
+                                                            style: theme
+                                                                .textTheme
+                                                                .labelSmall),
+                                                      ),
+                                                      ListTile(
+                                                        leading: Text(
+                                                            "Blood Sugar",
+                                                            style: theme
+                                                                .textTheme
+                                                                .labelSmall),
+                                                        trailing: Text(
+                                                            state
+                                                                    .data[index]
+                                                                    .bloodSugar
+                                                                    .isNullOrEmpty
+                                                                ? 'N/A'
+                                                                : state
+                                                                    .data[index]
+                                                                    .bloodSugar!,
+                                                            style: theme
+                                                                .textTheme
+                                                                .labelSmall),
+                                                      ),
+                                                      ListTile(
+                                                        leading: Text("HBsAg",
+                                                            style: theme
+                                                                .textTheme
+                                                                .labelSmall),
+                                                        trailing: Text(
+                                                            state
+                                                                    .data[index]
+                                                                    .hbsag
+                                                                    .isNullOrEmpty
+                                                                ? 'N/A'
+                                                                : state
+                                                                    .data[index]
+                                                                    .hbsag!,
+                                                            style: theme
+                                                                .textTheme
+                                                                .labelSmall),
+                                                      ),
+                                                      ListTile(
+                                                        leading: Text("VDRL",
+                                                            style: theme
+                                                                .textTheme
+                                                                .labelSmall),
+                                                        trailing: Text(
+                                                            (!(state
+                                                                    .data[index]
+                                                                    .vdrl
+                                                                    .isNullOrEmpty))
+                                                                ? state
+                                                                    .data[index]
+                                                                    .vdrl!
+                                                                : 'N/A',
+                                                            style: theme
+                                                                .textTheme
+                                                                .labelSmall),
+                                                      ),
+                                                      ListTile(
+                                                        leading: Text(
+                                                            "Retro Virus",
+                                                            style: theme
+                                                                .textTheme
+                                                                .labelSmall),
+                                                        trailing: Text(
+                                                            state
+                                                                    .data[index]
+                                                                    .retroVirus
+                                                                    .isNullOrEmpty
+                                                                ? 'N/A'
+                                                                : state
+                                                                    .data[index]
+                                                                    .retroVirus!,
+                                                            style: theme
+                                                                .textTheme
+                                                                .labelSmall),
+                                                      ),
+                                                      Divider(),
+                                                      ListTile(
+                                                        leading: Text("Others",
+                                                            style: theme
+                                                                .textTheme
+                                                                .labelSmall),
+                                                        trailing: Text(
+                                                            state
+                                                                    .data[index]
+                                                                    .other
+                                                                    .isNullOrEmpty
+                                                                ? 'N/A'
+                                                                : state
+                                                                    .data[index]
+                                                                    .other!,
+                                                            style: theme
+                                                                .textTheme
+                                                                .labelSmall),
+                                                      ),
+                                                      VerticalSpace(12.h),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            );
+                                    }),
+                                    separatorBuilder: (ctx, index) {
+                                      return const Divider(
+                                        color: Colors.white,
+                                      );
+                                    },
+                                    itemCount: state.data.isEmpty
+                                        ? 1
+                                        : state.data.length));
+                          } else {
+                            return ShimmerLoading(
+                                boxHeight: 400.h, itemCount: 4);
                           }
                         },
                       )
@@ -292,12 +400,13 @@ class _LabtestpageState extends State<Labtestpage> {
             );
           }),
         );
-    
-
-        }else{
-          return Text('Complete Your Profile to see your reports');
-        }
-         },
+      },
     );
+  }
+}
+
+extension on String? {
+  bool get isNullOrEmpty {
+    return this == null || this!.isEmpty;
   }
 }

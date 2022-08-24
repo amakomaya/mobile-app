@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'package:aamako_maya/src/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 Future<bool> showExitPopup(context) async {
@@ -6,7 +6,7 @@ Future<bool> showExitPopup(context) async {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          content: Container(
+          content: SizedBox(
             height: 90,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -27,7 +27,7 @@ Future<bool> showExitPopup(context) async {
                           style: TextStyle(color: Colors.white),
                         ),
                         style: ElevatedButton.styleFrom(
-                            primary: Colors.red.shade800),
+                            primary: AppColors.primaryRed),
                       ),
                     ),
                     SizedBox(width: 15),
@@ -36,9 +36,9 @@ Future<bool> showExitPopup(context) async {
                       onPressed: () {
                         Navigator.of(context).pop(false);
                       },
-                      child: Text("No", style: TextStyle(color: Colors.black)),
+                      child: Text("No", style: TextStyle(color: Colors.white)),
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.white,
+                        primary: Colors.black,
                       ),
                     ))
                   ],

@@ -20,8 +20,7 @@ class AuthenticationCubit extends Cubit<LoggedInState> {
   final Dio dio;
   final AuthenticationRepository _repo;
   final NetworkInfo network;
-  final AuthLocalData local;
-  AuthenticationCubit(this.dio,this.network, this.local, this._repo)
+  AuthenticationCubit(this.dio, this.network, this._repo)
       : super(LoggedInState(user: null, error: null, isLoading: false));
 
   void loginWithToken(String token) async {
@@ -38,35 +37,33 @@ class AuthenticationCubit extends Cubit<LoggedInState> {
   }
 
   void login({required LoginRequestModel user}) async {
-    final hasInternet= await network.isConnected;
-    if(hasInternet){
-      emit(LoggedInState(user: null, error: null, isLoading: true));
-    try {
-      final UserModel response = await _repo.login(credential: user);
-      local.saveCredentialsDataToLocal(response);
-      emit(LoggedInState(
-          user: response,
+    final hasInternet = await network.isConnected;
+    if (hasInternet) {
+      emit(const LoggedInState(user: null, error: null, isLoading: true));
+      try {
+        final UserModel response = await _repo.login(credential: user);
+        emit(LoggedInState(
+            user: response,
+            isLoading: false,
+            error: null,
+            isAuthenticated: true,
+            isProfileComplete: (response.tole != null &&
+                (response.tole?.isNotEmpty ?? false))));
+      } catch (error) {
+        emit(LoggedInState(
+          user: null,
+          error: error.toString(),
           isLoading: false,
-          error: null,
-          isAuthenticated: true,
-          isProfileComplete:
-              (response.tole != null && (response.tole?.isNotEmpty ?? false))));
-    } catch (error) {
+        ));
+      }
+    } else {
       emit(LoggedInState(
-        user: null,
-        error: error.toString(),
         isLoading: false,
+        user: state.user,
+        isAuthenticated: false,
+        isProfileComplete: false,
+        error: 'No Internet Connection',
       ));
-    }
-    }
-    else{
-     emit( LoggedInState(
-      isLoading: false,
-      user: null,
-      isAuthenticated: false,
-      isProfileComplete: false,
-      error: 'No Internet Connection',));
-
     }
   }
 
@@ -75,7 +72,7 @@ class AuthenticationCubit extends Cubit<LoggedInState> {
     try {
       final UserModel response = await _repo.register(credential: user);
       // print(response.token??''+'eeeee');
-      local.saveCredentialsDataToLocal(response);
+      // local.saveCredentialsDataToLocal(response);
       emit(LoggedInState(
           user: response,
           isLoading: false,
@@ -90,11 +87,9 @@ class AuthenticationCubit extends Cubit<LoggedInState> {
   }
 
   void loginWithQr(String qrCode) async {
-    print(qrCode + 'Dick');
     try {
       final Response res = await Dio().post(Urls.qrcodeUrl + qrCode);
       if (res.statusCode == 200) {
-        print(qrCode + 'Pussy');
         final user = UserModel.fromJson(res.data['user']);
         // local.saveCredentialsDataToLocal(user);
         emit(LoggedInState(
@@ -105,32 +100,12 @@ class AuthenticationCubit extends Cubit<LoggedInState> {
             isProfileComplete:
                 (user.tole != null && (user.tole?.isNotEmpty ?? false))));
       } else {
-        emit(LoggedInState(user: null, error: 'Error', isLoading: false));
+        emit(const LoggedInState(user: null, error: 'Error', isLoading: false));
       }
     } catch (e) {
-      emit(LoggedInState(user: null, error: 'Error', isLoading: false));
+      emit(const LoggedInState(user: null, error: 'Error', isLoading: false));
     }
   }
-
-  // @override
-  // LoggedInState? fromJson(Map<String, dynamic> json) {
-  //   try {
-  //     final user = UserModel.fromJson(json);
-  //     return LoggedInState(user: user, error: null, isLoading: false);
-  //   } catch (_) {
-  //     return null;
-  //   }
-  // }
-
-  // @override
-  // Map<String, dynamic>? toJson(LoggedInState state) {
-  //   if (state.user!=null) {
-  //     final user = state.user?.toJson();
-  //     return user;
-  //   } else {
-  //     return null;
-  //   }
-  // }
 }
 
 class LoggedInState extends Equatable {
@@ -140,7 +115,7 @@ class LoggedInState extends Equatable {
   final bool? isAuthenticated;
   final bool? isProfileComplete;
 
-  LoggedInState(
+  const LoggedInState(
       {required this.user,
       this.isProfileComplete = false,
       required this.error,

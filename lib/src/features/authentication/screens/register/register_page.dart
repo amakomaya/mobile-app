@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:aamako_maya/src/core/widgets/border_container.dart';
+import 'package:aamako_maya/src/core/widgets/buttons/localization_button.dart';
 import 'package:aamako_maya/src/core/widgets/buttons/primary_action_button.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
@@ -59,10 +60,10 @@ class _RegisterPageState extends State<RegisterPage> {
                           color: Colors.white),
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(right: 18, bottom: 12),
-                    child: Icon(Icons.more_vert_outlined),
-                  ),
+                 
+                  LocalizationButton(
+                    icon: Icon(Icons.more_vert_outlined),
+                  )
                 ],
               ),
             ),
@@ -98,17 +99,14 @@ class _RegisterPageState extends State<RegisterPage> {
                         valueListenable: selected,
                         builder: (context, i, _) {
                           return BorderContainer(
-
-                            hasBorder: selected.value==inde,
-
-                            // color: selected.value == inde ? Colors.red : null,
+                            hasBorder: true,
+                            color: i == inde ? Colors.red : Colors.grey,
                             margin: defaultPadding,
                             padding:
                                 defaultPadding.copyWith(top: 15, bottom: 15),
                             width: size.width,
                             child: Text(
                               registerAs[inde].name,
-                            
                             ),
                           );
                         }),

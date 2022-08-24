@@ -1,31 +1,22 @@
-import 'package:aamako_maya/src/core/padding/padding.dart';
-import 'package:aamako_maya/src/core/theme/app_colors.dart';
-import 'package:aamako_maya/src/features/video/model/video_model.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../../core/padding/padding.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/helper_widgets/blank_space.dart';
-import '../../../core/widgets/helper_widgets/shadow_container.dart';
 import '../../audio/screens/audio_player_section.dart';
 
-class VideoPlayingPage extends StatefulWidget {
-  final List<VideoModel> list;
-  final VideoModel selected;
-  const VideoPlayingPage(this.list, this.selected, {Key? key})
-      : super(key: key);
+class HomeVideoPlayer extends StatefulWidget {
+  final String selectedUrl;
+  const HomeVideoPlayer(this.selectedUrl, {Key? key}) : super(key: key);
 
   @override
-  State<VideoPlayingPage> createState() => _VideoPlayingPageState();
+  State<HomeVideoPlayer> createState() => _HomeVideoPlayerState();
 }
 
-class _VideoPlayingPageState extends State<VideoPlayingPage> {
+class _HomeVideoPlayerState extends State<HomeVideoPlayer> {
   late VideoPlayerController _controller;
-  final ItemScrollController _scrollController = ItemScrollController();
   ValueNotifier<bool> isPlaying = ValueNotifier(false);
   ValueNotifier<Duration> position = ValueNotifier(Duration.zero);
   ValueNotifier<Duration> duration = ValueNotifier(Duration.zero);
@@ -51,15 +42,17 @@ class _VideoPlayingPageState extends State<VideoPlayingPage> {
 
   @override
   void initState() {
-    currentUrl = widget.selected.path;
-    _controller = VideoPlayerController.network(widget.selected.path)
+    currentUrl =
+        "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4";
+    _controller = VideoPlayerController.network(currentUrl)
       ..initialize().then((_) {
-        // _controller.play();
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
 
         setState(() {});
       });
-   
+    //   audioPlayer.onPlayerStateChanged.listen((event) {
+    //   isPlaying.value = event == PlayerState.playing;
+    // });
 
     _controller.addListener(() {
       isPlaying.value = _controller.value.isPlaying;
@@ -79,8 +72,7 @@ class _VideoPlayingPageState extends State<VideoPlayingPage> {
 
   @override
   Widget build(BuildContext context) {
-    bool isPortrait =
-        MediaQuery.of(context).orientation == Orientation.portrait;
+   
 
     return SafeArea(
       child: Scaffold(
@@ -105,11 +97,9 @@ class _VideoPlayingPageState extends State<VideoPlayingPage> {
               ),
             ),
           ),
-           AspectRatio(
-                aspectRatio: isPortrait ? 16 / 9 : 4 / 1,
-                child: VideoPlayer(_controller),
-              ),
-         
+          AspectRatio(
+           aspectRatio: 16/9,
+            child: VideoPlayer(_controller)),
           ValueListenableBuilder(
               valueListenable: duration,
               builder: (context, r, t) {
@@ -134,7 +124,6 @@ class _VideoPlayingPageState extends State<VideoPlayingPage> {
             padding: defaultPadding,
             child: Row(
               children: [
-              
                 ValueListenableBuilder(
                     valueListenable: position,
                     builder: (context, c, v) {
@@ -197,60 +186,6 @@ class _VideoPlayingPageState extends State<VideoPlayingPage> {
               ],
             ),
           ),
-          Expanded(
-            child: ScrollablePositionedList.builder(
-                shrinkWrap: true,
-                itemScrollController: _scrollController,
-                itemCount: widget.list.length,
-                itemBuilder: (ctx, ind) {
-                  return InkWell(
-                    onTap: () async {
-                      changevideo(widget.list[ind].path);
-
-                      _scrollController.scrollTo(
-                          index: ind, duration: const Duration(seconds: 1));
-                    },
-                    child: ShadowContainer(
-                      color: currentUrl == widget.list[ind].path
-                          ? AppColors.grey
-                          : null,
-                      margin: const EdgeInsets.only(bottom: 20),
-                      padding: const EdgeInsets.all(10),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            width: 100.w,
-                            height: 100.h,
-                            child: CachedNetworkImage(
-                              fit: BoxFit.cover,
-                              imageUrl: widget.list[ind].thumbnail,
-                              placeholder: (ctx, url) => Container(
-                                height: 100.h,
-                                width: 100.w,
-                                color: AppColors.accentGrey,
-                              ),
-                              errorWidget: (context, url, error) =>
-                                  Icon(Icons.error),
-                            ),
-                          ),
-                          HorizSpace(10.w),
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Html(data: widget.list[ind].titleEn),
-                                Html(data: widget.list[ind].descriptionEn)
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  );
-                }),
-          )
         ],
       )),
     );

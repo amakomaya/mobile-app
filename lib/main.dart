@@ -27,17 +27,19 @@ import 'package:path_provider/path_provider.dart';
 
 import 'injection_container.dart';
 import 'localization/locale.dart';
-import 'localization_cubit/localization_cubit.dart';
+import 'src/core/constant/app_constants.dart';
 import 'src/features/ancs/cubit/ancs_cubit.dart';
 import 'src/features/audio/cubit/audio_cubit.dart';
 import 'src/features/authentication/authentication_cubit/auth_cubit.dart';
 import 'src/features/authentication/authentication_cubit/logout_cubit.dart';
 import 'src/features/authentication/cubit/district_municipality_cubit.dart';
 import 'src/features/authentication/drawer_cubit/drawer_cubit.dart';
+import 'src/features/authentication/model/user_model.dart';
 import 'src/features/bottom_nav/cubit/cubit/navigation_index_cubit.dart';
 import 'src/features/home/cubit/newsfeed_cubit.dart';
 import 'injection_container.dart' as di;
 
+late Box box;
 Future<void> main() async {
   WidgetsFlutterBinding?.ensureInitialized();
   // await FlutterDownloader.initialize(debug: true, ignoreSsl: true);
@@ -46,7 +48,7 @@ Future<void> main() async {
   await EasyLocalization.ensureInitialized();
 
   await Hive.initFlutter();
-  // WidgetsBinding.instance?.addObserver(const AudioPlayerWidget());
+  Hive.registerAdapter(UserModelAdapter());
 
   //initialize get_it
   di.init();
@@ -84,7 +86,8 @@ Future<void> main() async {
                   BlocProvider(create: (context) => sl<NewsfeedCubit>()),
                   BlocProvider(create: (context) => sl<FaqsCubit>()),
                   BlocProvider(create: (context) => sl<AudioCubit>()),
-                  BlocProvider(create: (context)=>SelectDistrictMunicipalityCubit()),
+                  BlocProvider(
+                      create: (context) => SelectDistrictMunicipalityCubit()),
                   BlocProvider(
                       create: (context) =>
                           DrawerCubit()..checkDrawerSelection(0)),
@@ -124,17 +127,17 @@ class MyApp extends StatelessWidget {
       designSize: const Size(414, 896),
       builder: (context, child) => Builder(builder: (context) {
         return MaterialApp(
-              localizationsDelegates: context.localizationDelegates,
-              supportedLocales: context.supportedLocales,
-              locale: context.locale,
-              builder: BotToastInit(),
-              navigatorObservers: [
-                BotToastNavigatorObserver(),
-              ],
-              debugShowCheckedModeBanner: false,
-              theme: CustomTheme.lightTheme,
-              home: const SplashPage(),
-            );
+          localizationsDelegates: context.localizationDelegates,
+          supportedLocales: context.supportedLocales,
+          locale: context.locale,
+          builder: BotToastInit(),
+          navigatorObservers: [
+            BotToastNavigatorObserver(),
+          ],
+          debugShowCheckedModeBanner: false,
+          theme: CustomTheme.lightTheme,
+          home: const SplashPage(),
+        );
       }),
     );
   }

@@ -8,6 +8,7 @@ import 'package:aamako_maya/src/features/authentication/screens/login/login_page
 import 'package:aamako_maya/src/features/authentication/widgets/complete_profile_section.dart';
 import 'package:aamako_maya/src/features/bottom_nav/bottom_navigation.dart';
 import 'package:bot_toast/bot_toast.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -16,6 +17,7 @@ import 'package:intl/intl.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart' as picker;
 
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/buttons/localization_button.dart';
 import '../../../core/widgets/buttons/primary_action_button.dart';
 import '../../../core/widgets/scaffold/primary_appBar.dart';
 import '../../../core/widgets/textfield/primary_textfield.dart';
@@ -58,27 +60,14 @@ class _RegisterSectionState extends State<RegisterSection> {
               });
             }
 
-            if (state.isAuthenticated == true&& state.error==null && state.isLoading==false) {
+            if (state.isAuthenticated == true &&
+                state.error == null &&
+                state.isLoading == false) {
               Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (ctx) => CustomBottomNavigation()),
+                  MaterialPageRoute(builder: (ctx) => const CustomBottomNavigation()),
                   (route) => false);
             }
-            // if (state.isLoading && state.error == null) {
-            //   BotToast.showLoading();
-            // }
-            // if (state.isLoading == false) {
-            //   BotToast.closeAllLoading();
-            // }
-            // state.when(
-            //     initial: ((isLoading, error) => ''),
-            //     success: (isLoading, error, user) {
-            //   Navigator.pushAndRemoveUntil(
-            //       context,
-            //       MaterialPageRoute(
-            //           builder: (ctx) => CustomBottomNavigation()),
-            //       (route) => false);
-            // });
           },
           builder: (context, state) {
             return Form(
@@ -98,10 +87,9 @@ class _RegisterSectionState extends State<RegisterSection> {
                             style: Theme.of(context).textTheme.displaySmall,
                           ),
                         ),
-                        const Padding(
-                          padding: EdgeInsets.only(right: 18, bottom: 12),
-                          child: Icon(Icons.more_vert_outlined),
-                        ),
+                       const LocalizationButton(
+                    icon: Icon(Icons.more_vert_outlined),
+                  )
                       ],
                     ),
                   ),
@@ -154,19 +142,7 @@ class _RegisterSectionState extends State<RegisterSection> {
                                 });
                               }
                             },
-                            // onTap: () async {
-                            //   picked = await showDatePicker(
-                            //     context: context,
-                            //     initialDate: selectedDate,
-                            //     firstDate: DateTime(2000),
-                            //     lastDate: DateTime.now(),
-                            //   );
-                            //   if (picked != null && picked != selectedDate) {
-                            //     setState(() {
-                            //       selectedDate = picked!;
-                            //     });
-                            //   }
-                            // },
+                          
                             child: ShadowContainer(
                               width: size.width,
                               margin: defaultPadding,
@@ -175,7 +151,7 @@ class _RegisterSectionState extends State<RegisterSection> {
                               child: Text(
                                 picked != null
                                     ? formatter.format(selectedDate)
-                                    : 'LMP ate',
+                                    : 'LMP Date',
                                 style: TextStyle(color: AppColors.black),
                               ),
                             ),
@@ -231,10 +207,10 @@ class _RegisterSectionState extends State<RegisterSection> {
                                   border: InputBorder.none,
                                 ),
                               )),
-                          VerticalSpace(2.h),
-                          const Text(
+                          VerticalSpace(10.h),
+                           Text(
                             "By clicking in register you are in agreement of Terms and Conditions",
-                            style: TextStyle(fontSize: 12, fontFamily: 'lato'),
+                            style:Theme.of(context).textTheme.bodySmall,
                           ),
                           VerticalSpace(40.h),
                           PrimaryActionButton(
@@ -267,21 +243,26 @@ class _RegisterSectionState extends State<RegisterSection> {
                               width: 170.w,
                               title: 'Register'),
                           VerticalSpace(30.h),
-                          InkWell(
-                            onTap: () {
-                              Navigator.push(
+
+                          RichText(text:TextSpan(
+                            children: [
+                              TextSpan(text: 'Already have an account ? ',  style: Theme.of(context).textTheme.bodySmall
+                              ),
+                              TextSpan(text: 'Go to login',
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                fontSize: 16,
+                                color: AppColors.primaryRed
+                              ),
+                              recognizer: TapGestureRecognizer()
+                        ..onTap = () =>  Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => LoginPage()));
-                            },
-                            child: const Center(
-                              child: Text(
-                                "Already have an Account",
-                                style:
-                                    TextStyle(fontSize: 12, fontFamily: 'lato'),
+                                      builder: (context) => const LoginPage()),
+                                  (route) => false),
                               ),
-                            ),
-                          )
+                            ]
+                          ))
+                         
                         ],
                       ),
                     ),

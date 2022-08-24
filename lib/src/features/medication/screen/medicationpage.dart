@@ -4,13 +4,17 @@ import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
 import 'package:aamako_maya/src/core/widgets/loading_shimmer/shimmer_loading.dart';
 import 'package:aamako_maya/src/features/medication/cubit/medication_cubit.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 
+import '../../../../injection_container.dart';
+import '../../../core/connection_checker/network_connection.dart';
 import '../cubit/medication_page_cubit.dart';
 
 class MedicationPage extends StatefulWidget {
@@ -21,10 +25,12 @@ class MedicationPage extends StatefulWidget {
 }
 
 class _MedicationPageState extends State<MedicationPage> {
+  final DateFormat formatter = DateFormat('yyyy-MM-dd');
+
   final controller = PageController();
   @override
   void initState() {
-    context.read<MedicationCubit>().getMedication();
+    context.read<MedicationCubit>().getMedication(false);
     super.initState();
   }
 
@@ -58,67 +64,80 @@ class _MedicationPageState extends State<MedicationPage> {
                   ),
                   BlocBuilder<MedicationCubit, MedicationState>(
                     builder: (context, state) {
-                      if (state.medication == null) {
-                        return ShimmerLoading(boxHeight: 200.h, itemCount: 4);
-                      } else if (state.medication?.isEmpty ?? false) {
-                        return Text('NO  REPORTS FOUND');
-                      } else {
-                        return ListView.separated(
-                            itemBuilder: ((context, index) {
-                              return Column(
-                                children: [
-                                  ShadowContainer(
-                                    radius: 20,
-                                    width: 380.w,
-                                    color: Colors.white,
-                                    padding: defaultPadding.copyWith(
-                                        top: 10, bottom: 20),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        ListTile(
-                                          leading: Text(state.medication?[index]
-                                                  .vaccineType
-                                                  .toString() ??
-                                              ''),
-                                        ),
-                                        Divider(),
-                                        ListTile(
-                                          leading: Text("given date"),
-                                          trailing: Text(state
-                                                  .medication?[index]
-                                                  .vaccinatedDateNp
-                                                  .toString() ??
-                                              ''),
-                                        ),
-                                        ListTile(
-                                          leading: Text("Iron Pill"),
-                                          trailing: Text(state
-                                                  .medication?[index].noOfPills
-                                                  .toString() ??
-                                              ''),
-                                        ),
-                                        ListTile(
-                                          leading: Text(" VaccineReg NO"),
-                                          trailing: Text(state
-                                                  .medication?[index]
-                                                  .vaccineRegNo
-                                                  .toString() ??
-                                              ''),
-                                        ),
-                                      ],
+                      if (state is MedicationSuccess) {
+                        return RefreshIndicator(
+                          onRefresh: () async {
+                            if (await sl<NetworkInfo>().isConnected) {
+                              context
+                                  .read<MedicationCubit>()
+                                  .getMedication(true);
+                            } else {
+                              BotToast.showText(
+                                  text: 'No Internet Connection !');
+                            }
+                          },
+                          child: ListView.separated(
+                            padding: EdgeInsets.symmetric(vertical: 30.h),
+                              itemBuilder: ((context, index) {
+                                return Column(
+                                  children: [
+                                    ShadowContainer(
+                                      radius: 20,
+                                      width: 380.w,
+                                      color: Colors.white,
+                                      padding: defaultPadding.copyWith(
+                                          top: 10, bottom: 20),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          ListTile(
+                                            leading: Text(state
+                                                    .data?[index].vaccineType
+                                                    .toString() ??
+                                                ''),
+                                          ),
+                                          Divider(),
+                                          ListTile(
+                                            leading: Text("Given date"),
+                                            trailing: Text(((state.data?[index]
+                                                        .vaccinatedDateEn) !=
+                                                    null)
+                                                ? formatter.format(state
+                                                    .data![index]
+                                                    .vaccinatedDateNp!)
+                                                : ''),
+                                          ),
+                                          ListTile(
+                                            leading: Text("Iron Pill"),
+                                            trailing: Text(state
+                                                    .data?[index].noOfPills
+                                                    .toString() ??
+                                                ''),
+                                          ),
+                                          ListTile(
+                                            leading: Text(" VaccineReg NO"),
+                                            trailing: Text(state
+                                                    .data?[index].vaccineRegNo
+                                                    .toString() ??
+                                                ''),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              );
-                            }),
-                            separatorBuilder: (ctx, index) {
-                              return Divider(
-                                color: AppColors.white,
-                              );
-                            },
-                            itemCount: state.medication?.length ?? 0);
+                                  ],
+                                );
+                              }),
+                              separatorBuilder: (ctx, index) {
+                                return Divider(
+                                  color: AppColors.white,
+                                );
+                              },
+                              itemCount: state.data?.length ?? 0),
+                       
+                        );
+                      } else {
+                        return ShimmerLoading(boxHeight: 400, itemCount: 4);
                       }
                     },
                   )

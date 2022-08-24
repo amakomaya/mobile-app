@@ -1,41 +1,61 @@
+import 'dart:convert';
+
 import 'package:aamako_maya/src/core/network_services/urls.dart';
 import 'package:aamako_maya/src/features/faqs/model/faqs_model.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FaqsCubit extends Cubit<FaqsState> {
   final Dio dio;
-  FaqsCubit(this.dio)
-      : super(FaqsState(faqs: null, error: null, loading: false));
+  final SharedPreferences prefs;
+  FaqsCubit(this.dio, this.prefs) : super(FaqInitialState());
 
-  void getfaqs() async {
-    emit(FaqsState(error: null, loading: true, faqs: null));
-    try {
-      final response = await dio.get(Urls.faqsUrl);
+  void getfaqs(bool isRefreshed) async {
+    emit(FaqLoadingState());
 
-      if (response.statusCode == 200) {
-        final faqs = response.data as List;
-        List<Faqsmodel> list =
-            (faqs).map((e) => Faqsmodel.fromJson(e)).toList();
+    final response = prefs.getString('faqs');
+    if (response != null && isRefreshed == false) {
+      final faqs = jsonDecode(response) as List;
+      List<Faqsmodel> list = (faqs).map((e) => Faqsmodel.fromJson(e)).toList();
+      emit(FaqSuccessState(list));
+    } else {
+      try {
+        final response = await dio.get(Urls.faqsUrl);
 
-        emit(FaqsState(error: null, loading: false, faqs: list));
-      } else {
-        emit(FaqsState(faqs: state.faqs, error: null, loading: false));
+        if (response.statusCode == 200) {
+          final faqs = response.data as List;
+          await prefs.setString('faqs', jsonEncode(faqs));
+          List<Faqsmodel> list =
+              (faqs).map((e) => Faqsmodel.fromJson(e)).toList();
+
+          emit(FaqSuccessState(list));
+        } else {
+          emit(FaqFailureState());
+        }
+      } on DioError catch (e) {
+        emit(FaqFailureState());
       }
-    } on DioError catch (e) {
-      emit(FaqsState(faqs: state.faqs, error: e.message, loading: false));
     }
   }
 }
 
-class FaqsState extends Equatable {
-  final bool loading;
-  final String? error;
-  final List<Faqsmodel>? faqs;
-  FaqsState({required this.faqs, required this.error, required this.loading});
-
+abstract class FaqsState extends Equatable {
   @override
-  List<Object?> get props => [faqs, loading, error];
+  List<Object?> get props => [];
 }
+
+class FaqSuccessState extends FaqsState {
+  final List<Faqsmodel> faqs;
+  FaqSuccessState(this.faqs);
+  @override
+  List<Object?> get props => [faqs];
+}
+
+class FaqInitialState extends FaqsState {}
+
+class FaqFailureState extends FaqsState {}
+
+class FaqLoadingState extends FaqsState {}

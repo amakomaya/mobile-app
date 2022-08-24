@@ -1,11 +1,15 @@
 import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
 import 'package:aamako_maya/src/core/widgets/loading_shimmer/shimmer_loading.dart';
+import 'package:bot_toast/bot_toast.dart';
 
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 
+import '../../../../injection_container.dart';
+import '../../../core/connection_checker/network_connection.dart';
 import '../../../core/padding/padding.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/helper_widgets/shadow_container.dart';
@@ -21,10 +25,12 @@ class PncsPage extends StatefulWidget {
 }
 
 class _PncsPageState extends State<PncsPage> {
+  final DateFormat formatter = DateFormat('yyyy-MM-dd');
+
   PageController controller = PageController();
   @override
   void initState() {
-    context.read<PncsCubit>().getPncs();
+    context.read<PncsCubit>().getPncs(false);
     super.initState();
   }
 
@@ -35,11 +41,7 @@ class _PncsPageState extends State<PncsPage> {
 
     return BlocBuilder<AuthenticationCubit, LoggedInState>(
       builder: (authContext, authState) {
-       if(authState.isProfileComplete!=true){
-        return const Text('Complete your profile to see your reports');
-
-       }else{
-         return BlocProvider(
+        return BlocProvider(
           create: (context) => PcnChangecubit(),
           child: Builder(builder: (context) {
             return SizedBox(
@@ -54,117 +56,168 @@ class _PncsPageState extends State<PncsPage> {
                     },
                     controller: controller,
                     children: [
-                      const Center(
-                        child: Text('INFORMATION'),
+                      Center(
+                        child: Text('INFORMATION',
+                            style: theme.textTheme.bodySmall?.copyWith(
+                                color: Colors.black, fontSize: 15.sm)),
                       ),
                       BlocBuilder<PncsCubit, PncState>(
                         builder: (context, state) {
-                          if (state.pncs == null) {
-                            return ShimmerLoading(
-                                boxHeight: 200.h, itemCount: 4);
-                          } else if (state.pncs?.isEmpty ?? false) {
-                            return const Text('NO PNC REPORTS FOUND');
-                          } else {
-                            return ListView.separated(
-                                itemBuilder: ((context, index) {
-                                  return Container(
-                                    margin: const EdgeInsets.only(
-                                        left: 18, right: 18),
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          "PNC Report${index + 1}"
-                                              .toUpperCase(),
-                                          style: const TextStyle(
-                                              fontFamily: "lato",
-                                              color: AppColors.primaryRed,
-                                              fontSize: 17),
-                                        ),
-                                        VerticalSpace(12.h),
-                                        ShadowContainer(
-                                          radius: 20,
-                                          width: 380.w,
-                                          color: Colors.white,
-                                          padding: defaultPadding.copyWith(
-                                              top: 10, bottom: 20),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              ListTile(
-                                                leading: Text("Visit Date",
-                                                    style: theme
-                                                        .textTheme.labelSmall),
-                                                trailing: Text(
-                                                    state.pncs?[index]
-                                                            .dateOfVisit
-                                                            .toString() ??
-                                                        '',
-                                                    style: theme
-                                                        .textTheme.labelSmall),
-                                              ),
-                                              Divider(),
-                                              ListTile(
-                                                leading: Text("Mother Status",
-                                                    style: theme
-                                                        .textTheme.labelSmall),
-                                                trailing: Text(
-                                                    state.pncs?[index]
-                                                            .motherStatus
-                                                            .toString() ??
-                                                        '',
-                                                    style: theme
-                                                        .textTheme.labelSmall),
-                                              ),
-                                              ListTile(
-                                                leading: Text("Baby Status",
-                                                    style: theme
-                                                        .textTheme.labelSmall),
-                                                trailing: Text(
-                                                    state.pncs?[index]
-                                                            .babyStatus
-                                                            .toString() ??
-                                                        '',
-                                                    style: theme
-                                                        .textTheme.labelSmall),
-                                              ),
-                                              ListTile(
-                                                leading: Text("Family Planning",
-                                                    style: theme
-                                                        .textTheme.labelSmall),
-                                                trailing: Text(
-                                                    state.pncs?[index]
-                                                            .familyPlan
-                                                            .toString() ??
-                                                        '',
-                                                    style: theme
-                                                        .textTheme.labelSmall),
-                                              ),
-                                              ListTile(
-                                                leading: Text("Advice",
-                                                    style: theme
-                                                        .textTheme.labelSmall),
-                                                trailing: Text(
-                                                    state.pncs?[index].advice
-                                                            .toString() ??
-                                                        '',
-                                                    style: theme
-                                                        .textTheme.labelSmall),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        VerticalSpace(15.h),
-                                      ],
-                                    ),
-                                  );
-                                }),
-                                separatorBuilder: (ctx, index) {
-                                  return const Divider(
-                                    color: AppColors.white,
-                                  );
+                          if (state is PncSuccessState) {
+                            print(state.data.toString() + 'k ho yo');
+                            return RefreshIndicator(
+                                onRefresh: () async {
+                                  if (await sl<NetworkInfo>().isConnected) {
+                                    context.read<PncsCubit>().getPncs(true);
+                                  } else {
+                                    BotToast.showText(
+                                        text: 'No Internet Connection !');
+                                  }
                                 },
-                                itemCount: state.pncs?.length ?? 0);
+                                child: ListView.separated(
+                                    padding:
+                                        EdgeInsets.symmetric(vertical: 28.h),
+                                    itemBuilder: ((context, index) {
+                                      return (state.data.isEmpty)
+                                          ? Center(
+                                              child: Padding(
+                                                padding:
+                                                    EdgeInsets.only(top: 30.h),
+                                                child: Text('No Records Found!',
+                                                    style: theme
+                                                        .textTheme.bodySmall
+                                                        ?.copyWith(
+                                                            color: Colors.black,
+                                                            fontSize: 15.sm)),
+                                              ),
+                                            )
+                                          : Container(
+                                              margin: const EdgeInsets.only(
+                                                  left: 18, right: 18),
+                                              child: Column(
+                                                children: [
+                                                  Text(
+                                                    "PNC Report${index + 1}"
+                                                        .toUpperCase(),
+                                                    style: const TextStyle(
+                                                        fontFamily: "lato",
+                                                        color: AppColors
+                                                            .primaryRed,
+                                                        fontSize: 17),
+                                                  ),
+                                                  VerticalSpace(12.h),
+                                                  ShadowContainer(
+                                                    radius: 20,
+                                                    width: 380.w,
+                                                    color: Colors.white,
+                                                    padding:
+                                                        defaultPadding.copyWith(
+                                                            top: 10,
+                                                            bottom: 20),
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        ListTile(
+                                                          leading: Text(
+                                                              "Visit Date",
+                                                              style: theme
+                                                                  .textTheme
+                                                                  .labelSmall),
+                                                          trailing: Text(
+                                                              (state.data[index]
+                                                                          .dateOfVisit !=
+                                                                      null)
+                                                                  ? formatter.format(state
+                                                                      .data[
+                                                                          index]
+                                                                      .dateOfVisit!)
+                                                                  : 'N/A',
+                                                              style: theme
+                                                                  .textTheme
+                                                                  .labelSmall),
+                                                        ),
+                                                        Divider(),
+                                                        ListTile(
+                                                          leading: Text(
+                                                              "Mother Status",
+                                                              style: theme
+                                                                  .textTheme
+                                                                  .labelSmall),
+                                                          trailing: Text(
+                                                              state.data[index]
+                                                                      .motherStatus
+                                                                       ??
+                                                                  'N/A',
+                                                              style: theme
+                                                                  .textTheme
+                                                                  .labelSmall),
+                                                        ),
+                                                        ListTile(
+                                                          leading: Text(
+                                                              "Baby Status",
+                                                              style: theme
+                                                                  .textTheme
+                                                                  .labelSmall),
+                                                          trailing: Text(
+                                                              state.data[index]
+                                                                      .babyStatus
+                                                                       ??
+                                                                  'N/A',
+                                                              style: theme
+                                                                  .textTheme
+                                                                  .labelSmall),
+                                                        ),
+                                                        ListTile(
+                                                          leading: Text(
+                                                              "Family Planning",
+                                                              style: theme
+                                                                  .textTheme
+                                                                  .labelSmall),
+                                                          trailing: Text(
+                                                              state.data[index]
+                                                                      .familyPlan
+                                                                    ??
+                                                                  'N/A',
+                                                              style: theme
+                                                                  .textTheme
+                                                                  .labelSmall),
+                                                        ),
+                                                        ListTile(
+                                                          leading: Text(
+                                                              "Advice",
+                                                              style: theme
+                                                                  .textTheme
+                                                                  .labelSmall),
+                                                          trailing: Text(
+                                                              state.data[index]
+                                                                      .advice
+                                                                    ??
+                                                                  'N/A',
+                                                              style: theme
+                                                                  .textTheme
+                                                                  .labelSmall),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  VerticalSpace(15.h),
+                                                ],
+                                              ),
+                                            );
+                                    }),
+                                    separatorBuilder: (ctx, index) {
+                                      return const Divider(
+                                        color: AppColors.white,
+                                      );
+                                    },
+                                    itemCount: state.data.isEmpty
+                                        ? 1
+                                        : state.data.length));
+                          } else {
+                            return ShimmerLoading(
+                                boxHeight: 400.h, itemCount: 3);
                           }
                         },
                       ),
@@ -239,102 +292,7 @@ class _PncsPageState extends State<PncsPage> {
             );
           }),
         );
-      
-       }
-      
       },
     );
-
-    // return BlocBuilder<PncsCubit, PncState>(
-    //   builder: (context, state) {
-    //     if (state.pncs == null) {
-    //       return ShimmerLoading(boxHeight: 200.h, itemCount: 4);
-    //     } else if (state.pncs?.isEmpty ?? false) {
-    //       return const Text('NO PNC REPORTS FOUND');
-    //     } else {
-    //       return ListView.separated(
-    //           itemBuilder: ((context, index) {
-    //             return Container(
-    //               margin: const EdgeInsets.only(left: 18, right: 18),
-    //               child: Column(
-    //                 children: [
-    //                   Text(
-    //                     "PNC Report${index + 1}".toUpperCase(),
-    //                     style: const TextStyle(
-    //                         fontFamily: "lato",
-    //                         color: AppColors.primaryRed,
-    //                         fontSize: 17),
-    //                   ),
-    //                   VerticalSpace(12.h),
-    //                   ShadowContainer(
-    //                     radius: 20,
-    //                     width: 380.w,
-    //                     color: Colors.white,
-    //                     padding: defaultPadding.copyWith(top: 10, bottom: 20),
-    //                     child: Column(
-    //                       crossAxisAlignment: CrossAxisAlignment.start,
-    //                       children: [
-    //                         ListTile(
-    //                           leading: Text("Visit Date",
-    //                               style: theme.textTheme.labelSmall),
-    //                           trailing: Text(
-    //                               state.pncs?[index].dateOfVisit.toString() ??
-    //                                   '',
-    //                               style: theme.textTheme.labelSmall),
-    //                         ),
-    //                         Divider(),
-    //                         ListTile(
-    //                           leading: Text("Mother Status",
-    //                               style: theme.textTheme.labelSmall),
-    //                           trailing: Text(
-    //                               state.pncs?[index].motherStatus.toString() ??
-    //                                   '',
-    //                               style: theme.textTheme.labelSmall),
-    //                         ),
-    //                         ListTile(
-    //                           leading: Text("Baby Status",
-    //                               style: theme.textTheme.labelSmall),
-    //                           trailing: Text(
-    //                               state.pncs?[index].babyStatus.toString() ??
-    //                                   '',
-    //                               style: theme.textTheme.labelSmall),
-    //                         ),
-    //                         ListTile(
-    //                           leading: Text("Family Planning",
-    //                               style: theme.textTheme.labelSmall),
-    //                           trailing: Text(
-    //                               state.pncs?[index].familyPlan.toString() ??
-    //                                   '',
-    //                               style: theme.textTheme.labelSmall),
-    //                         ),
-    //                         ListTile(
-    //                           leading: Text("Advice",
-    //                               style: theme.textTheme.labelSmall),
-    //                           trailing: Text(
-    //                               state.pncs?[index].advice.toString() ?? '',
-    //                               style: theme.textTheme.labelSmall),
-    //                         ),
-    //                       ],
-    //                     ),
-    //                   ),
-    //                   VerticalSpace(15.h),
-    //                 ],
-    //               ),
-    //             );
-    //           }),
-    //           separatorBuilder: (ctx, index) {
-    //             return const Divider(
-    //               color: AppColors.white,
-    //             );
-    //           },
-    //           itemCount: state.pncs?.length ?? 0);
-    //     }
-    //   },
-    // );
   }
 }
-
-
-//edit
-
-//bloc.add

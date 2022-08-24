@@ -8,7 +8,7 @@ class BorderContainer extends StatelessWidget {
   final double? height;
   final Color? color;
   final double? width;
-  final  bool hasBorder;
+  final bool hasBorder;
   final Widget? child;
   final EdgeInsetsGeometry? margin;
   final EdgeInsetsGeometry? padding;
@@ -31,23 +31,15 @@ class BorderContainer extends StatelessWidget {
       child: InkWell(
         child: Container(
           margin: margin ?? defaultPadding,
-        padding: padding ??
-                  const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-              width: width ?? 185.w,
-              height: height,
+          padding: padding ??
+              const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+          width: width ?? 185.w,
+          height: height,
           decoration: BoxDecoration(
-            boxShadow:const [
-              BoxShadow(
-                blurRadius: 2,
-                color: Colors.grey,
-                offset: Offset(1,1)
-                ,spreadRadius: 2
-              )
-            ],
-           
-            color: color ?? Colors.white,
+            color: Colors.white,
             borderRadius: borderRadius ?? BorderRadius.circular(22),
-            border: hasBorder? Border.all(color: AppColors.primaryRed,) :Border.all(color: color??Colors.white),
+            border:Border.all(color: color ?? AppColors.primaryRed)
+             
           ),
           child: child,
         ),

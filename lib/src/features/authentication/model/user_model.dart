@@ -1,16 +1,21 @@
 // To parse this JSON data, do
 //
 //     final userModel = userModelFromJson(jsonString);
+import 'package:hive/hive.dart';
 
 import 'dart:convert';
+
+part 'user_model.g.dart';
+
 
 UserModel userModelFromJson(String str) => UserModel.fromJson(json.decode(str));
 
 String userModelToJson(UserModel data) => json.encode(data.toJson());
 
-class UserModel {
+
+@HiveType(typeId: 0)
+class UserModel extends HiveObject{
   UserModel({
-    this.token,
     this.name,
     this.age,
     this.height,
@@ -38,37 +43,60 @@ class UserModel {
     this.healthWorkerPhone,
     this.registerAs,
   });
-
-  String? token;
+  @HiveField(0)
   String? name;
+  @HiveField(1)
   int? age;
+  @HiveField(2)
   String? height;
+  @HiveField(3)
   int? districtId;
+  @HiveField(4)
   int? municipalityId;
+  @HiveField(5)
   String? ward;
+  @HiveField(25)
   String? tole;
+  @HiveField(6)
   dynamic phone;
+  @HiveField(7)
   String? bloodGroup;
+  @HiveField(8)
   String? husbandName;
+  @HiveField(9)
   String? lmpDateEn;
+  @HiveField(10)
   String? lmpDateNp;
+  @HiveField(11)
   String? healthpostName;
+  @HiveField(12)
   int? hpDistrict;
+  @HiveField(13)
   int? hpMunicipality;
+  @HiveField(14)
   int? hpWard;
+  @HiveField(15)
   String? chronicIllness;
+  @HiveField(16)
   String? currentHealthpost;
+  @HiveField(17)
   String? noOfPregnantBefore;
+  @HiveField(18)
   String? moolDartaNo;
+  @HiveField(19)
   String? sewaDartaNo;
+  @HiveField(20)
   String? orcDartaNo;
+  @HiveField(21)
   String? healthWorkerFullName;
+  @HiveField(22)
   String? healthWorkerPost;
+  @HiveField(23)
   String? healthWorkerPhone;
+  @HiveField(24)
   String? registerAs;
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
-        token: json["token"],
         name: json["name"],
         age: json["age"],
         height: json["height"],
@@ -98,7 +126,6 @@ class UserModel {
       );
 
   Map<String, dynamic> toJson() => {
-        "token": token,
         "name": name,
         "age": age,
         "height": height,

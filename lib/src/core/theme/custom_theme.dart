@@ -11,15 +11,15 @@ class CustomTheme {
       colorScheme: const ColorScheme(
           brightness: Brightness.light,
           primary: AppColors.primaryRed,
-          onPrimary: AppColors.primaryRed,
+          onPrimary: AppColors.white,
           secondary: AppColors.primaryRed,
           onSecondary: AppColors.accentGrey,
           error: AppColors.primaryRed,
           onError: Colors.red,
           onBackground: Colors.white,
           surface: Colors.white,
-          onSurface: Colors.white,
-          background: Colors.red),
+          onSurface: Colors.black,
+          background: Colors.white),
       appBarTheme: const AppBarTheme(
           toolbarHeight: 0,
           elevation: 0,

@@ -515,9 +515,9 @@ abstract class _Initial implements OnboardState {
       _$_Initial;
 
   @override
-  bool get isLoading => throw _privateConstructorUsedError;
+  bool get isLoading;
   @override
-  Exception? get error => throw _privateConstructorUsedError;
+  Exception? get error;
   @override
   @JsonKey(ignore: true)
   _$$_InitialCopyWith<_$_Initial> get copyWith =>
@@ -693,10 +693,10 @@ abstract class _OnboardSuccess implements OnboardState {
       required final List<WizardModel> onboardList}) = _$_OnboardSuccess;
 
   @override
-  bool get isLoading => throw _privateConstructorUsedError;
+  bool get isLoading;
   @override
-  Exception? get error => throw _privateConstructorUsedError;
-  List<WizardModel> get onboardList => throw _privateConstructorUsedError;
+  Exception? get error;
+  List<WizardModel> get onboardList;
   @override
   @JsonKey(ignore: true)
   _$$_OnboardSuccessCopyWith<_$_OnboardSuccess> get copyWith =>

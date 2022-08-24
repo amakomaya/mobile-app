@@ -1,12 +1,18 @@
 import 'package:aamako_maya/src/core/padding/padding.dart';
 import 'package:aamako_maya/src/core/theme/app_colors.dart';
+import 'package:aamako_maya/src/features/audio/cubit/audio_cubit.dart';
 import 'package:aamako_maya/src/features/audio/model/audio_model.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:bot_toast/bot_toast.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
+import '../../../../injection_container.dart';
+import '../../../core/connection_checker/network_connection.dart';
 import '../../../core/widgets/helper_widgets/blank_space.dart';
 import '../widgets/audio_container_widget.dart';
 
@@ -24,8 +30,7 @@ class _AudioPlayerSectionState extends State<AudioPlayerSection>
   ValueNotifier<bool> isPlaying = ValueNotifier(false);
 
   late AudioPlayer _audioPlayer;
-  // Duration duration = Duration.zero;
-  // Duration position = Duration.zero;
+
   ValueNotifier<Duration> dur = ValueNotifier(Duration.zero);
   ValueNotifier<Duration> pos = ValueNotifier(Duration.zero);
 
@@ -90,7 +95,7 @@ class _AudioPlayerSectionState extends State<AudioPlayerSection>
     final theme = Theme.of(context);
 
     return VisibilityDetector(
-      key: ValueKey('AudioWidgetKey'),
+      key: const ValueKey('AudioWidgetKey'),
       onVisibilityChanged: (visibilityInfo) {
         var visiblePercentage = visibilityInfo.visibleFraction * 100;
         if (visiblePercentage < 100.0) {
@@ -113,41 +118,50 @@ class _AudioPlayerSectionState extends State<AudioPlayerSection>
             ),
           ),
           Expanded(
-            child: ScrollablePositionedList.builder(
-                itemScrollController: _scrollController,
-                padding: defaultPadding.copyWith(
-                  top: 15.h,
-                  bottom: 15.h,
-                ),
-                itemBuilder: ((context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: InkWell(
-                      onTap: () {
-                        _play(
-                          widget.audios[index].path,
-                          widget.audios[index].titleEn,
-                          widget.audios[index].thumbnail,
-                        );
-                        _scrollController.scrollTo(
-                            index: index, duration: Duration(seconds: 1));
-                      },
-                      child: ValueListenableBuilder(
-                          valueListenable: currentUrl,
-                          builder: (context, b, bb) {
-                            return AudioContainerWidget(
-                              isPlaying: currentUrl.value == null
-                                  ? false
-                                  : widget.audios[index].path ==
-                                      currentUrl.value,
-                              audio: widget.audios[index],
-                            );
-                          }),
-                    ),
-                  );
-                }),
-                // separatorBuilder: (ctx, ind) => VerticalSpace(20.h),
-                itemCount: widget.audios.length),
+            child: RefreshIndicator(
+              onRefresh: () async {
+                if (await sl<NetworkInfo>().isConnected) {
+                  context.read<AudioCubit>().getAudio(true);
+                } else {
+                  BotToast.showText(text: 'No Internet Connection !');
+                }
+              },
+              child: ScrollablePositionedList.builder(
+                  itemScrollController: _scrollController,
+                  padding: defaultPadding.copyWith(
+                    top: 15.h,
+                    bottom: 15.h,
+                  ),
+                  itemBuilder: ((context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: InkWell(
+                        onTap: () {
+                          _play(
+                            widget.audios[index].path,
+                            widget.audios[index].titleEn,
+                            widget.audios[index].thumbnail,
+                          );
+                          _scrollController.scrollTo(
+                              index: index, duration: Duration(seconds: 1));
+                        },
+                        child: ValueListenableBuilder(
+                            valueListenable: currentUrl,
+                            builder: (context, b, bb) {
+                              return AudioContainerWidget(
+                                isPlaying: currentUrl.value == null
+                                    ? false
+                                    : widget.audios[index].path ==
+                                        currentUrl.value,
+                                audio: widget.audios[index],
+                              );
+                            }),
+                      ),
+                    );
+                  }),
+                  // separatorBuilder: (ctx, ind) => VerticalSpace(20.h),
+                  itemCount: widget.audios.length),
+            ),
           ),
           ValueListenableBuilder(
               valueListenable: currentUrl,
@@ -164,9 +178,9 @@ class _AudioPlayerSectionState extends State<AudioPlayerSection>
                             );
                           }),
                           child: Container(
-                            height: 60.h,
+                            height: 0.h,
                             color: Colors.transparent.withOpacity(0.1),
-                            key: ValueKey('switchAnimation1'),
+                            key: const ValueKey('switchAnimation1'),
                           ),
                         )
                       : Container(
@@ -180,13 +194,13 @@ class _AudioPlayerSectionState extends State<AudioPlayerSection>
                                   ]),
                               borderRadius: BorderRadius.only(
                                   topRight: Radius.circular(30.w))),
-                          key: ValueKey('switchAnimation2'),
+                          key: const ValueKey('switchAnimation2'),
                           // curve: Curves.fastOutSlowIn,
                           // duration: Duration(seconds: 1),
 
-                          height: 170.h,
                           width: double.infinity,
-                          padding: defaultPadding.copyWith(top: 15, bottom: 15),
+                          padding:
+                              defaultPadding.copyWith(top: 30.h, bottom: 30.h),
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -194,17 +208,25 @@ class _AudioPlayerSectionState extends State<AudioPlayerSection>
                                   valueListenable: currentThumbnail,
                                   builder: (context, snapshot, c) {
                                     print(currentThumbnail.toString() + 'ads');
-                                    return Container(
-                                      height: 50.h,
-                                      width: 50.h,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(17),
-                                          image: DecorationImage(
-                                              image: NetworkImage(
-                                                  currentThumbnail.value ??
-                                                      widget.audios[0]
-                                                          .thumbnail))),
+                                    return ClipRRect(
+                                      borderRadius: BorderRadius.circular(20),
+                                      child: SizedBox(
+                                        height: 70.h,
+                                        width: 70.h,
+                                        child: CachedNetworkImage(
+                                          fit: BoxFit.cover,
+                                          imageUrl: currentThumbnail.value ??
+                                              widget.audios[0].thumbnail,
+                                          placeholder: (ctx, url) => Container(
+                                            height: 100.h,
+                                            width: 100.w,
+                                            color: AppColors.accentGrey,
+                                          ),
+                                          errorWidget: (context, url, error) =>
+                                              const Icon(Icons.error),
+                                        ),
+                                      
+                                      ),
                                     );
                                   }),
                               Column(

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:aamako_maya/src/core/network_services/urls.dart';
 import 'package:aamako_maya/src/features/ancs/model/ancs_model.dart';
 import 'package:aamako_maya/src/features/delivery/model/delivery_model.dart';
@@ -7,58 +9,65 @@ import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../injection_container.dart';
 import '../../authentication/local_storage/authentication_local_storage.dart';
 
 //this is cubit (class)
 class DeliverCubit extends Cubit<DeliveryState> {
   Dio dio; //type of data accepted in constructor
   AuthLocalData local;
-  DeliverCubit(this.dio, this.local) //constructor
-      : super(const DeliveryState(delivery: null, error: null, loading: false));
+  SharedPreferences prefs;
+
+  DeliverCubit(this.dio, this.local, this.prefs) //constructor
+      : super(DeliveryInitialState());
 
   //inside class, function is called method
-  void getDelivery() async {
-    emit(const DeliveryState(delivery: null, loading: true, error: null));
+  void getDelivery(bool isRefreshed) async {
+    emit(DeliveryLoadingState());
     // String token = await local.getTokenFromocal();
     String token = "4a66f714-9124-4cd1-a0fa-e48789021600";
-    try {
-      final response = await dio.get("${Urls.deliveryUrl}/$token");
-      if (response.statusCode == 200) {
-        debugPrint(response.data.toString() + 'delivery');
-        final delivery = response.data as List;
-        //final delieveryv= response.data;
-        // DeliveryModel data= DelievryModel.fromJson(deliverryv);
-        //emit DeliveryState(delievery:data,error:null,loading:false);
 
-        List<Deliverymodel> list =
-            (delivery).map((e) => Deliverymodel.fromJson(e)).toList();
-        debugPrint(list.toString() + ' success');
+    final response = prefs.getString('delivery');
+    if (response != null && isRefreshed == false) {
+      final delivery = jsonDecode(response) as List;
+      final data = (delivery).map((e) => Deliverymodel.fromJson(e)).toList();
+      emit(DeliverySuccessState(data));
+    } else {
+      try {
+        final response = await dio.get("${Urls.deliveryUrl}/$token");
+        if (response.statusCode == 200) {
+          final delivery = response.data as List;
+          prefs.setString('delivery', jsonEncode(delivery));
+          List<Deliverymodel> list =
+              (delivery).map((e) => Deliverymodel.fromJson(e)).toList();
 
-        emit(DeliveryState(delivery: list, error: null, loading: false));
-      } else {
-        emit(DeliveryState(
-            delivery: state.delivery, error: 'Error', loading: false));
-        // debugPrint(response.data.toString() + 'delivery');
+          emit(DeliverySuccessState(list));
+        } else {
+          emit(DeliveryFailureState());
+        }
+      } on DioError catch (_) {
+        emit(DeliveryFailureState());
       }
-    } on DioError catch (e) {
-      //e = Internal Server error
-      //or e= Bad request
-      //or e = 404 not found error
-      debugPrint(e.toString() + 'pncs dio');
-
-      emit(DeliveryState(
-          delivery: state.delivery, error: e.message, loading: false));
     }
   }
 }
 
 class DeliveryState extends Equatable {
-  final bool loading;
-  final String? error;
-  final List<Deliverymodel>? delivery;
-  const DeliveryState(
-      {required this.delivery, required this.loading, required this.error});
   @override
-  List<Object?> get props => [loading, error, delivery];
+  List<Object?> get props => [];
 }
+
+class DeliverySuccessState extends DeliveryState {
+  final List<Deliverymodel> data;
+  DeliverySuccessState(this.data);
+  @override
+  List<Object?> get props => [data];
+}
+
+class DeliveryInitialState extends DeliveryState {}
+
+class DeliveryLoadingState extends DeliveryState {}
+
+class DeliveryFailureState extends DeliveryState {}

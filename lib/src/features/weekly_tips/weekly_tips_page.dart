@@ -1,4 +1,3 @@
-import 'package:aamako_maya/localization_cubit/localization_cubit.dart';
 import 'package:aamako_maya/src/core/connection_checker/network_connection.dart';
 import 'package:aamako_maya/src/core/padding/padding.dart';
 import 'package:aamako_maya/src/core/snackbar/error_snackbar.dart';
@@ -7,6 +6,7 @@ import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
 import 'package:aamako_maya/src/core/widgets/loading_shimmer/shimmer_loading.dart';
 import 'package:aamako_maya/src/features/weekly_tips/cubit/weekly_tips_cubit.dart';
+import 'package:aamako_maya/src/features/weekly_tips/model/weekly_tips_model.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +14,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_html/flutter_html.dart';
 import '../../../injection_container.dart';
+import '../../core/cache/weekly_cache/cache_values.dart';
 import '../../core/theme/app_colors.dart';
 
 class WeeklyTipsPage extends StatefulWidget {
@@ -26,7 +27,7 @@ class WeeklyTipsPage extends StatefulWidget {
 class _WeeklyTipsPageState extends State<WeeklyTipsPage> {
   @override
   void initState() {
-    context.read<WeeklyTipsCubit>().getWeeklyTips();
+    context.read<WeeklyTipsCubit>().getWeeklyTips(false);
     super.initState();
   }
 
@@ -34,37 +35,21 @@ class _WeeklyTipsPageState extends State<WeeklyTipsPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return BlocConsumer<WeeklyTipsCubit, WeeklyTipsState>(
-        listener: (context, state) {
-      if (state.error != null) {
-        BotToast.showCustomText(toastBuilder: (e) {
-          return ErrorSnackBar(message: state.error ?? '');
-        });
-      }
-      if (state.success != null) {
-        BotToast.showCustomText(toastBuilder: (e) {
-          return SuccessSnackBar(message: state.success ?? '');
-        });
-      }
-    }, builder: (context, state) {
-      final bool isEnglish =
-          EasyLocalization.of(context)?.currentLocale?.languageCode == 'en';
-
-      if (state.data == null) {
-        return ShimmerLoading(boxHeight: 400.h, itemCount: 2);
-      } else {
+        builder: (ctx, state) {
+      if (state is WeeklyTipsSucces) {
+        final list = state.data;
+        final bool isEnglish =
+            EasyLocalization.of(context)?.currentLocale?.languageCode == 'en';
         return RefreshIndicator(
           onRefresh: () async {
             if (await sl<NetworkInfo>().isConnected) {
-              context.read<WeeklyTipsCubit>().getWeeklyTips(isRefreshed: true);
+              context.read<WeeklyTipsCubit>().getWeeklyTips(true);
             } else {
-              BotToast.showCustomText(toastBuilder: (e) {
-                return const ErrorSnackBar(
-                    message: 'No Internet Connectivity !!');
-              });
+              BotToast.showText(text: 'No Internet Connection !');
             }
           },
           child: ListView.separated(
-              padding: defaultPadding,
+              padding: defaultPadding.copyWith(bottom: 25.h),
               primary: false,
               shrinkWrap: true,
               itemBuilder: (ctx, index) {
@@ -80,76 +65,35 @@ class _WeeklyTipsPageState extends State<WeeklyTipsPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                              (isEnglish)
-                                  ? (state.data?[index].titleEn ?? "")
-                                  : (state.data?[index].titleNp ?? ""),
+                              isEnglish
+                                  ? (list[index].titleEn)
+                                  : (list[index].titleNp),
                               style: theme.textTheme.labelMedium),
                           Divider(
                             height: 15.w,
                             color: AppColors.accentGrey,
                           ),
                           Html(
-                            data: (isEnglish)
-                                ? (state.data?[index].descriptionEn ?? '')
-                                : (state.data?[index].descriptionNp ?? ''),
+                            data: (list[index].descriptionNp),
                             onImageError: (sd, f) {},
                           )
                         ],
                       ),
                     ),
-
-                    // Text(
-                    //   'Other Week Information',
-                    //   style: theme.textTheme.headlineMedium,
-                    // ),
-                    // VerticalSpace(20.h),
-                    // ShadowContainer(
-                    //   radius: 30,
-                    //   padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20),
-                    //   child: Column(
-                    //     crossAxisAlignment: CrossAxisAlignment.start,
-                    //     children: [
-                    //       Text('Special consideration:',
-                    //           style: theme.textTheme.labelMedium),
-                    //       Divider(
-                    //         height: 15.w,
-                    //         color: AppColors.accentGrey,
-                    //       ),
-                    //       Text(
-                    //         "It's never too early to start healthy habts. Try eating whole fod;avoid smoking.It's never too early to start healthy habts. Try eating whole fod;avoid smoking.It's never too early to start healthy habts. Try eating whole fod;avoid smoking.It's never too early to start healthy habts. Try eating whole fod;avoid smoking.It's never too early to start healthy habts. Try eating whole fod;avoid smoking.It's never too early to start healthy habts. Try eating whole fod;avoid smoking.It's never too early to start healthy habts. Try eating whole fod;avoid smoking.",
-                    //         style: theme.textTheme.labelSmall,
-                    //         textAlign: TextAlign.left,
-                    //       )
-                    //     ],
-                    //   ),
-                    // ),
-                    // VerticalSpace(30.h),
-                    // ShadowContainer(
-                    //   radius: 30,
-                    //   padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20),
-                    //   child: Column(
-                    //     crossAxisAlignment: CrossAxisAlignment.start,
-                    //     children: [
-                    //       Text('Special consideration:',
-                    //           style: theme.textTheme.labelMedium),
-                    //       Divider(
-                    //         height: 15.w,
-                    //         color: AppColors.accentGrey,
-                    //       ),
-                    //       Text(
-                    //         "It's never too early to start healthy habts. Try eating whole fod;avoid smoking.It's never too early to start healthy habts. Try eating whole fod;avoid smoking.It's never too early to start healthy habts. Try eating whole fod;avoid smoking.It's never too early to start healthy habts. Try eating whole fod;avoid smoking.It's never too early to start healthy habts. Try eating whole fod;avoid smoking.It's never too early to start healthy habts. Try eating whole fod;avoid smoking.It's never too early to start healthy habts. Try eating whole fod;avoid smoking.",
-                    //         style: theme.textTheme.labelSmall,
-                    //         textAlign: TextAlign.left,
-                    //       )
-                    //     ],
-                    //   ),
-                    // ),
                   ],
                 );
               },
               separatorBuilder: (ctx, index) => VerticalSpace(20.h),
-              itemCount: state.data?.length ?? 0),
+              itemCount: list.length),
         );
+      } else {
+        return ShimmerLoading(boxHeight: 500.h, itemCount: 2);
+      }
+    }, listener: (state, cs) {
+      if (cs is WeeklyTipsSucces) {
+        if (cs.isRefreshed == true) {
+          BotToast.showText(text: 'Successfully Refreshed !');
+        }
       }
     });
   }

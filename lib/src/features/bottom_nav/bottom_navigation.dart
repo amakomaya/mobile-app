@@ -17,6 +17,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive/hive.dart';
 
 import '../../../l10n/locale_keys.g.dart';
 import '../../core/strings/app_strings.dart';
@@ -52,10 +53,10 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
           key: _scaffoldKey,
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
-          extendBody: true,
-          // extendBodyBehindAppBar: true,
+          extendBody: false,
+          extendBodyBehindAppBar: true,
           backgroundColor: Colors.white,
-          resizeToAvoidBottomInset: true,
+          resizeToAvoidBottomInset: false,
           drawer: const DrawerWidget(),
           bottomNavigationBar: Builder(builder: (context) {
             return BlocBuilder<NavigationIndexCubit, NavigationIndexState>(
@@ -63,6 +64,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                 return SizedBox(
                   height: 60.h,
                   child: BottomAppBar(
+
                       color: Colors.white,
                       elevation: 4,
                       notchMargin: 7,
@@ -81,7 +83,9 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                             ),
                             onPressed: () {
                               context.read<NavigationIndexCubit>().changeIndex(
-                                  index: 0, titleEn: 'Home', titleNp:  AppStrings.home);
+                                  index: 0,
+                                  titleEn: 'Home',
+                                  titleNp: AppStrings.home);
                               context
                                   .read<DrawerCubit>()
                                   .checkDrawerSelection(0);
@@ -97,7 +101,9 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                             ),
                             onPressed: () {
                               context.read<NavigationIndexCubit>().changeIndex(
-                                  index: 1, titleNp:  AppStrings.audio, titleEn: "Audio");
+                                  index: 1,
+                                  titleNp: AppStrings.audio,
+                                  titleEn: "Audio");
 
                               context
                                   .read<DrawerCubit>()
@@ -113,12 +119,14 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                                   state.index == 2 ? Colors.red : Colors.grey,
                             ),
                             onPressed: () {
-                              context
-                                  .read<VideoCubit>()
-                                  .getVideos(isRefreshed: true);
+                              // context
+                              //     .read<VideoCubit>()
+                              //     .getVideos(isRefreshed: true);
 
                               context.read<NavigationIndexCubit>().changeIndex(
-                                  titleNp:  AppStrings.video, index: 2, titleEn: 'Video');
+                                  titleNp: AppStrings.video,
+                                  index: 2,
+                                  titleEn: 'Video');
                               context
                                   .read<DrawerCubit>()
                                   .checkDrawerSelection(-1);
@@ -137,7 +145,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                             ),
                             onPressed: () {
                               context.read<NavigationIndexCubit>().changeIndex(
-                                  titleNp:  AppStrings.weeklytips,
+                                  titleNp: AppStrings.weeklytips,
                                   index: 3,
                                   titleEn: 'Weekly Tips');
                               context
@@ -184,21 +192,14 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
 
                           ///index 9
                           Labtestpage(),
-
                           //profile index=10
                           CompleteProfileSection(),
-
                           //card index =11
-
                           CardPage(),
-
                           //faq=12
                           FaqsPage(),
-
                           //syztemassetment index=13
                           SymptomsPAge()
-
-                          //
                         ],
                       ),
                     ),

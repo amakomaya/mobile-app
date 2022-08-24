@@ -42,6 +42,7 @@ class HomeAudioPlayerPage extends StatelessWidget {
                     image: NetworkImage(
                         "https://img.freepik.com/free-psd/cover-compact-disc-mockup_7838-394.jpg?w=2000"))),
           ),
+          Spacer(),
           Padding(
             padding: defaultPadding,
             child: Text('Title'),
@@ -78,30 +79,27 @@ class HomeAudioPlayerPage extends StatelessWidget {
             ),
           ),
           VerticalSpace(20.h),
-
-
-          Container(
-            color: Colors.red,
-            child: Row(
-              children: [
-               Icon(
-                      Icons.skip_previous_rounded,
-                      color: AppColors.accentGrey,
-                      size: 66.sm,
-                    ),
-                Icon(
-                      Icons.play_arrow_rounded,
-                      color: AppColors.accentGrey,
-                      size: 66.sm,
-                    ),
-                 Icon(
-                      Icons.skip_next_rounded,
-                      color: AppColors.accentGrey,
-                      size: 66.sm,
-                    )
-              ],
-            ),
-          )
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.skip_previous_rounded,
+                color: AppColors.accentGrey,
+                size: 66.sm,
+              ),
+              Icon(
+                Icons.play_arrow_rounded,
+                color: AppColors.accentGrey,
+                size: 66.sm,
+              ),
+              Icon(
+                Icons.skip_next_rounded,
+                color: AppColors.accentGrey,
+                size: 66.sm,
+              )
+            ],
+          ),
+            Spacer(),
         ],
       ),
     ));

@@ -21,6 +21,7 @@ class ShimmerLoading extends StatelessWidget {
       baseColor: Colors.grey[200]!,
       highlightColor: Colors.white,
       child: ListView.separated(
+        physics: NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         padding: defaultPadding.copyWith(top: 20, bottom: 20),
         itemCount: itemCount,
