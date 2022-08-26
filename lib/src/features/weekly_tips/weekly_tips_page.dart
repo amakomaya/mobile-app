@@ -8,6 +8,7 @@ import 'package:aamako_maya/src/core/widgets/loading_shimmer/shimmer_loading.dar
 import 'package:aamako_maya/src/features/weekly_tips/cubit/weekly_tips_cubit.dart';
 import 'package:aamako_maya/src/features/weekly_tips/model/weekly_tips_model.dart';
 import 'package:bot_toast/bot_toast.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -73,10 +74,41 @@ class _WeeklyTipsPageState extends State<WeeklyTipsPage> {
                             height: 15.w,
                             color: AppColors.accentGrey,
                           ),
+                          // Html(
+                          //   data: (list[index].descriptionNp),
+                          //   onImageError: (sd, f) {},
+                          //   customRenders: {
+
+                          //   },
+                          // )
                           Html(
-                            data: (list[index].descriptionNp),
-                            onImageError: (sd, f) {},
-                          )
+                              // data: <span>Some normal HTML</span> then appears a <customtag>Some data in this one</customtag>,
+                              data: list[index].descriptionNp,
+                              tagsList: Html.tags..addAll(['img']),
+                              customRenders: {
+                                customTagMatcher(): CustomRender.widget(
+                                    widget: (context, buildChildren) {
+                                  final element = context.tree.element!;
+
+                                  // Your conditions with the element.
+                                  // finally return your own custom widget:
+                                  return Builder(builder: (context) {
+                                    // return Image.network(element.attributes['src']??'');
+                                    return CachedNetworkImage(
+                                      fit: BoxFit.cover,
+                                      imageUrl: element.attributes['src'] ?? '',
+                                      placeholder: (ctx, url) => Container(
+                                        height: 100.h,
+                                        width: 100.w,
+                                        color: AppColors.accentGrey,
+                                      ),
+                                      errorWidget: (context, url, error) =>
+                                          const Icon(Icons.error),
+                                    );
+                                  });
+                                }),
+                              }),
+                        
                         ],
                       ),
                     ),
@@ -90,11 +122,14 @@ class _WeeklyTipsPageState extends State<WeeklyTipsPage> {
         return ShimmerLoading(boxHeight: 500.h, itemCount: 2);
       }
     }, listener: (state, cs) {
-      if (cs is WeeklyTipsSucces) {
-        if (cs.isRefreshed == true) {
-          BotToast.showText(text: 'Successfully Refreshed !');
-        }
-      }
+      // if (cs is WeeklyTipsSucces) {
+      //   if (cs.isRefreshed == true) {
+      //     BotToast.showText(text: 'Successfully Refreshed !');
+      //   }
+      // }
     });
   }
 }
+
+CustomRenderMatcher customTagMatcher() =>
+    (context) => context.tree.element?.localName == 'img';

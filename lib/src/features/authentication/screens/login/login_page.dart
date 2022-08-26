@@ -49,23 +49,15 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AuthenticationCubit, LoggedInState>(
+    return BlocConsumer<AuthenticationCubit, AuthenticationState>(
       listener: (context, state) {
-        if (state.isLoading == true) {
+        if (state is AuthenticationLoadingState) {
           BotToast.showLoading();
-        }
-        if (state.isLoading == false) {
+        } else if (state is LoginFailureState) {
           BotToast.closeAllLoading();
-        }
-        if (state.error != null && state.isLoading == false) {
-          BotToast.showCustomText(toastBuilder: (toast) {
-            return ErrorSnackBar(
-              message: state.error ?? 'Unexpected Error',
-            );
-          });
-        }
-
-        if (state.isAuthenticated == true) {
+          BotToast.showText(text: state.error);
+        } else if (state is LoginSuccessfulState) {
+          BotToast.closeAllLoading();
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
                 builder: (ctx) => const CustomBottomNavigation(),
@@ -73,10 +65,10 @@ class _LoginPageState extends State<LoginPage> {
               (route) => false);
 
           Timer(const Duration(seconds: 3), () {
-            BotToast.showCustomText(toastBuilder: (ds) {
-              return const SuccessSnackBar(message: 'Successfully Logged in!!');
-            });
+            BotToast.showText(text: 'Login Successful');
           });
+        } else {
+          BotToast.closeAllLoading();
         }
       },
       builder: (context, state) {
@@ -98,13 +90,12 @@ class _LoginPageState extends State<LoginPage> {
                           cacheHeight: 197,
                         ),
                       ),
-                       const Padding(
-                         padding: EdgeInsets.only(right:18.0),
-                         child: LocalizationButton(
-                    color: AppColors.primaryRed,
-                   ),
-                       ),
-                    
+                      const Padding(
+                        padding: EdgeInsets.only(right: 18.0),
+                        child: LocalizationButton(
+                          color: AppColors.primaryRed,
+                        ),
+                      ),
                     ],
                   ),
                   VerticalSpace(50.h),
@@ -172,10 +163,10 @@ class _LoginPageState extends State<LoginPage> {
                     padding: const EdgeInsets.symmetric(vertical: 20),
                     width: 380.w,
                     onpress: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: ((context) => const QRViewPage())));
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: ((context) => const QRViewPage())));
                     },
                     title: '',
                     child: Row(

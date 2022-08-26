@@ -2,7 +2,6 @@ import 'package:aamako_maya/src/core/theme/app_colors.dart';
 import 'package:aamako_maya/src/core/widgets/scaffold/primary_appBar.dart';
 import 'package:aamako_maya/src/features/ancs/screens/ancs_page.dart';
 import 'package:aamako_maya/src/features/authentication/widgets/complete_profile_section.dart';
-import 'package:aamako_maya/src/features/baby/screen/babypage.dart';
 import 'package:aamako_maya/src/features/bottom_nav/cubit/cubit/navigation_index_cubit.dart';
 import 'package:aamako_maya/src/features/bottom_nav/popup.dart';
 import 'package:aamako_maya/src/features/delivery/screen/delivery_page.dart';
@@ -29,6 +28,7 @@ import '../authentication/drawer_cubit/drawer_cubit.dart';
 import '../card/card_page.dart';
 import '../home/screens/homepage.dart';
 import '../shop/shop_page.dart';
+import '../siren/siren_page.dart';
 import '../symptoms/screen/symptomspage.dart';
 import '../video/cubit/video_cubit.dart';
 import '../weekly_tips/cubit/weekly_tips_cubit.dart';
@@ -55,8 +55,9 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
               FloatingActionButtonLocation.centerDocked,
           extendBody: false,
           extendBodyBehindAppBar: true,
+          
           backgroundColor: Colors.white,
-          resizeToAvoidBottomInset: false,
+          resizeToAvoidBottomInset: true,
           drawer: const DrawerWidget(),
           bottomNavigationBar: Builder(builder: (context) {
             return BlocBuilder<NavigationIndexCubit, NavigationIndexState>(
@@ -166,6 +167,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                     EasyLocalization.of(context)?.currentLocale?.languageCode ==
                         'en';
                 return Stack(
+                  clipBehavior: Clip.none,
                   children: [
                     PrimaryAppBar(
                       scaffoldKey: _scaffoldKey,
@@ -199,7 +201,9 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                           //faq=12
                           FaqsPage(),
                           //syztemassetment index=13
-                          SymptomsPAge()
+                          SymptomsPAge(),
+                          //14
+                          SirenPage()
                         ],
                       ),
                     ),
@@ -209,25 +213,28 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
             );
           }),
           floatingActionButton:
-              BlocBuilder<NavigationIndexCubit, NavigationIndexState>(
-            builder: (context, state) {
-              return FloatingActionButton(
-                backgroundColor:
-                    state.index == 4 ? AppColors.primaryRed : Colors.white,
-                isExtended: true,
-                onPressed: () {
-                  context.read<NavigationIndexCubit>().changeIndex(
-                      index: 4, titleNp: 'Sho', titleEn: "Shopping");
-                },
-                clipBehavior: Clip.none,
-                child: Icon(
-                  Icons.shopping_cart_sharp,
-                  size: 30.sm,
-                  color: state.index == 4 ? Colors.white : Colors.red,
-                ),
-              );
-            },
-          ),
+              Visibility(
+                visible: MediaQuery.of(context).viewInsets.bottom==0.0,
+                child: BlocBuilder<NavigationIndexCubit, NavigationIndexState>(
+                          builder: (context, state) {
+                return FloatingActionButton(
+                  backgroundColor:
+                      state.index == 4 ? AppColors.primaryRed : Colors.white,
+                  isExtended: true,
+                  onPressed: () {
+                    context.read<NavigationIndexCubit>().changeIndex(
+                        index: 4, titleNp: 'शप ', titleEn: "Shopping");
+                  },
+                  clipBehavior: Clip.none,
+                  child: Icon(
+                    Icons.shopping_cart_sharp,
+                    size: 30.sm,
+                    color: state.index == 4 ? Colors.white : Colors.red,
+                  ),
+                );
+                          },
+                        ),
+              ),
         ),
       ),
     );

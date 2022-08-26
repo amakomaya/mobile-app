@@ -10,6 +10,7 @@ class PrimaryTextField extends StatelessWidget {
   final TextEditingController? controller;
   final bool? obscureText;
   final VoidCallback? sufixTap;
+  final VoidCallback? onTap;
   final Decoration? decoration;
   final String? hintText;
   final String? labelText;
@@ -19,6 +20,7 @@ class PrimaryTextField extends StatelessWidget {
   final double? height;
   final double? width;
   final bool? isPhone;
+  final bool? readOnly;
   final EdgeInsetsGeometry? boxMargin;
   final EdgeInsetsGeometry? textPadding;
   final ValidatorFunc? validator;
@@ -26,6 +28,8 @@ class PrimaryTextField extends StatelessWidget {
   const PrimaryTextField({
     Key? key,
     this.decoration,
+    this.onTap,
+    this.readOnly,
     this.height,
     this.width,
     this.isPhone,
@@ -61,6 +65,8 @@ class PrimaryTextField extends StatelessWidget {
         Padding(
           padding: defaultPadding,
           child: TextFormField(
+            onTap: onTap,
+            readOnly: readOnly??false,
             keyboardType:
                 isPhone != null && isPhone == true ? TextInputType.phone : null,
             obscureText: obscureText ?? false,

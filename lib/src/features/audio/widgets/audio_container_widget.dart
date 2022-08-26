@@ -11,10 +11,11 @@ import '../../../core/widgets/helper_widgets/shadow_container.dart';
 class AudioContainerWidget extends StatelessWidget {
   final AudioModel audio;
   final bool isPlaying;
+  final bool isEnglish;
   const AudioContainerWidget({
     Key? key,
     required this.audio,
-    required this.isPlaying,
+    required this.isPlaying, required this.isEnglish,
   }) : super(key: key);
 
   @override
@@ -35,7 +36,7 @@ class AudioContainerWidget extends StatelessWidget {
         Image.asset(AppAssets.musicIcon),
         Expanded(
             child: Text(
-          audio.titleEn,
+          isEnglish?audio.titleEn:audio.titleNp,
           style: theme.textTheme.labelSmall,
         )),
         Visibility(

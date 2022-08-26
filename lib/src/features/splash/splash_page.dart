@@ -26,9 +26,8 @@ class _SplashPageState extends State<SplashPage> {
       String? token = await _localData.getTokenFromocal();
 
       if (token == null || token.isEmpty) {
-        var box = await Hive.openBox(Consts.hive_box);
-        final bool? onboard =
-            await box.get(Consts.hive_box_onboard_key) as bool?;
+        var box = await Hive.openBox('myBox');
+        final bool? onboard = await box.get('onboard') as bool?;
         if (onboard == false || onboard == null) {
           Navigator.pushReplacement(
               context,
@@ -71,9 +70,9 @@ class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return BlocListener<AuthenticationCubit, LoggedInState>(
+    return BlocListener<AuthenticationCubit, AuthenticationState>(
       listener: (context, state) {
-        if (state.isLoading == false && state.isAuthenticated == true) {
+        if (state is LoginSuccessfulState) {
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (ctx) => const CustomBottomNavigation()),

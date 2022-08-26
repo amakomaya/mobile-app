@@ -5,7 +5,7 @@ import 'package:aamako_maya/src/features/weekly_tips/model/weekly_tips_model.dar
 import 'package:aamako_maya/src/features/weekly_tips/repository/weekly_tips_repository.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
-import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/cache/weekly_cache/cache_values.dart';

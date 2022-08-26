@@ -8,7 +8,6 @@ import 'package:aamako_maya/src/features/video/model/video_model.dart';
 import 'package:aamako_maya/src/features/video/screens/video_playing_page.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';

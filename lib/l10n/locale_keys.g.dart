@@ -27,5 +27,12 @@ abstract class  LocaleKeys {
   static const symptoms = 'symptoms';
   static const appointment = 'appointment';
   static const healthreport = 'healthreport';
+  static const anc = 'anc';
+  static const delivery = 'delivery';
+  static const medication = 'medication';
+  static const pnc = 'pnc';
+  static const labtest = 'labtest';
+  static const faq = 'faq';
+  static const logout = 'logout';
 
 }

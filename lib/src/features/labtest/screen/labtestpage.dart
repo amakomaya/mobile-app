@@ -42,7 +42,7 @@ class _LabtestpageState extends State<Labtestpage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final size = MediaQuery.of(context).size;
-    return BlocBuilder<AuthenticationCubit, LoggedInState>(
+    return BlocBuilder<AuthenticationCubit, AuthenticationState>(
       builder: (authContext, authState) {
         return BlocProvider(
           create: (context) => LabPageCubit(),

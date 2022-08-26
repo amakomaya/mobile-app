@@ -49,9 +49,7 @@ class _AncsPageState extends State<AncsPage> {
     Size size = MediaQuery.of(context).size;
 
     final theme = Theme.of(context);
-    return BlocBuilder<AuthenticationCubit, LoggedInState>(
-        builder: (context, state) {
-      return BlocProvider(
+    return    BlocProvider(
         create: (context) => PageChangeCubit(),
         child: Builder(builder: (context) {
           return SizedBox(
@@ -383,6 +381,6 @@ class _AncsPageState extends State<AncsPage> {
           );
         }),
       );
-    });
+   
   }
 }

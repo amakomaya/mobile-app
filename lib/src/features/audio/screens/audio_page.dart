@@ -3,6 +3,7 @@ import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
 import 'package:aamako_maya/src/core/widgets/loading_shimmer/shimmer_loading.dart';
 import 'package:aamako_maya/src/features/audio/cubit/audio_cubit.dart';
 import 'package:bot_toast/bot_toast.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,18 +33,13 @@ class _AudioPageState extends State<AudioPage> {
     return BlocConsumer<AudioCubit, AudioState>(
       listener: (ctx, st) {},
       builder: (ctx, st) {
-        // return (st.audioModel == null)
-        //     ? ShimmerLoading(
-        //         boxHeight: 45.h,
-        //         itemCount: 10,
-        //         inBetweenSpace: 20.h,
-        //       )
-        //     : AudioPlayerSection(
-        //         audios: st.audioModel ?? [],
-        //       );
+         final bool isEnglish =
+            EasyLocalization.of(context)?.currentLocale?.languageCode == 'en';
+            print(isEnglish.toString());
 
         if (st is AudioSuccessState) {
           return AudioPlayerSection(
+            isEnglish:isEnglish,
             audios: st.data,
           );
         } else if (st is AudioLoadingState) {

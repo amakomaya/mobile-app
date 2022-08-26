@@ -26,7 +26,6 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   @override
   void initState() {
-    context.read<DistrictMunicipalityCubit>().startDistrictMunicipalityFetch();
     super.initState();
   }
 
@@ -80,40 +79,39 @@ class _RegisterPageState extends State<RegisterPage> {
               height: 20,
             ),
             Expanded(
-                child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(vertical: 20),
               child: ListView.separated(
                 shrinkWrap: true,
-                separatorBuilder: (c, i) => VerticalSpace(20.h),
-                itemCount: registerAs.length,
-                itemBuilder: (c, inde) {
-                  return GestureDetector(
-                    onTap: () {
-                      selected.value = 1;
-                      if (inde == 0 || inde == 2) {
-                        BotToast.showText(
-                            text: "Option Unavailable at the moment");
-                      }
-                    },
-                    child: ValueListenableBuilder(
-                        valueListenable: selected,
-                        builder: (context, i, _) {
-                          return BorderContainer(
-                            hasBorder: true,
-                            color: i == inde ? Colors.red : Colors.grey,
-                            margin: defaultPadding,
-                            padding:
-                                defaultPadding.copyWith(top: 15, bottom: 15),
-                            width: size.width,
-                            child: Text(
-                              registerAs[inde].name,
-                            ),
-                          );
-                        }),
-                  );
+              separatorBuilder: (c, i) => VerticalSpace(20.h),
+              itemCount: registerAs.length,
+              itemBuilder: (c, inde) {
+              return GestureDetector(
+                onTap: () {
+                  selected.value = 1;
+                  if (inde == 0 || inde == 2) {
+                    BotToast.showText(
+                        text: "Option Unavailable at the moment");
+                  }
                 },
+                child: ValueListenableBuilder(
+                    valueListenable: selected,
+                    builder: (context, i, _) {
+                      return BorderContainer(
+                        hasBorder: true,
+                        color: i == inde ? Colors.red : Colors.grey,
+                        margin: defaultPadding,
+                        padding:
+                            defaultPadding.copyWith(top: 15, bottom: 15),
+                        width: size.width,
+                        child: Text(
+                          registerAs[inde].name,
+                        ),
+                      );
+                    }),
+              );
+              },
               ),
-            )),
+            ),
+            VerticalSpace(20.h),
             PrimaryActionButton(
                 width: 170.w,
                 onpress: () {

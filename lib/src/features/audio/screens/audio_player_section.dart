@@ -18,7 +18,8 @@ import '../widgets/audio_container_widget.dart';
 
 class AudioPlayerSection extends StatefulWidget {
   final List<AudioModel> audios;
-  const AudioPlayerSection({Key? key, required this.audios}) : super(key: key);
+  final bool isEnglish;
+  const AudioPlayerSection({Key? key, required this.audios,required  this.isEnglish}) : super(key: key);
 
   @override
   State<AudioPlayerSection> createState() => _AudioPlayerSectionState();
@@ -149,6 +150,7 @@ class _AudioPlayerSectionState extends State<AudioPlayerSection>
                             valueListenable: currentUrl,
                             builder: (context, b, bb) {
                               return AudioContainerWidget(
+                                isEnglish:widget.isEnglish,
                                 isPlaying: currentUrl.value == null
                                     ? false
                                     : widget.audios[index].path ==

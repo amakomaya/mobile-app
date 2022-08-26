@@ -9,8 +9,7 @@ class SelectDistrictMunicipalityCubit
             district: null, municipality: null));
   void selectedDistrictMunicipality(
       DistrictModel? dis, MunicipalityModel? munici) {
-    print(dis.toString());
-    print(munici.toString());
+   
     emit(SelectDistrictMunicipalityState(district: dis, municipality: munici));
   }
 }

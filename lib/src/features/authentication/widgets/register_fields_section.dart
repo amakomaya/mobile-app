@@ -1,8 +1,9 @@
+import 'dart:async';
+
 import 'package:aamako_maya/src/core/padding/padding.dart';
 import 'package:aamako_maya/src/core/snackbar/error_snackbar.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
-import 'package:aamako_maya/src/features/authentication/cubit/register_cubit.dart';
 import 'package:aamako_maya/src/features/authentication/model/register_request_model.dart';
 import 'package:aamako_maya/src/features/authentication/screens/login/login_page.dart';
 import 'package:aamako_maya/src/features/authentication/widgets/complete_profile_section.dart';
@@ -31,11 +32,11 @@ class RegisterSection extends StatefulWidget {
 }
 
 class _RegisterSectionState extends State<RegisterSection> {
-  DateTime selectedDate = picker.NepaliDateTime.now();
   final DateFormat formatter = DateFormat('yyyy-MM-dd');
   final _name = TextEditingController();
   final _phone = TextEditingController();
   final _password = TextEditingController();
+  final _lmp = TextEditingController();
   picker.NepaliDateTime? picked;
   final _formKey = GlobalKey<FormState>();
 
@@ -45,28 +46,26 @@ class _RegisterSectionState extends State<RegisterSection> {
     return SafeArea(
         child: SafeArea(
       child: Scaffold(
-        body: BlocConsumer<AuthenticationCubit, LoggedInState>(
+        body: BlocConsumer<AuthenticationCubit, AuthenticationState>(
           listener: (context, state) {
-            if (state.isLoading == true) {
+            if (state is AuthenticationLoadingState) {
               BotToast.showLoading();
-            }
-            if (state.isLoading == false || state.isLoading == null) {
+            } else if (state is LoginFailureState) {
               BotToast.closeAllLoading();
-            }
-            if (state.error != null && state.isLoading == false) {
-              BotToast.showCustomText(toastBuilder: (d) {
-                return ErrorSnackBar(
-                    message: state.error ?? 'Unexpected Error');
-              });
-            }
-
-            if (state.isAuthenticated == true &&
-                state.error == null &&
-                state.isLoading == false) {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (ctx) => const CustomBottomNavigation()),
+              BotToast.showText(text: state.error);
+            } else if (state is LoginSuccessfulState) {
+              BotToast.closeAllLoading();
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                    builder: (ctx) => const CustomBottomNavigation(),
+                  ),
                   (route) => false);
+
+              Timer(const Duration(seconds: 3), () {
+                BotToast.showText(text: 'Register Successful');
+              });
+            } else {
+              BotToast.closeAllLoading();
             }
           },
           builder: (context, state) {
@@ -87,9 +86,9 @@ class _RegisterSectionState extends State<RegisterSection> {
                             style: Theme.of(context).textTheme.displaySmall,
                           ),
                         ),
-                       const LocalizationButton(
-                    icon: Icon(Icons.more_vert_outlined),
-                  )
+                        const LocalizationButton(
+                          icon: Icon(Icons.more_vert_outlined),
+                        )
                       ],
                     ),
                   ),
@@ -123,39 +122,44 @@ class _RegisterSectionState extends State<RegisterSection> {
                                 ),
                               )),
                           VerticalSpace(20.h),
-                          GestureDetector(
-                            onTap: () async {
-                              picked = await picker.showMaterialDatePicker(
-                                context: context,
-                                initialDate: picker.NepaliDateTime.now(),
-                                firstDate: picker.NepaliDateTime(2000),
-                                lastDate: picker.NepaliDateTime(2090),
-                                initialDatePickerMode: DatePickerMode.day,
-                              );
-
-                              print(picked.toString());
-
-                              if (picked != null && picked != selectedDate) {
-                                setState(() {
-                                  selectedDate =
-                                      picked ?? picker.NepaliDateTime.now();
-                                });
-                              }
-                            },
-                          
-                            child: ShadowContainer(
+                          ShadowContainer(
                               width: size.width,
-                              margin: defaultPadding,
                               padding:
-                                  defaultPadding.copyWith(top: 23, bottom: 24),
-                              child: Text(
-                                picked != null
-                                    ? formatter.format(selectedDate)
-                                    : 'LMP Date',
-                                style: TextStyle(color: AppColors.black),
-                              ),
-                            ),
-                          ),
+                                  defaultPadding.copyWith(top: 6, bottom: 6),
+                              margin: defaultPadding,
+                              child: TextFormField(
+                                onTap: () async {
+                                  picked = await picker.showMaterialDatePicker(
+                                    context: context,
+                                    initialDate: picker.NepaliDateTime.now(),
+                                    firstDate: picker.NepaliDateTime(2000),
+                                    lastDate: picker.NepaliDateTime.now(),
+                                    initialDatePickerMode: DatePickerMode.day,
+                                  );
+
+                                  if (picked != null) {
+                                    _lmp.text = formatter.format(picked!);
+                                  }
+                                },
+                                readOnly: true,
+                                cursorColor: AppColors.primaryRed,
+                                keyboardType: TextInputType.phone,
+                                controller: _lmp,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'LMP can\'t not be empty';
+                                  }
+
+                                  return null;
+                                },
+                                decoration: const InputDecoration(
+                                  labelStyle: TextStyle(color: AppColors.black),
+                                  label: Text('LMP'),
+
+                                  // enabled: false,
+                                  border: InputBorder.none,
+                                ),
+                              )),
                           VerticalSpace(20.h),
                           ShadowContainer(
                               width: size.width,
@@ -208,9 +212,9 @@ class _RegisterSectionState extends State<RegisterSection> {
                                 ),
                               )),
                           VerticalSpace(10.h),
-                           Text(
+                          Text(
                             "By clicking in register you are in agreement of Terms and Conditions",
-                            style:Theme.of(context).textTheme.bodySmall,
+                            style: Theme.of(context).textTheme.bodySmall,
                           ),
                           VerticalSpace(40.h),
                           PrimaryActionButton(
@@ -227,15 +231,14 @@ class _RegisterSectionState extends State<RegisterSection> {
                                           password: _password.text.trim(),
                                           username: _phone.text.trim(),
                                           phone: _phone.text.trim(),
-                                          lmpDateEn:
-                                              formatter.format(selectedDate),
-                                          lmpDateNp: '',
-                                          districtId: 0,
+                                          lmpDateEn: _lmp.text.trim(),
+                                          lmpDateNp: _lmp.text.trim(),
+                                          districtId: 3,
                                           email: "",
                                           isFirstTimeParent: 0,
                                           latitude: "",
                                           longitude: "",
-                                          municipalityId: 0,
+                                          municipalityId: 18,
                                           registerAs: widget.registerAs,
                                           tole: ""));
                                 }
@@ -243,26 +246,28 @@ class _RegisterSectionState extends State<RegisterSection> {
                               width: 170.w,
                               title: 'Register'),
                           VerticalSpace(30.h),
-
-                          RichText(text:TextSpan(
-                            children: [
-                              TextSpan(text: 'Already have an account ? ',  style: Theme.of(context).textTheme.bodySmall
-                              ),
-                              TextSpan(text: 'Go to login',
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                fontSize: 16,
-                                color: AppColors.primaryRed
-                              ),
+                          RichText(
+                              text: TextSpan(children: [
+                            TextSpan(
+                                text: 'Already have an account ? ',
+                                style: Theme.of(context).textTheme.bodySmall),
+                            TextSpan(
+                              text: 'Go to login',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.copyWith(
+                                      fontSize: 16,
+                                      color: AppColors.primaryRed),
                               recognizer: TapGestureRecognizer()
-                        ..onTap = () =>  Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const LoginPage()),
-                                  (route) => false),
-                              ),
-                            ]
-                          ))
-                         
+                                ..onTap = () => Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const LoginPage()),
+                                    (route) => false),
+                            ),
+                          ]))
                         ],
                       ),
                     ),

@@ -13,9 +13,7 @@ import 'package:aamako_maya/src/features/splash/splash_page.dart';
 import 'package:aamako_maya/src/features/symptoms/cubit/symptoms_cubit.dart';
 import 'package:aamako_maya/src/features/video/cubit/video_cubit.dart';
 import 'package:aamako_maya/src/features/weekly_tips/cubit/weekly_tips_cubit.dart';
-import 'package:aamako_maya/src/features/weekly_tips/repository/weekly_tips_repository.dart';
 import 'package:bot_toast/bot_toast.dart';
-import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -26,8 +24,6 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'injection_container.dart';
-import 'localization/locale.dart';
-import 'src/core/constant/app_constants.dart';
 import 'src/features/ancs/cubit/ancs_cubit.dart';
 import 'src/features/audio/cubit/audio_cubit.dart';
 import 'src/features/authentication/authentication_cubit/auth_cubit.dart';
@@ -36,6 +32,7 @@ import 'src/features/authentication/cubit/district_municipality_cubit.dart';
 import 'src/features/authentication/drawer_cubit/drawer_cubit.dart';
 import 'src/features/authentication/model/user_model.dart';
 import 'src/features/bottom_nav/cubit/cubit/navigation_index_cubit.dart';
+import 'src/features/fetch user data/cubit/get_user_cubit.dart';
 import 'src/features/home/cubit/newsfeed_cubit.dart';
 import 'injection_container.dart' as di;
 
@@ -48,7 +45,7 @@ Future<void> main() async {
   await EasyLocalization.ensureInitialized();
 
   await Hive.initFlutter();
-  Hive.registerAdapter(UserModelAdapter());
+
 
   //initialize get_it
   di.init();
@@ -84,6 +81,7 @@ Future<void> main() async {
                   BlocProvider(create: (context) => sl<AuthenticationCubit>()),
                   BlocProvider(create: (context) => sl<PncsCubit>()),
                   BlocProvider(create: (context) => sl<NewsfeedCubit>()),
+                  BlocProvider(create: (context)=>sl<GetUserCubit>()),
                   BlocProvider(create: (context) => sl<FaqsCubit>()),
                   BlocProvider(create: (context) => sl<AudioCubit>()),
                   BlocProvider(
@@ -99,7 +97,7 @@ Future<void> main() async {
                   // BlocProvider(
                   //     create: (context) => AppLanguageCubit()),
                   BlocProvider(
-                    create: (context) => DistrictMunicipalityCubit(),
+                    create: (context) => sl<DistrictMunicipalityCubit>(),
                   ),
                   BlocProvider(
                     create: (context) => sl<WeeklyTipsCubit>(),

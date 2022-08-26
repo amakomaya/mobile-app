@@ -9,12 +9,12 @@ import 'package:aamako_maya/src/features/ancs/cubit/ancs_cubit.dart';
 import 'package:aamako_maya/src/features/ancs/screens/ancs_page.dart';
 import 'package:aamako_maya/src/features/authentication/model/user_model.dart';
 import 'package:aamako_maya/src/features/authentication/screens/login/login_page.dart';
-import 'package:aamako_maya/src/features/baby/screen/babypage.dart';
 import 'package:aamako_maya/src/features/bottom_nav/cubit/cubit/navigation_index_cubit.dart';
 
 import 'package:aamako_maya/src/features/delivery/screen/delivery_page.dart';
 import 'package:aamako_maya/src/features/faqs/model/faqs_model.dart';
 import 'package:aamako_maya/src/features/faqs/screen/faqs_page.dart';
+import 'package:aamako_maya/src/features/fetch%20user%20data/cubit/get_user_cubit.dart';
 import 'package:aamako_maya/src/features/labtest/screen/labtestpage.dart';
 import 'package:aamako_maya/src/features/medication/screen/medicationpage.dart';
 import 'package:aamako_maya/src/features/pnc/screens/pnc_page.dart';
@@ -48,6 +48,12 @@ class DrawerWidget extends StatefulWidget {
 
 class _DrawerWidgetState extends State<DrawerWidget> {
   @override
+  void initState() {
+    context.read<GetUserCubit>().getUserFromLocal();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final theme = Theme.of(context);
@@ -66,10 +72,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 MaterialPageRoute(builder: (ctx) => const LoginPage()),
                 (route) => false);
           }
-          Timer(Duration(seconds: 2), () {
-            BotToast.showCustomText(toastBuilder: (f) {
-              return SuccessSnackBar(message: "Loggedout Successfully !!");
-            });
+          Timer(const Duration(seconds: 2), () {
+            BotToast.showText(text: 'Logout Successful');
           });
         },
         child: BlocBuilder<DrawerCubit, DrawerState>(
@@ -101,49 +105,29 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           Align(
                             alignment: Alignment.topCenter,
                             child: CircleAvatar(
-                              backgroundImage: AssetImage(AppAssets.girl),
+                              backgroundColor: AppColors.primaryRed,
+                              backgroundImage:
+                                  const AssetImage(AppAssets.profileImage),
                               radius: 40.h,
                             ),
                           ),
                           VerticalSpace(5.h),
-
-                          // FutureBuilder<UserModel?>(
-                          //     future: CachedValues().getUserModelfromHive(),
-                          //     builder: (ctx, snapshot) {
-                          //       if (snapshot.hasData) {
-                          //         final user = snapshot.data;
-
-                          //         return Align(
-                          //             alignment: Alignment.topCenter,
-                          //             child: Text(user?.name ?? "",
-                          //                 style: theme.textTheme.titleSmall
-                          //                     ?.copyWith(
-                          //                         fontSize: 34,
-                          //                         color: AppColors.white)));
-                          //       } else {
-                          //         return Container();
-                          //       }
-                          //     }),
-                          // ValueListenableBuilder<Box>(
-                          //     valueListenable:
-                          //         Hive.box('UserBoxModel').listenable(),
-                          //     builder: (context, box, widget) {
-                          //       final user =
-                          //           box.get(Consts.user_info_key) as UserModel;
-                          //       final name = user.name;
-
-                          //       return Align(
-                          //           alignment: Alignment.topCenter,
-                          //           child: Text(name ?? '',
-                          //               style: theme.textTheme.titleSmall
-                          //                   ?.copyWith(
-                          //                       fontSize: 34,
-                          //                       color: AppColors.white)));
-                          //     }),
+                          BlocBuilder<GetUserCubit, GetUserState>(
+                            builder: (context, state) {
+                              return Align(
+                                  alignment: Alignment.topCenter,
+                                  child: Text(
+                                      (state is GetUserSuccess)
+                                          ? (state.user.name ?? 'Unknown')
+                                          : '',
+                                      style: theme.textTheme.labelMedium
+                                          ?.copyWith(color: AppColors.white)));
+                            },
+                          ),
                           VerticalSpace(5.h),
                           Align(
                               alignment: Alignment.topCenter,
-                              child: Text('40 weeks 5 days',
+                              child: Text('40 Weeks 5 days',
                                   style: theme.textTheme.titleSmall?.copyWith(
                                       fontSize: 12, color: AppColors.white))),
                           VerticalSpace(15.h),
@@ -206,39 +190,13 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                                     : Colors.black)),
                                   ),
 
-                                  //card
-                                  // ListTile(
-                                  //   onTap: () {
-                                  //     Navigator.pop(context);
-                                  //     context
-                                  //         .read<DrawerCubit>()
-                                  //         .checkDrawerSelection(2);
-
-                                  //     context
-                                  //         .read<NavigationIndexCubit>()
-                                  //         .changeIndex(
-                                  //             index: 11,
-                                  //             titleEn: "card",
-                                  //             titleNp: AppStrings.card);
-                                  //   },
-                                  //   leading: Image.asset(
-                                  //     AppAssets.cardIcon,
-                                  //     height: 30.sm,
-                                  //   ),
-                                  //   title: Text(LocaleKeys.card.tr(),
-                                  //       style: theme.textTheme.titleSmall
-                                  //           ?.copyWith(
-                                  //               color: state.index == 2
-                                  //                   ? AppColors.primaryRed
-                                  //                   : Colors.black)),
-                                  // ),
-                                  //
                                   ListTile(
                                     onTap: () {
                                       Navigator.pop(context);
                                       context
                                           .read<DrawerCubit>()
                                           .checkDrawerSelection(3);
+                                     
                                       context
                                           .read<NavigationIndexCubit>()
                                           .changeIndex(
@@ -302,13 +260,13 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                               .read<NavigationIndexCubit>()
                                               .changeIndex(
                                                   index: 5,
-                                                  titleNp: 'ANC',
+                                                  titleNp: 'गर्भवस्था जाँच',
                                                   titleEn: 'ANC');
                                         },
                                         title: Padding(
                                           padding: const EdgeInsets.only(
                                               left: 80, right: 50),
-                                          child: Text("ANC",
+                                          child: Text(LocaleKeys.anc.tr(),
                                               style: theme.textTheme.titleSmall
                                                   ?.copyWith(
                                                       color: state.index == 5
@@ -326,14 +284,19 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                           context
                                               .read<NavigationIndexCubit>()
                                               .changeIndex(
-                                                  titleNp: 'Del',
+                                                  titleNp: 'सुत्केरी',
                                                   index: 6,
-                                                  titleEn: 'Delivery Page');
+                                                  titleEn: 'Delivery');
+
+                                          
+                   
+                       
+                     
                                         },
                                         title: Padding(
                                           padding: const EdgeInsets.only(
                                               left: 80, right: 50),
-                                          child: Text("Delivery",
+                                          child: Text(LocaleKeys.delivery.tr(),
                                               style: theme.textTheme.titleSmall
                                                   ?.copyWith(
                                                       color: state.index == 6
@@ -351,14 +314,14 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                           context
                                               .read<NavigationIndexCubit>()
                                               .changeIndex(
-                                                  titleNp: 'Med',
+                                                  titleNp: 'औषधि सेवा',
                                                   index: 7,
                                                   titleEn: 'Medication');
                                         },
                                         title: Padding(
                                           padding: const EdgeInsets.only(
                                               left: 80, right: 50),
-                                          child: Text("Medication",
+                                          child: Text(LocaleKeys.medication.tr(),
                                               style: theme.textTheme.titleSmall
                                                   ?.copyWith(
                                                       color: state.index == 7
@@ -376,14 +339,14 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                           context
                                               .read<NavigationIndexCubit>()
                                               .changeIndex(
-                                                  titleNp: 'Post',
+                                                  titleNp: 'सुत्केरी जाँच',
                                                   index: 8,
                                                   titleEn: 'Postnatal Care');
                                         },
                                         title: Padding(
                                           padding: const EdgeInsets.only(
                                               left: 80, right: 50),
-                                          child: Text("PNC",
+                                          child: Text(LocaleKeys.pnc.tr(),
                                               style: theme.textTheme.titleSmall
                                                   ?.copyWith(
                                                       color: state.index == 8
@@ -401,14 +364,14 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                           context
                                               .read<NavigationIndexCubit>()
                                               .changeIndex(
-                                                  titleNp: 'Lab',
+                                                  titleNp: 'प्रयोगशाला परिक्षण ',
                                                   index: 9,
                                                   titleEn: 'Lab Test');
                                         },
                                         title: Padding(
                                           padding: const EdgeInsets.only(
                                               left: 80, right: 50),
-                                          child: Text("Lab Test",
+                                          child: Text(LocaleKeys.labtest.tr(),
                                               style: theme.textTheme.titleSmall
                                                   ?.copyWith(
                                                       color: state.index == 9
@@ -430,7 +393,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                       context
                                           .read<NavigationIndexCubit>()
                                           .changeIndex(
-                                              titleNp: 'Fa',
+                                              titleNp: 'बारम्बार सोधिने प्रश्न ',
                                               index: 12,
                                               titleEn: 'FAQs');
                                     },
@@ -438,7 +401,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                       AppAssets.faqsIcon,
                                       height: 30.sm,
                                     ),
-                                    title: Text('FAQs',
+                                    title: Text(LocaleKeys.faq.tr(),
                                         style: theme.textTheme.titleSmall
                                             ?.copyWith(
                                                 color: state.index == 10
@@ -453,18 +416,28 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                           const EdgeInsets.only(left: 12.0),
                                       child: TextButton.icon(
                                           label: Text(
-                                            'Logout',
+                                            LocaleKeys.logout.tr(),
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .titleSmall,
                                           ),
                                           onPressed: () {
+                                            context
+                                                .read<NavigationIndexCubit>()
+                                                .changeIndex(
+                                                    titleNp: AppStrings.home,
+                                                    index: 0,
+                                                    titleEn: 'Home');
+                                            context
+                                                .read<DrawerCubit>()
+                                                .checkDrawerSelection(0);
                                             Navigator.pop(context);
+
                                             context
                                                 .read<LoggedOutCubit>()
                                                 .logout();
                                           },
-                                          icon: Icon(Icons.logout,
+                                          icon: const Icon(Icons.logout,
                                               color: Colors.red)),
                                     ),
                                   ),

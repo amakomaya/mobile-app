@@ -39,7 +39,7 @@ class _PncsPageState extends State<PncsPage> {
     Size size = MediaQuery.of(context).size;
     final theme = Theme.of(context);
 
-    return BlocBuilder<AuthenticationCubit, LoggedInState>(
+    return BlocBuilder<AuthenticationCubit, AuthenticationState>(
       builder: (authContext, authState) {
         return BlocProvider(
           create: (context) => PcnChangecubit(),
@@ -64,7 +64,6 @@ class _PncsPageState extends State<PncsPage> {
                       BlocBuilder<PncsCubit, PncState>(
                         builder: (context, state) {
                           if (state is PncSuccessState) {
-                            print(state.data.toString() + 'k ho yo');
                             return RefreshIndicator(
                                 onRefresh: () async {
                                   if (await sl<NetworkInfo>().isConnected) {
@@ -99,11 +98,9 @@ class _PncsPageState extends State<PncsPage> {
                                                   Text(
                                                     "PNC Report${index + 1}"
                                                         .toUpperCase(),
-                                                    style: const TextStyle(
-                                                        fontFamily: "lato",
-                                                        color: AppColors
-                                                            .primaryRed,
-                                                        fontSize: 17),
+                                                    style:theme.textTheme.labelMedium?.copyWith(
+                                                      color: AppColors.primaryRed
+                                                    )
                                                   ),
                                                   VerticalSpace(12.h),
                                                   ShadowContainer(
@@ -287,12 +284,17 @@ class _PncsPageState extends State<PncsPage> {
                           );
                         },
                       )),
+               
                 ],
               ),
             );
+        
+        
           }),
         );
       },
     );
+ 
+ 
   }
 }

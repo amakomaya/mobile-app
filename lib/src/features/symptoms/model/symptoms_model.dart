@@ -25,6 +25,7 @@ class Symptomsmodel {
     this.longitude,
     this.latitude,
     this.createdAt,
+    this.comments
   });
 
   String? womenToken;
@@ -41,6 +42,7 @@ class Symptomsmodel {
   dynamic longitude;
   dynamic latitude;
   DateTime? createdAt;
+  String? comments;
 
   factory Symptomsmodel.fromJson(Map<String, dynamic> json) => Symptomsmodel(
         womenToken: json["women_token"],
@@ -56,12 +58,14 @@ class Symptomsmodel {
         otherProblems: json["other_problems"],
         longitude: json["longitude"],
         latitude: json["latitude"],
+        comments: json["comments"],
         createdAt: DateTime.parse(json["created_at"]),
       );
 
   Map<String, dynamic> toJson() => {
         "women_token": womenToken,
         "headache": headache,
+        "comments":comments,
         "vagina_bleed": vaginaBleed,
         "tremble_or_faint": trembleOrFaint,
         "eyes_blur": eyesBlur,

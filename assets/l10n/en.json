@@ -25,6 +25,13 @@
     "card":"Card",
     "symptoms":"Symptoms Assessment",
     "appointment":"Appointment",
-    "healthreport":"Health Reports"
+    "healthreport":"Health Reports",
+    "anc":"ANC" ,
+   "delivery":"Delivery",
+   "medication":"Medication",
+   "pnc":"PNC",
+  "labtest":"Lab Test",
+  "faq":"FAQs",
+  "logout":"Logout"
 
   }
