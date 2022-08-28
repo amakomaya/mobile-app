@@ -17,9 +17,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../injection_container.dart';
 import '../../../core/connection_checker/network_connection.dart';
@@ -30,6 +32,7 @@ import '../../bottom_nav/cubit/cubit/navigation_index_cubit.dart';
 import '../../fetch user data/cubit/get_user_cubit.dart';
 import '../../video/screens/video_playing_page.dart';
 import 'home_video_player.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -39,6 +42,21 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  CustomRenderMatcher customTagMatcher(String sff) => (context) {
+        String text = sff;
+        String link = '';
+        final urlRegExp = RegExp(
+            r"((https?:www\.)|(https?:\/\/)|(www\.))[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9]{1,6}(\/[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)?");
+        final urlMatches = urlRegExp.allMatches(text);
+        List<String> urls = urlMatches
+            .map((urlMatch) => text.substring(urlMatch.start, urlMatch.end))
+            .toList();
+        for (var x in urls) {
+          link = x;
+        }
+
+        return link.isNotEmpty;
+      };
   @override
   void initState() {
     context.read<NewsfeedCubit>().getNewsFeed(false);
@@ -57,10 +75,10 @@ class _HomePageState extends State<HomePage> {
         BlocBuilder<GetUserCubit, GetUserState>(
           builder: (context, state) {
             return Visibility(
-              visible:
-                  (state is GetUserSuccess && state.user.tole.isNullOrEmpty),
+              visible: false,
+              // (state is GetUserSuccess && state.user.tole.isNullOrEmpty),
               child: ShadowContainer(
-                  color: AppColors.primaryRed,
+                  color: Color.fromARGB(255, 221, 77, 77),
                   margin: EdgeInsets.only(top: 10.h),
                   padding: defaultPadding.copyWith(top: 10, bottom: 10),
                   width: 380.w,
@@ -94,7 +112,7 @@ class _HomePageState extends State<HomePage> {
                   },
                   child: ListView.separated(
                       shrinkWrap: true,
-                      padding: EdgeInsets.symmetric(vertical: 25.h),
+                      padding: EdgeInsets.symmetric(vertical: 20.h),
                       itemBuilder: ((context, index) {
                         return Column(
                           children: [
@@ -158,7 +176,75 @@ class _HomePageState extends State<HomePage> {
                                       color: Colors.black,
                                     ),
                                   ),
-                                  Html(data: state.newsfeed[index].title),
+                                  VerticalSpace(20.h),
+                                  Html(
+                                      data: state.newsfeed[index].title,
+                                      customRenders: {
+                                        customTagMatcher(
+                                            state.newsfeed[index].title ??
+                                                ''): CustomRender.widget(
+                                            widget: (ctx, buildChildren) {
+                                          final element =
+                                              ctx.tree.element!.text;
+                                          String text = element;
+                                          String link = '';
+                                          final urlRegExp = RegExp(
+                                              r"((https?:www\.)|(https?:\/\/)|(www\.))[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9]{1,6}(\/[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)?");
+
+                                          final urlMatches =
+                                              urlRegExp.allMatches(text);
+                                          List<String> urls = urlMatches
+                                              .map((urlMatch) => text.substring(
+                                                  urlMatch.start, urlMatch.end))
+                                              .toList();
+                                          for (var x in urls) {
+                                            link = x;
+                                          }
+
+                                          final htmlText = state
+                                              .newsfeed[index].title
+                                              ?.replaceAll(urlRegExp, '');
+
+                                          return Column(
+                                            children: [
+                                              Html(data: htmlText),
+                                              GestureDetector(
+                                                onLongPress: () {
+                                                  Clipboard.setData(
+                                                          ClipboardData(
+                                                              text: link))
+                                                      .then((value) {
+                                                    BotToast.showText(
+                                                        text:
+                                                            'Copied to clipboard');
+                                                  });
+                                                },
+                                                onTap: () async {
+                                                  if (await canLaunchUrl(
+                                                      Uri.parse(link))) {
+                                                    await launchUrl(
+                                                        Uri.parse(link));
+                                                  } else {
+                                                    BotToast.showText(
+                                                        text:
+                                                            'Can not launch URL');
+                                                  }
+                                                },
+                                                child: Text(
+                                                  link,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .labelMedium
+                                                      ?.copyWith(
+                                                          color: AppColors
+                                                              .primaryRed,
+                                                          fontSize: 18.sm),
+                                                ),
+                                              ),
+                                            ],
+                                          );
+                                        }),
+                                      })
                                 ],
                               ),
                             ),

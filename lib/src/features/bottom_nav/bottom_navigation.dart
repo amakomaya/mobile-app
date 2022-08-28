@@ -55,17 +55,117 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
               FloatingActionButtonLocation.centerDocked,
           extendBody: false,
           extendBodyBehindAppBar: true,
-          
           backgroundColor: Colors.white,
           resizeToAvoidBottomInset: true,
           drawer: const DrawerWidget(),
           bottomNavigationBar: Builder(builder: (context) {
             return BlocBuilder<NavigationIndexCubit, NavigationIndexState>(
               builder: (context, state) {
+                return BottomAppBar(
+                    clipBehavior: Clip.antiAlias,
+                    color: Colors.white,
+                    elevation: 4,
+                    notchMargin: 7,
+                    shape: const CircularNotchedRectangle(),
+                    child: BottomNavigationBar(
+                      selectedLabelStyle: TextStyle(fontSize: 0),
+                      unselectedLabelStyle: TextStyle(fontSize: 0),
+                      type: BottomNavigationBarType.fixed,
+                      items: [
+                        BottomNavigationBarItem(
+                            icon: IconButton(
+                              iconSize: 35.sm,
+                              icon: ImageIcon(
+                                const AssetImage("assets/images/home1.png"),
+                                color:
+                                    state.index == 0 ? Colors.red : Colors.grey,
+                              ),
+                              onPressed: () {
+                                context
+                                    .read<NavigationIndexCubit>()
+                                    .changeIndex(
+                                        index: 0,
+                                        titleEn: 'Home',
+                                        titleNp: AppStrings.home);
+                                context
+                                    .read<DrawerCubit>()
+                                    .checkDrawerSelection(0);
+                              },
+                            ),
+                            label: ''),
+                        BottomNavigationBarItem(
+                            icon: IconButton(
+                              iconSize: 35.sm,
+                              onPressed: () {
+                                context
+                                    .read<NavigationIndexCubit>()
+                                    .changeIndex(
+                                        index: 1,
+                                        titleNp: AppStrings.audio,
+                                        titleEn: "Audio");
+
+                                context
+                                    .read<DrawerCubit>()
+                                    .checkDrawerSelection(-1);
+                              },
+                              icon: ImageIcon(
+                                const AssetImage(
+                                  "assets/images/audio.png",
+                                ),
+                                color:
+                                    state.index == 1 ? Colors.red : Colors.grey,
+                              ),
+                            ),
+                            label: ''),
+                        BottomNavigationBarItem(
+                            icon: IconButton(
+                              iconSize: 35.sm,
+                              onPressed: () {
+                                context
+                                    .read<NavigationIndexCubit>()
+                                    .changeIndex(
+                                        titleNp: AppStrings.video,
+                                        index: 2,
+                                        titleEn: 'Video');
+                                context
+                                    .read<DrawerCubit>()
+                                    .checkDrawerSelection(-1);
+                              },
+                              icon: ImageIcon(
+                                const AssetImage("assets/images/video.png"),
+                                color:
+                                    state.index == 2 ? Colors.red : Colors.grey,
+                              ),
+                            ),
+                            label: ''),
+                        BottomNavigationBarItem(
+                            icon: IconButton(
+                                iconSize: 35.sm,
+                                icon: ImageIcon(
+                                  const AssetImage(
+                                    "assets/images/text.png",
+                                  ),
+                                  color: state.index == 3
+                                      ? Colors.red
+                                      : Colors.grey,
+                                ),
+                                onPressed: () {
+                                  context
+                                      .read<NavigationIndexCubit>()
+                                      .changeIndex(
+                                          titleNp: AppStrings.weeklytips,
+                                          index: 3,
+                                          titleEn: 'Weekly Tips');
+                                  context
+                                      .read<DrawerCubit>()
+                                      .checkDrawerSelection(-1);
+                                }),
+                            label: ''),
+                      ],
+                    ));
                 return SizedBox(
                   height: 60.h,
                   child: BottomAppBar(
-
                       color: Colors.white,
                       elevation: 4,
                       notchMargin: 7,
@@ -212,18 +312,17 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
               },
             );
           }),
-          floatingActionButton:
-              Visibility(
-                visible: MediaQuery.of(context).viewInsets.bottom==0.0,
-                child: BlocBuilder<NavigationIndexCubit, NavigationIndexState>(
-                          builder: (context, state) {
+          floatingActionButton: Visibility(
+            visible: MediaQuery.of(context).viewInsets.bottom == 0.0,
+            child: BlocBuilder<NavigationIndexCubit, NavigationIndexState>(
+              builder: (context, state) {
                 return FloatingActionButton(
                   backgroundColor:
                       state.index == 4 ? AppColors.primaryRed : Colors.white,
                   isExtended: true,
                   onPressed: () {
                     context.read<NavigationIndexCubit>().changeIndex(
-                        index: 4, titleNp: 'शप ', titleEn: "Shopping");
+                        index: 4, titleNp: 'शप', titleEn: "Shopping");
                   },
                   clipBehavior: Clip.none,
                   child: Icon(
@@ -232,9 +331,9 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                     color: state.index == 4 ? Colors.white : Colors.red,
                   ),
                 );
-                          },
-                        ),
-              ),
+              },
+            ),
+          ),
         ),
       ),
     );

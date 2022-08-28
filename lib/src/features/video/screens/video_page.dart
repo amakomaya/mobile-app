@@ -107,15 +107,14 @@ class _VideoListPageState extends State<VideoListPage> {
 
   @override
   Widget build(BuildContext context) {
-   
     return RefreshIndicator(
-     onRefresh: () async {
-            if (await sl<NetworkInfo>().isConnected) {
-              context.read<VideoCubit>().getVideos(true);
-            } else {
-              BotToast.showText(text: 'No Internet Connection !');
-            }
-          },
+      onRefresh: () async {
+        if (await sl<NetworkInfo>().isConnected) {
+          context.read<VideoCubit>().getVideos(true);
+        } else {
+          BotToast.showText(text: 'No Internet Connection !');
+        }
+      },
       child: ListView.separated(
           separatorBuilder: (ctx, index) {
             return VerticalSpace(20.h);
@@ -126,8 +125,8 @@ class _VideoListPageState extends State<VideoListPage> {
           itemBuilder: (ctx, index) => GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>
-                          VideoPlayingPage(widget.list, widget.list[index])));
+                      builder: (context) => VideoPlayingPage(
+                          widget.list, widget.list[index], index)));
                 },
                 child: ShadowContainer(
                   padding: const EdgeInsets.all(10),
@@ -145,7 +144,8 @@ class _VideoListPageState extends State<VideoListPage> {
                             width: 100.w,
                             color: AppColors.accentGrey,
                           ),
-                          errorWidget: (context, url, error) => Icon(Icons.error),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
                         ),
                       ),
                       HorizSpace(10.w),

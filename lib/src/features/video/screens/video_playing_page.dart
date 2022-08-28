@@ -2,12 +2,14 @@ import 'package:aamako_maya/src/core/padding/padding.dart';
 import 'package:aamako_maya/src/core/theme/app_colors.dart';
 import 'package:aamako_maya/src/features/video/model/video_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:video_player/video_player.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../../core/widgets/helper_widgets/blank_space.dart';
 import '../../../core/widgets/helper_widgets/shadow_container.dart';
@@ -16,7 +18,8 @@ import '../../audio/screens/audio_player_section.dart';
 class VideoPlayingPage extends StatefulWidget {
   final List<VideoModel> list;
   final VideoModel selected;
-  const VideoPlayingPage(this.list, this.selected, {Key? key})
+  final int initialScroll;
+  const VideoPlayingPage(this.list, this.selected, this.initialScroll, {Key? key})
       : super(key: key);
 
   @override
@@ -24,64 +27,51 @@ class VideoPlayingPage extends StatefulWidget {
 }
 
 class _VideoPlayingPageState extends State<VideoPlayingPage> {
-  late VideoPlayerController _controller;
   final ItemScrollController _scrollController = ItemScrollController();
-  ValueNotifier<bool> isPlaying = ValueNotifier(false);
-  ValueNotifier<Duration> position = ValueNotifier(Duration.zero);
-  ValueNotifier<Duration> duration = ValueNotifier(Duration.zero);
-  late String currentUrl;
-  changevideo(String url) async {
-    if (url != currentUrl) {
-      await _controller.pause();
 
-      _controller = VideoPlayerController.network(url)
-        ..initialize().then((value) {
-          currentUrl = url;
-          setState(() {});
-        });
-
-      await _controller.play();
-      _controller.addListener(() {
-        isPlaying.value = _controller.value.isPlaying;
-        duration.value = _controller.value.duration;
-        position.value = _controller.value.position;
-      });
+  late FlickManager flickManager;
+  late VideoModel currentVideo;
+ 
+  changevideo(VideoModel video) async {
+    if (currentVideo.path != video.path) {
+    
+      currentVideo=video;
+      await flickManager.handleChangeVideo(
+        VideoPlayerController.network(
+          currentVideo.path,
+        ),
+      );
     }
   }
 
   @override
   void initState() {
-    currentUrl = widget.selected.path;
-    _controller = VideoPlayerController.network(widget.selected.path)
-      ..initialize().then((_) {
-        // _controller.play();
-        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-
-        setState(() {});
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+      setState(() {
+        _scrollController.scrollTo(
+            index: widget.initialScroll, duration: const Duration(seconds: 1));
       });
-   
-
-    _controller.addListener(() {
-      isPlaying.value = _controller.value.isPlaying;
-      duration.value = _controller.value.duration;
-      position.value = _controller.value.position;
     });
+    flickManager = FlickManager(
+      videoPlayerController: VideoPlayerController.network(
+        widget.selected.path,
+      ),
+    );
+
+    currentVideo=widget.selected;
 
     super.initState();
   }
 
   @override
   void dispose() {
+    flickManager.dispose();
     super.dispose();
-    _controller.pause();
-    _controller.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    bool isPortrait =
-        MediaQuery.of(context).orientation == Orientation.portrait;
-
+    final theme = Theme.of(context);
     return SafeArea(
       child: Scaffold(
           body: Column(
@@ -105,97 +95,42 @@ class _VideoPlayingPageState extends State<VideoPlayingPage> {
               ),
             ),
           ),
-           AspectRatio(
-                aspectRatio: isPortrait ? 16 / 9 : 4 / 1,
-                child: VideoPlayer(_controller),
+          VisibilityDetector(
+            key: ObjectKey(flickManager),
+            onVisibilityChanged: (visibility) {
+              if (visibility.visibleFraction == 0 && mounted) {
+                flickManager.flickControlManager?.autoPause();
+              } else if (visibility.visibleFraction == 1) {
+                flickManager.flickControlManager?.autoResume();
+              }
+            },
+            child: FlickVideoPlayer(
+              flickManager: flickManager,
+              flickVideoWithControls: const FlickVideoWithControls(
+                closedCaptionTextStyle: TextStyle(fontSize: 8),
+                controls: FlickPortraitControls(),
               ),
-         
-          ValueListenableBuilder(
-              valueListenable: duration,
-              builder: (context, r, t) {
-                return ValueListenableBuilder(
-                    valueListenable: position,
-                    builder: (context, m, j) {
-                      return Slider(
-                        thumbColor: Colors.white,
-                        activeColor: AppColors.primaryRed,
-                        inactiveColor: AppColors.primaryRed.withOpacity(0.2),
-                        max: duration.value.inSeconds.toDouble(),
-                        min: 0,
-                        value: position.value.inSeconds.toDouble(),
-                        onChanged: (double value) async {
-                          final position = Duration(seconds: value.toInt());
-                          await _controller.seekTo(position);
-                        },
-                      );
-                    });
-              }),
-          Padding(
-            padding: defaultPadding,
-            child: Row(
-              children: [
-              
-                ValueListenableBuilder(
-                    valueListenable: position,
-                    builder: (context, c, v) {
-                      return Text(
-                        formatTime(
-                          position.value,
-                        ),
-                      );
-                    }),
-                Spacer(),
-                IconButton(
-                    onPressed: () {
-                      _controller
-                          .seekTo(position.value - const Duration(seconds: 10));
-                    },
-                    icon: Icon(
-                      Icons.skip_previous_rounded,
-                      color: AppColors.accentGrey,
-                      size: 35.sm,
-                    )),
-                HorizSpace(10.w),
-                ValueListenableBuilder(
-                    valueListenable: isPlaying,
-                    builder: (a, b, c) {
-                      return IconButton(
-                          onPressed: () {
-                            isPlaying.value
-                                ? _controller.pause()
-                                : _controller.play();
-                          },
-                          icon: Icon(
-                            _controller.value.isPlaying
-                                ? Icons.pause_outlined
-                                : Icons.play_arrow_rounded,
-                            color: AppColors.accentGrey,
-                            size: 35.sm,
-                          ));
-                    }),
-                HorizSpace(10.w),
-                IconButton(
-                    onPressed: () {
-                      _controller
-                          .seekTo(position.value + const Duration(seconds: 10));
-                    },
-                    icon: Icon(
-                      Icons.skip_next_rounded,
-                      color: AppColors.accentGrey,
-                      size: 35.sm,
-                    )),
-                Spacer(),
-                ValueListenableBuilder(
-                    valueListenable: position,
-                    builder: (context, c, v) {
-                      return Text(
-                        formatTime(
-                          duration.value,
-                        ),
-                      );
-                    }),
-              ],
+              flickVideoWithControlsFullscreen: const FlickVideoWithControls(
+                controls: FlickLandscapeControls(),
+              ),
             ),
+          ),
+          ExpansionTile(
+            iconColor: AppColors.accentGrey,
+            collapsedIconColor: AppColors.accentGrey,
+            expandedCrossAxisAlignment: CrossAxisAlignment.start,
+            expandedAlignment: Alignment.centerLeft,
+            initiallyExpanded: false,
+            title: Text(currentVideo.titleNp,
+                style: theme.textTheme.titleSmall?.copyWith(
+                    fontSize: 18.sm,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black)),
+            children: [
+              Html(
+                data: currentVideo.descriptionNp,
+              ),
+            ],
           ),
           Expanded(
             child: ScrollablePositionedList.builder(
@@ -205,13 +140,14 @@ class _VideoPlayingPageState extends State<VideoPlayingPage> {
                 itemBuilder: (ctx, ind) {
                   return InkWell(
                     onTap: () async {
-                      changevideo(widget.list[ind].path);
-
+                      changevideo(widget.list[ind]);
+                      setState(() {});
+ 
                       _scrollController.scrollTo(
                           index: ind, duration: const Duration(seconds: 1));
                     },
                     child: ShadowContainer(
-                      color: currentUrl == widget.list[ind].path
+                      color: currentVideo.path == widget.list[ind].path
                           ? AppColors.grey
                           : null,
                       margin: const EdgeInsets.only(bottom: 20),
@@ -231,7 +167,7 @@ class _VideoPlayingPageState extends State<VideoPlayingPage> {
                                 color: AppColors.accentGrey,
                               ),
                               errorWidget: (context, url, error) =>
-                                  Icon(Icons.error),
+                                  const Icon(Icons.error),
                             ),
                           ),
                           HorizSpace(10.w),
