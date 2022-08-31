@@ -26,9 +26,11 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../injection_container.dart';
 import '../../../core/connection_checker/network_connection.dart';
 import '../../../core/padding/padding.dart';
+import '../../../core/strings/app_strings.dart';
 import '../../../core/widgets/drawer/drawer_widget.dart';
 import '../../authentication/authentication_cubit/auth_cubit.dart';
 import '../../bottom_nav/cubit/cubit/navigation_index_cubit.dart';
+import '../../bottom_nav/popup.dart';
 import '../../fetch user data/cubit/get_user_cubit.dart';
 import '../../video/screens/video_playing_page.dart';
 import 'home_video_player.dart';
@@ -72,8 +74,96 @@ class _HomePageState extends State<HomePage> {
       children: [
         //  profile Complete container
 
-        BlocBuilder<GetUserCubit, GetUserState>(
-          builder: (context, state) {
+        BlocConsumer<GetUserCubit, GetUserState>(
+          listener: (userCtx, userState) {
+            if (userState is GetUserSuccess) {
+              if ((userState.user.tole?.isEmpty ?? true) ||
+                  userState.user.tole == null) {
+                WidgetsBinding.instance?.addPostFrameCallback((_) async {
+                  // showExitPopup(context);
+                  await showDialog(
+                    barrierDismissible: false,
+                      context: userCtx,
+                      builder: (BuildContext userCtx) {
+                        return AlertDialog(
+                          content: SizedBox(
+                            height: 90.h,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Text(
+                                  "You have not completed your profile.",
+                                ),
+                                SizedBox(height: 20),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    TextButton(
+                                      child: Text('Fill Now'),
+                                      onPressed: () async {
+                                        Navigator.pop(context);
+                                        context
+                                            .read<DrawerCubit>()
+                                            .checkDrawerSelection(1);
+                                        context
+                                            .read<NavigationIndexCubit>()
+                                            .changeIndex(
+                                                index: 10,
+                                                titleNp: AppStrings.profile,
+                                                titleEn: 'Profile');
+                                      },
+                                    ),
+                                    const SizedBox(width: 15),
+                                    TextButton(
+                                      child: const Text('Later'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop(true);
+                                      },
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        );
+                      });
+
+                  // showDialog(
+
+                  //     context: context,
+                  //     builder: (ctx) {
+                  //       return ShadowContainer(
+                  //         height:200.h,
+                  //         width:300.w,
+                  //         child: Column(
+                  //           mainAxisSize: MainAxisSize.min,
+                  //           children: [
+                  //             Text('You have not completed profile.'),
+                  //             VerticalSpace(30.h),
+                  //             Row(
+                  //               mainAxisAlignment: MainAxisAlignment.end,
+                  //               children: [
+                  //                 TextButton(
+
+                  //                     onPressed: () {},
+                  //                     child: Text('Fill now')),
+                  //                 TextButton(
+                  //                     onPressed: () {
+                  //                       Navigator.pop(context);
+                  //                     },
+                  //                     child: Text('Later'))
+                  //               ],
+                  //             )
+                  //           ],
+                  //         ),
+                  //       );
+                  //     });
+                });
+              }
+            }
+          },
+          builder: (userCtx, userState) {
             return Visibility(
               visible: false,
               // (state is GetUserSuccess && state.user.tole.isNullOrEmpty),
@@ -99,7 +189,11 @@ class _HomePageState extends State<HomePage> {
 
         Expanded(
           child: BlocConsumer<NewsfeedCubit, NewsfeedState>(
-            listener: (context, state) {},
+            listener: (context, state) {
+              if (state is NewsfeedSuccess && state.isRefreshed) {
+                BotToast.showText(text: 'Newsfeed Successfully Refreshed');
+              }
+            },
             builder: (context, state) {
               if (state is NewsfeedSuccess) {
                 return RefreshIndicator(
@@ -116,6 +210,28 @@ class _HomePageState extends State<HomePage> {
                       itemBuilder: ((context, index) {
                         return Column(
                           children: [
+                            //video container
+                            Visibility(
+                              visible: !(state
+                                  .newsfeed[index].urlToVideo.isNullOrEmpty),
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => HomeVideoPlayer(
+                                          state.newsfeed[index].urlToVideo ??
+                                              '')));
+                                },
+                                child: ShadowContainer(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  radius: 25,
+                                  color: Colors.white,
+                                  width: 380.w,
+                                  height: 200.h,
+                                ),
+                              ),
+                            ),
+
                             //news container
                             ShadowContainer(
                               radius: 20,
@@ -256,8 +372,10 @@ class _HomePageState extends State<HomePage> {
                               child: InkWell(
                                 onTap: () {
                                   Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) =>
-                                          const HomeAudioPlayerPage()));
+                                      builder: (context) => HomeAudioPlayerPage(
+                                            audioUrl:
+                                                "https://aamakomaya.com//files/1/audio/19-38week.mp3",
+                                          )));
                                 },
                                 child: ShadowContainer(
                                   padding: const EdgeInsets.symmetric(

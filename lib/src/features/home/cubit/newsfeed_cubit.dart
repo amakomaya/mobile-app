@@ -13,21 +13,19 @@ import '../models/newsfeed_model.dart';
 
 class NewsfeedCubit extends Cubit<NewsfeedState> {
   final Dio _dio;
-  final NewsFeedCache _cache;
+
   final SharedPreferences _prefs;
   NewsfeedCubit(Dio dio, SharedPreferences prefs, NewsFeedCache cache)
       : _dio = dio,
-        _cache = cache,
         _prefs = prefs,
         super(NewsFeedInitial());
 
   void getNewsFeed(bool isRefreshed) async {
-    emit(NewsFeedLoading());
     final response = _prefs.getString('newsfeed');
     if (response != null && isRefreshed == false) {
       final newsfeed = jsonDecode(response) as List;
       final data = newsfeed.map((e) => NewsFeedModel.fromJson(e)).toList();
-      emit(NewsfeedSuccess(data));
+      emit(NewsfeedSuccess(data, isRefreshed));
     } else {
       try {
         final Response response = await _dio.get(Urls.newsFeedUrl);
@@ -37,7 +35,7 @@ class NewsfeedCubit extends Cubit<NewsfeedState> {
           final data = (response.data as List)
               .map((json) => NewsFeedModel.fromJson(json))
               .toList();
-          emit(NewsfeedSuccess(data));
+          emit(NewsfeedSuccess(data, isRefreshed));
         } else {
           emit(NewsfeedFailure());
         }
@@ -62,7 +60,8 @@ class NewsFeedLoading extends NewsfeedState {
 
 class NewsfeedSuccess extends NewsfeedState {
   final List<NewsFeedModel> newsfeed;
-  NewsfeedSuccess(this.newsfeed);
+  final bool isRefreshed;
+  NewsfeedSuccess(this.newsfeed, this.isRefreshed);
 
   @override
   List<Object?> get props => [];

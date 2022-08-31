@@ -198,10 +198,14 @@ import '../cubit/toggle_district_municipality.dart';
 class DistrictDropDownListWidget extends StatefulWidget {
   final int districtId;
   final TextEditingController controller;
+  final ValidatorFunc? validator;
+  final TextEditingController retainId;
   final TextEditingController municipalityController;
   const DistrictDropDownListWidget(
       {Key? key,
       required this.controller,
+      required this.validator,
+      required this.retainId,
       required this.municipalityController,
       required this.districtId})
       : super(key: key);
@@ -239,6 +243,7 @@ class _DistrictDropDownListWidgetState
   @override
   Widget build(BuildContext context) {
     return PrimaryTextField(
+      validator: widget.validator,
       controller: widget.controller,
       readOnly: true,
       labelText: 'District',
@@ -250,6 +255,7 @@ class _DistrictDropDownListWidgetState
               context: context,
               builder: (BuildContext context) {
                 return DialogWidget(
+                  retainId: widget.retainId,
                   controller: widget.controller,
                   districts: districts,
                   municipalityController: widget.municipalityController,
@@ -265,9 +271,11 @@ class DialogWidget extends StatefulWidget {
   List<DistrictModel> districts;
   TextEditingController controller;
   TextEditingController municipalityController;
+  TextEditingController retainId;
   DialogWidget(
       {Key? key,
       required this.controller,
+      required this.retainId,
       required this.municipalityController,
       required this.districts})
       : super(key: key);
@@ -348,9 +356,14 @@ class _DialogWidgetState extends State<DialogWidget> {
               itemBuilder: (ctx, ind) {
                 return GestureDetector(
                     onTap: () async {
+                      print('District Name:'+ _foundDistricts[ind].districtName.toString());
+                      print('District ID:'+ _foundDistricts[ind].id.toString());
                       //when elements are selected
                       widget.controller.text =
                           _foundDistricts[ind].districtName ?? '';
+                      widget.retainId.text =
+                          (_foundDistricts[ind].id ?? 0).toString();
+
                       widget.municipalityController.clear();
 
                       context

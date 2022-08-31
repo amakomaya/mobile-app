@@ -1,25 +1,33 @@
 import 'package:aamako_maya/src/core/padding/padding.dart';
 import 'package:aamako_maya/src/core/theme/app_colors.dart';
+import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
 import 'package:aamako_maya/src/features/audio/cubit/audio_cubit.dart';
 import 'package:aamako_maya/src/features/audio/model/audio_model.dart';
+import 'package:aamako_maya/src/features/home/screens/home_audio_player.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../../../injection_container.dart';
+import '../../../core/app_assets/app_assets.dart';
 import '../../../core/connection_checker/network_connection.dart';
+import '../../../core/widgets/drawer/drawer_widget.dart';
 import '../../../core/widgets/helper_widgets/blank_space.dart';
+import '../../fetch user data/cubit/get_user_cubit.dart';
 import '../widgets/audio_container_widget.dart';
 
 class AudioPlayerSection extends StatefulWidget {
   final List<AudioModel> audios;
   final bool isEnglish;
-  const AudioPlayerSection({Key? key, required this.audios,required  this.isEnglish}) : super(key: key);
+  const AudioPlayerSection(
+      {Key? key, required this.audios, required this.isEnglish})
+      : super(key: key);
 
   @override
   State<AudioPlayerSection> createState() => _AudioPlayerSectionState();
@@ -43,8 +51,11 @@ class _AudioPlayerSectionState extends State<AudioPlayerSection>
   _play(String url, String title, String thumbnail) async {
     if (url != currentUrl.value) {
       _audioPlayer.pause();
-
-      await _audioPlayer.play(UrlSource(url));
+      try {
+        await _audioPlayer.play(UrlSource(url));
+      } catch (e) {
+        BotToast.showText(text: 'Something went wrong!');
+      }
 
       currentUrl.value = url;
       currentAudio.value = title;
@@ -84,9 +95,6 @@ class _AudioPlayerSectionState extends State<AudioPlayerSection>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused) {
-      // Release the player's resources when not in use. We use "stop" so that
-      // if the app resumes later, it will still remember what position to
-      // resume from.
       _audioPlayer.stop();
     }
   }
@@ -104,13 +112,81 @@ class _AudioPlayerSectionState extends State<AudioPlayerSection>
             _audioPlayer.pause();
           }
         }
-
-        debugPrint(
-            'Widget ${visibilityInfo.key} is ${visiblePercentage}% visible');
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          BlocBuilder<GetUserCubit, GetUserState>(
+              builder: (userCtx, userState) {
+            String weeks = '';
+            String day = '';
+            String days = '';
+            if (userState is GetUserSuccess) {
+              final date = DateTime.parse(userState.user.lmpDateNp ?? '');
+
+              DateTime earlier = DateTime.utc(date.year, date.month, date.day);
+              final later = DateTime.utc(NepaliDateTime.now().year,
+                  NepaliDateTime.now().month, NepaliDateTime.now().day);
+              day = differenceInCalendarDays(later, earlier).toString();
+
+              weeks = (int.parse(day) / 7).toStringAsFixed(0);
+              days = ((int.parse(day)) - (int.parse(weeks) * 7)).toString();
+            }
+            final thisWeek = widget.audios.firstWhere(
+                (element) =>
+                    (element.weekId) == ((int.parse(weeks) < 13) ? 12 : int.parse(weeks)),
+                orElse: () => AudioModel(
+                    id: 0,
+                    titleEn: '',
+                    titleNp: '',
+                    thumbnail: '',
+                    path: '',
+                    weekId: 0,
+                    createdAt: DateTime.now(),
+                    updatedAt: DateTime.now()));
+
+            return Column(
+              children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: defaultPadding.copyWith(top: 15.h),
+                    child: Text(
+                      'This Week Audio',
+                      style: theme.textTheme.labelMedium,
+                    ),
+                  ),
+                ),
+                VerticalSpace(10.h),
+                Align(
+                  alignment: Alignment.center,
+                  child: GestureDetector(
+                    onTap: () async {
+                      _play(
+                        thisWeek.path,
+                        thisWeek.titleEn,
+                        thisWeek.thumbnail,
+                      );
+                    },
+                    child: ValueListenableBuilder(
+                        valueListenable: currentUrl,
+                        builder: (context, b, bb) {
+                          return Padding(
+                            padding: defaultPadding,
+                            child: AudioContainerWidget(
+                              isEnglish: widget.isEnglish,
+                              isPlaying: currentUrl.value == null
+                                  ? false
+                                  : thisWeek.path == currentUrl.value,
+                              audio: thisWeek,
+                            ),
+                          );
+                        }),
+                  ),
+                )
+              ],
+            );
+          }),
           Padding(
             padding: defaultPadding.copyWith(top: 15.h),
             child: Text(
@@ -150,7 +226,7 @@ class _AudioPlayerSectionState extends State<AudioPlayerSection>
                             valueListenable: currentUrl,
                             builder: (context, b, bb) {
                               return AudioContainerWidget(
-                                isEnglish:widget.isEnglish,
+                                isEnglish: widget.isEnglish,
                                 isPlaying: currentUrl.value == null
                                     ? false
                                     : widget.audios[index].path ==
@@ -227,7 +303,6 @@ class _AudioPlayerSectionState extends State<AudioPlayerSection>
                                           errorWidget: (context, url, error) =>
                                               const Icon(Icons.error),
                                         ),
-                                      
                                       ),
                                     );
                                   }),

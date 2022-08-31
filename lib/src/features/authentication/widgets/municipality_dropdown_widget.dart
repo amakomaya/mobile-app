@@ -197,9 +197,14 @@ class MunicipalityDropdownListWidget extends StatefulWidget {
   final TextEditingController controller;
   final int districtId;
   final int municipalityId;
+  final TextEditingController retainId;
+  final ValidatorFunc? validator;
+
   const MunicipalityDropdownListWidget(
       {Key? key,
       required this.municipalityId,
+      required this.retainId,
+      required this.validator,
       required this.districtId,
       required this.controller})
       : super(key: key);
@@ -254,6 +259,7 @@ class _MunicipalityDropdownListWidgetState
       },
       builder: (context, state) {
         return PrimaryTextField(
+          validator: widget.validator,
           controller: widget.controller,
           readOnly: true,
           labelText: 'Municipality/VDC',
@@ -293,10 +299,19 @@ class _MunicipalityDropdownListWidgetState
                               itemBuilder: (ctx, ind) {
                                 return GestureDetector(
                                     onTap: () async {
+                                      print('Municipality Name:' +
+                                          municipalities[ind]
+                                              .municipalityName
+                                              .toString());
+                                      print('Municipality ID:' +
+                                          municipalities[ind].id.toString());
                                       widget.controller.text =
                                           municipalities[ind]
                                                   .municipalityName ??
                                               '';
+                                      widget.retainId.text =
+                                          (municipalities[ind].id ?? 0)
+                                              .toString();
                                       Navigator.pop(context);
                                     },
                                     child: Text(

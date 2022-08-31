@@ -28,18 +28,18 @@ class WeeklyTipsCubit extends Cubit<WeeklyTipsState> {
         super(WeeklyTipsInitial());
 
   void getWeeklyTips(bool isRefreshed) async {
-    emit(WeeklyTipsLoading());
+  
     final response = _prefs.getString('weeklyTips');
     if (response != null && isRefreshed == false) {
       final weekly = jsonDecode(response) as List;
       final List<WeeklyTips> data =
           weekly.map((json) => WeeklyTips.fromJson(json)).toList();
-      emit(WeeklyTipsSucces(data));
+      emit(WeeklyTipsSucces(data,isRefreshed));
     } else {
       try {
         final List<WeeklyTips> response = await _repo.getWeeklyTips();
 
-        emit(WeeklyTipsSucces(response, isRefreshed: isRefreshed));
+        emit(WeeklyTipsSucces(response, isRefreshed));
       } on DioError catch (_) {
         emit(WeeklyTipsFailure());
       }
@@ -56,8 +56,8 @@ class WeeklyTipsLoading extends WeeklyTipsState {
 
 class WeeklyTipsSucces extends WeeklyTipsState {
   final List<WeeklyTips> data;
-  final bool? isRefreshed;
-  WeeklyTipsSucces(this.data, {this.isRefreshed});
+  final bool isRefreshed;
+  WeeklyTipsSucces(this.data, this.isRefreshed);
   @override
   List<Object?> get props => [data];
 }

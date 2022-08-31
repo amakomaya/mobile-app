@@ -14,9 +14,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:nepali_date_picker/nepali_date_picker.dart';
 import '../../../injection_container.dart';
 import '../../core/cache/weekly_cache/cache_values.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/widgets/drawer/drawer_widget.dart';
+import '../fetch user data/cubit/get_user_cubit.dart';
 
 class WeeklyTipsPage extends StatefulWidget {
   const WeeklyTipsPage({Key? key}) : super(key: key);
@@ -49,84 +52,183 @@ class _WeeklyTipsPageState extends State<WeeklyTipsPage> {
               BotToast.showText(text: 'No Internet Connection !');
             }
           },
-          child: ListView.separated(
-              padding: defaultPadding.copyWith(bottom: 25.h),
-              primary: false,
-              shrinkWrap: true,
-              itemBuilder: (ctx, index) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          child: BlocBuilder<GetUserCubit, GetUserState>(
+            builder: (userCt, userStat) {
+              WeeklyTips? _weeks;
+              List<WeeklyTips> listOfWeekly;
+
+              if (userStat is GetUserSuccess) {
+                final date = DateTime.parse(userStat.user.lmpDateNp ?? '');
+
+                DateTime earlier =
+                    DateTime.utc(date.year, date.month, date.day);
+                final later = DateTime.utc(NepaliDateTime.now().year,
+                    NepaliDateTime.now().month, NepaliDateTime.now().day);
+                int day = differenceInCalendarDays(later, earlier);
+
+                int weekId = day ~/ 7;
+
+                _weeks =
+                    state.data.firstWhere((element) => element.weekId == weekId,
+                        orElse: () => WeeklyTips(
+                              id: -1,
+                              titleEn: '',
+                              titleNp: '',
+                              descriptionEn: '',
+                              descriptionNp: '',
+                              weekId: 0,
+                              createdAt: DateTime.now(),
+                              updatedAt: DateTime.now(),
+                            ));
+              }
+
+              return SingleChildScrollView(
+                primary: true,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    VerticalSpace(20.h),
-                    ShadowContainer(
-                      radius: 30,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20.w, vertical: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                              isEnglish
-                                  ? (list[index].titleEn)
-                                  : (list[index].titleNp),
-                              style: theme.textTheme.labelMedium),
-                          Divider(
-                            height: 15.w,
-                            color: AppColors.accentGrey,
+                    VerticalSpace(10.h),
+                    Padding(
+                      padding: defaultPadding,
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'This week tips',
+                          style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                            fontSize: 20
                           ),
-                          // Html(
-                          //   data: (list[index].descriptionNp),
-                          //   onImageError: (sd, f) {},
-                          //   customRenders: {
-
-                          //   },
-                          // )
-                          Html(
-                              // data: <span>Some normal HTML</span> then appears a <customtag>Some data in this one</customtag>,
-                              data: list[index].descriptionNp,
-                              tagsList: Html.tags..addAll(['img']),
-                              customRenders: {
-                                customTagMatcher(): CustomRender.widget(
-                                    widget: (context, buildChildren) {
-                                  final element = context.tree.element!;
-
-                                  // Your conditions with the element.
-                                  // finally return your own custom widget:
-                                  return Builder(builder: (context) {
-                                    // return Image.network(element.attributes['src']??'');
-                                    return CachedNetworkImage(
-                                      fit: BoxFit.cover,
-                                      imageUrl: element.attributes['src'] ?? '',
-                                      placeholder: (ctx, url) => Container(
-                                        height: 100.h,
-                                        width: 100.w,
-                                        color: AppColors.accentGrey,
-                                      ),
-                                      errorWidget: (context, url, error) =>
-                                          const Icon(Icons.error),
-                                    );
-                                  });
-                                }),
-                              }),
-                        
-                        ],
+                        ),
                       ),
                     ),
+                    VerticalSpace(10.h),
+                    ShadowContainer(
+                      width: 380.w,
+                        radius: 30,
+                      padding: defaultPadding.copyWith(top: 10.h, bottom: 20.h),
+                      child: _weeks?.id != -1
+                          ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                    isEnglish
+                                        ? (_weeks?.titleEn ?? '')
+                                        : (_weeks?.titleNp ?? ''),
+                                    style: theme.textTheme.labelMedium),
+                                   Divider(
+                                      height: 15.w,
+                                      color: AppColors.accentGrey,
+                                    ),
+                                Html(data: _weeks?.descriptionEn)
+                              ],
+                            )
+                          : Center(
+                              child: Text(
+                                'No Tips Found!',
+                                style: Theme.of(context).textTheme.labelMedium,
+                              ),
+                            ),
+                    ),
+                    VerticalSpace(10.h),
+                     Padding(
+                      padding: defaultPadding,
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Other week tips',
+                          style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                            fontSize: 20
+                          ),
+                        ),
+                      ),
+                    ),
+                    ListView.separated(
+                        padding: defaultPadding.copyWith(bottom: 25.h),
+                        primary: false,
+                        shrinkWrap: true,
+                        itemBuilder: (ctx, index) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              VerticalSpace(20.h),
+                              ShadowContainer(
+                                radius: 30,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 20.w, vertical: 20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                        isEnglish
+                                            ? (list[index].titleEn)
+                                            : (list[index].titleNp),
+                                        style: theme.textTheme.labelMedium),
+                                    Divider(
+                                      height: 15.w,
+                                      color: AppColors.accentGrey,
+                                    ),
+                                    // Html(
+                                    //   data: (list[index].descriptionNp),
+                                    //   onImageError: (sd, f) {},
+                                    //   customRenders: {
+
+                                    //   },
+                                    // )
+                                    Html(
+                                        // data: <span>Some normal HTML</span> then appears a <customtag>Some data in this one</customtag>,
+                                        data: isEnglish
+                                            ? list[index].descriptionEn
+                                            : list[index].descriptionNp,
+                                        tagsList: Html.tags..addAll(['img']),
+                                        customRenders: {
+                                          customTagMatcher():
+                                              CustomRender.widget(widget:
+                                                  (context, buildChildren) {
+                                            final element =
+                                                context.tree.element!;
+
+                                            // Your conditions with the element.
+                                            // finally return your own custom widget:
+                                            return Builder(builder: (context) {
+                                              // return Image.network(element.attributes['src']??'');
+                                              return CachedNetworkImage(
+                                                fit: BoxFit.cover,
+                                                imageUrl:
+                                                    element.attributes['src'] ??
+                                                        '',
+                                                placeholder: (ctx, url) =>
+                                                    Container(
+                                                  height: 100.h,
+                                                  width: 100.w,
+                                                  color: AppColors.accentGrey,
+                                                ),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        const Icon(Icons.error),
+                                              );
+                                            });
+                                          }),
+                                        }),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                        separatorBuilder: (ctx, index) => VerticalSpace(20.h),
+                        itemCount: list.length)
                   ],
-                );
-              },
-              separatorBuilder: (ctx, index) => VerticalSpace(20.h),
-              itemCount: list.length),
+                ),
+              );
+            },
+          ),
         );
       } else {
         return ShimmerLoading(boxHeight: 500.h, itemCount: 2);
       }
     }, listener: (state, cs) {
-      // if (cs is WeeklyTipsSucces) {
-      //   if (cs.isRefreshed == true) {
-      //     BotToast.showText(text: 'Successfully Refreshed !');
-      //   }
-      // }
+      if (cs is WeeklyTipsSucces && cs.isRefreshed) {
+        BotToast.showText(text: 'Weekly Tips Successfully Refreshed');
+      }
     });
   }
 }

@@ -31,11 +31,14 @@ class _AudioPageState extends State<AudioPage> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AudioCubit, AudioState>(
-      listener: (ctx, st) {},
+      listener: (ctx, st) {
+        if(st is AudioSuccessState&& st.isRefreshed){
+          BotToast.showText(text: 'Audio Successfully fetched');
+        }
+      },
       builder: (ctx, st) {
          final bool isEnglish =
             EasyLocalization.of(context)?.currentLocale?.languageCode == 'en';
-            print(isEnglish.toString());
 
         if (st is AudioSuccessState) {
           return AudioPlayerSection(

@@ -26,6 +26,7 @@ import '../audio/cubit/audio_cubit.dart';
 import '../audio/screens/audio_page.dart';
 import '../authentication/drawer_cubit/drawer_cubit.dart';
 import '../card/card_page.dart';
+import '../fetch user data/cubit/get_user_cubit.dart';
 import '../home/screens/homepage.dart';
 import '../shop/shop_page.dart';
 import '../siren/siren_page.dart';
@@ -90,6 +91,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                                 context
                                     .read<DrawerCubit>()
                                     .checkDrawerSelection(0);
+                                context.read<GetUserCubit>().getUserFromLocal();
                               },
                             ),
                             label: ''),
@@ -107,6 +109,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                                 context
                                     .read<DrawerCubit>()
                                     .checkDrawerSelection(-1);
+                                context.read<GetUserCubit>().getUserFromLocal();
                               },
                               icon: ImageIcon(
                                 const AssetImage(
@@ -130,6 +133,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                                 context
                                     .read<DrawerCubit>()
                                     .checkDrawerSelection(-1);
+                                context.read<GetUserCubit>().getUserFromLocal();
                               },
                               icon: ImageIcon(
                                 const AssetImage("assets/images/video.png"),
@@ -159,6 +163,9 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                                   context
                                       .read<DrawerCubit>()
                                       .checkDrawerSelection(-1);
+                                  context
+                                      .read<GetUserCubit>()
+                                      .getUserFromLocal();
                                 }),
                             label: ''),
                       ],

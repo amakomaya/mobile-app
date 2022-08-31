@@ -65,6 +65,7 @@ class PrimaryTextField extends StatelessWidget {
         Padding(
           padding: defaultPadding,
           child: TextFormField(
+            
             onTap: onTap,
             readOnly: readOnly??false,
             keyboardType:
@@ -100,10 +101,10 @@ class PrimaryTextField extends StatelessWidget {
                     borderRadius: BorderRadius.circular(30),
                     borderSide: const BorderSide(
                         color: AppColors.accentGrey, width: 1)),
-                // border: OutlineInputBorder(
-                //     borderRadius: BorderRadius.circular(30),
-                //     borderSide: const BorderSide(
-                //         color: AppColors.accentGrey, width: 1)),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: const BorderSide(
+                        color: AppColors.accentGrey, width: 1)),
                 contentPadding: const EdgeInsets.only(
                     left: 15, right: 10, top: 15, bottom: 15)),
           ),

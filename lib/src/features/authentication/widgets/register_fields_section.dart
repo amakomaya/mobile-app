@@ -224,21 +224,21 @@ class _RegisterSectionState extends State<RegisterSection> {
                                       user: RegisterRequestModel(
                                           age: 0,
                                           createdAt:
-                                              formatter.format(DateTime.now()),
+                                             _lmp.text.trim(),
                                           updatedAt:
-                                              formatter.format(DateTime.now()),
+                                             _lmp.text.trim(),
                                           name: _name.text.trim(),
                                           password: _password.text.trim(),
                                           username: _phone.text.trim(),
                                           phone: _phone.text.trim(),
                                           lmpDateEn: _lmp.text.trim(),
                                           lmpDateNp: _lmp.text.trim(),
-                                          districtId: 3,
+                                          districtId: 0,
                                           email: "",
                                           isFirstTimeParent: 0,
                                           latitude: "",
                                           longitude: "",
-                                          municipalityId: 18,
+                                          municipalityId: 0,
                                           registerAs: widget.registerAs,
                                           tole: ""));
                                 }

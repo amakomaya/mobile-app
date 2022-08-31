@@ -10,9 +10,8 @@ import 'package:equatable/equatable.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../core/network_services/urls.dart';
 import '../model/register_request_model.dart';
-
-
 
 class AuthenticationCubit extends Cubit<AuthenticationState> {
   final Dio dio;
@@ -49,60 +48,38 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   }
 
   void register({required RegisterRequestModel user}) async {
-      final hasInternet = await network.isConnected;
+    final hasInternet = await network.isConnected;
     if (hasInternet) {
-        emit(AuthenticationLoadingState());
-    try {
-      final UserModel response = await _repo.register(credential: user);
-      emit(LoginSuccessfulState(response));
-    } catch (error) {
-      emit(
-          LoginFailureState(error.toString()));
-    }
-    }else{
+      emit(AuthenticationLoadingState());
+      try {
+        final UserModel response = await _repo.register(credential: user);
+        emit(LoginSuccessfulState(response));
+      } catch (error) {
+        emit(LoginFailureState(error.toString()));
+      }
+    } else {
       emit(LoginFailureState('No Internet Connection!'));
     }
-  
   }
 
-  // void loginWithQr(String qrCode) async {
-  //   try {
-  //     final Response res = await Dio().post(Urls.qrcodeUrl + qrCode);
-  //     if (res.statusCode == 200) {
-  //       final user = UserModel.fromJson(res.data['user']);
-  //       // local.saveCredentialsDataToLocal(user);
-  //       emit(LoggedInState(
-  //           user: user,
-  //           error: null,
-  //           isLoading: false,
-  //           isAuthenticated: true,
-  //           isProfileComplete:
-  //               (user.tole != null && (user.tole?.isNotEmpty ?? false))));
-  //     } else {
-  //       emit(const LoggedInState(user: null, error: 'Error', isLoading: false));
-  //     }
-  //   } catch (e) {
-  //     emit(const LoggedInState(user: null, error: 'Error', isLoading: false));
-  //   }
-  // }
+  void loginWithQr(String qrCode) async {
+    final hasInternet = await network.isConnected;
+    if (hasInternet) {
+      emit(AuthenticationLoadingState());
+      try {
+        final UserModel response = await _repo.qrLogin(credenntial: qrCode);
+
+        emit(LoginSuccessfulState(response));
+      } catch (e) {
+        emit(LoginFailureState(e.toString()));
+      }
+    } else {
+      emit(LoginFailureState('No Internet Connection!'));
+    }
+  }
 }
 
-abstract class AuthenticationState extends Equatable {
-  // final UserModel? user;
-  // final String? error;
-  // final bool? isLoading;
-  // final bool? isAuthenticated;
-  // final bool? isProfileComplete;
-
-  // const LoggedInState(
-  //     {required this.user,
-  //     this.isProfileComplete = false,
-  //     required this.error,
-  //     required this.isLoading,
-  //     this.isAuthenticated = false});
-  // @override
-  // List<Object?> get props => [user, error, isLoading];
-}
+abstract class AuthenticationState extends Equatable {}
 
 class AuthenticationInitialState extends AuthenticationState {
   @override

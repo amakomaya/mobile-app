@@ -115,6 +115,8 @@ class _VideoPlayingPageState extends State<VideoPlayingPage> {
               ),
             ),
           ),
+          
+          
           ExpansionTile(
             iconColor: AppColors.accentGrey,
             collapsedIconColor: AppColors.accentGrey,

@@ -8,6 +8,8 @@ import 'package:aamako_maya/src/features/video/model/video_model.dart';
 import 'package:aamako_maya/src/features/video/screens/video_playing_page.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -42,19 +44,20 @@ class _VideoPageState extends State<VideoPage> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<VideoCubit, VideoState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is VideoSuccessState && state.isRefreshed) {
+          BotToast.showText(text: 'Videos successfully refreshed');
+        }
+      },
       builder: (context, state) {
         if (state is VideoLoadingState) {
           return ShimmerLoading(boxHeight: 200.h, itemCount: 4);
         } else if (state is VideoSuccessState) {
-          final urlList = [];
-          for (VideoModel path in state.data) {
-            final controller = VideoPlayerController.network(path.path);
-            urlList.add(controller);
-          }
+          final bool isEnglish =
+              EasyLocalization.of(context)?.currentLocale?.languageCode == 'en';
 
           return VideoListPage(
-            videoPlayerController: urlList,
+            isEnglish: isEnglish,
             list: state.data,
           );
         } else {
@@ -84,11 +87,14 @@ class _VideoPageState extends State<VideoPage> {
 }
 
 class VideoListPage extends StatefulWidget {
-  final List videoPlayerController;
+  // final List videoPlayerController;
   final List<VideoModel> list;
-  const VideoListPage(
-      {Key? key, required this.list, required this.videoPlayerController})
-      : super(key: key);
+  final bool isEnglish;
+  const VideoListPage({
+    Key? key,
+    required this.list,
+    required this.isEnglish,
+  }) : super(key: key);
 
   @override
   State<VideoListPage> createState() => _VideoListPageState();
@@ -121,7 +127,7 @@ class _VideoListPageState extends State<VideoListPage> {
           },
           padding: defaultPadding.copyWith(bottom: 22.h, top: 22.h),
           shrinkWrap: true,
-          itemCount: widget.videoPlayerController.length,
+          itemCount: widget.list.length,
           itemBuilder: (ctx, index) => GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
@@ -134,28 +140,44 @@ class _VideoListPageState extends State<VideoListPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(
-                        width: 100.w,
-                        height: 100.h,
-                        child: CachedNetworkImage(
-                          fit: BoxFit.cover,
-                          imageUrl: widget.list[index].thumbnail,
-                          placeholder: (ctx, url) => Container(
-                            height: 100.h,
-                            width: 100.w,
-                            color: AppColors.accentGrey,
-                          ),
-                          errorWidget: (context, url, error) =>
-                              Icon(Icons.error),
-                        ),
-                      ),
+                          width: 100.w,
+                          height: 100.h,
+                          child: Stack(
+                            children: [
+                              CachedNetworkImage(
+                                fit: BoxFit.cover,
+                                imageUrl: widget.list[index].thumbnail,
+                                placeholder: (ctx, url) => Container(
+                                  height: 100.h,
+                                  width: 100.w,
+                                  color: AppColors.accentGrey,
+                                ),
+                                errorWidget: (context, url, error) =>
+                                    Icon(Icons.error),
+                              ),
+                              Align(
+                                child: Icon(
+                                  Icons.play_circle,
+                                  color: AppColors.white,
+                                  size: 35.sm,
+                                ),
+                              )
+                            ],
+                          )),
                       HorizSpace(10.w),
                       Expanded(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Html(data: widget.list[index].titleEn),
-                            Html(data: widget.list[index].descriptionEn)
+                            Html(
+                                data: widget.isEnglish
+                                    ? widget.list[index].titleEn
+                                    : widget.list[index].titleNp),
+                            Html(
+                                data: widget.isEnglish
+                                    ? widget.list[index].descriptionEn
+                                    : widget.list[index].descriptionNp)
                           ],
                         ),
                       )

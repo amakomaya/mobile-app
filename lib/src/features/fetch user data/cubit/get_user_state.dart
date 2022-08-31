@@ -11,6 +11,7 @@ class GetUserInitial extends GetUserState {}
 
 class GetUserSuccess extends GetUserState {
   final UserModel user;
+ 
   const GetUserSuccess(this.user);
   @override
   List<Object> get props => [user];

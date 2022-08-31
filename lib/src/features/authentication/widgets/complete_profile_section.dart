@@ -30,8 +30,10 @@ class _CompleteProfileSectionState extends State<CompleteProfileSection> {
   final TextEditingController _phone = TextEditingController();
   final TextEditingController _district = TextEditingController();
   final TextEditingController _municipality = TextEditingController();
+  final TextEditingController _districtID = TextEditingController();
+  final TextEditingController _municipalityID = TextEditingController();
   final DateFormat formatter = DateFormat('yyyy-MM-dd');
-
+  final _formKey = GlobalKey<FormState>();
   picker.NepaliDateTime? picked;
 
   final TextEditingController _lmp = TextEditingController();
@@ -47,112 +49,176 @@ class _CompleteProfileSectionState extends State<CompleteProfileSection> {
     return BlocConsumer<GetUserCubit, GetUserState>(
       listener: (context, state) {
         if (state is GetUserSuccess) {
+          
           _name.text = state.user.name ?? '';
           _age.text = (state.user.age ?? 0).toString();
           _lmp.text = state.user.lmpDateNp ?? '';
           _phone.text = state.user.phone.toString();
           _ward.text = state.user.ward ?? '';
           _tole.text = state.user.tole ?? '';
+          _districtID.text = (state.user.districtId ?? 0).toString();
+          _municipalityID.text = (state.user.municipalityId ?? 0).toString();
         }
       },
       builder: (context, state) {
         return SingleChildScrollView(
           padding: defaultPadding.copyWith(top: 27.h, bottom: 27.h),
-          child: Column(
-            children: [
-              ShadowContainer(
-                width: 380.w,
-                radius: 35,
-                padding: EdgeInsets.symmetric(vertical: 20.h),
-                child: Column(children: [
-                  Text(
-                    'Your Personal Details',
-                    style: Theme.of(context)
-                        .textTheme
-                        .labelLarge
-                        ?.copyWith(fontSize: 16),
-                  ),
-                  PrimaryTextField(
-                    controller: _name,
-                    labelText: 'Name',
-                  ),
-                  VerticalSpace(10.h),
-                  PrimaryTextField(
-                    controller: _age,
-                    isPhone: true,
-                    labelText: 'Age',
-                  ),
-                  VerticalSpace(10.h),
-                  PrimaryTextField(
-                    readOnly: true,
-                    onTap: () async {
-                      picked = await picker.showMaterialDatePicker(
-                        context: context,
-                        initialDate: picker.NepaliDateTime.now(),
-                        firstDate: picker.NepaliDateTime(2000),
-                        lastDate: picker.NepaliDateTime.now(),
-                        initialDatePickerMode: DatePickerMode.day,
-                      );
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                ShadowContainer(
+                  width: 380.w,
+                  radius: 35,
+                  padding: EdgeInsets.symmetric(vertical: 20.h),
+                  child: Column(children: [
+                    Text(
+                      'Your Personal Details',
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelLarge
+                          ?.copyWith(fontSize: 16),
+                    ),
+                    PrimaryTextField(
+                      controller: _name,
+                      labelText: 'Name',
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Name can not be Empty';
+                        }
+                        return null;
+                      },
+                    ),
+                    VerticalSpace(10.h),
+                    PrimaryTextField(
+                      controller: _age,
+                      isPhone: true,
+                      labelText: 'Age',
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Age can not be Empty';
+                        }
+                        return null;
+                      },
+                    ),
+                    VerticalSpace(10.h),
+                    PrimaryTextField(
+                      readOnly: true,
+                      onTap: () async {
+                        picked = await picker.showMaterialDatePicker(
+                          context: context,
+                          initialDate: picker.NepaliDateTime.now(),
+                          firstDate: picker.NepaliDateTime(2000),
+                          lastDate: picker.NepaliDateTime.now(),
+                          initialDatePickerMode: DatePickerMode.day,
+                        );
 
-                      if (picked != null) {
-                        _lmp.text = formatter.format(picked!);
+                        if (picked != null) {
+                          _lmp.text = formatter.format(picked!);
+                        }
+                      },
+                      controller: _lmp,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'LMP can not be Empty';
+                        }
+                        return null;
+                      },
+                      labelText: 'LMP Date',
+                    ),
+                  ]),
+                ),
+                VerticalSpace(30.h),
+                ShadowContainer(
+                  width: 380.w,
+                  radius: 35,
+                  padding: EdgeInsets.symmetric(vertical: 20.h),
+                  child: Column(children: [
+                    Text(
+                      'Your Address',
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelLarge
+                          ?.copyWith(fontSize: 16),
+                    ),
+                    VerticalSpace(20.h),
+                    (state is GetUserSuccess)
+                        ? DistrictDropDownListWidget(
+                            retainId: _districtID,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'District can not be Empty';
+                              }
+                              return null;
+                            },
+                            municipalityController: _municipality,
+                            controller: _district,
+                            districtId: state.user.districtId ?? 0,
+                          )
+                        : Container(),
+                    VerticalSpace(20.h),
+                    (state is GetUserSuccess)
+                        ? MunicipalityDropdownListWidget(
+                            retainId: _municipalityID,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Municipality can not be Empty';
+                              }
+                              return null;
+                            },
+                            districtId: state.user.districtId ?? 0,
+                            controller: _municipality,
+                            municipalityId: (state.user.municipalityId ?? 0),
+                          )
+                        : Container(),
+                    VerticalSpace(20.h),
+                    PrimaryTextField(
+                      labelText: 'Ward No.',
+                      controller: _ward,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Ward can not be Empty';
+                        }
+                        return null;
+                      },
+                    ),
+                    VerticalSpace(10.h),
+                    PrimaryTextField(
+                      controller: _tole,
+                      labelText: 'Tole',
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Tole can not be Empty';
+                        }
+                        return null;
+                      },
+                    ),
+                    VerticalSpace(10.h),
+                    PrimaryTextField(
+                      controller: _phone,
+                      labelText: 'Mobile Number',
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Number can not be Empty';
+                        }
+                        return null;
+                      },
+                    ),
+                  ]),
+                ),
+                VerticalSpace(50.h),
+                PrimaryActionButton(
+                    height: 50.h,
+                    onpress: () {
+                      if (_formKey.currentState!.validate()) {
+
+                        print(_districtID.text.toString());
+                         print(_municipalityID.text.toString());
                       }
                     },
-                    controller: _lmp,
-                    labelText: 'LMP Date',
-                  ),
-                ]),
-              ),
-              VerticalSpace(30.h),
-              ShadowContainer(
-                width: 380.w,
-                radius: 35,
-                padding: EdgeInsets.symmetric(vertical: 20.h),
-                child: Column(children: [
-                  Text(
-                    'Your Address',
-                    style: Theme.of(context)
-                        .textTheme
-                        .labelLarge
-                        ?.copyWith(fontSize: 16),
-                  ),
-                  VerticalSpace(20.h),
-                  (state is GetUserSuccess)
-                      ? DistrictDropDownListWidget(
-                          municipalityController: _municipality,
-                          controller: _district,
-                          districtId: state.user.districtId ?? 0,
-                        )
-                      : Container(),
-                  VerticalSpace(20.h),
-                  (state is GetUserSuccess)
-                      ? MunicipalityDropdownListWidget(
-                          districtId: state.user.districtId ?? 0,
-                          controller: _municipality,
-                          municipalityId: (state.user.municipalityId ?? 0),
-                        )
-                      : Container(),
-                  VerticalSpace(20.h),
-                  PrimaryTextField(
-                    labelText: 'Ward No.',
-                    controller: _ward,
-                  ),
-                  VerticalSpace(10.h),
-                  PrimaryTextField(
-                    controller: _tole,
-                    labelText: 'Tole',
-                  ),
-                  VerticalSpace(10.h),
-                  PrimaryTextField(
-                    controller: _phone,
-                    labelText: 'Mobile Number',
-                  ),
-                ]),
-              ),
-              VerticalSpace(50.h),
-              PrimaryActionButton(
-                  height: 50.h, onpress: () {}, title: 'Register'),
-            ],
+                    title: 'Submit'),
+              ],
+            ),
           ),
         );
       },

@@ -5,11 +5,14 @@ import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dar
 import 'package:aamako_maya/src/core/widgets/loading_shimmer/shimmer_loading.dart';
 import 'package:aamako_maya/src/features/faqs/cubit/faqs_cubit.dart';
 import 'package:bot_toast/bot_toast.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../injection_container.dart';
 import '../../../core/connection_checker/network_connection.dart';
@@ -31,11 +34,19 @@ class _FaqsPageState extends State<FaqsPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return BlocBuilder<FaqsCubit, FaqsState>(
+    return BlocConsumer<FaqsCubit, FaqsState>(
+      listener: (ctx, sta) {
+        if (sta is FaqSuccessState && sta.isRefreshed) {
+          BotToast.showText(text: 'FAQs refreshed successfully');
+        }
+      },
       builder: (context, state) {
         if (state is FaqLoadingState) {
           return ShimmerLoading(boxHeight: 200.h, itemCount: 4);
         } else if (state is FaqSuccessState) {
+          final bool isEnglish =
+              EasyLocalization.of(context)?.currentLocale?.languageCode == 'en';
+
           return RefreshIndicator(
             onRefresh: () async {
               if (await sl<NetworkInfo>().isConnected) {
@@ -45,32 +56,95 @@ class _FaqsPageState extends State<FaqsPage> {
               }
             },
             child: ListView.separated(
-              padding: defaultPadding.copyWith(top: 27.h,bottom: 27.h),
+                padding: defaultPadding.copyWith(top: 27.h, bottom: 27.h),
                 itemBuilder: ((context, index) {
                   return ShadowContainer(
-                    radius: 20,
-                    width: 380.w,
-                    color: Colors.white,
-                    padding: defaultPadding.copyWith(top: 10, bottom: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          state.faqs[index].question ?? '',
-                          style: const TextStyle(
-                              fontFamily: "lato",
-                              color: AppColors.primaryRed,
-                              fontSize: 17),
-                        ),
-                        Divider(),
-                        Text(
-                          state.faqs[index].answer ?? '',
-                          style: theme.textTheme.labelSmall,
-                        )
-                      ],
-                    ),
-                  );
-                  ;
+                      radius: 20,
+                      width: 380.w,
+                      color: Colors.white,
+                      padding: defaultPadding.copyWith(top: 10, bottom: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ExpansionTile(
+                            title: Text(
+                              state.faqs[index].question ?? '',
+                              style: const TextStyle(
+                                  fontFamily: "lato",
+                                  color: AppColors.primaryRed,
+                                  fontSize: 17),
+                            ),
+                            children: [
+                              Text(
+                                state.faqs[index].answer ?? '',
+                                style: theme.textTheme.labelSmall,
+                              ),
+                              Builder(builder: (context) {
+                                final medialinks = state.faqs[index].mediaLinks;
+                                final splitted = medialinks!.split(',');
+
+                                return splitted.isNotEmpty
+                                    ? Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          ...splitted
+                                              .map((e) => GestureDetector(
+                                                  onTap: () async {
+                                                    if (await canLaunchUrl(
+                                                        Uri.parse(e))) {
+                                                      await launchUrl(
+                                                          Uri.parse(e));
+                                                    } else {
+                                                      BotToast.showText(
+                                                          text:
+                                                              'Can not launch URL');
+                                                    }
+                                                  },
+                                                  child: Padding(
+                                                    padding:  EdgeInsets.only(top:8.h),
+                                                    child: Text(
+                                                      e,
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .labelMedium
+                                                          ?.copyWith(
+                                                              color: AppColors
+                                                                  .primaryRed,
+                                                                  
+                                                              fontSize: 20.sm),
+                                                    ),
+                                                  )))
+                                              .toList()
+                                        ],
+                                      )
+                                    : GestureDetector(
+                                        onTap: () async {
+                                          if (await canLaunchUrl(Uri.parse(
+                                              state.faqs[index].mediaLinks ??
+                                                  ""))) {
+                                            await launchUrl(Uri.parse(
+                                                state.faqs[index].mediaLinks ??
+                                                    ''));
+                                          } else {
+                                            BotToast.showText(
+                                                text: 'Can not launch URL');
+                                          }
+                                        },
+                                        child: Text(
+                                          state.faqs[index].mediaLinks ?? "",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .labelMedium
+                                              ?.copyWith(
+                                                  color: AppColors.primaryRed,
+                                                  fontSize: 18.sm),
+                                        ));
+                              })
+                            ],
+                          ),
+                        ],
+                      ));
                 }),
                 separatorBuilder: (ctx, index) {
                   return const Divider(

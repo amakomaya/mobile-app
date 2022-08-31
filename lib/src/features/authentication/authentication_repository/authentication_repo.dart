@@ -52,6 +52,33 @@ class AuthenticationRepository {
     }
   }
 
+  Future qrLogin({required String credenntial}) async {
+    try {
+      final response = await dio.post(Urls.qrcodeUrl + credenntial);
+      if (response.statusCode == 200) {
+        //save in shared_prefs
+        final user = response.data['user'];
+        await prefs.remove('user');
+        await prefs.setString('user', jsonEncode(user));
+
+        //end
+
+        //fetch districtMunicipality and save to local
+        await dis.fetchDistrictAndMunicipality();
+        //end
+        final data = UserModel.fromJson(response.data['user']);
+        local.saveCredentialsDataToLocal(response.data['user']['token']);
+        return data;
+      }
+    } on DioError catch (e) {
+      if (e.response != null) {
+        throw (e.response?.data['message']);
+      } else {
+        throw ('Unexpected Error Occured');
+      }
+    }
+  }
+
   Future login({required LoginRequestModel credential}) async {
     try {
       final response =
@@ -63,7 +90,7 @@ class AuthenticationRepository {
         await prefs.setString('user', jsonEncode(user));
 
         //end
-         //fetch districtMunicipality and save to local
+        //fetch districtMunicipality and save to local
         await dis.fetchDistrictAndMunicipality();
         //end
         final data = UserModel.fromJson(response.data['user']);

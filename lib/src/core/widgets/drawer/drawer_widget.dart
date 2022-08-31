@@ -27,6 +27,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:nepali_date_picker/nepali_date_picker.dart';
 
 import '../../../../l10n/locale_keys.g.dart';
 import '../../../features/authentication/authentication_cubit/auth_cubit.dart';
@@ -49,7 +50,6 @@ class DrawerWidget extends StatefulWidget {
 class _DrawerWidgetState extends State<DrawerWidget> {
   @override
   void initState() {
-    context.read<GetUserCubit>().getUserFromLocal();
     super.initState();
   }
 
@@ -125,11 +125,39 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             },
                           ),
                           VerticalSpace(5.h),
-                          Align(
-                              alignment: Alignment.topCenter,
-                              child: Text('40 Weeks 5 days',
-                                  style: theme.textTheme.titleSmall?.copyWith(
-                                      fontSize: 12, color: AppColors.white))),
+                          BlocBuilder<GetUserCubit, GetUserState>(
+                              builder: (userCtx, userState) {
+                            String weeks = '';
+                            String day = '';
+                            String days = '';
+                            if (userState is GetUserSuccess) {
+                              final date = DateTime.parse(
+                                  userState.user.lmpDateNp ?? '');
+
+                              DateTime earlier =
+                                  DateTime.utc(date.year, date.month, date.day);
+                              final later = DateTime.utc(
+                                  NepaliDateTime.now().year,
+                                  NepaliDateTime.now().month,
+                                  NepaliDateTime.now().day);
+                              day = differenceInCalendarDays(later, earlier)
+                                  .toString();
+
+                              weeks = (int.parse(day) / 7).toStringAsFixed(0);
+                              days = (((int.parse(day)) -
+                                          (int.parse(weeks) * 7))
+                                      .isNegative)
+                                  ? 0.toString()
+                                  : ((int.parse(day)) - (int.parse(weeks) * 7))
+                                      .toString();
+                            }
+
+                            return Align(
+                                alignment: Alignment.topCenter,
+                                child: Text(weeks + ' weeks ' + days + ' days',
+                                    style: theme.textTheme.titleSmall?.copyWith(
+                                        fontSize: 12, color: AppColors.white)));
+                          }),
                           VerticalSpace(15.h),
                           Expanded(
                             child: ShadowContainer(
@@ -177,6 +205,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                               index: 10,
                                               titleNp: AppStrings.profile,
                                               titleEn: 'Profile');
+                                      context
+                                          .read<GetUserCubit>()
+                                          .getUserFromLocal();
                                     },
                                     leading: Image.asset(
                                       AppAssets.profileIcon,
@@ -196,7 +227,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                       context
                                           .read<DrawerCubit>()
                                           .checkDrawerSelection(3);
-                                     
+
                                       context
                                           .read<NavigationIndexCubit>()
                                           .changeIndex(
@@ -262,6 +293,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                                   index: 5,
                                                   titleNp: 'गर्भवस्था जाँच',
                                                   titleEn: 'ANC');
+                                          context
+                                              .read<GetUserCubit>()
+                                              .getUserFromLocal();
                                         },
                                         title: Padding(
                                           padding: const EdgeInsets.only(
@@ -287,11 +321,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                                   titleNp: 'सुत्केरी',
                                                   index: 6,
                                                   titleEn: 'Delivery');
-
-                                          
-                   
-                       
-                     
+                                          context
+                                              .read<GetUserCubit>()
+                                              .getUserFromLocal();
                                         },
                                         title: Padding(
                                           padding: const EdgeInsets.only(
@@ -317,11 +349,15 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                                   titleNp: 'औषधि सेवा',
                                                   index: 7,
                                                   titleEn: 'Medication');
+                                          context
+                                              .read<GetUserCubit>()
+                                              .getUserFromLocal();
                                         },
                                         title: Padding(
                                           padding: const EdgeInsets.only(
                                               left: 80, right: 50),
-                                          child: Text(LocaleKeys.medication.tr(),
+                                          child: Text(
+                                              LocaleKeys.medication.tr(),
                                               style: theme.textTheme.titleSmall
                                                   ?.copyWith(
                                                       color: state.index == 7
@@ -342,6 +378,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                                   titleNp: 'सुत्केरी जाँच',
                                                   index: 8,
                                                   titleEn: 'Postnatal Care');
+                                          context
+                                              .read<GetUserCubit>()
+                                              .getUserFromLocal();
                                         },
                                         title: Padding(
                                           padding: const EdgeInsets.only(
@@ -364,9 +403,13 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                           context
                                               .read<NavigationIndexCubit>()
                                               .changeIndex(
-                                                  titleNp: 'प्रयोगशाला परिक्षण ',
+                                                  titleNp:
+                                                      'प्रयोगशाला परिक्षण ',
                                                   index: 9,
                                                   titleEn: 'Lab Test');
+                                          context
+                                              .read<GetUserCubit>()
+                                              .getUserFromLocal();
                                         },
                                         title: Padding(
                                           padding: const EdgeInsets.only(
@@ -381,7 +424,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                       ),
                                     ],
                                   ),
- 
+
                                   //faq button
                                   ListTile(
                                     onTap: () {
@@ -393,7 +436,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                       context
                                           .read<NavigationIndexCubit>()
                                           .changeIndex(
-                                              titleNp: 'बारम्बार सोधिने प्रश्न ',
+                                              titleNp:
+                                                  'बारम्बार सोधिने प्रश्न ',
                                               index: 12,
                                               titleEn: 'FAQs');
                                     },
@@ -455,4 +499,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
       );
     });
   }
+}
+
+int differenceInCalendarDays(DateTime later, DateTime earlier) {
+  // Normalize [DateTime] objects to UTC and to discard time information.
+
+  return later.difference(earlier).inDays;
 }

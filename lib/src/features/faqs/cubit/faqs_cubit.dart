@@ -14,13 +14,13 @@ class FaqsCubit extends Cubit<FaqsState> {
   FaqsCubit(this.dio, this.prefs) : super(FaqInitialState());
 
   void getfaqs(bool isRefreshed) async {
-    emit(FaqLoadingState());
+    // emit(FaqLoadingState());
 
     final response = prefs.getString('faqs');
     if (response != null && isRefreshed == false) {
       final faqs = jsonDecode(response) as List;
       List<Faqsmodel> list = (faqs).map((e) => Faqsmodel.fromJson(e)).toList();
-      emit(FaqSuccessState(list));
+      emit(FaqSuccessState(list,false));
     } else {
       try {
         final response = await dio.get(Urls.faqsUrl);
@@ -31,7 +31,7 @@ class FaqsCubit extends Cubit<FaqsState> {
           List<Faqsmodel> list =
               (faqs).map((e) => Faqsmodel.fromJson(e)).toList();
 
-          emit(FaqSuccessState(list));
+          emit(FaqSuccessState(list,isRefreshed));
         } else {
           emit(FaqFailureState());
         }
@@ -49,7 +49,8 @@ abstract class FaqsState extends Equatable {
 
 class FaqSuccessState extends FaqsState {
   final List<Faqsmodel> faqs;
-  FaqSuccessState(this.faqs);
+  final bool isRefreshed;
+  FaqSuccessState(this.faqs,this.isRefreshed);
   @override
   List<Object?> get props => [faqs];
 }

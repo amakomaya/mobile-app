@@ -119,6 +119,7 @@ class _LoginPageState extends State<LoginPage> {
                       valueListenable: obscureBtn,
                       builder: (BuildContext context, bool i, _) {
                         return PrimaryTextField(
+                          obscureText: i,
                           controller: passwordController,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -163,10 +164,10 @@ class _LoginPageState extends State<LoginPage> {
                     padding: const EdgeInsets.symmetric(vertical: 20),
                     width: 380.w,
                     onpress: () {
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: ((context) => const QRViewPage())));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: ((context) => const QRViewPage())));
                     },
                     title: '',
                     child: Row(

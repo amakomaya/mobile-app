@@ -21,19 +21,19 @@ class VideoCubit extends Cubit<VideoState> {
         super(VideoInitialState());
 
   void getVideos(bool isRefreshed) async {
-    emit(VideoLoadingState());
+    
     final response = _prefs.getString('videos');
 
     if (response != null && isRefreshed == false) {
       final videos = jsonDecode(response) as List;
 
       final data = videos.map((e) => VideoModel.fromJson(e)).toList();
-      emit(VideoSuccessState(data));
+      emit(VideoSuccessState(data,isRefreshed));
     } else {
       try {
         final List<VideoModel> response = await _repo.getVideos();
 
-        emit(VideoSuccessState(response));
+        emit(VideoSuccessState(response,isRefreshed));
       } catch (error) {
         emit(VideoFailureState());
       }
@@ -60,7 +60,8 @@ class VideoFailureState extends VideoState {
 
 class VideoSuccessState extends VideoState {
   final List<VideoModel> data;
-  VideoSuccessState(this.data);
+  final bool isRefreshed;
+  VideoSuccessState(this.data,this.isRefreshed);
   @override
   List<Object?> get props => [data];
 }

@@ -17,14 +17,13 @@ class AudioCubit extends Cubit<AudioState> {
         super(AudioInitialState());
 
   void getAudio(bool isRefreshed) async {
-    emit(AudioLoadingState());
 
     final response = _prefs.getString('audios');
 
     if (response != null && isRefreshed == false) {
       final audios = jsonDecode(response) as List;
       final data = audios.map((e) => AudioModel.fromJson(e)).toList();
-      emit(AudioSuccessState(data));
+      emit(AudioSuccessState(data,isRefreshed));
     } else {
       try {
         final Response response = await _dio.get(Urls.audiourl);
@@ -37,7 +36,7 @@ class AudioCubit extends Cubit<AudioState> {
                 (json) => AudioModel.fromJson(json),
               )
               .toList();
-          emit(AudioSuccessState(data));
+          emit(AudioSuccessState(data,isRefreshed));
         } else {
           emit(AudioFailureState());
         }
@@ -52,7 +51,8 @@ abstract class AudioState extends Equatable {}
 
 class AudioSuccessState extends AudioState {
   final List<AudioModel> data;
-  AudioSuccessState(this.data);
+  final bool isRefreshed;
+  AudioSuccessState(this.data,this.isRefreshed);
 
   @override
   List<Object?> get props => [data];
