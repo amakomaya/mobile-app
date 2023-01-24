@@ -78,30 +78,53 @@ class _LoginPageState extends State<LoginPage> {
               key: _formKey,
               child: Column(
                 children: [
+                  // Row(
+                  //   //mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  //   children: [
+                  //     Align(
+                  //       alignment: Alignment.center,
+                  // child: Image.asset(
+                  //   AppAssets.logo,
+                  //   height: 197.h,
+                  //   width: 197.h,
+                  //   cacheHeight: 197,
+                  // ),
+                  //     ),
+                  //     const Padding(
+                  //       padding: EdgeInsets.all(25),
+                  // child: LocalizationButton(
+                  //   color: AppColors.primaryRed,
+                  // ),
+                  //     ),
+                  //   ],
+                  // ),
+
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: Image.asset(
-                          AppAssets.logo,
-                          height: 197.h,
-                          width: 197.h,
-                          cacheHeight: 197,
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 110),
+                          child: Image.asset(
+                            AppAssets.logo,
+                            height: 190.h,
+                            width: 190.h,
+                            cacheHeight: 197,
+                          ),
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.only(right: 18.0),
+                      Padding(
+                        padding: const EdgeInsets.all(65),
                         child: LocalizationButton(
                           color: AppColors.primaryRed,
                         ),
-                      ),
+                      )
                     ],
                   ),
                   VerticalSpace(50.h),
                   PrimaryTextField(
                     controller: usernameController,
-                    nextFocus: passwordFocus,
+                    // nextFocus: passwordFocus,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return LocaleKeys.usernamenotempty.tr();
@@ -215,7 +238,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-                  VerticalSpace(20.h),
+                  VerticalSpace(10.h),
                   RichText(
                       text: TextSpan(children: [
                     TextSpan(
@@ -234,24 +257,41 @@ class _LoginPageState extends State<LoginPage> {
                                 builder: (ctx) => const RegisterPage())),
                     ),
                   ])),
-                  VerticalSpace(50.h),
-                  RichText(
-                      text: TextSpan(children: [
-                    TextSpan(
-                      text: LocaleKeys.call.tr(),
-                      style: Theme.of(context).textTheme.labelSmall,
-                    ),
-                    TextSpan(
-                        text: LocaleKeys.number.tr(),
-                        style:
-                            Theme.of(context).textTheme.labelMedium?.copyWith(
-                                  fontWeight: FontWeight.w500,
-                                  color: AppColors.primaryRed,
-                                )),
-                    TextSpan(
-                        text: LocaleKeys.forenquiry.tr(),
-                        style: Theme.of(context).textTheme.labelSmall),
-                  ]))
+                  VerticalSpace(40.h),
+                  Column(
+                    children: [
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Container(
+                            child: RichText(
+                                textAlign: TextAlign.center,
+                                text: TextSpan(children: [
+                                  TextSpan(
+                                    text: LocaleKeys.call.tr(),
+                                    style:
+                                        Theme.of(context).textTheme.labelSmall,
+                                  ),
+                                  TextSpan(
+                                      text: LocaleKeys.number.tr(),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelMedium
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.w500,
+                                            color: AppColors.primaryRed,
+                                          )),
+                                  TextSpan(
+                                      text: LocaleKeys.forenquiry.tr(),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelSmall),
+                                ])),
+                          ),
+                        ),
+                      )
+                    ],
+                  )
                 ],
               ),
             ),
@@ -262,8 +302,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-class LanguageModel {
-  String title;
-  String value;
-  LanguageModel({required this.title, required this.value});
-}
+// class LanguageModel {
+//   String title;
+//   String value;
+//   LanguageModel({required this.title, required this.value});
+// }

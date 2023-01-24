@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:aamako_maya/l10n/locale_keys.g.dart';
 import 'package:aamako_maya/src/core/padding/padding.dart';
 import 'package:aamako_maya/src/core/snackbar/error_snackbar.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
@@ -9,6 +10,7 @@ import 'package:aamako_maya/src/features/authentication/screens/login/login_page
 import 'package:aamako_maya/src/features/authentication/widgets/complete_profile_section.dart';
 import 'package:aamako_maya/src/features/bottom_nav/bottom_navigation.dart';
 import 'package:bot_toast/bot_toast.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -82,7 +84,7 @@ class _RegisterSectionState extends State<RegisterSection> {
                         Padding(
                           padding: const EdgeInsets.only(left: 18, bottom: 12),
                           child: Text(
-                            'Register',
+                            '${LocaleKeys.registered.tr()}',
                             style: Theme.of(context).textTheme.displaySmall,
                           ),
                         ),
@@ -103,6 +105,7 @@ class _RegisterSectionState extends State<RegisterSection> {
                                   defaultPadding.copyWith(top: 6, bottom: 6),
                               margin: defaultPadding,
                               child: TextFormField(
+                                autofocus: true,
                                 cursorColor: AppColors.primaryRed,
                                 controller: _name,
                                 validator: (value) {
@@ -114,9 +117,9 @@ class _RegisterSectionState extends State<RegisterSection> {
                                   }
                                   return null;
                                 },
-                                decoration: const InputDecoration(
+                                decoration: InputDecoration(
                                   labelStyle: TextStyle(color: AppColors.black),
-                                  label: Text('Name'),
+                                  label: Text('${LocaleKeys.name.tr()}'),
                                   isDense: true,
                                   border: InputBorder.none,
                                 ),
@@ -152,9 +155,9 @@ class _RegisterSectionState extends State<RegisterSection> {
 
                                   return null;
                                 },
-                                decoration: const InputDecoration(
+                                decoration: InputDecoration(
                                   labelStyle: TextStyle(color: AppColors.black),
-                                  label: Text('LMP'),
+                                  label: Text('${LocaleKeys.lmp.tr()}'),
 
                                   // enabled: false,
                                   border: InputBorder.none,
@@ -179,9 +182,10 @@ class _RegisterSectionState extends State<RegisterSection> {
                                   }
                                   return null;
                                 },
-                                decoration: const InputDecoration(
+                                decoration: InputDecoration(
                                   labelStyle: TextStyle(color: AppColors.black),
-                                  label: Text('Mobile Number'),
+                                  label:
+                                      Text('${LocaleKeys.mobilenumber.tr()}'),
                                   isDense: true,
                                   border: InputBorder.none,
                                 ),
@@ -204,9 +208,9 @@ class _RegisterSectionState extends State<RegisterSection> {
                                   }
                                   return null;
                                 },
-                                decoration: const InputDecoration(
+                                decoration: InputDecoration(
                                   labelStyle: TextStyle(color: AppColors.black),
-                                  label: Text('Password'),
+                                  label: Text('${LocaleKeys.password.tr()}'),
                                   isDense: true,
                                   border: InputBorder.none,
                                 ),
@@ -218,41 +222,40 @@ class _RegisterSectionState extends State<RegisterSection> {
                           ),
                           VerticalSpace(40.h),
                           PrimaryActionButton(
-                              onpress: () {
-                                if (_formKey.currentState!.validate()) {
-                                  context.read<AuthenticationCubit>().register(
-                                      user: RegisterRequestModel(
-                                          age: 0,
-                                          createdAt:
-                                             _lmp.text.trim(),
-                                          updatedAt:
-                                             _lmp.text.trim(),
-                                          name: _name.text.trim(),
-                                          password: _password.text.trim(),
-                                          username: _phone.text.trim(),
-                                          phone: _phone.text.trim(),
-                                          lmpDateEn: _lmp.text.trim(),
-                                          lmpDateNp: _lmp.text.trim(),
-                                          districtId: 0,
-                                          email: "",
-                                          isFirstTimeParent: 0,
-                                          latitude: "",
-                                          longitude: "",
-                                          municipalityId: 0,
-                                          registerAs: widget.registerAs,
-                                          tole: ""));
-                                }
-                              },
-                              width: 170.w,
-                              title: 'Register'),
+                            onpress: () {
+                              if (_formKey.currentState!.validate()) {
+                                context.read<AuthenticationCubit>().register(
+                                    user: RegisterRequestModel(
+                                        age: 0,
+                                        createdAt: _lmp.text.trim(),
+                                        updatedAt: _lmp.text.trim(),
+                                        name: _name.text.trim(),
+                                        password: _password.text.trim(),
+                                        username: _phone.text.trim(),
+                                        phone: _phone.text.trim(),
+                                        lmpDateEn: _lmp.text.trim(),
+                                        lmpDateNp: _lmp.text.trim(),
+                                        districtId: 0,
+                                        email: "",
+                                        isFirstTimeParent: 0,
+                                        latitude: "",
+                                        longitude: "",
+                                        municipalityId: 0,
+                                        registerAs: widget.registerAs,
+                                        tole: ""));
+                              }
+                            },
+                            width: 170.w,
+                            title: '${LocaleKeys.registered.tr()}',
+                          ),
                           VerticalSpace(30.h),
                           RichText(
                               text: TextSpan(children: [
                             TextSpan(
-                                text: 'Already have an account ? ',
+                                text: '${LocaleKeys.account.tr()} ',
                                 style: Theme.of(context).textTheme.bodySmall),
                             TextSpan(
-                              text: 'Go to login',
+                              text: '${LocaleKeys.loginbutton.tr()} ',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodySmall

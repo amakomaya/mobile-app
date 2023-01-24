@@ -1,4 +1,3 @@
-
 import 'package:aamako_maya/src/core/app_assets/app_assets.dart';
 import 'package:aamako_maya/src/core/theme/app_colors.dart';
 import 'package:aamako_maya/src/core/widgets/buttons/primary_action_button.dart';
@@ -157,7 +156,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                           builder: (context, value, _) {
                             return PrimaryActionButton(
                               width: 185.w,
-                              height: 43.h,
+                              height: 50.h,
                               title: value == _onboardList.length - 1
                                   ? 'Continue'
                                   : 'Next',
@@ -168,8 +167,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                                         ),
                                       )
                                   : () => _controller.nextPage(
-                                        duration:
-                                            const Duration(milliseconds: 400),
+                                        duration: const Duration(seconds: 2),
                                         curve: Curves.decelerate,
                                       ),
                             );

@@ -46,7 +46,6 @@ Future<void> main() async {
 
   await Hive.initFlutter();
 
-
   //initialize get_it
   di.init();
 
@@ -81,7 +80,7 @@ Future<void> main() async {
                   BlocProvider(create: (context) => sl<AuthenticationCubit>()),
                   BlocProvider(create: (context) => sl<PncsCubit>()),
                   BlocProvider(create: (context) => sl<NewsfeedCubit>()),
-                  BlocProvider(create: (context)=>sl<GetUserCubit>()),
+                  BlocProvider(create: (context) => sl<GetUserCubit>()),
                   BlocProvider(create: (context) => sl<FaqsCubit>()),
                   BlocProvider(create: (context) => sl<AudioCubit>()),
                   BlocProvider(

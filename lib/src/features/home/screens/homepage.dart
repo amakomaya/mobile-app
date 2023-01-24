@@ -79,10 +79,10 @@ class _HomePageState extends State<HomePage> {
             if (userState is GetUserSuccess) {
               if ((userState.user.tole?.isEmpty ?? true) ||
                   userState.user.tole == null) {
-                WidgetsBinding.instance?.addPostFrameCallback((_) async {
+                WidgetsBinding.instance.addPostFrameCallback((_) async {
                   // showExitPopup(context);
                   await showDialog(
-                    barrierDismissible: false,
+                      barrierDismissible: false,
                       context: userCtx,
                       builder: (BuildContext userCtx) {
                         return AlertDialog(
