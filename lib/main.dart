@@ -38,7 +38,7 @@ import 'injection_container.dart' as di;
 
 late Box box;
 Future<void> main() async {
-  WidgetsFlutterBinding?.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
   // await FlutterDownloader.initialize(debug: true, ignoreSsl: true);
 
   //await for localization

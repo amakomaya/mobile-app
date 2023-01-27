@@ -1,3 +1,4 @@
+import 'package:aamako_maya/l10n/locale_keys.g.dart';
 import 'package:aamako_maya/src/core/padding/padding.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
 import 'package:aamako_maya/src/core/widgets/textfield/primary_textfield.dart';
@@ -5,11 +6,11 @@ import 'package:aamako_maya/src/features/authentication/cubit/district_municipal
 
 import 'package:aamako_maya/src/features/authentication/widgets/municipality_dropdown_widget.dart';
 import 'package:aamako_maya/src/features/fetch%20user%20data/cubit/get_user_cubit.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart' as picker;
 
 import '../../../core/widgets/buttons/primary_action_button.dart';
@@ -49,9 +50,8 @@ class _CompleteProfileSectionState extends State<CompleteProfileSection> {
     return BlocConsumer<GetUserCubit, GetUserState>(
       listener: (context, state) {
         if (state is GetUserSuccess) {
-          
           _name.text = state.user.name ?? '';
-          _age.text = (state.user.age ?? 0).toString();
+          _age.text = (state.user.age ?? '').toString();
           _lmp.text = state.user.lmpDateNp ?? '';
           _phone.text = state.user.phone.toString();
           _ward.text = state.user.ward ?? '';
@@ -73,7 +73,7 @@ class _CompleteProfileSectionState extends State<CompleteProfileSection> {
                   padding: EdgeInsets.symmetric(vertical: 20.h),
                   child: Column(children: [
                     Text(
-                      'Your Personal Details',
+                      LocaleKeys.yourpersonaldetails.tr(),
                       style: Theme.of(context)
                           .textTheme
                           .labelLarge
@@ -81,7 +81,7 @@ class _CompleteProfileSectionState extends State<CompleteProfileSection> {
                     ),
                     PrimaryTextField(
                       controller: _name,
-                      labelText: 'Name',
+                      labelText: LocaleKeys.name.tr(),
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Name can not be Empty';
@@ -92,8 +92,7 @@ class _CompleteProfileSectionState extends State<CompleteProfileSection> {
                     VerticalSpace(10.h),
                     PrimaryTextField(
                       controller: _age,
-                      isPhone: true,
-                      labelText: 'Age',
+                      labelText: LocaleKeys.age.tr(),
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Age can not be Empty';
@@ -124,7 +123,7 @@ class _CompleteProfileSectionState extends State<CompleteProfileSection> {
                         }
                         return null;
                       },
-                      labelText: 'LMP Date',
+                      labelText: LocaleKeys.lmpdate.tr(),
                     ),
                   ]),
                 ),
@@ -135,7 +134,7 @@ class _CompleteProfileSectionState extends State<CompleteProfileSection> {
                   padding: EdgeInsets.symmetric(vertical: 20.h),
                   child: Column(children: [
                     Text(
-                      'Your Address',
+                      LocaleKeys.youraddress.tr(),
                       style: Theme.of(context)
                           .textTheme
                           .labelLarge
@@ -168,12 +167,11 @@ class _CompleteProfileSectionState extends State<CompleteProfileSection> {
                             },
                             districtId: state.user.districtId ?? 0,
                             controller: _municipality,
-                            municipalityId: (state.user.municipalityId ?? 0),
-                          )
+                            municipalityId: state.user.municipalityId ?? 0)
                         : Container(),
                     VerticalSpace(20.h),
                     PrimaryTextField(
-                      labelText: 'Ward No.',
+                      labelText: LocaleKeys.wardno.tr(),
                       controller: _ward,
                       validator: (value) {
                         if (value!.isEmpty) {
@@ -185,7 +183,7 @@ class _CompleteProfileSectionState extends State<CompleteProfileSection> {
                     VerticalSpace(10.h),
                     PrimaryTextField(
                       controller: _tole,
-                      labelText: 'Tole',
+                      labelText: LocaleKeys.tole.tr(),
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Tole can not be Empty';
@@ -196,7 +194,7 @@ class _CompleteProfileSectionState extends State<CompleteProfileSection> {
                     VerticalSpace(10.h),
                     PrimaryTextField(
                       controller: _phone,
-                      labelText: 'Mobile Number',
+                      labelText: LocaleKeys.mobilenumber.tr(),
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Number can not be Empty';
@@ -208,15 +206,17 @@ class _CompleteProfileSectionState extends State<CompleteProfileSection> {
                 ),
                 VerticalSpace(50.h),
                 PrimaryActionButton(
-                    height: 50.h,
+                    height: 70.h,
                     onpress: () {
                       if (_formKey.currentState!.validate()) {
-
-                        print(_districtID.text.toString());
-                         print(_municipalityID.text.toString());
+                        print(_municipality.text.toString());
+                        print('name:${_name.text.toString()}');
+                        print("ward: ${_ward.text.toString()} ");
+                        print("age: ${_age.text.toString()} ");
+                        print("number: ${_phone.text.toString()} ");
                       }
                     },
-                    title: 'Submit'),
+                    title: LocaleKeys.submit.tr()),
               ],
             ),
           ),

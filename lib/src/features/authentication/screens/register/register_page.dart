@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:aamako_maya/l10n/locale_keys.g.dart';
 import 'package:aamako_maya/src/core/widgets/border_container.dart';
 import 'package:aamako_maya/src/core/widgets/buttons/localization_button.dart';
@@ -26,15 +24,10 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
   List<RegisterAsModel> registerAs = [
     RegisterAsModel(
       id: 1,
-      name: LocaleKeys.preparingforpregancy.tr(),
+      text: LocaleKeys.preparingforpregancy.tr(),
       value: "planning",
       image: Image.asset(
         'assets/images/logo/item1.png',
@@ -45,25 +38,25 @@ class _RegisterPageState extends State<RegisterPage> {
     ),
     RegisterAsModel(
       id: 2,
-      name: LocaleKeys.pregnant.tr(),
+      text: LocaleKeys.pregnant.tr(),
       value: "pregnant",
       image: Image.asset(
         'assets/images/logo/item2.png',
-        height: 50,
-        width: 50,
-        fit: BoxFit.fitWidth,
+        height: 60,
+        width: 60,
+        fit: BoxFit.cover,
       ),
     ),
     RegisterAsModel(
       id: 3,
-      name: LocaleKeys.growth.tr(),
+      text: LocaleKeys.growth.tr(),
       value: "ongoing",
       image: Image.asset(
         'assets/images/logo/item3.png',
         height: 70,
         width: 70,
-        colorBlendMode: BlendMode.darken,
-        fit: BoxFit.fitWidth,
+        // colorBlendMode: BlendMode.darken,
+        fit: BoxFit.cover,
       ),
     ),
   ];
@@ -83,32 +76,32 @@ class _RegisterPageState extends State<RegisterPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(left: 18.0, bottom: 12),
+                    padding: const EdgeInsets.only(left: 18.0, bottom: 12),
                     child: Text(
                       LocaleKeys.registered.tr(),
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontFamily: 'lato',
                           fontSize: 22,
                           color: Colors.white),
                     ),
                   ),
-                  LocalizationButton(
+                  const LocalizationButton(
                     icon: Icon(Icons.more_vert_outlined),
                   )
                 ],
               ),
             ),
-            VerticalSpace(10),
+            const VerticalSpace(10),
             Column(
               children: [
                 Text(
                   LocaleKeys.option.tr(),
-                  style: TextStyle(fontSize: 17, fontFamily: 'lato'),
+                  style: const TextStyle(fontSize: 17, fontFamily: 'lato'),
                 )
               ],
             ),
-            SizedBox(
-              height: 20,
+            const SizedBox(
+              height: 10,
             ),
             Padding(
               padding: const EdgeInsets.all(10.0),
@@ -146,7 +139,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text(registerAs[inde].name),
+                                          Text(registerAs[inde].text),
                                           // SizedBox(
                                           //   width: 90,
                                           // ),
@@ -158,12 +151,10 @@ class _RegisterPageState extends State<RegisterPage> {
                                           //     image: registerAs[inde].image.image)
 
                                           CircleAvatar(
-                                              radius: 20,
-                                              child: Image(
-                                                image: registerAs[inde]
-                                                    .image
-                                                    .image,
-                                              ))
+                                            backgroundColor: Colors.white,
+                                            backgroundImage:
+                                                registerAs[inde].image.image,
+                                          )
                                         ],
                                       ),
                                     ));
@@ -181,7 +172,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 onpress: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (ctx) => RegisterSection(
-                          registerAs: registerAs[selected.value].name)));
+                          registerAs: registerAs[selected.value].text)));
                 },
                 title: LocaleKeys.next.tr()),
           ],
@@ -193,11 +184,11 @@ class _RegisterPageState extends State<RegisterPage> {
 
 class RegisterAsModel {
   int id;
-  String name;
+  String text;
   String value;
   Image image;
   RegisterAsModel(
-      {required this.name,
+      {required this.text,
       required this.value,
       required this.id,
       required this.image});

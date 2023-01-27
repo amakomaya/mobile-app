@@ -84,7 +84,7 @@ class _RegisterSectionState extends State<RegisterSection> {
                         Padding(
                           padding: const EdgeInsets.only(left: 18, bottom: 12),
                           child: Text(
-                            '${LocaleKeys.registered.tr()}',
+                            LocaleKeys.registered.tr(),
                             style: Theme.of(context).textTheme.displaySmall,
                           ),
                         ),
@@ -110,16 +110,17 @@ class _RegisterSectionState extends State<RegisterSection> {
                                 controller: _name,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
-                                    return 'Name can\'t not be empty';
+                                    return LocaleKeys.namewarning.tr();
                                   }
                                   if (value.length < 3) {
-                                    return 'Name must contain more than 3 characters ';
+                                    return LocaleKeys.namevalidation.tr();
                                   }
                                   return null;
                                 },
                                 decoration: InputDecoration(
-                                  labelStyle: TextStyle(color: AppColors.black),
-                                  label: Text('${LocaleKeys.name.tr()}'),
+                                  labelStyle:
+                                      const TextStyle(color: AppColors.black),
+                                  label: Text(LocaleKeys.name.tr()),
                                   isDense: true,
                                   border: InputBorder.none,
                                 ),
@@ -150,14 +151,14 @@ class _RegisterSectionState extends State<RegisterSection> {
                                 controller: _lmp,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
-                                    return 'LMP can\'t not be empty';
+                                    return LocaleKeys.lmpwarning.tr();
                                   }
 
                                   return null;
                                 },
                                 decoration: InputDecoration(
                                   labelStyle: TextStyle(color: AppColors.black),
-                                  label: Text('${LocaleKeys.lmp.tr()}'),
+                                  label: Text(LocaleKeys.lmp.tr()),
 
                                   // enabled: false,
                                   border: InputBorder.none,
@@ -175,17 +176,17 @@ class _RegisterSectionState extends State<RegisterSection> {
                                 controller: _phone,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
-                                    return 'Mobile number can\'t not be empty';
+                                    return LocaleKeys.mobilenumberwarning.tr();
                                   }
                                   if (value.length < 10 || value.length > 10) {
-                                    return 'Invalid mobile number ';
+                                    return LocaleKeys.mobilenumbervalidation
+                                        .tr();
                                   }
                                   return null;
                                 },
                                 decoration: InputDecoration(
                                   labelStyle: TextStyle(color: AppColors.black),
-                                  label:
-                                      Text('${LocaleKeys.mobilenumber.tr()}'),
+                                  label: Text(LocaleKeys.mobilenumber.tr()),
                                   isDense: true,
                                   border: InputBorder.none,
                                 ),
@@ -201,26 +202,26 @@ class _RegisterSectionState extends State<RegisterSection> {
                                 controller: _password,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
-                                    return 'Password can\'t not be empty';
+                                    return LocaleKeys.passwordwarning.tr();
                                   }
                                   if (value.length < 5) {
-                                    return 'Password must contain more than 5 characters ';
+                                    return LocaleKeys.passwordvalidation.tr();
                                   }
                                   return null;
                                 },
                                 decoration: InputDecoration(
                                   labelStyle: TextStyle(color: AppColors.black),
-                                  label: Text('${LocaleKeys.password.tr()}'),
+                                  label: Text(LocaleKeys.password.tr()),
                                   isDense: true,
                                   border: InputBorder.none,
                                 ),
                               )),
-                          VerticalSpace(10.h),
+                          VerticalSpace(15.h),
                           Text(
                             "By clicking in register you are in agreement of Terms and Conditions",
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
-                          VerticalSpace(40.h),
+                          VerticalSpace(20.h),
                           PrimaryActionButton(
                             onpress: () {
                               if (_formKey.currentState!.validate()) {
@@ -246,21 +247,21 @@ class _RegisterSectionState extends State<RegisterSection> {
                               }
                             },
                             width: 170.w,
-                            title: '${LocaleKeys.registered.tr()}',
+                            title: LocaleKeys.registered.tr(),
                           ),
-                          VerticalSpace(30.h),
+                          VerticalSpace(15.h),
                           RichText(
                               text: TextSpan(children: [
                             TextSpan(
-                                text: '${LocaleKeys.account.tr()} ',
+                                text: LocaleKeys.account.tr(),
                                 style: Theme.of(context).textTheme.bodySmall),
                             TextSpan(
-                              text: '${LocaleKeys.loginbutton.tr()} ',
+                              text: LocaleKeys.loginbutton.tr(),
                               style: Theme.of(context)
                                   .textTheme
                                   .bodySmall
                                   ?.copyWith(
-                                      fontSize: 16,
+                                      fontSize: 14,
                                       color: AppColors.primaryRed),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () => Navigator.pushAndRemoveUntil(

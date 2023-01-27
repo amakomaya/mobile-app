@@ -15,6 +15,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../l10n/locale_keys.g.dart';
 import '../../../../core/app_assets/app_assets.dart';
@@ -45,6 +46,11 @@ class _LoginPageState extends State<LoginPage> {
   void dispose() {
     passwordFocus.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -207,11 +213,17 @@ class _LoginPageState extends State<LoginPage> {
                                       fontSize: 18,
                                       color: AppColors.white,
                                       fontWeight: FontWeight.w600)),
-                        )
+                        ),
                       ],
                     ),
                   ),
-                  VerticalSpace(20.h),
+                  TextButton(
+                    child: Text("Forget Password"),
+                    onPressed: () {
+                      _launchURL();
+                    },
+                  ),
+                  VerticalSpace(5.h),
                   Visibility(
                     visible: false,
                     child: InkWell(
@@ -238,7 +250,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-                  VerticalSpace(10.h),
+                  VerticalSpace(5.h),
                   RichText(
                       text: TextSpan(children: [
                     TextSpan(
@@ -257,7 +269,7 @@ class _LoginPageState extends State<LoginPage> {
                                 builder: (ctx) => const RegisterPage())),
                     ),
                   ])),
-                  VerticalSpace(40.h),
+                  VerticalSpace(5.h),
                   Column(
                     children: [
                       Center(
@@ -266,30 +278,33 @@ class _LoginPageState extends State<LoginPage> {
                           child: Container(
                             child: RichText(
                                 textAlign: TextAlign.center,
-                                text: TextSpan(children: [
-                                  TextSpan(
-                                    text: LocaleKeys.call.tr(),
-                                    style:
-                                        Theme.of(context).textTheme.labelSmall,
-                                  ),
-                                  TextSpan(
-                                      text: LocaleKeys.number.tr(),
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: LocaleKeys.call.tr(),
                                       style: Theme.of(context)
                                           .textTheme
-                                          .labelMedium
-                                          ?.copyWith(
-                                            fontWeight: FontWeight.w500,
-                                            color: AppColors.primaryRed,
-                                          )),
-                                  TextSpan(
-                                      text: LocaleKeys.forenquiry.tr(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelSmall),
-                                ])),
+                                          .labelSmall,
+                                    ),
+                                    TextSpan(
+                                        text: LocaleKeys.number.tr(),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelMedium
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.w500,
+                                              color: AppColors.primaryRed,
+                                            )),
+                                    TextSpan(
+                                        text: LocaleKeys.forenquiry.tr(),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelSmall),
+                                  ],
+                                )),
                           ),
                         ),
-                      )
+                      ),
                     ],
                   )
                 ],
@@ -307,3 +322,25 @@ class _LoginPageState extends State<LoginPage> {
 //   String value;
 //   LanguageModel({required this.title, required this.value});
 // }
+
+// IconButton(
+//                   icon: Icon(
+//                     Icons.phone,
+//                     color: Colors.black,
+//                   ),
+//                   onPressed: () {
+//                     setState(() {
+//                       _makePhoneCall(LocaleKeys.number.tr(),);
+//                     });
+//                   },
+//                 ),
+
+_launchURL() async {
+  const url =
+      'https://dribbble.com/shots/16848359/attachments/11908713?mode=media';
+  if (await launchUrl(Uri.parse(url))) {
+    await canLaunchUrl(Uri.parse(url));
+  } else {
+    throw 'Could not launch $url';
+  }
+}

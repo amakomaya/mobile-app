@@ -45,6 +45,7 @@ dependencies:
   #     ref: flutter-beta
   eva_icons_flutter: ^3.1.0
   qr_flutter: ^4.0.0
+  pdf:
   path_provider: ^2.0.11
   get_it: ^7.2.0
   internet_connection_checker: ^0.0.1+3
@@ -53,8 +54,12 @@ dependencies:
   hive_generator: ^1.1.3
   hydrated_bloc: ^8.1.0
   flick_video_player: ^0.5.0
-  flutter_linkify: ^5.0.2
-  url_launcher: ^6.1.5
+  flutter_linkify:
+    ^5.0.2
+    #for call
+  url_launcher: ^6.1.7
+
+  flutter_phone_direct_caller: ^2.1.1
 
 #launcher icon
 flutter_icons:
