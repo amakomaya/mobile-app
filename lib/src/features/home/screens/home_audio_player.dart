@@ -57,13 +57,13 @@ class _HomeAudioPlayerPageState extends State<HomeAudioPlayerPage>
     _audioPlayer.onPositionChanged.listen((event) {
       pos.value = event;
     });
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     _audioPlayer.dispose();
     super.dispose();
   }

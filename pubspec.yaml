@@ -39,10 +39,6 @@ dependencies:
   animated_text_kit: ^4.2.1
   qr_code_scanner:
   nepali_date_picker: ^5.1.0
-  # qr_code_scanner:
-  #   git:
-  #     url: https://github.com/X-SLAYER/qr_code_scanner.git
-  #     ref: flutter-beta
   eva_icons_flutter: ^3.1.0
   qr_flutter: ^4.0.0
   pdf:

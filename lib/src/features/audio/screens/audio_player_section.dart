@@ -75,7 +75,7 @@ class _AudioPlayerSectionState extends State<AudioPlayerSection>
     _audioPlayer.onPositionChanged.listen((event) {
       pos.value = event;
     });
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
 
     super.initState();
   }
@@ -84,7 +84,7 @@ class _AudioPlayerSectionState extends State<AudioPlayerSection>
   void dispose() {
     _audioPlayer.dispose();
 
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
 
     super.dispose();
   }

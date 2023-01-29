@@ -36,7 +36,7 @@ class BorderContainer extends StatelessWidget {
           width: width ?? 185.w,
           height: height,
           decoration: BoxDecoration(
-              color: Colors.white ?? Colors.grey,
+              color: Colors.white,
               borderRadius: borderRadius ?? BorderRadius.circular(20),
               border: Border.all(color: color ?? AppColors.primaryRed)),
           child: child,
