@@ -5,9 +5,12 @@ class ShopPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.asset(
-      "assets/images/shop.jpg",
-      fit: BoxFit.contain,
-    );
+    return Scaffold(
+        body: SafeArea(
+      child: Image.asset(
+        "assets/images/shop.jpg",
+        fit: BoxFit.cover,
+      ),
+    ));
   }
 }

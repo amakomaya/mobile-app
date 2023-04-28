@@ -184,8 +184,10 @@
 
 import 'dart:convert';
 
+import 'package:aamako_maya/l10n/locale_keys.g.dart';
 import 'package:aamako_maya/src/core/widgets/textfield/primary_textfield.dart';
 import 'package:aamako_maya/src/features/authentication/model/municipality_district_model.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -246,7 +248,7 @@ class _DistrictDropDownListWidgetState
       validator: widget.validator,
       controller: widget.controller,
       readOnly: true,
-      labelText: 'District',
+      labelText: LocaleKeys.district.tr(),
       hintText: 'Select Your District',
       suffix: Icons.arrow_drop_down,
       onTap: () async {
@@ -356,8 +358,10 @@ class _DialogWidgetState extends State<DialogWidget> {
               itemBuilder: (ctx, ind) {
                 return GestureDetector(
                     onTap: () async {
-                      print('District Name:'+ _foundDistricts[ind].districtName.toString());
-                      print('District ID:'+ _foundDistricts[ind].id.toString());
+                      print('District Name:' +
+                          _foundDistricts[ind].districtName.toString());
+                      print(
+                          'District ID:' + _foundDistricts[ind].id.toString());
                       //when elements are selected
                       widget.controller.text =
                           _foundDistricts[ind].districtName ?? '';

@@ -1,9 +1,7 @@
 import 'package:aamako_maya/src/core/padding/padding.dart';
 import 'package:aamako_maya/src/core/theme/app_colors.dart';
-import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
 import 'package:aamako_maya/src/features/audio/cubit/audio_cubit.dart';
 import 'package:aamako_maya/src/features/audio/model/audio_model.dart';
-import 'package:aamako_maya/src/features/home/screens/home_audio_player.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -15,7 +13,6 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../../../injection_container.dart';
-import '../../../core/app_assets/app_assets.dart';
 import '../../../core/connection_checker/network_connection.dart';
 import '../../../core/widgets/drawer/drawer_widget.dart';
 import '../../../core/widgets/helper_widgets/blank_space.dart';
@@ -78,7 +75,7 @@ class _AudioPlayerSectionState extends State<AudioPlayerSection>
     _audioPlayer.onPositionChanged.listen((event) {
       pos.value = event;
     });
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
 
     super.initState();
   }
@@ -87,7 +84,7 @@ class _AudioPlayerSectionState extends State<AudioPlayerSection>
   void dispose() {
     _audioPlayer.dispose();
 
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
 
     super.dispose();
   }
@@ -134,7 +131,8 @@ class _AudioPlayerSectionState extends State<AudioPlayerSection>
             }
             final thisWeek = widget.audios.firstWhere(
                 (element) =>
-                    (element.weekId) == ((int.parse(weeks) < 13) ? 12 : int.parse(weeks)),
+                    (element.weekId) ==
+                    ((int.parse(weeks) < 13) ? 12 : int.parse(weeks)),
                 orElse: () => AudioModel(
                     id: 0,
                     titleEn: '',

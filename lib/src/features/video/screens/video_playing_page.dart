@@ -46,7 +46,7 @@ class _VideoPlayingPageState extends State<VideoPlayingPage> {
 
   @override
   void initState() {
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       setState(() {
         _scrollController.scrollTo(
             index: widget.initialScroll, duration: const Duration(seconds: 1));

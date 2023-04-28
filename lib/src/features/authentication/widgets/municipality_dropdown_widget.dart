@@ -182,8 +182,10 @@
 
 import 'dart:convert';
 
+import 'package:aamako_maya/l10n/locale_keys.g.dart';
 import 'package:aamako_maya/src/features/authentication/cubit/toggle_district_municipality.dart';
 import 'package:aamako_maya/src/features/authentication/model/municipality_district_model.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -227,8 +229,8 @@ class _MunicipalityDropdownListWidgetState
           .toList();
       allMunicipalities = data;
       final municipal = data
-          .where(
-              (element) => int.parse(element.districtId!) == widget.districtId)
+          .where((element) =>
+              int.parse(element.districtId!.toString()) == widget.districtId)
           .toList();
 
       municipalities = municipal;
@@ -253,7 +255,8 @@ class _MunicipalityDropdownListWidgetState
         if (stateId != 0) {
           municipalities.clear();
           municipalities = allMunicipalities
-              .where((element) => int.parse(element.districtId!) == stateId)
+              .where((element) =>
+                  int.parse(element.districtId!.toString()) == stateId)
               .toList();
         }
       },
@@ -262,7 +265,7 @@ class _MunicipalityDropdownListWidgetState
           validator: widget.validator,
           controller: widget.controller,
           readOnly: true,
-          labelText: 'Municipality/VDC',
+          labelText: LocaleKeys.municipality.tr(),
           hintText: 'Select Your Municipality/VDC',
           suffix: Icons.arrow_drop_down,
           onTap: () async {

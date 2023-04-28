@@ -15,6 +15,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../l10n/locale_keys.g.dart';
 import '../../../../core/app_assets/app_assets.dart';
@@ -48,6 +49,11 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocConsumer<AuthenticationCubit, AuthenticationState>(
       listener: (context, state) {
@@ -78,30 +84,53 @@ class _LoginPageState extends State<LoginPage> {
               key: _formKey,
               child: Column(
                 children: [
+                  // Row(
+                  //   //mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  //   children: [
+                  //     Align(
+                  //       alignment: Alignment.center,
+                  // child: Image.asset(
+                  //   AppAssets.logo,
+                  //   height: 197.h,
+                  //   width: 197.h,
+                  //   cacheHeight: 197,
+                  // ),
+                  //     ),
+                  //     const Padding(
+                  //       padding: EdgeInsets.all(25),
+                  // child: LocalizationButton(
+                  //   color: AppColors.primaryRed,
+                  // ),
+                  //     ),
+                  //   ],
+                  // ),
+
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: Image.asset(
-                          AppAssets.logo,
-                          height: 197.h,
-                          width: 197.h,
-                          cacheHeight: 197,
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 110),
+                          child: Image.asset(
+                            AppAssets.logo,
+                            height: 190.h,
+                            width: 190.h,
+                            cacheHeight: 197,
+                          ),
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.only(right: 18.0),
+                      Padding(
+                        padding: const EdgeInsets.all(65),
                         child: LocalizationButton(
                           color: AppColors.primaryRed,
                         ),
-                      ),
+                      )
                     ],
                   ),
                   VerticalSpace(50.h),
                   PrimaryTextField(
                     controller: usernameController,
-                    nextFocus: passwordFocus,
+                    // nextFocus: passwordFocus,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return LocaleKeys.usernamenotempty.tr();
@@ -184,11 +213,17 @@ class _LoginPageState extends State<LoginPage> {
                                       fontSize: 18,
                                       color: AppColors.white,
                                       fontWeight: FontWeight.w600)),
-                        )
+                        ),
                       ],
                     ),
                   ),
-                  VerticalSpace(20.h),
+                  TextButton(
+                    child: Text("Forget Password"),
+                    onPressed: () {
+                      _launchURL();
+                    },
+                  ),
+                  VerticalSpace(5.h),
                   Visibility(
                     visible: false,
                     child: InkWell(
@@ -215,7 +250,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-                  VerticalSpace(20.h),
+                  VerticalSpace(5.h),
                   RichText(
                       text: TextSpan(children: [
                     TextSpan(
@@ -234,24 +269,44 @@ class _LoginPageState extends State<LoginPage> {
                                 builder: (ctx) => const RegisterPage())),
                     ),
                   ])),
-                  VerticalSpace(50.h),
-                  RichText(
-                      text: TextSpan(children: [
-                    TextSpan(
-                      text: LocaleKeys.call.tr(),
-                      style: Theme.of(context).textTheme.labelSmall,
-                    ),
-                    TextSpan(
-                        text: LocaleKeys.number.tr(),
-                        style:
-                            Theme.of(context).textTheme.labelMedium?.copyWith(
-                                  fontWeight: FontWeight.w500,
-                                  color: AppColors.primaryRed,
+                  VerticalSpace(5.h),
+                  Column(
+                    children: [
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Container(
+                            child: RichText(
+                                textAlign: TextAlign.center,
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: LocaleKeys.call.tr(),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelSmall,
+                                    ),
+                                    TextSpan(
+                                        text: LocaleKeys.number.tr(),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelMedium
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.w500,
+                                              color: AppColors.primaryRed,
+                                            )),
+                                    TextSpan(
+                                        text: LocaleKeys.forenquiry.tr(),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelSmall),
+                                  ],
                                 )),
-                    TextSpan(
-                        text: LocaleKeys.forenquiry.tr(),
-                        style: Theme.of(context).textTheme.labelSmall),
-                  ]))
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
                 ],
               ),
             ),
@@ -262,8 +317,30 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-class LanguageModel {
-  String title;
-  String value;
-  LanguageModel({required this.title, required this.value});
+// class LanguageModel {
+//   String title;
+//   String value;
+//   LanguageModel({required this.title, required this.value});
+// }
+
+// IconButton(
+//                   icon: Icon(
+//                     Icons.phone,
+//                     color: Colors.black,
+//                   ),
+//                   onPressed: () {
+//                     setState(() {
+//                       _makePhoneCall(LocaleKeys.number.tr(),);
+//                     });
+//                   },
+//                 ),
+
+_launchURL() async {
+  const url =
+      'https://dribbble.com/shots/16848359/attachments/11908713?mode=media';
+  if (await launchUrl(Uri.parse(url))) {
+    await canLaunchUrl(Uri.parse(url));
+  } else {
+    throw 'Could not launch $url';
+  }
 }

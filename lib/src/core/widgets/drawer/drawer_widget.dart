@@ -246,12 +246,44 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                                     ? AppColors.primaryRed
                                                     : Colors.black)),
                                   ),
-                                  //Appointment
+
+                                  //QR Code
+                                  ListTile(
+                                    onTap: (() {
+                                      context
+                                          .read<DrawerCubit>()
+                                          .checkDrawerSelection(4);
+
+                                      context
+                                          .read<NavigationIndexCubit>()
+                                          .changeIndex(
+                                              index: 15,
+                                              titleNp: AppStrings.qrcode,
+                                              titleEn: "QR Code");
+                                    }),
+                                    leading: Image.asset(
+                                      AppAssets.cardIcon,
+                                      height: 30.sm,
+                                    ),
+                                    title: Text(LocaleKeys.qrcode.tr(),
+                                        style: theme.textTheme.titleSmall
+                                            ?.copyWith(
+                                                color: state.index == 4
+                                                    ? AppColors.primaryRed
+                                                    : Colors.black)),
+                                  ),
+                                  //appointment
                                   // ListTile(
                                   //   onTap: (() {
                                   //     context
                                   //         .read<DrawerCubit>()
-                                  //         .checkDrawerSelection(4);
+                                  //         .checkDrawerSelection(21);
+                                  //             context
+                                  //         .read<NavigationIndexCubit>()
+                                  //         .changeIndex(
+                                  //             index: 16,
+                                  //             titleNp: AppStrings.appointment,
+                                  //             titleEn: "Appointment");
                                   //   }),
                                   //   leading: Image.asset(
                                   //     AppAssets.appoitnmentIcon,
@@ -260,10 +292,11 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   //   title: Text(LocaleKeys.appointment.tr(),
                                   //       style: theme.textTheme.titleSmall
                                   //           ?.copyWith(
-                                  //               color: state.index == 4
+                                  //               color: state.index == 21
                                   //                   ? AppColors.primaryRed
                                   //                   : Colors.black)),
                                   // ),
+
                                   //health Report
                                   ExpansionTile(
                                     initiallyExpanded:

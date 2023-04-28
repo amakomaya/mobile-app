@@ -8,4 +8,5 @@ class AppStrings {
   static const symptoms = "लक्षण मूल्यांकन";
   static const appointment = "नियुक्तिहरू";
   static const healthreport = "स्वास्थ्य रिपोर्ट";
+  static const qrcode = "QR कोड";
 }

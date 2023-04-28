@@ -1,7 +1,5 @@
 import 'package:aamako_maya/src/core/connection_checker/network_connection.dart';
 import 'package:aamako_maya/src/core/padding/padding.dart';
-import 'package:aamako_maya/src/core/snackbar/error_snackbar.dart';
-import 'package:aamako_maya/src/core/snackbar/success_snackbar.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
 import 'package:aamako_maya/src/core/widgets/loading_shimmer/shimmer_loading.dart';
@@ -16,7 +14,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 import '../../../injection_container.dart';
-import '../../core/cache/weekly_cache/cache_values.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/widgets/drawer/drawer_widget.dart';
 import '../fetch user data/cubit/get_user_cubit.dart';

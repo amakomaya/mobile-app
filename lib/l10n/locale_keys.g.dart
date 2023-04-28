@@ -1,6 +1,8 @@
 // DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
 
-abstract class  LocaleKeys {
+import 'package:aamako_maya/src/features/symptoms/model/assessment_model.dart';
+
+abstract class LocaleKeys {
   static const login = 'login';
   static const username = 'username';
   static const password = 'password';
@@ -34,5 +36,39 @@ abstract class  LocaleKeys {
   static const labtest = 'labtest';
   static const faq = 'faq';
   static const logout = 'logout';
+  static const preparingforpregancy = 'preparingforpregancy';
+  static const pregnant = 'pregnant';
+  static const growth = 'growth';
+  static const registered = 'registered';
+  static const option = 'option';
+  static const next = 'next';
+  static const name = 'name';
+  static const mobilenumber = 'mobilenumber';
+  static const lmp = 'lmp';
+  static const account = 'account';
+  static const loginbutton = 'loginbutton';
+  static const namewarning = 'namewarning';
+  static const namevalidation = 'namevalidation';
+  static const lmpwarning = 'lmpwarning';
+  static const mobilenumberwarning = 'mobilenumberwarning';
+  static const mobilenumbervalidation = 'mobilenumbervalidation';
+  static const passwordwarning = 'passwordwarning';
+  static const passwordvalidation = 'passwordvalidation';
+  static const fillnow = 'fillnow';
+  static const later = 'later';
+  static const profilepop = 'profilepop';
+  static const qrcode = 'qrcode';
+  static const yourpersonaldetails = 'yourpersonaldetails';
+  static const age = 'age';
+  static const district = 'district';
+  static const youraddress = 'youraddress';
+  static const lmpdate = 'lmpdate';
+  static const tole = 'tole';
+  static const wardno = 'wardno';
+  static const municipality = 'municipality';
+  static const submit = 'submit';
+
+
+
 
 }

@@ -12,7 +12,7 @@ class DistrictModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['province_id'] = provinceId;
     data['district_name'] = districtName;
@@ -20,11 +20,10 @@ class DistrictModel {
   }
 }
 
-
 class MunicipalityModel {
   int? id;
-  String? provinceId;
-  String? districtId;
+  int? provinceId;
+  int? districtId;
   String? municipalityName;
 
   MunicipalityModel(
@@ -38,11 +37,11 @@ class MunicipalityModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['province_id'] = this.provinceId;
-    data['district_id'] = this.districtId;
-    data['municipality_name'] = this.municipalityName;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['province_id'] = provinceId;
+    data['district_id'] = districtId;
+    data['municipality_name'] = municipalityName;
     return data;
   }
 }

@@ -24,7 +24,7 @@ class _CardPageState extends State<CardPage> {
       child: Builder(builder: (context) {
         return BlocBuilder<CardCubit, String>(
           builder: (context, state) {
-            print(state + "QRCODE");
+            print(state + " QRCODE");
 
             return QrImage(
               data: state,
