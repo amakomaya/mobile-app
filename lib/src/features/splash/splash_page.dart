@@ -2,15 +2,18 @@ import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
 import 'package:aamako_maya/src/features/authentication/local_storage/authentication_local_storage.dart';
 import 'package:aamako_maya/src/features/authentication/screens/login/login_page.dart';
 import 'package:aamako_maya/src/features/onboarding/screens/onboarding_page.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
 
+import '../../../l10n/locale_keys.g.dart';
 import '../../core/constant/app_constants.dart';
 import '../../core/theme/app_colors.dart';
 import '../authentication/authentication_cubit/auth_cubit.dart';
 import '../bottom_nav/bottom_navigation.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({Key? key}) : super(key: key);
@@ -101,11 +104,11 @@ class _SplashPageState extends State<SplashPage> {
                   Image.asset(
                     "assets/images/logo/logo_white.png",
                     height: 363.w,
-                    width: 363.h,
+                    width: 363.w,
                     scale: 1.0,
                   ),
                   VerticalSpace(20.h),
-                  Text('Making Pregnancy Healthy and Happy',
+                  Text(LocaleKeys.label_pregnancy_healthy.tr() ,
                       style: Theme.of(context).textTheme.labelMedium?.copyWith(
                             color: Colors.white,
                           )),

@@ -1,4 +1,6 @@
-import 'package:aamako_maya/l10n/locale_keys.g.dart';
+import 'package:aamako_maya/src/features/home/screens/home_video_player.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:aamako_maya/src/core/app_assets/app_assets.dart';
 import 'package:aamako_maya/src/core/theme/app_colors.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
@@ -10,18 +12,21 @@ import 'package:aamako_maya/src/features/home/cubit/newsfeed_cubit.dart';
 import 'package:aamako_maya/src/features/home/screens/home_audio_player.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../injection_container.dart';
+import '../../../../l10n/locale_keys.g.dart';
 import '../../../core/connection_checker/network_connection.dart';
 import '../../../core/padding/padding.dart';
-import '../../../core/strings/app_strings.dart';
+import '../../../core/widgets/drawer/drawer_widget.dart';
+import '../../../core/widgets/popup_confirmation_page.dart';
 import '../../bottom_nav/cubit/cubit/navigation_index_cubit.dart';
 import '../../fetch user data/cubit/get_user_cubit.dart';
 
@@ -48,17 +53,26 @@ class _HomePageState extends State<HomePage> {
 
         return link.isNotEmpty;
       };
+
+  checkInternet() async {
+    if (await sl<NetworkInfo>().isConnected) {
+      context.read<NewsfeedCubit>().getNewsFeed(true);
+    } else {
+      context.read<NewsfeedCubit>().getNewsFeed(false);
+      BotToast.showText(text: LocaleKeys.no_internet_connection.tr());
+    }
+  }
+
   @override
   void initState() {
-    context.read<NewsfeedCubit>().getNewsFeed(false);
-    context.read<GetUserCubit>().getUserFromLocal();
+    checkInternet();
+    context.read<GetUserCubit>().getUserData();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         heroTag: '1',
@@ -68,425 +82,743 @@ class _HomePageState extends State<HomePage> {
         ),
         onPressed: () {
           // phoneCall();
-          launchDialer('9741663662');
+          launchDialer('9761663394');
         },
       ),
-      body: Column(
-        children: [
-          //  profile Complete container
-          // ShadowContainer(
-          //   child: Column(
-          //     children: [
-          //       Row(
-          //         mainAxisAlignment: MainAxisAlignment.center,
-          //         children: [
-          //           Image.asset(
-          //             "assets/images/logo/item1.png",
-          //             scale: 12,
-          //           ),
-          //         ],
-          //       )
-          //     ],
-          //   ),
-          // ),
-
-          BlocConsumer<GetUserCubit, GetUserState>(
-            listener: (userCtx, userState) {
-              if (userState is GetUserSuccess) {
-                if ((userState.user.tole?.isEmpty ?? true) ||
-                    userState.user.tole == null) {
-                  WidgetsBinding.instance.addPostFrameCallback((_) async {
-                    // showExitPopup(context);
-                    await showDialog(
-                        barrierDismissible: false,
-                        context: userCtx,
-                        builder: (BuildContext userCtx) {
-                          return AlertDialog(
-                            content: SizedBox(
-                              height: 150.h,
+      body: BlocConsumer<NewsfeedCubit, NewsfeedState>(
+        listener: (context, state) {
+          print("statet $state");
+          if (state is NewsfeedSuccess && state.isRefreshed) {
+            BotToast.showText(text: LocaleKeys.msg_refresh_success.tr());
+          }
+        },
+        builder: (ct, st) {
+          if (st is NewsfeedSuccess) {
+            return RefreshIndicator(
+              onRefresh: () async {
+                checkInternet();
+              },
+              child: SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
+                child: Column(
+                  children: [
+                    SizedBox(height: 10.h),
+                    BlocConsumer<GetUserCubit, GetUserState>(
+                      listener: (context, state) {},
+                      builder: (context, state) {
+                        var name = "";
+                        var day = "";
+                        var weeks = "";
+                        var days = "";
+                        var remainingDays = "";
+                        var expectedDeliveryDate = "";
+                        if (state is GetUserSuccess) {
+                          name = state.user.name ?? "";
+                          final date =
+                              DateTime.parse(state.user.lmpDateNp ?? '');
+                          DateTime earlier =
+                              DateTime.utc(date.year, date.month, date.day);
+                          DateTime expectedDate =
+                              earlier.add(Duration(days: 280));
+                          expectedDeliveryDate =
+                              DateFormat('yyyy-MM-dd').format(expectedDate);
+                          final later = DateTime.utc(
+                              NepaliDateTime.now().year,
+                              NepaliDateTime.now().month,
+                              NepaliDateTime.now().day);
+                          day = differenceInCalendarDays(later, earlier)
+                              .toString();
+                          remainingDays =
+                              differenceInCalendarDays(expectedDate, later)
+                                  .toString();
+                          weeks = ((int.parse(day) % 365) / 7).toStringAsFixed(0);
+                          days =( (int.parse(day) % 365) % 7 ).toString();
+                          return Stack(
+                            children: [
+                              Container(
+                                alignment: Alignment.topCenter,
+                                margin: EdgeInsets.only(top: 50),
+                                child: ShadowContainer(
+                                    radius: 25.r,
+                                    color: Colors.white,
+                                    width: 380.w,
+                                    child: Column(children: [
+                                      Container(
+                                        padding: REdgeInsets.fromLTRB(
+                                            10, 20, 10, 20),
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(25.r),
+                                              topRight: Radius.circular(25.r)),
+                                          color: Colors.grey[100],
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              name,
+                                              style: TextStyle(
+                                                fontSize: 26.sm,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            SizedBox(height: 4.h),
+                                            Text(
+                                              "$weeks ${LocaleKeys.label_week.tr()} $days ${LocaleKeys.label_day.tr()}",
+                                              style: TextStyle(
+                                                fontSize: 16.sm,
+                                                color: Colors.black87,
+                                                fontWeight: FontWeight.normal,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        alignment: Alignment.center,
+                                        padding: REdgeInsets.fromLTRB(
+                                            40, 10, 30, 20),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.only(
+                                              bottomLeft: Radius.circular(25.r),
+                                              bottomRight:
+                                                  Radius.circular(25.r)),
+                                          color: Colors.white,
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Column(children: [
+                                              Text(
+                                                remainingDays,
+                                                style: TextStyle(
+                                                    fontSize: 16.sm,
+                                                    color: Colors.black87,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              SizedBox(height: 4.h),
+                                              Text(
+                                                LocaleKeys.label_remaining_date.tr(),
+                                                style: TextStyle(
+                                                    fontSize: 16.sm,
+                                                    color: Colors.black87,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ]),
+                                            Column(children: [
+                                              Text(
+                                                expectedDeliveryDate,
+                                                style: TextStyle(
+                                                    fontSize: 16.sm,
+                                                    color: Colors.black87,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              SizedBox(height: 4.h),
+                                              Text(
+                                                LocaleKeys.label_expected_date.tr(),
+                                                style: TextStyle(
+                                                    fontSize: 16.sm,
+                                                    color: Colors.black87,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ])
+                                          ],
+                                        ),
+                                      )
+                                    ])),
+                              ),
+                              Container(
+                                alignment: Alignment.topCenter,
+                                child: Image.asset(
+                                  'assets/images/logo/profile.png',
+                                  height: 80.sm,
+                                  width: 80.sm,
+                                ),
+                              ),
+                            ],
+                          );
+                        } else {
+                          return SizedBox();
+                        }
+                      },
+                    ),
+                    SizedBox(height: 10.h),
+                    InkWell(
+                      onTap: () {
+                        showDialog(
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (BuildContext userCtx) {
+                              return PopUpConfirmation(
+                                message: LocaleKeys.label_ask_call.tr(),
+                                onConfirmed: () {
+                                  Navigator.pop(context);
+                                  phoneCall();
+                                },
+                              );
+                            });
+                      },
+                      child: Container(
+                        margin:
+                            REdgeInsets.only(top: 20.h, left: 12, right: 12),
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            color: AppColors.lightShadePink,
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                  color: AppColors.darkShadePink,
+                                  borderRadius: BorderRadius.only(
+                                      bottomLeft: Radius.circular(20),
+                                      topLeft: Radius.circular(20))),
+                              child: Padding(
+                                padding: REdgeInsets.all(20.0),
+                                child: SvgPicture.asset(
+                                  'assets/images/tollfreecall.svg',
+                                  height: 40.h,
+                                  width: 40.w,
+                                ),
+                              ),
+                            ),
+                            Expanded(
                               child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    LocaleKeys.profilepop.tr(),
+                                    LocaleKeys.label_for_pregnancy_counsleing.tr(),
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 18.sp,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
-                                  const SizedBox(height: 20),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      TextButton(
-                                        child: Text(LocaleKeys.fillnow.tr()),
-                                        onPressed: () async {
-                                          Navigator.pop(context);
-                                          context
-                                              .read<DrawerCubit>()
-                                              .checkDrawerSelection(1);
-                                          context
-                                              .read<NavigationIndexCubit>()
-                                              .changeIndex(
-                                                  index: 10,
-                                                  titleNp: AppStrings.profile,
-                                                  titleEn: 'Profile');
-                                        },
+                                  SizedBox(
+                                    height: 10.h,
+                                  ),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                        color: AppColors.darkShadePink,
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    child: Padding(
+                                      padding:
+                                          REdgeInsets.fromLTRB(16, 8, 16, 8),
+                                      child: Text(
+                                        LocaleKeys.label_click_call.tr(),
+                                        style: TextStyle(
+                                          letterSpacing: 1,
+                                          fontSize: 18.sp,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                      const SizedBox(width: 15),
-                                      TextButton(
-                                        child: Text(LocaleKeys.later.tr()),
-                                        onPressed: () {
-                                          Navigator.of(context).pop(true);
-                                        },
-                                      ),
-                                    ],
-                                  )
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
-                          );
-                        });
+                          ],
+                        ),
+                      ),
+                      // width: 350.w,
+                      // height: 350.h,
+                    ),
+                    SizedBox(height: 10.h),
+                    InkWell(
+                      onTap: () {
+                        showDialog(
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (BuildContext userCtx) {
+                              return PopUpConfirmation(
+                                message:  LocaleKeys.label_ask_message.tr(),
+                                onConfirmed: () {
+                                  Navigator.pop(context);
+                                  context
+                                      .read<DrawerCubit>()
+                                      .checkDrawerSelection(3);
 
-                    // showDialog(
+                                  context
+                                      .read<NavigationIndexCubit>()
+                                      .changeIndex(
+                                          index: 13,
+                                          titleNp: "लक्षण मूल्याङ्कन",
+                                          titleEn: "Symptom Assessment");
+                                },
+                              );
+                            });
+                      },
+                      child: Container(
+                        margin:
+                            REdgeInsets.only(top: 10.h, left: 12, right: 12),
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            color: AppColors.lightShadeOrange,
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                  color: AppColors.darkShadeOrange,
+                                  borderRadius: BorderRadius.only(
+                                      bottomLeft: Radius.circular(20),
+                                      topLeft: Radius.circular(20))),
+                              child: Padding(
+                                padding: REdgeInsets.all(20.0),
+                                child: SvgPicture.asset(
+                                  'assets/images/message.svg',
+                                  height: 40.h,
+                                  width: 40.w,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Text("${LocaleKeys.label_for_pregnancy_probelm.tr()} \n ${LocaleKeys.label_click_message.tr()}",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
 
-                    //     context: context,
-                    //     builder: (ctx) {
-                    //       return ShadowContainer(
-                    //         height:200.h,
-                    //         width:300.w,
-                    //         child: Column(
-                    //           mainAxisSize: MainAxisSize.min,
-                    //           children: [
-                    //             Text('You have not completed profile.'),
-                    //             VerticalSpace(30.h),
-                    //             Row(
-                    //               mainAxisAlignment: MainAxisAlignment.end,
-                    //               children: [
-                    //                 TextButton(
+                      // width: 350.w,
+                    ),
+                    BlocConsumer<GetUserCubit, GetUserState>(
+                      listener: (userCtx, userState) {
+                        if (userState is GetUserSuccess) {
+                          print(userState.user.tole);
+                          print(userState.user.name);
+                          print(userState.user.lmpDateNp);
+                          print(userState.user.bloodGroup);
+                          print(userState.user.provinceName);
+                          print(userState.user.districtName);
+                          print(userState.user.municipalityName);
+                          print(userState.user.ward);
+                          print(userState.user.phone);
+                          print(userState.user.haveDiseasePreviously);
+                          print(userState.user.pregnantTimes);
+                          print(userState.user.height);
+                          print(userState.user.currentHealthPost);
+                          print(userState.user.modeType);
+                          print(userState.user.husbandName);
+                          print(userState.user.age);
+                          if ((userState.user.tole?.isEmpty ?? true) ||
+                              userState.user.tole == null ||
+                              (userState.user.name?.isEmpty ?? true) ||
+                              userState.user.name == null ||
+                              (userState.user.lmpDateNp?.isEmpty ?? true) ||
+                              userState.user.lmpDateNp == null ||
+                              (userState.user.bloodGroup?.isEmpty ?? true) ||
+                              userState.user.bloodGroup == null ||
+                              (userState.user.provinceName?.isEmpty ?? true) ||
+                              userState.user.provinceName == null ||
+                              (userState.user.districtName?.isEmpty ?? true) ||
+                              userState.user.districtName == null ||
+                              (userState.user.municipalityName?.isEmpty ?? true) ||
+                              userState.user.municipalityName == null ||
+                              (userState.user.ward?.isEmpty ?? true) ||
+                              userState.user.ward == null ||
+                              (userState.user.phone?.isEmpty ?? true) ||
+                              userState.user.phone == null ||
+                              (userState.user.haveDiseasePreviously?.isEmpty ?? true) ||
+                              userState.user.haveDiseasePreviously == null ||
+                              (userState.user.pregnantTimes==0) ||
+                              userState.user.pregnantTimes == null ||
+                              (userState.user.height?.isEmpty ?? true) ||
+                              userState.user.height == null ||
+                              (userState.user.husbandName?.isEmpty ?? true) ||
+                              userState.user.husbandName == null ||
+                              (userState.user.currentHealthPost?.isEmpty ?? true) ||
+                              userState.user.currentHealthPost == null ||
+                              (userState.user.modeType?.isEmpty ?? true) ||
+                              userState.user.modeType == null ||
+                              (userState.user.age== 0 ) ||
+                              userState.user.age == null) {
+                            WidgetsBinding.instance
+                                ?.addPostFrameCallback((_) async {
+                              await showDialog(
+                                  barrierDismissible: false,
+                                  context: context,
+                                  builder: (BuildContext userCtx) {
+                                    return PopUpConfirmation(
+                                      forProfileFill: true,
+                                      message: LocaleKeys
+                                          .error_msg_not_complete_profile
+                                          .tr(),
+                                      onConfirmed: () {
+                                        Navigator.pop(context);
+                                        context
+                                            .read<DrawerCubit>()
+                                            .checkDrawerSelection(1);
+                                        context
+                                            .read<NavigationIndexCubit>()
+                                            .changeIndex(
+                                                index: 10,
+                                                titleEn: "Profile",
+                                                titleNp: "व्यक्तिगत विवरण");
+                                      },
+                                    );
+                                  });
+                            });
+                          }
+                        }
+                      },
+                      builder: (userCtx, userState) {
+                        return Visibility(
+                          visible: false,
+                          child: ShadowContainer(
+                              color: const Color.fromARGB(255, 221, 77, 77),
+                              margin: EdgeInsets.only(top: 10.h),
+                              padding: defaultPadding.copyWith(
+                                  top: 10.h, bottom: 10.h),
+                              width: 380.w,
+                              child: RichText(
+                                  text: TextSpan(
+                                      text: LocaleKeys
+                                          .error_msg_not_complete_profile
+                                          .tr(),
+                                      style: theme.textTheme.titleSmall
+                                          ?.copyWith(color: AppColors.white),
+                                      children: [
+                                    TextSpan(
+                                        text: LocaleKeys
+                                            .msg_complete_profile_now
+                                            .tr(),
+                                        style: theme.textTheme.titleSmall
+                                            ?.copyWith(color: AppColors.white))
+                                  ]))),
+                        );
+                      },
+                    ),
+                    Column(
+                      children: [
+                        ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            padding: EdgeInsets.symmetric(vertical: 20.h),
+                            itemBuilder: ((context, index) {
+                              return Column(
+                                children: [
+                                  //video container
+                                  Visibility(
+                                    visible: (st.newsfeed[index].type == "video"),
+                                    child: Column(
+                                      children: [
 
-                    //                     onPressed: () {},
-                    //                     child: Text('Fill now')),
-                    //                 TextButton(
-                    //                     onPressed: () {
-                    //                       Navigator.pop(context);
-                    //                     },
-                    //                     child: Text('Later'))
-                    //               ],
-                    //             )
-                    //           ],
-                    //         ),
-                    //       );
-                    //     });
-                  });
-                }
-              }
-            },
-            builder: (userCtx, userState) {
-              return Visibility(
-                visible: false,
-                // (state is GetUserSuccess && state.user.tole.isNullOrEmpty),
-                child: ShadowContainer(
-                    color: const Color.fromARGB(255, 221, 77, 77),
-                    margin: EdgeInsets.only(top: 10.h),
-                    padding: defaultPadding.copyWith(top: 10, bottom: 10),
-                    width: 380.w,
-                    child: RichText(
-                        text: TextSpan(
-                            text: 'You have not completed your profile.',
-                            style: theme.textTheme.titleSmall
-                                ?.copyWith(color: AppColors.white),
-                            children: [
-                          TextSpan(
-                              text: ' Complete Your Profile Now !',
-                              style: theme.textTheme.titleSmall
-                                  ?.copyWith(color: AppColors.white))
-                        ]))),
-              );
-            },
-          ),
-
-          Expanded(
-            child: BlocConsumer<NewsfeedCubit, NewsfeedState>(
-              listener: (context, state) {
-                if (state is NewsfeedSuccess && state.isRefreshed) {
-                  BotToast.showText(text: 'Newsfeed Successfully Refreshed');
-                }
-              },
-              builder: (context, state) {
-                if (state is NewsfeedSuccess) {
-                  return RefreshIndicator(
-                    onRefresh: () async {
-                      if (await sl<NetworkInfo>().isConnected) {
-                        context.read<NewsfeedCubit>().getNewsFeed(true);
-                      } else {
-                        BotToast.showText(text: 'No Internet Connection !');
-                      }
-                    },
-                    child: ListView.separated(
-                        // shrinkWrap: true,
-                        padding: EdgeInsets.symmetric(vertical: 20.h),
-                        itemBuilder: ((context, index) {
-                          return Column(
-                            children: [
-                              //video container
-
-                              Visibility(
-                                visible: !(state
-                                    .newsfeed[index].urlToVideo.isNullOrEmpty),
-                                child: InkWell(
-                                  // onTap: () {
-                                  //   // Navigator.of(context).push(MaterialPageRoute(
-                                  //   //     builder: (context) => HomeVideoPlayer(
-                                  //   //         state.newsfeed[index].urlToVideo ??
-                                  //   //             '')));
-                                  // },
-                                  child: ShadowContainer(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(top: 0),
-                                      child: Column(
-                                        // mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          SizedBox(
-                                              width: 385,
-                                              child: Card(
-                                                child: Image.asset(
-                                                  "assets/images/top.png",
-                                                  height: 75,
-                                                  // width: 385,
-                                                ),
-                                              )),
-                                          SizedBox(
-                                              child: Card(
-                                            child: InkWell(
-                                              onTap: phoneCall,
-                                              child: Image.asset(
-                                                "assets/images/second.png",
-                                                height: 75,
-                                                // width: 500,
+                                        HomeVideoPlayer(
+                                            st.newsfeed[index].urlToVideo ??
+                                                "",st.newsfeed[index].urlToImage ??
+                                            ""),
+                                        SizedBox(height: 4.h,),
+                                        Align(
+                                          alignment: Alignment.topLeft,
+                                          child: Padding(
+                                            padding: REdgeInsets.only(left: 20),
+                                            child: Text(
+                                              st.newsfeed[index].title ?? "" ,
+                                              style: TextStyle(
+                                                fontSize: 20.sm,
+                                                color: Colors.black87,
+                                                fontWeight: FontWeight.bold,
                                               ),
                                             ),
-                                          )),
+                                          ),
+                                        ),
+
+                                        VerticalSpace(20.h),
+                                      ],
+                                    ),
+                                  ),
+                                  //audio container
+
+                                  Visibility(
+                                    visible: (st.newsfeed[index].type == "audio"),
+                                    child: InkWell(
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    HomeAudioPlayerPage(
+                                                      image: st.newsfeed[index].urlToImage ?? "",
+                                                      title:  st.newsfeed[index].title ?? "",
+                                                      author: st.newsfeed[index].author ?? "" ,
+                                                      audioUrl: st
+                                                              .newsfeed[index]
+                                                              .url ??
+                                                          "",
+                                                    )));
+                                      },
+                                      child: Column(
+                                        children: [
+                                          ShadowContainer(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10),
+                                            radius: 25,
+                                            color: Colors.white,
+                                            width: 380.w,
+                                            child: Row(children: [
+                                              Image.asset(AppAssets.musicIcon),
+                                              Expanded(
+                                                  child: Text(
+                                                st.newsfeed[index].author ?? "",
+                                                style:
+                                                    theme.textTheme.labelSmall,
+                                              ))
+                                            ]),
+                                          ),
+                                          VerticalSpace(20.h),
                                         ],
                                       ),
                                     ),
-                                    color: Colors.white,
-                                    // width: 350.w,
-                                    // height: 350.h,
                                   ),
-                                ),
-                              ),
-
-                              //news container
-                              Padding(
-                                padding: const EdgeInsets.all(12.0),
-                                child: ShadowContainer(
-                                  radius: 20,
-                                  width: 380.w,
-                                  color: Colors.white,
-                                  padding: defaultPadding.copyWith(
-                                      top: 10, bottom: 10),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Image.asset(
-                                            'assets/images/logo/profile.png',
-                                            height: 80.sm,
-                                            width: 80.sm,
-                                          ),
-                                          Flexible(
-                                              child: Column(
+                                  //news container
+                                  Visibility(
+                                    visible: (st.newsfeed[index].type =="text"),
+                                    child: Column(
+                                      children: [
+                                        ShadowContainer(
+                                          radius: 20.r,
+                                          width: 380.w,
+                                          color: Colors.white,
+                                          padding: defaultPadding.copyWith(
+                                              top: 10.h, bottom: 10.h),
+                                          child: Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              Text(
-                                                state.newsfeed[index].author ??
-                                                    '',
-                                                style: theme
-                                                    .textTheme.headlineMedium
-                                                    ?.copyWith(
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                              ),
-                                              Text(
-                                                state.newsfeed[index]
-                                                        .publishedAt ??
-                                                    '',
-                                                style: theme
-                                                    .textTheme.labelMedium
-                                                    ?.copyWith(
-                                                        color: AppColors
-                                                            .accentGrey),
-                                              ),
-                                            ],
-                                          ))
-                                        ],
-                                      ),
-                                      // VerticalSpace(20.h),
-
-                                      //After Image is added in api
-                                      // CachedNetworkImage(
-                                      //   fit: BoxFit.cover,
-                                      //   imageUrl:
-                                      //       state.newsfeed[index].urlToImage ??
-                                      //           '',
-                                      //   placeholder: (ctx, url) => Container(
-                                      //     height: 380.h,
-                                      //     width: 380.w,
-                                      //     color: AppColors.grey,
-                                      //   ),
-                                      //   errorWidget: (context, url, error) =>
-                                      //       const Icon(
-                                      //     Icons.error,
-                                      //     color: Colors.black,
-                                      //   ),
-                                      // ),
-                                      VerticalSpace(20.h),
-                                      Html(
-                                          data: state.newsfeed[index].title,
-                                          customRenders: {
-                                            customTagMatcher(
-                                                state.newsfeed[index].title ??
-                                                    ''): CustomRender.widget(
-                                                widget: (ctx, buildChildren) {
-                                              final element =
-                                                  ctx.tree.element!.text;
-                                              String text = element;
-                                              String link = 'amakomaya.com/en';
-                                              final urlRegExp = RegExp(
-                                                  r"((https?:www\.)|(https?:\/\/)|(www\.))[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9]{1,6}(\/[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)?");
-
-                                              final urlMatches =
-                                                  urlRegExp.allMatches(text);
-                                              List<String> urls = urlMatches
-                                                  .map((urlMatch) =>
-                                                      text.substring(
-                                                          urlMatch.start,
-                                                          urlMatch.end))
-                                                  .toList();
-                                              for (var x in urls) {
-                                                link = x;
-                                              }
-
-                                              final htmlText = state
-                                                  .newsfeed[index].title
-                                                  ?.replaceAll(urlRegExp, ' ');
-
-                                              return Column(
+                                              Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
                                                 children: [
-                                                  Html(data: htmlText),
-                                                  GestureDetector(
-                                                    onLongPress: () {
-                                                      Clipboard.setData(
-                                                              ClipboardData(
-                                                                  text: link))
-                                                          .then((value) {
-                                                        BotToast.showText(
-                                                            text:
-                                                                'Copied to clipboard');
-                                                      });
-                                                    },
-                                                    onTap: () async {
-                                                      if (await canLaunchUrl(
-                                                          Uri.parse(link))) {
-                                                        await launchUrl(
-                                                            Uri.parse(link));
-                                                      } else {
-                                                        BotToast.showText(
-                                                            text:
-                                                                'Can not launch URL');
-                                                      }
-                                                    },
-                                                    child: Text(
-                                                      link,
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .labelMedium
-                                                          ?.copyWith(
-                                                              color: AppColors
-                                                                  .primaryRed,
-                                                              fontSize: 18.sm),
-                                                    ),
+                                                  Image.asset(
+                                                    'assets/images/logo/profile.png',
+                                                    height: 80.sm,
+                                                    width: 80.sm,
                                                   ),
+                                                  Flexible(
+                                                      child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        st.newsfeed[index]
+                                                                .author ??
+                                                            '',
+                                                        style: theme.textTheme
+                                                            .headlineMedium
+                                                            ?.copyWith(
+                                                                fontSize: 16.sm,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                      ),
+                                                      Text(
+                                                        st.newsfeed[index]
+                                                                .publishedAt ??
+                                                            '',
+                                                        style: theme.textTheme
+                                                            .labelMedium
+                                                            ?.copyWith(
+                                                                fontSize: 16.sm,
+                                                                color: AppColors
+                                                                    .accentGrey),
+                                                      ),
+                                                    ],
+                                                  ))
                                                 ],
-                                              );
-                                            }),
-                                          })
-                                    ],
+                                              ),
+                                              // VerticalSpace(20.h),
+
+                                              //After Image is added in api
+                                              // CachedNetworkImage(
+                                              //   fit: BoxFit.cover,
+                                              //   imageUrl:
+                                              //       state.newsfeed[index].urlToImage ??
+                                              //           '',
+                                              //   placeholder: (ctx, url) => Container(
+                                              //     height: 380.h,
+                                              //     width: 380.w,
+                                              //     color: AppColors.grey,
+                                              //   ),
+                                              //   errorWidget: (context, url, error) =>
+                                              //       const Icon(
+                                              //     Icons.error,
+                                              //     color: Colors.black,
+                                              //   ),
+                                              // ),
+                                              VerticalSpace(4.h),
+                                              Text(
+                                                st.newsfeed[index].title ?? "" ,
+                                                style: TextStyle(
+                                                  fontSize: 20.sm,
+                                                  color: Colors.black87,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              VerticalSpace(4.h),
+                                              Html(
+                                                  data:
+                                                      st.newsfeed[index].desc,
+                                                  style: {
+                                                    "h2": Style(
+                                                        fontSize:
+                                                            FontSize(16.0.sm),
+                                                        fontWeight:
+                                                            FontWeight.normal)
+                                                  },
+                                                  customRenders: {
+                                                    customTagMatcher(st
+                                                                .newsfeed[index]
+                                                                .desc ??
+                                                            ''):
+                                                        CustomRender.widget(
+                                                            widget: (ctx,
+                                                                buildChildren) {
+                                                      final element = ctx
+                                                          .tree.element!.text;
+                                                      String text = element;
+                                                      String link =
+                                                          'amakomaya.com/en';
+                                                      final urlRegExp = RegExp(
+                                                          r"((https?:www\.)|(https?:\/\/)|(www\.))[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9]{1,6}(\/[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)?");
+
+                                                      final urlMatches =
+                                                          urlRegExp
+                                                              .allMatches(text);
+                                                      List<String> urls =
+                                                          urlMatches
+                                                              .map((urlMatch) =>
+                                                                  text.substring(
+                                                                      urlMatch
+                                                                          .start,
+                                                                      urlMatch
+                                                                          .end))
+                                                              .toList();
+                                                      for (var x in urls) {
+                                                        link = x;
+                                                      }
+
+                                                      final htmlText = st
+                                                          .newsfeed[index].desc
+                                                          ?.replaceAll(
+                                                              urlRegExp, ' ');
+
+                                                      return Column(
+                                                        children: [
+                                                          Html(
+                                                              data: htmlText,
+                                                              style: {
+                                                                "body": Style(
+                                                                  fontSize:
+                                                                      FontSize(
+                                                                          16.0.sm),
+                                                                )
+                                                              }),
+                                                          GestureDetector(
+                                                            onLongPress: () {
+                                                              Clipboard.setData(
+                                                                      ClipboardData(
+                                                                          text:
+                                                                              link))
+                                                                  .then(
+                                                                      (value) {
+                                                                BotToast.showText(
+                                                                    text: LocaleKeys
+                                                                        .msg_copied_to_clipboard
+                                                                        .tr());
+                                                              });
+                                                            },
+                                                            onTap: () async {
+                                                              if (await canLaunchUrl(
+                                                                  Uri.parse(
+                                                                      link))) {
+                                                                await launchUrl(
+                                                                    Uri.parse(
+                                                                        link));
+                                                              } else {
+                                                                BotToast.showText(
+                                                                    text: LocaleKeys
+                                                                        .error_msg_cannot_launch_url
+                                                                        .tr());
+                                                              }
+                                                            },
+                                                            child: Text(
+                                                              link,
+                                                              style: Theme.of(
+                                                                      context)
+                                                                  .textTheme
+                                                                  .labelMedium
+                                                                  ?.copyWith(
+                                                                      color: AppColors
+                                                                          .primaryRed,
+                                                                      fontSize:
+                                                                          14.sm),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      );
+                                                    }),
+                                                  })
+                                            ],
+                                          ),
+                                        ),
+                                        VerticalSpace(20.h),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ),
-                              VerticalSpace(10.h),
-                              //audio container
-                              // Visibility(
-                              //   visible:
-                              //       !(state.newsfeed[index].url.isNullOrEmpty),
-                              //   child: InkWell(
-                              //     onTap: () {
-                              //       Navigator.of(context).push(
-                              //           MaterialPageRoute(
-                              //               builder: (context) =>
-                              //                   const HomeAudioPlayerPage(
-                              //                     audioUrl:
-                              //                         "https://aamakomaya.com//files/1/audio/19-38week.mp3",
-                              //                   )));
-                              //     },
-                              //     child: ShadowContainer(
-                              //       padding: const EdgeInsets.symmetric(
-                              //           horizontal: 10),
-                              //       radius: 25,
-                              //       color: Colors.white,
-                              //       width: 380.w,
-                              //       child: Row(children: [
-                              //         Image.asset(AppAssets.musicIcon),
-                              //         Expanded(
-                              //             child: Text(
-                              //           state.newsfeed[index].url ??
-                              //               'Unknown.mp3',
-                              //           style: theme.textTheme.labelSmall,
-                              //         ))
-                              //       ]),
-                              //     ),
-                              //   ),
-                              // ),
-                            ],
-                          );
-                        }),
-                        separatorBuilder: (context, index) =>
-                            VerticalSpace(0.h),
-                        itemCount: state.newsfeed.length),
-                  );
-                } else if (state is NewsfeedFailure) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text("Something Went Wrong!"),
-                      IconButton(
-                          onPressed: () async {
-                            if (await sl<NetworkInfo>().isConnected) {
-                              context.read<NewsfeedCubit>().getNewsFeed(true);
-                            } else {
-                              BotToast.showText(
-                                  text: 'No Internet Connection !');
-                            }
-                          },
-                          icon: Icon(
-                            Icons.refresh,
-                            size: 22.sm,
-                            color: Colors.black,
-                          ))
-                    ],
-                  );
-                } else {
-                  return ShimmerLoading(boxHeight: 200.h, itemCount: 4);
-                }
-              },
-            ),
-          )
-        ],
+                                ],
+                              );
+                            }),
+                            itemCount: st.newsfeed.length),
+                      ],
+                    ),
+                    VerticalSpace(24.h),
+                  ],
+                ),
+              ),
+            );
+          } else if (st is NewsfeedFailure) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(LocaleKeys.error_msg_someting_went_wrong.tr()),
+                IconButton(
+                    onPressed: () async {
+                      if (await sl<NetworkInfo>().isConnected) {
+                        context.read<NewsfeedCubit>().getNewsFeed(true);
+                      } else {
+                        BotToast.showText(
+                            text: LocaleKeys.no_internet_connection.tr());
+                      }
+                    },
+                    icon: Icon(
+                      Icons.refresh,
+                      size: 20.sm,
+                      color: Colors.black,
+                    ))
+              ],
+            );
+          } else {
+            return ShimmerLoading(boxHeight: 200.h, itemCount: 4);
+          }
+        },
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:aamako_maya/l10n/locale_keys.g.dart';
 import 'package:aamako_maya/src/core/padding/padding.dart';
 import 'package:aamako_maya/src/core/theme/app_colors.dart';
 import 'package:aamako_maya/src/features/audio/cubit/audio_cubit.dart';
@@ -5,6 +6,7 @@ import 'package:aamako_maya/src/features/audio/model/audio_model.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,10 +20,12 @@ import '../../../core/widgets/drawer/drawer_widget.dart';
 import '../../../core/widgets/helper_widgets/blank_space.dart';
 import '../../fetch user data/cubit/get_user_cubit.dart';
 import '../widgets/audio_container_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AudioPlayerSection extends StatefulWidget {
   final List<AudioModel> audios;
   final bool isEnglish;
+
   const AudioPlayerSection(
       {Key? key, required this.audios, required this.isEnglish})
       : super(key: key);
@@ -50,13 +54,16 @@ class _AudioPlayerSectionState extends State<AudioPlayerSection>
       _audioPlayer.pause();
       try {
         await _audioPlayer.play(UrlSource(url));
+        currentUrl.value = url;
+        currentAudio.value = title;
+        currentThumbnail.value = thumbnail;
       } catch (e) {
-        BotToast.showText(text: 'Something went wrong!');
+        _audioPlayer.pause();
+        currentUrl.value = null ;
+        BotToast.showText(text: 'Cannot Play Audio');
       }
 
-      currentUrl.value = url;
-      currentAudio.value = title;
-      currentThumbnail.value = thumbnail;
+
     }
   }
 
@@ -69,13 +76,17 @@ class _AudioPlayerSectionState extends State<AudioPlayerSection>
     _audioPlayer.onPlayerStateChanged.listen((event) {
       isPlaying.value = event == PlayerState.playing;
     });
+    _audioPlayer.onPlayerComplete.listen((event) {
+      _audioPlayer.stop();
+      currentUrl.value = null ;
+    });
     _audioPlayer.onDurationChanged.listen((event) {
       dur.value = event;
     });
     _audioPlayer.onPositionChanged.listen((event) {
       pos.value = event;
     });
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance?.addObserver(this);
 
     super.initState();
   }
@@ -83,8 +94,8 @@ class _AudioPlayerSectionState extends State<AudioPlayerSection>
   @override
   void dispose() {
     _audioPlayer.dispose();
-
-    WidgetsBinding.instance.removeObserver(this);
+    currentUrl.value = null ;
+    WidgetsBinding.instance?.removeObserver(this);
 
     super.dispose();
   }
@@ -93,13 +104,13 @@ class _AudioPlayerSectionState extends State<AudioPlayerSection>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused) {
       _audioPlayer.stop();
+      currentUrl.value = null ;
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
     return VisibilityDetector(
       key: const ValueKey('AudioWidgetKey'),
       onVisibilityChanged: (visibilityInfo) {
@@ -107,6 +118,7 @@ class _AudioPlayerSectionState extends State<AudioPlayerSection>
         if (visiblePercentage < 100.0) {
           if (isPlaying.value) {
             _audioPlayer.pause();
+            currentUrl.value = null ;
           }
         }
       },
@@ -126,13 +138,11 @@ class _AudioPlayerSectionState extends State<AudioPlayerSection>
                   NepaliDateTime.now().month, NepaliDateTime.now().day);
               day = differenceInCalendarDays(later, earlier).toString();
 
-              weeks = (int.parse(day) / 7).toStringAsFixed(0);
-              days = ((int.parse(day)) - (int.parse(weeks) * 7)).toString();
+              weeks = ((int.parse(day) % 365) / 7).toStringAsFixed(0);
+              days =( (int.parse(day) % 365) % 7 ).toString();
             }
             final thisWeek = widget.audios.firstWhere(
-                (element) =>
-                    (element.weekId) ==
-                    ((int.parse(weeks) < 13) ? 12 : int.parse(weeks)),
+                (element) => (element.weekId) == int.parse(weeks),
                 orElse: () => AudioModel(
                     id: 0,
                     titleEn: '',
@@ -150,7 +160,7 @@ class _AudioPlayerSectionState extends State<AudioPlayerSection>
                   child: Padding(
                     padding: defaultPadding.copyWith(top: 15.h),
                     child: Text(
-                      'This Week Audio',
+                      LocaleKeys.label_this_week_audio.tr(),
                       style: theme.textTheme.labelMedium,
                     ),
                   ),
@@ -158,47 +168,58 @@ class _AudioPlayerSectionState extends State<AudioPlayerSection>
                 VerticalSpace(10.h),
                 Align(
                   alignment: Alignment.center,
-                  child: GestureDetector(
-                    onTap: () async {
-                      _play(
-                        thisWeek.path,
-                        thisWeek.titleEn,
-                        thisWeek.thumbnail,
-                      );
-                    },
-                    child: ValueListenableBuilder(
-                        valueListenable: currentUrl,
-                        builder: (context, b, bb) {
-                          return Padding(
-                            padding: defaultPadding,
-                            child: AudioContainerWidget(
-                              isEnglish: widget.isEnglish,
-                              isPlaying: currentUrl.value == null
-                                  ? false
-                                  : thisWeek.path == currentUrl.value,
-                              audio: thisWeek,
-                            ),
-                          );
-                        }),
+                  child: thisWeek.id != 0
+                      ? GestureDetector(
+                          onTap: () async {
+                            _play(
+                              thisWeek.path,
+                              thisWeek.titleEn,
+                              thisWeek.thumbnail,
+                            );
+                          },
+                          child: ValueListenableBuilder(
+                              valueListenable: currentUrl,
+                              builder: (context, b, bb) {
+                                return Padding(
+                                  padding: defaultPadding,
+                                  child: AudioContainerWidget(
+                                    isEnglish: widget.isEnglish,
+                                    isPlaying: currentUrl.value == null
+                                        ? false
+                                        : thisWeek.path == currentUrl.value,
+                                    audio: thisWeek,
+                                  ),
+                                );
+                              }),
+                        )
+                      : Center(
+                          child: Text(
+                            "No Audio Found",
+                            style: Theme.of(context).textTheme.labelMedium,
+                          ),
+                        ),
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: defaultPadding.copyWith(top: 15.h),
+                    child: Text(
+                      LocaleKeys.label_other_week_audio.tr(),
+                      style: theme.textTheme.labelMedium,
+                    ),
                   ),
-                )
+                ),
               ],
             );
           }),
-          Padding(
-            padding: defaultPadding.copyWith(top: 15.h),
-            child: Text(
-              'Other Week Audio',
-              style: theme.textTheme.labelMedium,
-            ),
-          ),
           Expanded(
             child: RefreshIndicator(
               onRefresh: () async {
                 if (await sl<NetworkInfo>().isConnected) {
                   context.read<AudioCubit>().getAudio(true);
                 } else {
-                  BotToast.showText(text: 'No Internet Connection !');
+                  BotToast.showText(
+                      text: LocaleKeys.no_internet_connection.tr());
                 }
               },
               child: ScrollablePositionedList.builder(
@@ -209,7 +230,7 @@ class _AudioPlayerSectionState extends State<AudioPlayerSection>
                   ),
                   itemBuilder: ((context, index) {
                     return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      padding: REdgeInsets.symmetric(vertical: 10),
                       child: InkWell(
                         onTap: () {
                           _play(
@@ -239,6 +260,7 @@ class _AudioPlayerSectionState extends State<AudioPlayerSection>
                   itemCount: widget.audios.length),
             ),
           ),
+          SizedBox(height: 10.h),
           ValueListenableBuilder(
               valueListenable: currentUrl,
               builder: (context, v, b) {
@@ -276,122 +298,147 @@ class _AudioPlayerSectionState extends State<AudioPlayerSection>
 
                           width: double.infinity,
                           padding:
-                              defaultPadding.copyWith(top: 30.h, bottom: 30.h),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                              defaultPadding.copyWith(top: 10.h, bottom: 30.h),
+                          child: Column(
                             children: [
-                              ValueListenableBuilder(
-                                  valueListenable: currentThumbnail,
-                                  builder: (context, snapshot, c) {
-                                    print(currentThumbnail.toString() + 'ads');
-                                    return ClipRRect(
-                                      borderRadius: BorderRadius.circular(20),
-                                      child: SizedBox(
-                                        height: 70.h,
-                                        width: 70.h,
-                                        child: CachedNetworkImage(
-                                          fit: BoxFit.cover,
-                                          imageUrl: currentThumbnail.value ??
-                                              widget.audios[0].thumbnail,
-                                          placeholder: (ctx, url) => Container(
-                                            height: 100.h,
-                                            width: 100.w,
-                                            color: AppColors.accentGrey,
-                                          ),
-                                          errorWidget: (context, url, error) =>
-                                              const Icon(Icons.error),
-                                        ),
-                                      ),
-                                    );
-                                  }),
-                              Column(
+                              Align(
+                                  alignment: Alignment.topRight,
+                                  child:  InkWell(
+                                    onTap: () {
+                                      _audioPlayer.stop();
+                                      currentUrl.value = null;
+                                    },
+                                    child: Icon(Icons.cancel,
+                                        color: AppColors.accentGrey,
+                                        size: 30.r),
+                                  )),
+                              SizedBox(height: 10.h),
+                              Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   ValueListenableBuilder(
-                                      valueListenable: currentAudio,
-                                      builder: (context, obj, wi) {
-                                        return Padding(
-                                          padding: defaultPadding,
-                                          child: Text(currentAudio.value ??
-                                              widget.audios[0].titleEn),
+                                      valueListenable: currentThumbnail,
+                                      builder: (context, snapshot, c) {
+                                        print(currentThumbnail.toString() +
+                                            'ads');
+                                        return ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(20.r),
+                                          child: SizedBox(
+                                            height: 70.h,
+                                            width: 70.h,
+                                            child: CachedNetworkImage(
+                                              fit: BoxFit.cover,
+                                              imageUrl: currentThumbnail
+                                                      .value ??
+                                                  widget.audios[0].thumbnail,
+                                              placeholder: (ctx, url) =>
+                                                  Container(
+                                                height: 100.h,
+                                                width: 100.h,
+                                                color: AppColors.accentGrey,
+                                              ),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      const Icon(Icons.error),
+                                            ),
+                                          ),
                                         );
                                       }),
-                                  VerticalSpace(10.h),
-                                  ValueListenableBuilder(
-                                      valueListenable: dur,
-                                      builder: (c, cc, ccc) {
-                                        print(dur.value.toString() + "dffd");
-                                        return ValueListenableBuilder(
-                                            valueListenable: pos,
-                                            builder: (context, c, g) {
-                                              return Slider.adaptive(
-                                                activeColor:
-                                                    AppColors.primaryRed,
-                                                inactiveColor: Colors.white,
-                                                max: dur.value.inSeconds
-                                                    .toDouble(),
-                                                min: 0,
-                                                value: pos.value.inSeconds
-                                                    .toDouble(),
-                                                onChanged:
-                                                    (double value) async {
-                                                  final position = Duration(
-                                                      seconds: value.toInt());
-                                                  await _audioPlayer
-                                                      .seek(position);
-                                                },
-                                              );
-                                            });
-                                      }),
-                                  ValueListenableBuilder(
-                                      valueListenable: dur,
-                                      builder: (context, f, ff) {
-                                        return ValueListenableBuilder(
-                                            valueListenable: pos,
-                                            builder: (context, f, ff) {
-                                              return Row(
-                                                children: [
-                                                  Text(
-                                                    formatTime(
-                                                      pos.value,
-                                                    ),
-                                                    style:
-                                                        TextStyle(fontSize: 12),
-                                                  ),
-                                                  HorizSpace(95.w),
-                                                  Text(
-                                                    formatTime(
-                                                        dur.value - pos.value),
-                                                    style:
-                                                        TextStyle(fontSize: 12),
-                                                  )
-                                                ],
-                                              );
-                                            });
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      ValueListenableBuilder(
+                                          valueListenable: currentAudio,
+                                          builder: (context, obj, wi) {
+                                            return Padding(
+                                              padding: defaultPadding,
+                                              child: Text(currentAudio.value ??
+                                                  widget.audios[0].titleEn),
+                                            );
+                                          }),
+                                      VerticalSpace(10.h),
+                                      ValueListenableBuilder(
+                                          valueListenable: dur,
+                                          builder: (c, cc, ccc) {
+                                            print(
+                                                dur.value.toString() + "dffd");
+                                            return ValueListenableBuilder(
+                                                valueListenable: pos,
+                                                builder: (context, c, g) {
+                                                  return Slider.adaptive(
+                                                    activeColor:
+                                                        AppColors.primaryRed,
+                                                    inactiveColor: Colors.white,
+                                                    max: dur.value.inSeconds
+                                                        .toDouble(),
+                                                    min: 0,
+                                                    value: pos.value.inSeconds
+                                                        .toDouble(),
+                                                    onChanged:
+                                                        (double value) async {
+                                                      final position = Duration(
+                                                          seconds:
+                                                              value.toInt());
+                                                      await _audioPlayer
+                                                          .seek(position);
+                                                    },
+                                                  );
+                                                });
+                                          }),
+                                      ValueListenableBuilder(
+                                          valueListenable: dur,
+                                          builder: (context, f, ff) {
+                                            return ValueListenableBuilder(
+                                                valueListenable: pos,
+                                                builder: (context, f, ff) {
+                                                  return Row(
+                                                    children: [
+                                                      Text(
+                                                        formatTime(
+                                                          pos.value,
+                                                        ),
+                                                        style: TextStyle(
+                                                            fontSize: 12),
+                                                      ),
+                                                      HorizSpace(95.w),
+                                                      Text(
+                                                        formatTime(dur.value -
+                                                            pos.value),
+                                                        style: TextStyle(
+                                                            fontSize: 12.sm),
+                                                      )
+                                                    ],
+                                                  );
+                                                });
+                                          }),
+                                    ],
+                                  ),
+                                  Spacer(),
+                                  ValueListenableBuilder<bool>(
+                                      valueListenable: isPlaying,
+                                      builder: (context, s, c) {
+                                        return IconButton(
+                                            padding:
+                                                REdgeInsets.only(right: 10),
+                                            onPressed: () async {
+                                              if (isPlaying.value) {
+                                                await _audioPlayer.pause();
+                                              } else {
+                                                await _audioPlayer.resume();
+                                              }
+                                            },
+                                            icon: Icon(
+                                              isPlaying.value
+                                                  ? Icons.pause_circle_filled
+                                                  : Icons.play_circle,
+                                              size: 50.sm,
+                                              color: Colors.grey,
+                                            ));
                                       }),
                                 ],
                               ),
-                              Spacer(),
-                              ValueListenableBuilder<bool>(
-                                  valueListenable: isPlaying,
-                                  builder: (context, s, c) {
-                                    return IconButton(
-                                        padding: EdgeInsets.only(right: 10),
-                                        onPressed: () async {
-                                          if (isPlaying.value) {
-                                            await _audioPlayer.pause();
-                                          } else {
-                                            await _audioPlayer.resume();
-                                          }
-                                        },
-                                        icon: Icon(
-                                          isPlaying.value
-                                              ? Icons.pause_circle_filled
-                                              : Icons.play_circle,
-                                          size: 50.sm,
-                                          color: Colors.grey,
-                                        ));
-                                  }),
                             ],
                           ),
                         ),

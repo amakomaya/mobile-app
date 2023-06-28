@@ -1,11 +1,12 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../../../core/strings/app_strings.dart';
 
 class NavigationIndexCubit extends Cubit<NavigationIndexState> {
   NavigationIndexCubit()
       : super(const NavigationIndexState(
-            appbarTitleEn: 'Home', appbarTitleNp: AppStrings.home, index: 0));
+            appbarTitleEn: 'Home', appbarTitleNp: "होम", index: 0));
 
   changeIndex(
       {required int index, required String titleEn, required String titleNp}) {

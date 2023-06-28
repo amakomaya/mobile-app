@@ -16,6 +16,5 @@ class DrawerState extends Equatable {
   DrawerState(this.index);
 
   @override
-  // TODO: implement props
   List<Object?> get props => [index];
 }

@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-
 class LocalizationButton extends StatelessWidget {
   final Color? color;
   final Widget? icon;
 
-  const LocalizationButton({Key? key,this.icon, this.color}) : super(key: key);
+  const LocalizationButton({Key? key, this.icon, this.color}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,15 +22,13 @@ class LocalizationButton extends StatelessWidget {
         itemBuilder: (ctx) {
           return [
             PopupMenuItem(
-                onTap: () {
-                  EasyLocalization.of(context)
-                      ?.setLocale(const Locale('en', ''));
+                onTap: ()  {
+                   context.setLocale(const Locale('en', ''));
                 },
                 child: const Text('English')),
             PopupMenuItem(
-                onTap: () {
-                  EasyLocalization.of(context)
-                      ?.setLocale(const Locale('ne', ''));
+                onTap: ()  {
+                   context.setLocale(const Locale('ne', ''));
                 },
                 child: const Text('Nepali')),
           ];

@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:aamako_maya/l10n/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:aamako_maya/src/core/padding/padding.dart';
 import 'package:aamako_maya/src/core/snackbar/error_snackbar.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
@@ -10,7 +12,6 @@ import 'package:aamako_maya/src/features/authentication/screens/login/login_page
 import 'package:aamako_maya/src/features/authentication/widgets/complete_profile_section.dart';
 import 'package:aamako_maya/src/features/bottom_nav/bottom_navigation.dart';
 import 'package:bot_toast/bot_toast.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -64,7 +65,7 @@ class _RegisterSectionState extends State<RegisterSection> {
                   (route) => false);
 
               Timer(const Duration(seconds: 3), () {
-                BotToast.showText(text: 'Register Successful');
+                BotToast.showText(text: LocaleKeys.msg_register_success.tr());
               });
             } else {
               BotToast.closeAllLoading();
@@ -82,9 +83,8 @@ class _RegisterSectionState extends State<RegisterSection> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(left: 18, bottom: 12),
-                          child: Text(
-                            LocaleKeys.registered.tr(),
+                          padding:REdgeInsets.only(left: 18, bottom: 12),
+                          child: Text(LocaleKeys.label_register.tr(),
                             style: Theme.of(context).textTheme.displaySmall,
                           ),
                         ),
@@ -102,7 +102,7 @@ class _RegisterSectionState extends State<RegisterSection> {
                           ShadowContainer(
                               width: size.width,
                               padding:
-                                  defaultPadding.copyWith(top: 6, bottom: 6),
+                                  defaultPadding.copyWith(top: 6.h, bottom: 6.h),
                               margin: defaultPadding,
                               child: TextFormField(
                                 autofocus: true,
@@ -110,17 +110,17 @@ class _RegisterSectionState extends State<RegisterSection> {
                                 controller: _name,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
-                                    return LocaleKeys.namewarning.tr();
+                                    return LocaleKeys.warning_msg_name_no_empty.tr();
                                   }
                                   if (value.length < 3) {
-                                    return LocaleKeys.namevalidation.tr();
+                                    return LocaleKeys.msg_name_min_length.tr();
                                   }
                                   return null;
                                 },
                                 decoration: InputDecoration(
                                   labelStyle:
                                       const TextStyle(color: AppColors.black),
-                                  label: Text(LocaleKeys.name.tr()),
+                                  label: Text( LocaleKeys.label_name.tr()),
                                   isDense: true,
                                   border: InputBorder.none,
                                 ),
@@ -129,7 +129,7 @@ class _RegisterSectionState extends State<RegisterSection> {
                           ShadowContainer(
                               width: size.width,
                               padding:
-                                  defaultPadding.copyWith(top: 6, bottom: 6),
+                                  defaultPadding.copyWith(top: 6.h, bottom: 6.h),
                               margin: defaultPadding,
                               child: TextFormField(
                                 onTap: () async {
@@ -151,14 +151,14 @@ class _RegisterSectionState extends State<RegisterSection> {
                                 controller: _lmp,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
-                                    return LocaleKeys.lmpwarning.tr();
+                                    return  LocaleKeys.warning_msg_lmp_no_empty.tr();
                                   }
 
                                   return null;
                                 },
                                 decoration: InputDecoration(
                                   labelStyle: TextStyle(color: AppColors.black),
-                                  label: Text(LocaleKeys.lmp.tr()),
+                                  label: Text( LocaleKeys.label_lmp.tr()),
 
                                   // enabled: false,
                                   border: InputBorder.none,
@@ -176,17 +176,16 @@ class _RegisterSectionState extends State<RegisterSection> {
                                 controller: _phone,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
-                                    return LocaleKeys.mobilenumberwarning.tr();
+                                    return  LocaleKeys.warning_msg_mobile_num_no_empty.tr();
                                   }
                                   if (value.length < 10 || value.length > 10) {
-                                    return LocaleKeys.mobilenumbervalidation
-                                        .tr();
+                                    return  LocaleKeys.error_msg_invalid_mobile_num.tr();
                                   }
                                   return null;
                                 },
                                 decoration: InputDecoration(
                                   labelStyle: TextStyle(color: AppColors.black),
-                                  label: Text(LocaleKeys.mobilenumber.tr()),
+                                  label: Text( LocaleKeys.label_mobile_num.tr()),
                                   isDense: true,
                                   border: InputBorder.none,
                                 ),
@@ -202,23 +201,23 @@ class _RegisterSectionState extends State<RegisterSection> {
                                 controller: _password,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
-                                    return LocaleKeys.passwordwarning.tr();
+                                    return  LocaleKeys.warning_msg_password_no_empty.tr();
                                   }
                                   if (value.length < 5) {
-                                    return LocaleKeys.passwordvalidation.tr();
+                                    return  LocaleKeys.msg_password_min_length.tr();
                                   }
                                   return null;
                                 },
                                 decoration: InputDecoration(
                                   labelStyle: TextStyle(color: AppColors.black),
-                                  label: Text(LocaleKeys.password.tr()),
+                                  label: Text( LocaleKeys.label_password.tr()),
                                   isDense: true,
                                   border: InputBorder.none,
                                 ),
                               )),
                           VerticalSpace(15.h),
                           Text(
-                            "By clicking in register you are in agreement of Terms and Conditions",
+                            LocaleKeys.label_agree_terms_condition.tr(),
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
                           VerticalSpace(20.h),
@@ -247,21 +246,21 @@ class _RegisterSectionState extends State<RegisterSection> {
                               }
                             },
                             width: 170.w,
-                            title: LocaleKeys.registered.tr(),
+                            title:  LocaleKeys.label_register.tr(),
                           ),
                           VerticalSpace(15.h),
                           RichText(
                               text: TextSpan(children: [
                             TextSpan(
-                                text: LocaleKeys.account.tr(),
+                                text: LocaleKeys.label_already_have_account.tr() ,
                                 style: Theme.of(context).textTheme.bodySmall),
                             TextSpan(
-                              text: LocaleKeys.loginbutton.tr(),
+                              text: LocaleKeys.label_go_to_login.tr(),
                               style: Theme.of(context)
                                   .textTheme
                                   .bodySmall
                                   ?.copyWith(
-                                      fontSize: 14,
+                                      fontSize: 14.sm,
                                       color: AppColors.primaryRed),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () => Navigator.pushAndRemoveUntil(

@@ -46,7 +46,7 @@ class _VideoPlayingPageState extends State<VideoPlayingPage> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
       setState(() {
         _scrollController.scrollTo(
             index: widget.initialScroll, duration: const Duration(seconds: 1));
@@ -82,7 +82,7 @@ class _VideoPlayingPageState extends State<VideoPlayingPage> {
             child: Align(
               alignment: Alignment.topLeft,
               child: Padding(
-                padding: const EdgeInsets.only(left: 12.0, top: 5),
+                padding: REdgeInsets.only(left: 12.0, top: 5),
                 child: IconButton(
                   onPressed: () {
                     Navigator.pop(context);
@@ -152,19 +152,19 @@ class _VideoPlayingPageState extends State<VideoPlayingPage> {
                       color: currentVideo.path == widget.list[ind].path
                           ? AppColors.grey
                           : null,
-                      margin: const EdgeInsets.only(bottom: 20),
-                      padding: const EdgeInsets.all(10),
+                      margin:REdgeInsets.only(bottom: 20),
+                      padding:REdgeInsets.all(10),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(
                             width: 100.w,
-                            height: 100.h,
+                            height: 100.w,
                             child: CachedNetworkImage(
                               fit: BoxFit.cover,
                               imageUrl: widget.list[ind].thumbnail,
                               placeholder: (ctx, url) => Container(
-                                height: 100.h,
+                                height: 100.w,
                                 width: 100.w,
                                 color: AppColors.accentGrey,
                               ),

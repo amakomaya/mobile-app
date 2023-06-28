@@ -25,27 +25,29 @@ class PrimaryTextField extends StatelessWidget {
   final EdgeInsetsGeometry? textPadding;
   final ValidatorFunc? validator;
   final EdgeInsetsGeometry? padding;
-  const PrimaryTextField({
-    Key? key,
-    this.decoration,
-    this.onTap,
-    this.readOnly,
-    this.height,
-    this.width,
-    this.isPhone,
-    this.padding,
-    this.hintText,
-    this.suffix,
-    this.labelText,
-    this.boxMargin,
-    this.textPadding,
-    this.validator,
-    this.focus,
-    this.nextFocus,
-    this.controller,
-    this.sufixTap,
-    this.obscureText,
-  }) : super(key: key);
+  final bool isEditable;
+  const PrimaryTextField(
+      {Key? key,
+      this.decoration,
+      this.onTap,
+      this.readOnly,
+      this.height,
+      this.width,
+      this.isPhone,
+      this.padding,
+      this.hintText,
+      this.suffix,
+      this.labelText,
+      this.boxMargin,
+      this.textPadding,
+      this.validator,
+      this.focus,
+      this.nextFocus,
+      this.controller,
+      this.sufixTap,
+      this.obscureText,
+      this.isEditable = true})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -58,55 +60,66 @@ class PrimaryTextField extends StatelessWidget {
           child: Text(
             labelText ?? '',
             style:
-                Theme.of(context).textTheme.labelLarge?.copyWith(fontSize: 16),
+                Theme.of(context).textTheme.labelMedium?.copyWith(fontSize: 16),
           ),
         ),
         VerticalSpace(5.h),
         Padding(
           padding: defaultPadding,
-          child: TextFormField(
-            
-            onTap: onTap,
-            readOnly: readOnly??false,
-            keyboardType:
-                isPhone != null && isPhone == true ? TextInputType.phone : null,
-            obscureText: obscureText ?? false,
-            controller: controller,
-            cursorColor: AppColors.primaryRed,
-            focusNode: focus,
-            onFieldSubmitted: (value) => nextFocus != null
-                ? FocusScope.of(context).requestFocus(nextFocus)
-                : FocusScope.of(context).unfocus(),
-            validator: validator,
-            decoration: InputDecoration(
-              
-                suffixIcon: GestureDetector(
-                  onTap: sufixTap,
-                  child: Icon(
-                    suffix,
-                    color: Colors.grey,
+          child: Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: Colors.white),
+                borderRadius: BorderRadius.circular(30),
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.grey, offset: Offset(1, 1), blurRadius: 2)
+                ]),
+            child: TextFormField(
+              enabled: isEditable,
+              onTap: onTap,
+              readOnly: readOnly ?? false,
+              keyboardType: isPhone != null && isPhone == true
+                  ? TextInputType.phone
+                  : null,
+              obscureText: obscureText ?? false,
+              controller: controller,
+              cursorColor: AppColors.primaryRed,
+              focusNode: focus,
+              onFieldSubmitted: (value) => nextFocus != null
+                  ? FocusScope.of(context).requestFocus(nextFocus)
+                  : FocusScope.of(context).unfocus(),
+              validator: validator,
+              decoration: InputDecoration(
+                  suffixIcon: GestureDetector(
+                    onTap: sufixTap,
+                    child: Icon(
+                      suffix,
+                      color: Colors.grey,
+                    ),
                   ),
-                ),
-                hintText: hintText,
-                hintStyle: Theme.of(context)
-                    .textTheme
-                    .labelSmall
-                    ?.copyWith(color: Colors.grey),
-                  
-                    enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: const BorderSide(
-                        color: AppColors.accentGrey, width: 1)),
-                focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: const BorderSide(
-                        color: AppColors.accentGrey, width: 1)),
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: const BorderSide(
-                        color: AppColors.accentGrey, width: 1)),
-                contentPadding: const EdgeInsets.only(
-                    left: 15, right: 10, top: 15, bottom: 15)),
+                  hintText: hintText,
+                  hintStyle: Theme.of(context)
+                      .textTheme
+                      .labelSmall
+                      ?.copyWith(color: Colors.grey),
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30),
+                      borderSide:
+                          const BorderSide(color: AppColors.white, width: 1)),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30),
+                      borderSide:
+                          const BorderSide(color: AppColors.white, width: 1)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30),
+                      borderSide: const BorderSide(
+                        color: AppColors.white,
+                        width: 1,
+                      )),
+                  contentPadding: const EdgeInsets.only(
+                      left: 15, right: 10, top: 15, bottom: 15)),
+            ),
           ),
         ),
       ],

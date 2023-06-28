@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:aamako_maya/src/core/network_services/urls.dart';
 import 'package:aamako_maya/src/features/ancs/model/ancs_model.dart';
+import 'package:aamako_maya/src/features/ancs/model/new_report_model.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
@@ -10,34 +11,34 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../authentication/local_storage/authentication_local_storage.dart';
+import '../model/information_model.dart';
 
 class AncsCubit extends Cubit<AncsState> {
   Dio dio;
   SharedPreferences prefs;
   AuthLocalData local;
   AncsCubit(this.dio, this.local, this.prefs) : super(AncnitialState());
+
   void getAncs(bool isRefreshed) async {
     emit(AncLoadingState());
     // String token = await local.getTokenFromocal();
-    String token = "4a66f714-9124-4cd1-a0fa-e48789021600";
+    final AuthLocalData _localData = AuthLocalData();
+    String? token = await _localData.getTokenFromocal();
 
-    final response = prefs.getString('anc');
+    final response = prefs.getString('anc_data');
 
     if (response != null && isRefreshed == false) {
-      final ancs = jsonDecode(response) as List;
-
-      List<AncModel> list = (ancs).map((e) => AncModel.fromJson(e)).toList();
+      final ancs = jsonDecode(response);
+      NewReportModel list = NewReportModel.fromJson(ancs);
       emit(AncSuccessState(list));
     } else {
       try {
-        final response = await dio.get("${Urls.ancsUrl}/$token");
+        final response = await dio.get("${Urls.ancsUrls}", options:  Options(
+          headers: {"token": "$token"},
+        ));
         if (response.statusCode == 200) {
-          final ancs = response.data as List;
-
-          prefs.setString('anc', jsonEncode(response.data));
-
-          List<AncModel> list =
-              (ancs).map((e) => AncModel.fromJson(e)).toList();
+          prefs.setString('anc_data', jsonEncode(response.data));
+          NewReportModel list = NewReportModel.fromJson(response.data);
           emit(AncSuccessState(list));
         } else {
           emit(AncFailureState());
@@ -47,6 +48,8 @@ class AncsCubit extends Cubit<AncsState> {
       }
     }
   }
+
+
 }
 
 abstract class AncsState extends Equatable {
@@ -59,7 +62,7 @@ class AncnitialState extends AncsState {}
 class AncLoadingState extends AncsState {}
 
 class AncSuccessState extends AncsState {
-  final List<AncModel> data;
+  final NewReportModel data;
   AncSuccessState(this.data);
 
   @override

@@ -1,0 +1,19 @@
+Key	English	Nepali
+label_want_exit	Do you want to exit?	के तपाईं यस एपबाट बाहिर निस्कन चाहनुहुन्छ?
+msg_please_complete_profile_first	You can not view your reports. Please complete profile first.	तपाईं आफ्नो रिपोर्टहरू हेर्न सक्नुहुन्न। कृपया पहिले प्रोफाइल पूरा गर्नुहोस्।
+msg_appointment_inprogress	Appointment is in progress 	नियुक्ति प्रक्रियामा छ। कृपया पर्खनुहोस् ।
+error_msg_cannot_launch_url	Can not launch URL	URL प्रारम्भ गर्न सकिँदैन !
+error_msg_someting_went_wrong	Something Went Wrong!	केहि गलत भयो! कृपया पर्खनुहोस।
+no_internet_connection	No Internet Connection!	इन्टरनेट जडान छैन!
+error_msg_open_dailer	Application unable to open dialer.	Application unable to open dialer.
+msg_copied_to_clipboard	Copied to clipboard	Copied to clipboard
+msg_complete_profile_now	Complete Your Profile Now!	आफ्नो प्रोफाइल पूरा गर्नुहोस् !
+error_msg_not_complete_profile	You have not completed your profile.	तपाईंले आफ्नो प्रोफाइल पूरा गर्नुभएको छैन।
+msg_register_success	Register Successful	दर्ता सफल भयो
+label_agree_terms_condition	By clicking in register you are in agreement of Terms and Conditions	दर्ता क्लिक गरेर तपाईंले नियम र सर्तहरूमा सहमति जनाउनु भएको छ ।
+msg_option_unavailable	Option Unavailable at the moment	विकल्प हाल उपलब्ध छैन
+error_msg_no_error	There was an error	There was an error
+msg_no_permission	No Permission	अनुमति छैन
+msg_login_success	Login Successful	तपाईको लगइन सफल भयो
+label_choose_option_your_need	Choose Option that describe your need	तपाइँको आवश्यकताहरुलाई पुर्ण रुपमा वर्णन गर्ने विकल्प छान्नुहोस्
+msg_problem_contact_call_number	If there is any problem with you that requires an attention, feel free to call us at 9870568956	यदि तपाईलाई कुनै समस्या छ भने, हामीलाई यस नम्बर 9870568956 मा सम्पर्क गर्नुहोस् 

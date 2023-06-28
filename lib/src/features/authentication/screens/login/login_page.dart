@@ -4,7 +4,6 @@ import 'package:aamako_maya/src/core/padding/padding.dart';
 import 'package:aamako_maya/src/core/widgets/border_container.dart';
 import 'package:aamako_maya/src/core/widgets/buttons/primary_action_button.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
-import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
 import 'package:aamako_maya/src/core/widgets/textfield/primary_textfield.dart';
 import 'package:aamako_maya/src/features/authentication/model/login_request_model.dart';
 import 'package:aamako_maya/src/features/authentication/screens/login/qr_code_page.dart';
@@ -19,12 +18,9 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../l10n/locale_keys.g.dart';
 import '../../../../core/app_assets/app_assets.dart';
-import '../../../../core/snackbar/error_snackbar.dart';
-import '../../../../core/snackbar/success_snackbar.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/buttons/localization_button.dart';
 import '../../../bottom_nav/bottom_navigation.dart';
-import '../../../home/screens/homepage.dart';
 import '../../authentication_cubit/auth_cubit.dart';
 
 class LoginPage extends StatefulWidget {
@@ -42,6 +38,7 @@ class _LoginPageState extends State<LoginPage> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
   ValueNotifier<bool> obscureBtn = ValueNotifier(true);
+
   @override
   void dispose() {
     passwordFocus.dispose();
@@ -51,6 +48,13 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
+  }
+
+  var link = "";
+
+  getForgetPasswordData() async {
+    var a = await context.read<AuthenticationCubit>().forgetPassword();
+    link = a?.link ?? "";
   }
 
   @override
@@ -71,13 +75,14 @@ class _LoginPageState extends State<LoginPage> {
               (route) => false);
 
           Timer(const Duration(seconds: 3), () {
-            BotToast.showText(text: 'Login Successful');
+            BotToast.showText(text: LocaleKeys.msg_login_success.tr());
           });
         } else {
           BotToast.closeAllLoading();
         }
       },
       builder: (context, state) {
+        getForgetPasswordData();
         return Scaffold(
           body: SingleChildScrollView(
             child: Form(
@@ -110,7 +115,7 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       Expanded(
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 110),
+                          padding: REdgeInsets.only(left: 110),
                           child: Image.asset(
                             AppAssets.logo,
                             height: 190.h,
@@ -120,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(65),
+                        padding: REdgeInsets.all(65),
                         child: LocalizationButton(
                           color: AppColors.primaryRed,
                         ),
@@ -133,15 +138,15 @@ class _LoginPageState extends State<LoginPage> {
                     // nextFocus: passwordFocus,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return LocaleKeys.usernamenotempty.tr();
+                        return LocaleKeys.warning_msg_username_no_empty.tr();
                       }
                       if (value.length < 4) {
-                        return LocaleKeys.leastcharsforusername.tr();
+                        return LocaleKeys.msg_username_min_length.tr();
                       }
                       return null;
                     },
-                    labelText: LocaleKeys.username.tr(),
-                    hintText: LocaleKeys.usernameHint.tr(),
+                    labelText: LocaleKeys.label_username.tr(),
+                    hintText: LocaleKeys.field_phone_number.tr(),
                   ),
                   VerticalSpace(15.h),
                   ValueListenableBuilder(
@@ -152,16 +157,17 @@ class _LoginPageState extends State<LoginPage> {
                           controller: passwordController,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return LocaleKeys.passwordnotempty.tr();
+                              return LocaleKeys.warning_msg_password_no_empty
+                                  .tr();
                             }
                             if (value.length < 5) {
-                              return LocaleKeys.leastcharsforpassword.tr();
+                              return LocaleKeys.msg_password_min_length.tr();
                             }
                             return null;
                           },
                           focus: passwordFocus,
-                          labelText: LocaleKeys.password.tr(),
-                          hintText: LocaleKeys.passwordHint.tr(),
+                          labelText: LocaleKeys.label_password.tr(),
+                          hintText: LocaleKeys.field_password.tr(),
                           sufixTap: () {
                             obscureBtn.value = !obscureBtn.value;
                           },
@@ -172,8 +178,9 @@ class _LoginPageState extends State<LoginPage> {
                   Padding(
                     padding: defaultPadding,
                     child: PrimaryActionButton(
-                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      padding: REdgeInsets.symmetric(vertical: 20),
                       onpress: () {
+                        FocusScope.of(context).unfocus();
                         if (_formKey.currentState!.validate()) {
                           BlocProvider.of<AuthenticationCubit>(context).login(
                             user: LoginRequestModel(
@@ -183,14 +190,15 @@ class _LoginPageState extends State<LoginPage> {
                           );
                         }
                       },
-                      title: LocaleKeys.login.tr(),
+                      title: LocaleKeys.label_login.tr(),
                     ),
                   ),
                   VerticalSpace(20.h),
-                  Text('OR', style: Theme.of(context).textTheme.headlineMedium),
+                  Text(LocaleKeys.label_or.tr(),
+                      style: Theme.of(context).textTheme.headlineMedium),
                   VerticalSpace(20.h),
                   PrimaryActionButton(
-                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    padding: REdgeInsets.symmetric(vertical: 20),
                     width: 380.w,
                     onpress: () {
                       Navigator.push(
@@ -203,14 +211,14 @@ class _LoginPageState extends State<LoginPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Icon(Icons.qr_code),
-                        const HorizSpace(10),
+                        HorizSpace(10.w),
                         Flexible(
-                          child: Text(LocaleKeys.loginwithqr.tr(),
+                          child: Text(LocaleKeys.label_login_with_qr.tr(),
                               style: Theme.of(context)
                                   .textTheme
                                   .labelSmall!
                                   .copyWith(
-                                      fontSize: 18,
+                                      fontSize: 18.sm,
                                       color: AppColors.white,
                                       fontWeight: FontWeight.w600)),
                         ),
@@ -218,9 +226,9 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   TextButton(
-                    child: Text("Forget Password"),
+                    child: Text(LocaleKeys.label_forget_password.tr()),
                     onPressed: () {
-                      _launchURL();
+                      _launchURL(link);
                     },
                   ),
                   VerticalSpace(5.h),
@@ -235,7 +243,7 @@ class _LoginPageState extends State<LoginPage> {
                       },
                       child: BorderContainer(
                         hasBorder: true,
-                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        padding: REdgeInsets.symmetric(vertical: 20),
                         width: 380.w,
                         child: Center(
                           child: Text('',
@@ -243,7 +251,7 @@ class _LoginPageState extends State<LoginPage> {
                                   .textTheme
                                   .labelSmall!
                                   .copyWith(
-                                      fontSize: 18,
+                                      fontSize: 18.sm,
                                       color: AppColors.primaryRed,
                                       fontWeight: FontWeight.w600)),
                         ),
@@ -254,11 +262,15 @@ class _LoginPageState extends State<LoginPage> {
                   RichText(
                       text: TextSpan(children: [
                     TextSpan(
-                      text: LocaleKeys.notregisteryet.tr(),
+                      text: LocaleKeys.label_not_regester_yet.tr(),
                       style: Theme.of(context).textTheme.labelSmall,
                     ),
                     TextSpan(
-                      text: LocaleKeys.register.tr(),
+                      text: " ",
+                      style: Theme.of(context).textTheme.labelSmall,
+                    ),
+                    TextSpan(
+                      text: LocaleKeys.label_register.tr(),
                       style: Theme.of(context).textTheme.labelMedium?.copyWith(
                             fontWeight: FontWeight.bold,
                             color: AppColors.primaryRed,
@@ -274,20 +286,26 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       Center(
                         child: Padding(
-                          padding: const EdgeInsets.all(12.0),
+                          padding: REdgeInsets.all(12.0),
                           child: Container(
                             child: RichText(
                                 textAlign: TextAlign.center,
                                 text: TextSpan(
                                   children: [
                                     TextSpan(
-                                      text: LocaleKeys.call.tr(),
+                                      text: LocaleKeys.label_call.tr(),
                                       style: Theme.of(context)
                                           .textTheme
                                           .labelSmall,
                                     ),
                                     TextSpan(
-                                        text: LocaleKeys.number.tr(),
+                                      text: " ",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelSmall,
+                                    ),
+                                    TextSpan(
+                                        text: LocaleKeys.label_contact_num.tr(),
                                         style: Theme.of(context)
                                             .textTheme
                                             .labelMedium
@@ -296,7 +314,13 @@ class _LoginPageState extends State<LoginPage> {
                                               color: AppColors.primaryRed,
                                             )),
                                     TextSpan(
-                                        text: LocaleKeys.forenquiry.tr(),
+                                      text: " ",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelSmall,
+                                    ),
+                                    TextSpan(
+                                        text: LocaleKeys.label_enquiry.tr(),
                                         style: Theme.of(context)
                                             .textTheme
                                             .labelSmall),
@@ -335,12 +359,10 @@ class _LoginPageState extends State<LoginPage> {
 //                   },
 //                 ),
 
-_launchURL() async {
-  const url =
-      'https://dribbble.com/shots/16848359/attachments/11908713?mode=media';
-  if (await launchUrl(Uri.parse(url))) {
-    await canLaunchUrl(Uri.parse(url));
+_launchURL(String link) async {
+  if (await launchUrl(Uri.parse(link), mode: LaunchMode.externalApplication)) {
+    await canLaunchUrl(Uri.parse(link));
   } else {
-    throw 'Could not launch $url';
+    throw 'Could not launch $link';
   }
 }

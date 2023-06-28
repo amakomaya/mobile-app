@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:aamako_maya/src/core/network_services/urls.dart';
 import 'package:aamako_maya/src/features/ancs/model/ancs_model.dart';
+import 'package:aamako_maya/src/features/ancs/model/new_report_model.dart';
 import 'package:aamako_maya/src/features/pnc/model/pnc_model.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
@@ -9,6 +10,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../ancs/model/information_model.dart';
 import '../../authentication/local_storage/authentication_local_storage.dart';
 
 class PncsCubit extends Cubit<PncState> {
@@ -20,23 +22,23 @@ class PncsCubit extends Cubit<PncState> {
     emit(PncLoadingState());
     // String token = await local.getTokenFromocal();
     // print(token);
-    String token = "4a66f714-9124-4cd1-a0fa-e48789021600";
-    final response = prefs.getString('pnc');
+    final AuthLocalData _localData = AuthLocalData();
+    String? token = await _localData.getTokenFromocal();
+    final response = prefs.getString('pnc_data');
 
     if (response != null && isRefreshed == false) {
-      final pncs = jsonDecode(response) as List;
-      final data = pncs.map((e) => PncModel.fromJson(e)).toList();
+      final pncs = jsonDecode(response) ;
+      final data = NewReportModel.fromJson(pncs);
       emit(PncSuccessState(data));
     } else {
       try {
-        final response = await dio.get("${Urls.pncUrl}/$token");
+        final response = await dio.get("${Urls.pncUrls}", options:  Options(
+          headers: {"token": "$token"},
+        ));
         if (response.statusCode == 200) {
-          final pncs = response.data as List;
-          await prefs.setString('pnc', jsonEncode(pncs));
-
-          List<PncModel> list =
-              (pncs).map((e) => PncModel.fromJson(e)).toList();
-
+          final pncs = response.data ;
+          await prefs.setString('pnc_data', jsonEncode(pncs));
+         NewReportModel list = NewReportModel.fromJson(pncs);
           emit(PncSuccessState(list));
         } else {
           emit(PncFailureState());
@@ -46,6 +48,7 @@ class PncsCubit extends Cubit<PncState> {
       }
     }
   }
+
 }
 
 abstract class PncState extends Equatable {
@@ -56,7 +59,7 @@ abstract class PncState extends Equatable {
 class PncInitial extends PncState {}
 
 class PncSuccessState extends PncState {
-  final List<PncModel> data;
+  final NewReportModel data;
   PncSuccessState(this.data);
   @override
   List<Object?> get props => [];

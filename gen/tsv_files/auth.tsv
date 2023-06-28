@@ -1,0 +1,54 @@
+Key	English	Nepali
+warning_msg_name_no_empty	Name can not be Empty	पूरा नाम आवश्यक
+warning_msg_age_no_empty	Age can not be Empty	उमेर आवश्यक
+warning_msg_lmp_no_empty	LMP can not be Empty	अन्तिम महिनावारी मिति आवश्यक
+warning_msg_distrct_no_empty	District can not be Empty	जिल्ला चयन गर्न आवश्यक 
+warning_msg_municiplality_no_empty	Municipality can not be Empty	नगरपालिका चयन गर्न आवश्यक 
+warning_msg_ward_no_empty	Ward can not be Empty	वडा नं. आवश्यक
+warning_msg_tole_no_empty	Tole can not be Empty	टोल आवश्यक
+warning_msg_number_no_empty	Number can not be Empty	नम्बर आवश्यक
+label_select_district	Select Your District	कृपया जिल्ला चयन गर्नुहोस्
+label_select_municipality_vdc	Select Your Municipality/VDC	कृपया नगर/गाउँपालिका चयन गर्नुहोस्
+label_select_municipality	Select your municipality	कृपया नगरपालिका चयन गर्नुहोस्
+label_planning	planning	योजना
+label_pregnant	pregnant	गर्भवती
+label_ongoing	ongoing	चलिरहेको
+label_login	Log In	लग - इन
+label_username	Username	प्रयोगकर्ताको नाम
+label_password	Password	पासवर्ड
+field_phone_number	Enter Your Phone Number/Username	फोन नम्बर/प्रयोगकर्ता नाम लेख्नुहोस् 
+field_password	Enter Your Password	पासवर्ड लेख्नुहोस् 
+label_create_account	Create an Account	कृपया खाता खोल्नुहोस्
+warning_msg_username_no_empty	Username can not be empty	प्रयोगकर्ताको नाम आवश्यक 
+label_login_with_qr	Login with QR code	QR कोडको साथ लगइन गर्नुहोस्
+label_not_regester_yet	Not registered yet?	दर्ता गर्नुभएको छैन?
+label_call	Call	सम्पर्क  गर्नुहोस्
+label_contact_num	NTC : 9761663394 / NCELL : 9802333446	NTC : ९७६१६६३३९४ / NCELL : ९८०२३३३४४६
+label_enquiry	for an enquiry	सोधपुछको लागि
+msg_username_min_length	Username must be at least 5 characters	प्रयोगकर्ताको नाम कम्तिमा ५ क्यारेक्टर हुनुपर्छ
+msg_password_min_length	Password must be at least 5 characters	पासवर्ड कम्तिमा ५ क्यारेक्टर हुनुपर्छ
+label_logout	Logout	लग- आउट गर्नुहोस् 
+label_register	Register	दर्ता गर्नुहोस्
+label_mobile_num	Mobile Number	मोबाइल नम्बर
+label_lmp	LMP 	अन्तिम महिनावारीको पहिलो दिन
+label_already_have_account	Already have an account ?	"पहिले नै दर्ता छ ?
+label_go_to_login	Go to login	लगइनमा जानुहोस्
+msg_name_min_length	Name must contain more than 3 characters	नाममा ३ भन्दा बढी क्यारेक्टर हुनुपर्छ
+warning_msg_mobile_num_no_empty	Mobile number can't not be empty	मोबाइल नम्बर खाली हुन सक्दैन
+error_msg_invalid_mobile_num	Invalid mobile number	अवैध मोबाइल नम्बर
+warning_msg_password_no_empty	Password can't not be empty	पासवर्ड लेख्नुहोस् 
+msg_password_min_length	Password must contain more than 5 characters	पासवर्डमा ५ भन्दा बढी क्यारेक्टर हुनुपर्छ
+label_personal_details	Your Personal Details	तपाईंको व्यक्तिगत विवरणहरू
+label_distrct	District	जिल्ला
+label_age	Age	उमेर
+lable_address	Your Address	तपाईको ठेगाना
+lable_lmp_date	LMP Date	LMP मिति
+lable_tole	Tole	टोल
+ward_no	Ward No.	वडा नं.
+lable_municipality_vdc	Municipality	नगरपालिका
+label_name	Name	नाम
+label_select_province	Select your province	आफ्नो प्रदेश चयन गर्नुहोस्
+label_province	Province	प्रदेश
+warning_msg_province_no_empty	Province can not be Empty	प्रदेश खाली हुन सक्दैन
+label_forget_password	Forget Password	पासवर्ड बिर्सनुभयो 
+label_or	OR	वा

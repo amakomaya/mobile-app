@@ -72,11 +72,12 @@ class DistrictMunicipality {
   Future fetchDistrictAndMunicipality() async {
     try {
       final response = await Future.wait(
-          [dio.get(Urls.getDistrict), dio.get(Urls.getMunicipality)]);
+          [dio.get(Urls.getDistrict), dio.get(Urls.getMunicipality),dio.get(Urls.getProvince)]);
 
      final result= await prefs.setString('district', jsonEncode(response[0].data));
     final result1=  await prefs.setString('municipality', jsonEncode(response[1].data));
-    
+    final result2=  await prefs.setString('province', jsonEncode(response[2].data));
+
 
       return true;
     } catch (_) {

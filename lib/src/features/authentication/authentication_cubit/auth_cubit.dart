@@ -11,6 +11,8 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/network_services/urls.dart';
+import '../../symptoms/cubit/symptoms_cubit.dart';
+import '../model/forget_password_model.dart';
 import '../model/register_request_model.dart';
 
 class AuthenticationCubit extends Cubit<AuthenticationState> {
@@ -60,6 +62,27 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     } else {
       emit(LoginFailureState('No Internet Connection!'));
     }
+  }
+
+  Future<ForgetPasswordModel?> forgetPassword() async {
+    final hasInternet = await network.isConnected;
+    if (hasInternet) {
+      try {
+        final response = await dio.post("${Urls.forgetPassword}");
+        if (response.statusCode == 200){
+          final data = ForgetPasswordModel.fromJson(response.data);
+          return data;
+        }
+        else {
+          throw ApiException(response.data.toString());
+        }
+      } on DioError catch (e) {
+        throw ApiException(e.message);
+      }
+    } else {
+      ApiException('No Internet Connection!');
+    }
+    return null;
   }
 
   void loginWithQr(String qrCode) async {

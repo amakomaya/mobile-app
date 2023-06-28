@@ -28,7 +28,7 @@ class PrimaryActionButton extends StatelessWidget {
     return Align(
       alignment: Alignment.topCenter,
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(radius ?? 22),
+        borderRadius: BorderRadius.circular(radius ?? 22.r),
         child: Material(
           color: color ?? AppColors.primaryRed,
           child: InkWell(
@@ -36,7 +36,7 @@ class PrimaryActionButton extends StatelessWidget {
             splashColor: Colors.white.withOpacity(0.5),
             child: Container(
               padding: padding ??
-                  const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+                 REdgeInsets.symmetric(horizontal: 8, vertical: 12),
               width: width,
               height: height,
               decoration: BoxDecoration(color: Colors.transparent),
@@ -45,7 +45,7 @@ class PrimaryActionButton extends StatelessWidget {
                     child: Text(
                       title,
                       style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                          fontSize: 18,
+                          fontSize: 18.sm,
                           color: AppColors.white,
                           fontWeight: FontWeight.w600),
                     ),

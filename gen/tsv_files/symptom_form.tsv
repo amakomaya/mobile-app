@@ -1,0 +1,26 @@
+	Key	Nepali
+label_headache	Having a little too much headache	धेरै टाउको दुख्नु 
+label_bleeding	Bleeding from vagina	पाठेघरबाट रगत बग्नु
+label_faint	Hands and feet tremble or faint	हात र खुट्टा काम्नु वा बेहोस हुनु
+label_fever	Fever	ज्वरो आउनु 
+label_abdominal_pain	Smelling water from vagina or lower abdominal pain	पाठेघरबाट पानी बग्नु वा तल्लो पेट दुख्नु 
+label_fever_degrees	Fever above 100.4 degrees	100.4 डिग्री भन्दा माथि ज्वरो आउनु 
+label_breathing	Difficulty in breathing	सास फेर्न गाह्रो हुनु
+label_cough_cold	Cough and cold	रुघाखोकी र चिसो लग्नु 
+label_eyes_blurred	Eyes blurred	आँखा धमिलो हुनु 
+label_month_of_pregnancy	Abdominal pain in the first month of pregnancy	गर्भावस्थाको पहिलो महिनामा पेट दुख्नु 
+label_labor_pain	Labor pain for more than 8 hours	८ घण्टाभन्दा बढी समयसम्म सुत्केरी व्यथा लाग्नु 
+label_cord_protrusion	First hand,leg or umbilical cord protrusion	पहिलो हात, खुट्टा वा गर्भनाल प्रोट्रुसन
+label_hands_feet	Hands and feet tremble or faint	हात र खुट्टा काम्नु वा बेहोस हुनु
+label_baby_born	A lot of bleeding before or after the baby was born	बच्चा जन्मनु अघि वा पछि धेरै रगत बग्नु 
+label_choose_heath_condition	Choose your health condition	आफ्नो स्वास्थ्य अवस्था चयन गर्नुहोस् 
+label_pregnancy	Pregnancy	गर्भावस्था
+label_delivery_labor	Delivery/Labor	प्रसुति / प्रसव व्यथा 
+label_postnatal	Postnatal	प्रसव पछि
+label_danger_signs	Danger Signs	खतरा संकेत
+label_write_symptoms	Write here if you have other symptoms	यदि अन्य लक्षणहरू छन् भने, लेख्नुहोस्
+label_comments	Comments	कमेन्टहरु 
+label_other_problems	Other Problems	अन्य समस्याहरू
+label_assessment	Assessment	मूल्याङ्कन
+label_history	History	पहिलेको विवरण 
+label_too_much_headeache	Severe headache	अलिकति धेरै टाउको दुख्ने

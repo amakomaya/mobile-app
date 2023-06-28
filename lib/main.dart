@@ -1,14 +1,18 @@
 import 'package:aamako_maya/src/core/theme/app_colors.dart';
 import 'package:aamako_maya/src/core/theme/custom_theme.dart';
-import 'package:aamako_maya/src/features/audio/repository/audio_repository.dart';
+import 'package:aamako_maya/src/features/ancs/cubit/ancs_info_cubit.dart';
 import 'package:aamako_maya/src/features/authentication/cubit/select_district_municipality_cubit.dart';
 import 'package:aamako_maya/src/features/authentication/cubit/toggle_district_municipality.dart';
 import 'package:aamako_maya/src/features/delivery/cubit/delivery_cubit.dart';
+import 'package:aamako_maya/src/features/delivery/cubit/delivery_info_cubit.dart';
 import 'package:aamako_maya/src/features/faqs/cubit/faqs_cubit.dart';
 import 'package:aamako_maya/src/features/labtest/cubit/labtest_cubit.dart';
+import 'package:aamako_maya/src/features/labtest/cubit/labtest_info_cubit.dart';
 import 'package:aamako_maya/src/features/medication/cubit/medication_cubit.dart';
+import 'package:aamako_maya/src/features/medication/cubit/medication_info_cubit.dart';
 import 'package:aamako_maya/src/features/onboarding/bloc/onboard_bloc.dart';
 import 'package:aamako_maya/src/features/pnc/cubit/pnc_cubit.dart';
+import 'package:aamako_maya/src/features/pnc/cubit/pnc_info_cubit.dart';
 import 'package:aamako_maya/src/features/splash/splash_page.dart';
 import 'package:aamako_maya/src/features/symptoms/cubit/symptoms_cubit.dart';
 import 'package:aamako_maya/src/features/video/cubit/video_cubit.dart';
@@ -24,27 +28,24 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'injection_container.dart';
+import 'injection_container.dart' as di;
 import 'src/features/ancs/cubit/ancs_cubit.dart';
 import 'src/features/audio/cubit/audio_cubit.dart';
 import 'src/features/authentication/authentication_cubit/auth_cubit.dart';
 import 'src/features/authentication/authentication_cubit/logout_cubit.dart';
 import 'src/features/authentication/cubit/district_municipality_cubit.dart';
 import 'src/features/authentication/drawer_cubit/drawer_cubit.dart';
-import 'src/features/authentication/model/user_model.dart';
 import 'src/features/bottom_nav/cubit/cubit/navigation_index_cubit.dart';
 import 'src/features/fetch user data/cubit/get_user_cubit.dart';
 import 'src/features/home/cubit/newsfeed_cubit.dart';
-import 'injection_container.dart' as di;
 
 late Box box;
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // await FlutterDownloader.initialize(debug: true, ignoreSsl: true);
-
-  //await for localization
-  await EasyLocalization.ensureInitialized();
-
   await Hive.initFlutter();
+  await EasyLocalization.ensureInitialized();
 
   //initialize get_it
   di.init();
@@ -74,11 +75,16 @@ Future<void> main() async {
                   BlocProvider(create: (context) => NavigationIndexCubit()),
                   BlocProvider(create: (context) => sl<SymptomsCubit>()),
                   BlocProvider(create: (context) => sl<DeliverCubit>()),
+                  BlocProvider(create: (context) => sl<DeliverInfoCubit>()),
                   BlocProvider(create: (context) => sl<MedicationCubit>()),
+                  BlocProvider(create: (context) => sl<MedicationInfoCubit>()),
                   BlocProvider(create: (context) => sl<LabtestCubit>()),
+                  BlocProvider(create: (context) => sl<LabtestInfoCubit>()),
                   BlocProvider(create: (context) => sl<AncsCubit>()),
+                  BlocProvider(create: (context) => sl<AncsInfoCubit>()),
                   BlocProvider(create: (context) => sl<AuthenticationCubit>()),
                   BlocProvider(create: (context) => sl<PncsCubit>()),
+                  BlocProvider(create: (context) => sl<PncsInfoCubit>()),
                   BlocProvider(create: (context) => sl<NewsfeedCubit>()),
                   BlocProvider(create: (context) => sl<GetUserCubit>()),
                   BlocProvider(create: (context) => sl<FaqsCubit>()),

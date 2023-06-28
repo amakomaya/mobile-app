@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MySquare extends StatefulWidget {
@@ -16,7 +14,7 @@ class _MySquareState extends State<MySquare> {
     return ListView(
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 18, right: 18),
+          padding: REdgeInsets.only(left: 18, right: 18),
           child: Container(
             height: 200.h,
             color: Colors.purpleAccent,

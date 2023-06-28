@@ -1,4 +1,4 @@
-package com.example.aamako_maya
+package com.amakomaya_version2
 
 import io.flutter.embedding.android.FlutterActivity
 

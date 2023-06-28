@@ -16,6 +16,10 @@ For help getting started with Flutter, view our
 samples, guidance on mobile development, and a full API reference.
 
 
-#To generate localization files
-
+### To generate and update locale file and translations
+Export each sheet to tsv and put them inside gen/tsv_files
+then run:
+dart run gen/generate.dart
+flutter gen-l10n
+flutter pub get
 flutter pub run easy_localization:generate -S assets/l10n -f keys -O lib/l10n -o locale_keys.g.dart

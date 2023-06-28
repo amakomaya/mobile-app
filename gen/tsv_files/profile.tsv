@@ -1,0 +1,23 @@
+Key	English	Nepali
+label_edit_personal_details	Edit your personal details	आफ्नो व्यक्तिगत विवरण परिवर्तन गर्नुहोस्
+label_choose_blood_group	Choose your Blood Group	आफ्नो रक्त समूह चयन गर्नुहोस्
+label_other_info	Other Informations	अन्य जानकारी
+label_have_disease_prev	Do you have disease previously?	के तपाईलाई पहिले कुनै रोग थियो?
+warning_msg_disease_prev_no_empty	Disease previously can not be Empty	पहिले रोग खाली हुन हुदैँन
+label_no_of_pregnant_before	How many times you have been pregnant before this?	तपाईं यसअघि कति पटक गर्भवती हुनुभएको छ ?
+warning_msg_pregnant_before_no_empty	Pregnant period can not be Empty	गर्भवती अवधि खाली हुन हुदैँन
+label_height	Height (c.m)	उचाई (c.m)
+warning_msg_height_no_empty	Height can not be Empty	उचाई खाली हुन सक्दैन
+label_husband_name	Name of Husband	श्रीमानको नाम
+warning_msg_husband_name_no_empty	Name of husband can not be Empty	श्रीमानको नाम खाली हुन हुदैँन
+label_health_post	Name of Current Health post	हालको स्वास्थ्य चौकीको नाम
+warning_msg_health_post_no_empty	Current Health post can not be Empty	हालको स्वास्थ्य चौकी खाली हुन सक्दैन
+label_mode	Mode	मोड
+msg_updated_profile_success	Updated Profile Successfully	प्रोफाइल सफलतापूर्वक अपडेट गरियो
+label_cancel	Cancel	 रद्द गर्नुहोस्
+label_change	Change	परिवर्तन गर्नुहोस्
+label_select_blood_group	Select your blood group	आफ्नो रक्त समूह चयन गर्नुहोस्
+msg_update_success	Successfully Updated	सफलतापूर्वक अपडेट गरियो
+warning_msg_fill_all_field	Please fill all the forms field.	कृपया फारमका सबै फिल्डहरु भर्नुहोस्।
+warning_msg_pregnant_before_exceed	Pregnant Period times should not exceed 5 times	गर्भावस्था अवधि 5 पटक भन्दा बढी हुनु हुँदैन
+warning_msg_ward_no_exceed	Ward number should not exceed 33	वडा नम्बर ३३ भन्दा बढी हुनु हुँदैन

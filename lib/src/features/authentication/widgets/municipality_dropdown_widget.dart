@@ -1,185 +1,3 @@
-// //District Dropdown
-// import 'package:aamako_maya/src/core/widgets/textfield/primary_textfield.dart';
-// import 'package:aamako_maya/src/features/authentication/cubit/select_district_municipality_cubit.dart';
-// import 'package:flutter/cupertino.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-// import '../../../core/padding/padding.dart';
-// import '../../../core/theme/app_colors.dart';
-// import '../../../core/widgets/helper_widgets/shadow_container.dart';
-// import '../cubit/district_municipality_cubit.dart';
-// import '../cubit/toggle_district_municipality.dart';
-// import '../model/municipality_district_model.dart';
-
-// class MunicipalityDropdownListWidget extends StatefulWidget {
-//   final TextEditingController controller;
-//   final int municipalityId;
-//   const MunicipalityDropdownListWidget({Key? key,required this.municipalityId, required this.controller})
-//       : super(key: key);
-
-//   @override
-//   State<MunicipalityDropdownListWidget> createState() =>
-//       _MunicipalityDropdownListWidgetState();
-// }
-
-// class _MunicipalityDropdownListWidgetState
-//     extends State<MunicipalityDropdownListWidget> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Align(
-//       alignment: Alignment.centerLeft,
-//       child: BlocConsumer<DistrictFieldToggleCubit, int>(
-//         listener: (ctx, id) {},
-//         builder: (ctx, id) {
-//           return BlocConsumer<DistrictMunicipalityCubit,
-//               DistrictMunicipalityState>(
-//             listener: (context, state) {},
-//             builder: (context, state) {
-//               final List<MunicipalityModel> municipalityList =  (state is DistrictMuniciSuccess)? state
-//                   .municipalityModelList
-//                   .where((element) => int.parse(element.districtId!) == id)
-//                   .toList() :[];
-
-//               // if (widget.controller.text.trim().isNotEmpty) {
-
-//               //   final currentDistrict = municipalityList.firstWhere(
-//               //       (element) =>
-//               //           element.id!.toString().trim() == widget.controller.text.trim(),
-//               //       orElse: () => MunicipalityModel());
-
-//               //   widget.controller.text = currentDistrict.municipalityName ?? '';
-//               // }
-
-//               return BlocBuilder<SelectDistrictMunicipalityCubit,
-//                   SelectDistrictMunicipalityState>(
-//                 builder: (ctx, st) {
-//                   return PrimaryTextField(
-//                     controller: widget.controller,
-//                     labelText: "Municipality",
-//                     hintText: 'Select Your municipality',
-//                     suffix: Icons.arrow_drop_down,
-//                     readOnly: true,
-//                     onTap: () {
-//                       showDialog(
-//                           context: context,
-//                           builder: (BuildContext context) {
-//                             return ShadowContainer(
-//                                 margin: defaultPadding.copyWith(
-//                                     top: 27.h, bottom: 27.h),
-//                                 child: Column(
-//                                   children: [
-//                                     Align(
-//                                       alignment: Alignment.centerLeft,
-//                                       child: Padding(
-//                                         padding: defaultPadding.copyWith(
-//                                             top: 10.h, bottom: 10.h),
-//                                         child: Text(
-//                                           'Select your municipality',
-//                                           style: Theme.of(context)
-//                                               .textTheme
-//                                               .labelMedium
-//                                               ?.copyWith(
-//                                                   fontWeight: FontWeight.bold,
-//                                                   fontSize: 22.sm),
-//                                         ),
-//                                       ),
-//                                     ),
-//                                     Expanded(
-//                                       child: BlocBuilder<
-//                                           SelectDistrictMunicipalityCubit,
-//                                           SelectDistrictMunicipalityState>(
-//                                         builder:
-//                                             (selectionCon, selectionState) {
-//                                           return ListView.separated(
-//                                             shrinkWrap: true,
-//                                             padding: defaultPadding.copyWith(
-//                                                 top: 18, bottom: 18),
-//                                             itemBuilder: (ctx, ind) {
-//                                               return GestureDetector(
-//                                                   onTap: () {
-//                                                     print(municipalityList[
-//                                                                 ind].id.toString());
-
-//                                                     widget.controller
-//                                                         .text = (municipalityList[
-//                                                                 ind]
-//                                                             .municipalityName ??
-//                                                         '');
-//                                                     context
-//                                                         .read<
-//                                                             SelectDistrictMunicipalityCubit>()
-//                                                         .selectedDistrictMunicipality(
-//                                                             selectionState
-//                                                                 .district,
-//                                                             (municipalityList[
-//                                                                 ind]));
-//                                                     Navigator.pop(context);
-//                                                   },
-//                                                   child: Text(municipalityList[
-//                                                               ind]
-//                                                           .municipalityName ??
-//                                                       ''));
-//                                             },
-//                                             itemCount: municipalityList.length,
-//                                             separatorBuilder: (ctx, ind) {
-//                                               return Divider(
-//                                                 height: 30.h,
-//                                               );
-//                                             },
-//                                           );
-//                                         },
-//                                       ),
-//                                     ),
-//                                     Align(
-//                                         alignment: Alignment.centerRight,
-//                                         child: Padding(
-//                                           padding:
-//                                               const EdgeInsets.only(right: 8.0),
-//                                           child: TextButton(
-//                                             child: Text('Close'),
-//                                             onPressed: () {
-//                                               Navigator.of(context).pop();
-//                                             },
-//                                           ),
-//                                         )),
-//                                   ],
-//                                 ));
-//                           });
-//                     },
-//                   );
-//                   // return state.municipality == null
-//                   //     ? Text(
-//                   //         "Tap to select municipality",
-//                   //         style: Theme.of(context)
-//                   //             .textTheme
-//                   //             .headlineMedium
-//                   //             ?.copyWith(color: AppColors.primaryRed),
-//                   //       )
-//                   //     : RichText(
-//                   //         text: TextSpan(
-//                   //             text: "${state.municipality?.municipalityName}",
-//                   //             style: Theme.of(context).textTheme.labelMedium,
-//                   //             children: [
-//                   //             TextSpan(
-//                   //               text: " (Tap to change)",
-//                   //               style: Theme.of(context)
-//                   //                   .textTheme
-//                   //                   .headlineMedium
-//                   //                   ?.copyWith(color: AppColors.primaryRed),
-//                   //             )
-//                   //           ]));
-//                 },
-//               );
-//             },
-//           );
-//         },
-//       ),
-//     );
-//   }
-// }
-
 import 'dart:convert';
 
 import 'package:aamako_maya/l10n/locale_keys.g.dart';
@@ -201,6 +19,7 @@ class MunicipalityDropdownListWidget extends StatefulWidget {
   final int municipalityId;
   final TextEditingController retainId;
   final ValidatorFunc? validator;
+  final bool isEditable;
 
   const MunicipalityDropdownListWidget(
       {Key? key,
@@ -208,7 +27,8 @@ class MunicipalityDropdownListWidget extends StatefulWidget {
       required this.retainId,
       required this.validator,
       required this.districtId,
-      required this.controller})
+      required this.controller,
+      this.isEditable = true})
       : super(key: key);
 
   @override
@@ -220,6 +40,7 @@ class _MunicipalityDropdownListWidgetState
     extends State<MunicipalityDropdownListWidget> {
   List<MunicipalityModel> municipalities = [];
   List<MunicipalityModel> allMunicipalities = [];
+
   void getMunicipality() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final response = prefs.getString('municipality');
@@ -232,9 +53,7 @@ class _MunicipalityDropdownListWidgetState
           .where((element) =>
               int.parse(element.districtId!.toString()) == widget.districtId)
           .toList();
-
       municipalities = municipal;
-
       final current = municipalities.firstWhere(
           (element) => element.id == widget.municipalityId,
           orElse: () => MunicipalityModel());
@@ -262,11 +81,12 @@ class _MunicipalityDropdownListWidgetState
       },
       builder: (context, state) {
         return PrimaryTextField(
+          isEditable: widget.isEditable,
           validator: widget.validator,
           controller: widget.controller,
           readOnly: true,
-          labelText: LocaleKeys.municipality.tr(),
-          hintText: 'Select Your Municipality/VDC',
+          labelText: LocaleKeys.lable_municipality_vdc.tr(),
+          hintText: LocaleKeys.label_select_municipality.tr(),
           suffix: Icons.arrow_drop_down,
           onTap: () async {
             if (municipalities.isNotEmpty) {
@@ -284,7 +104,7 @@ class _MunicipalityDropdownListWidgetState
                                 padding: defaultPadding.copyWith(
                                     top: 10.h, bottom: 10.h),
                                 child: Text(
-                                  'Select your municipality',
+                                  LocaleKeys.label_select_municipality.tr(),
                                   style: Theme.of(context)
                                       .textTheme
                                       .labelMedium
@@ -302,12 +122,6 @@ class _MunicipalityDropdownListWidgetState
                               itemBuilder: (ctx, ind) {
                                 return GestureDetector(
                                     onTap: () async {
-                                      print('Municipality Name:' +
-                                          municipalities[ind]
-                                              .municipalityName
-                                              .toString());
-                                      print('Municipality ID:' +
-                                          municipalities[ind].id.toString());
                                       widget.controller.text =
                                           municipalities[ind]
                                                   .municipalityName ??
@@ -333,7 +147,7 @@ class _MunicipalityDropdownListWidgetState
                                 child: Padding(
                                   padding: const EdgeInsets.only(right: 8.0),
                                   child: TextButton(
-                                    child: const Text('Close'),
+                                    child: Text(LocaleKeys.label_close.tr()),
                                     onPressed: () {
                                       Navigator.of(context).pop();
                                     },

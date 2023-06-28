@@ -1,24 +1,20 @@
-class PregnancyModel {
-  String problem;
-  int id;
-  bool isSelected;
-  PregnancyModel(
-      {required this.id, required this.isSelected, required this.problem});
-}
-
-
 class DeliveryModel {
   String problem;
+  String problemNp;
+  String key;
   int id;
   bool isSelected;
+  bool selected;
   DeliveryModel(
-      {required this.id, required this.isSelected, required this.problem});
-}
+      {required this.id,
+        this.key = '',
+        required this.isSelected,
+        required this.problem,
+        required this.problemNp,
+        this.selected = false});
 
-class PostnatalModel{
-   String problem;
-  int id;
-  bool isSelected;
-  PostnatalModel(
-      {required this.id, required this.isSelected, required this.problem});
+  @override
+  String toString() {
+    return 'DeliveryModel(problem: $problem,problemNp: $problemNp, key: $key, id: $id, isSelected: $isSelected, selected: $selected)';
+  }
 }

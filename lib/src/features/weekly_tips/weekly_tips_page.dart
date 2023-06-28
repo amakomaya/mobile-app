@@ -1,3 +1,4 @@
+import 'package:aamako_maya/l10n/locale_keys.g.dart';
 import 'package:aamako_maya/src/core/connection_checker/network_connection.dart';
 import 'package:aamako_maya/src/core/padding/padding.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
@@ -10,9 +11,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../../injection_container.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/widgets/drawer/drawer_widget.dart';
@@ -26,27 +30,40 @@ class WeeklyTipsPage extends StatefulWidget {
 }
 
 class _WeeklyTipsPageState extends State<WeeklyTipsPage> {
-  @override
-  void initState() {
-    context.read<WeeklyTipsCubit>().getWeeklyTips(false);
-    super.initState();
+
+  checkInternet() async{
+    if (await sl<NetworkInfo>().isConnected) {
+      context.read<WeeklyTipsCubit>().getWeeklyTips(true);
+    } else {
+      context.read<WeeklyTipsCubit>().getWeeklyTips(false);
+      BotToast.showText(
+          text: LocaleKeys.no_internet_connection.tr());
+    }
   }
 
   @override
+  void initState() {
+    checkInternet();
+    super.initState();
+  }
+
+
+  @override
   Widget build(BuildContext context) {
+
     final theme = Theme.of(context);
+    final bool isEnglish =
+        EasyLocalization.of(context)?.currentLocale?.languageCode == 'en';
     return BlocConsumer<WeeklyTipsCubit, WeeklyTipsState>(
         builder: (ctx, state) {
       if (state is WeeklyTipsSucces) {
         final list = state.data;
-        final bool isEnglish =
-            EasyLocalization.of(context)?.currentLocale?.languageCode == 'en';
         return RefreshIndicator(
           onRefresh: () async {
             if (await sl<NetworkInfo>().isConnected) {
               context.read<WeeklyTipsCubit>().getWeeklyTips(true);
             } else {
-              BotToast.showText(text: 'No Internet Connection !');
+              BotToast.showText(text: LocaleKeys.no_internet_connection.tr());
             }
           },
           child: BlocBuilder<GetUserCubit, GetUserState>(
@@ -63,8 +80,7 @@ class _WeeklyTipsPageState extends State<WeeklyTipsPage> {
                     NepaliDateTime.now().month, NepaliDateTime.now().day);
                 int day = differenceInCalendarDays(later, earlier);
 
-                int weekId = day ~/ 7;
-
+                int weekId = (day % 365) ~/ 7;
                 _weeks =
                     state.data.firstWhere((element) => element.weekId == weekId,
                         orElse: () => WeeklyTips(
@@ -78,7 +94,6 @@ class _WeeklyTipsPageState extends State<WeeklyTipsPage> {
                               updatedAt: DateTime.now(),
                             ));
               }
-
               return SingleChildScrollView(
                 primary: true,
                 child: Column(
@@ -90,51 +105,53 @@ class _WeeklyTipsPageState extends State<WeeklyTipsPage> {
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          'This week tips',
-                          style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                            fontSize: 20
-                          ),
+                          LocaleKeys.label_this_week_tips.tr(),
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelMedium
+                              ?.copyWith(fontSize: 20),
                         ),
                       ),
                     ),
                     VerticalSpace(10.h),
                     ShadowContainer(
                       width: 380.w,
-                        radius: 30,
+                      radius: 30.r,
                       padding: defaultPadding.copyWith(top: 10.h, bottom: 20.h),
                       child: _weeks?.id != -1
                           ? Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                     isEnglish
                                         ? (_weeks?.titleEn ?? '')
                                         : (_weeks?.titleNp ?? ''),
                                     style: theme.textTheme.labelMedium),
-                                   Divider(
-                                      height: 15.w,
-                                      color: AppColors.accentGrey,
-                                    ),
-                                Html(data: _weeks?.descriptionEn)
+                                Divider(
+                                  height: 15.h,
+                                  color: AppColors.accentGrey,
+                                ),
+                                Html(data: _weeks?.descriptionEn ?? "")
                               ],
                             )
                           : Center(
                               child: Text(
-                                'No Tips Found!',
+                                LocaleKeys.msg_no_tips_found.tr(),
                                 style: Theme.of(context).textTheme.labelMedium,
                               ),
                             ),
                     ),
                     VerticalSpace(10.h),
-                     Padding(
+                    Padding(
                       padding: defaultPadding,
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          'Other week tips',
-                          style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                            fontSize: 20
-                          ),
+                          LocaleKeys.label_other_week_tips.tr(),
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelMedium
+                              ?.copyWith(fontSize: 20),
                         ),
                       ),
                     ),
@@ -148,8 +165,8 @@ class _WeeklyTipsPageState extends State<WeeklyTipsPage> {
                             children: [
                               VerticalSpace(20.h),
                               ShadowContainer(
-                                radius: 30,
-                                padding: EdgeInsets.symmetric(
+                                radius: 30.r,
+                                padding: REdgeInsets.symmetric(
                                     horizontal: 20.w, vertical: 20),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -160,7 +177,7 @@ class _WeeklyTipsPageState extends State<WeeklyTipsPage> {
                                             : (list[index].titleNp),
                                         style: theme.textTheme.labelMedium),
                                     Divider(
-                                      height: 15.w,
+                                      height: 15.h,
                                       color: AppColors.accentGrey,
                                     ),
                                     // Html(
@@ -194,7 +211,7 @@ class _WeeklyTipsPageState extends State<WeeklyTipsPage> {
                                                         '',
                                                 placeholder: (ctx, url) =>
                                                     Container(
-                                                  height: 100.h,
+                                                  height: 100.w,
                                                   width: 100.w,
                                                   color: AppColors.accentGrey,
                                                 ),
@@ -223,9 +240,9 @@ class _WeeklyTipsPageState extends State<WeeklyTipsPage> {
         return ShimmerLoading(boxHeight: 500.h, itemCount: 2);
       }
     }, listener: (state, cs) {
-      if (cs is WeeklyTipsSucces && cs.isRefreshed) {
-        BotToast.showText(text: 'Weekly Tips Successfully Refreshed');
-      }
+      // if (cs is WeeklyTipsSucces && cs.isRefreshed) {
+      //   BotToast.showText(text: LocaleKeys.msg_tips_fetch_success.tr());
+      // }
     });
   }
 }

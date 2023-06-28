@@ -1,5 +1,3 @@
-import 'package:aamako_maya/l10n/locale_keys.g.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -76,7 +74,7 @@ class PrimaryAppBar extends StatelessWidget {
                     GestureDetector(
                       onTap: (){
                          context.read<NavigationIndexCubit>().changeIndex(
-                                  titleNp: 'Siren',
+                                  titleNp: "आपतकालीन साइरन",
                                   index: 14,
                                   titleEn: 'Emergency Siren');
                               context
@@ -85,8 +83,8 @@ class PrimaryAppBar extends StatelessWidget {
                       },
                       child: ImageIcon(
                         const AssetImage("assets/images/siren.png"),
-                        size: 22.sm,
-                        
+                        size: 30.sm,
+
                       ),
                     ),
                     HorizSpace(20.w),

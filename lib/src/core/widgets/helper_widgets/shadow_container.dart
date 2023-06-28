@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../theme/app_colors.dart';
 
@@ -38,7 +39,7 @@ class ShadowContainer extends StatelessWidget {
           BoxDecoration(
               gradient: gradient,
               color: color ?? AppColors.white,
-              borderRadius: BorderRadius.circular(radius ?? 10),
+              borderRadius: BorderRadius.circular(radius ?? 10.r),
               boxShadow: [
                 BoxShadow(
                   blurRadius: 2,

@@ -3,13 +3,18 @@ import 'dart:async';
 import 'package:aamako_maya/src/core/cache/news_feed/cache_values.dart';
 import 'package:aamako_maya/src/core/cache/videos_cache/cache_values.dart';
 import 'package:aamako_maya/src/core/cache/weekly_cache/cache_values.dart';
+import 'package:aamako_maya/src/features/ancs/cubit/ancs_info_cubit.dart';
 import 'package:aamako_maya/src/features/authentication/authentication_cubit/auth_cubit.dart';
 import 'package:aamako_maya/src/features/authentication/authentication_repository/authentication_repo.dart';
 import 'package:aamako_maya/src/features/authentication/local_storage/authentication_local_storage.dart';
+import 'package:aamako_maya/src/features/delivery/cubit/delivery_info_cubit.dart';
+import 'package:aamako_maya/src/features/labtest/cubit/labtest_info_cubit.dart';
+import 'package:aamako_maya/src/features/labtest/cubit/toggle_page_view_cubit.dart';
+import 'package:aamako_maya/src/features/medication/cubit/medication_info_cubit.dart';
+import 'package:aamako_maya/src/features/pnc/cubit/pnc_info_cubit.dart';
 import 'package:aamako_maya/src/features/video/repository/videoes_repository.dart';
 import 'package:aamako_maya/src/features/weekly_tips/repository/weekly_tips_repository.dart';
 import 'package:dio/dio.dart';
-
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -40,13 +45,19 @@ Future<void> init() async {
   sl.registerFactory<AuthenticationCubit>(
       () => AuthenticationCubit(sl(), sl(), sl(), sl()));
 
-  sl.registerFactory<LoggedOutCubit>(() => LoggedOutCubit(sl()));
+  sl.registerFactory<LoggedOutCubit>(() => LoggedOutCubit(sl(),sl()));
 
   sl.registerFactory<DeliverCubit>(() => DeliverCubit(sl(), sl(), sl()));
+  sl.registerFactory<DeliverInfoCubit>(() => DeliverInfoCubit(sl(), sl(), sl()));
   sl.registerFactory<MedicationCubit>(() => MedicationCubit(sl(), sl(), sl()));
+  sl.registerFactory<MedicationInfoCubit>(() => MedicationInfoCubit(sl(), sl(), sl()));
   sl.registerFactory<LabtestCubit>(() => LabtestCubit(sl(), sl(), sl()));
+  sl.registerFactory<LabtestInfoCubit>(() => LabtestInfoCubit(sl(), sl(), sl()));
+  sl.registerFactory<TogglePageViewCubit>(() => TogglePageViewCubit());
   sl.registerFactory<AncsCubit>(() => AncsCubit(sl(), sl(), sl()));
+  sl.registerFactory<AncsInfoCubit>(() => AncsInfoCubit(sl(), sl(), sl()));
   sl.registerFactory<PncsCubit>(() => PncsCubit(sl(), sl(), sl()));
+  sl.registerFactory<PncsInfoCubit>(() => PncsInfoCubit(sl(), sl(), sl()));
   sl.registerFactory<NewsfeedCubit>(() => NewsfeedCubit(sl(), sl(), sl()));
   sl.registerFactory<FaqsCubit>(() => FaqsCubit(sl(), sl()));
   sl.registerFactory<AudioCubit>(() => AudioCubit(sl(), sl()));
@@ -57,7 +68,7 @@ Future<void> init() async {
   sl.registerFactory<VideoCubit>(() => VideoCubit(sl(), sl(), sl()));
   sl.registerFactory<DistrictMunicipalityCubit>(()=>DistrictMunicipalityCubit(sl(),sl()));
 
-  sl.registerFactory<GetUserCubit>(() => GetUserCubit(sl()));
+  sl.registerFactory<GetUserCubit>(() => GetUserCubit(sl(),sl(),sl()));
 
   //??Repositories ??//
   sl.registerLazySingleton<OnboardingRepo>(() => OnboardingRepo(sl()));

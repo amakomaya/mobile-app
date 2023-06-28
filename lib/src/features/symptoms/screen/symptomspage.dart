@@ -3,6 +3,7 @@ import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
 import 'package:aamako_maya/src/core/widgets/loading_shimmer/shimmer_loading.dart';
 import 'package:aamako_maya/src/features/symptoms/cubit/symptoms_cubit.dart';
 import 'package:bot_toast/bot_toast.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'package:flutter/material.dart';
 
@@ -10,6 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../injection_container.dart';
+import '../../../../l10n/locale_keys.g.dart';
 import '../../../core/connection_checker/network_connection.dart';
 import '../../../core/padding/padding.dart';
 import '../../../core/widgets/helper_widgets/shadow_container.dart';
@@ -25,6 +27,7 @@ class SymptomsPAge extends StatefulWidget {
 
 class _SymptomsPAgeState extends State<SymptomsPAge> {
   PageController controller = PageController();
+
   @override
   void initState() {
     context.read<SymptomsCubit>().getSymptoms(false);
@@ -49,11 +52,12 @@ class _SymptomsPAgeState extends State<SymptomsPAge> {
                 controller: controller,
                 onPageChanged: (value) {
                   context.read<SymptomsPagChangeCubit>().togglePage(value);
+                  if(value == 1){
+                    context.read<SymptomsCubit>().getSymptoms(false);
+                  }
                 },
                 children: [
-                  AssessmentWidget(
-                  controller: controller
-                 ),
+                  AssessmentWidget(),
                   BlocBuilder<SymptomsCubit, SymptomsState>(
                     builder: (context, state) {
                       if (state is SymptomsSuccess) {
@@ -63,7 +67,7 @@ class _SymptomsPAgeState extends State<SymptomsPAge> {
                               context.read<SymptomsCubit>().getSymptoms(true);
                             } else {
                               BotToast.showText(
-                                  text: 'No Internet Connection !');
+                                  text: LocaleKeys.no_internet_connection.tr());
                             }
                           },
                           child: ListView.separated(
@@ -72,155 +76,551 @@ class _SymptomsPAgeState extends State<SymptomsPAge> {
                               itemBuilder: ((context, index) {
                                 return Column(
                                   children: [
-                                    Text(" Report ${index + 1}".toUpperCase(),
+                                    Text(
+                                        " ${LocaleKeys.label_report.tr()}${index + 1}"
+                                            .toUpperCase(),
                                         style: theme.textTheme.labelMedium
                                             ?.copyWith(
                                                 color: AppColors.primaryRed)),
                                     VerticalSpace(10.h),
-                                    ShadowContainer(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          ListTile(
-                                            trailing: Text(
-                                              getYesNoValue(state
-                                                  .symptoms[index].vaginaBleed),
-                                            ),
-                                            leading: Text(
-                                                "Bleeding from the vagina",
-                                                style:
-                                                    theme.textTheme.labelSmall),
-                                          ),
-                                          ListTile(
-                                            trailing: Text(
-                                              getYesNoValue(state
-                                                  .symptoms[index].headache),
-                                            ),
-                                            leading: Text(
-                                                "Headache a little too much headache",
-                                                style:
-                                                    theme.textTheme.labelSmall),
-                                          ),
-                                          ListTile(
-                                            trailing: Text(
-                                              getYesNoValue(state
-                                                  .symptoms[index]
-                                                  .trembleOrFaint),
-                                            ),
-                                            leading: Text(
-                                                "Hands and feet tremable or faint",
-                                                style:
-                                                    theme.textTheme.labelSmall),
-                                          ),
-                                          ListTile(
-                                            trailing: Text(
-                                              getYesNoValue(state
-                                                  .symptoms[index].eyesBlur),
-                                            ),
-                                            leading: Text("Eyes blurred",
-                                                style:
-                                                    theme.textTheme.labelSmall),
-                                          ),
-                                          ListTile(
-                                            trailing: Text(
-                                              getYesNoValue(state
-                                                  .symptoms[index]
-                                                  .abdominalPain),
-                                            ),
-                                            leading: Text(
-                                                "Abominal pain in the first month of pregnancy",
-                                                style:
-                                                    theme.textTheme.labelSmall),
-                                          ),
-                                          ListTile(
-                                            trailing: Text(
-                                              getYesNoValue(state
-                                                  .symptoms[index]
-                                                  .feverHundred),
-                                            ),
-                                            leading: Text(
-                                                "Fever above 100.4 degree",
-                                                style:
-                                                    theme.textTheme.labelSmall),
-                                          ),
-                                          ListTile(
-                                            trailing: Text(
-                                              getYesNoValue(state
-                                                  .symptoms[index]
-                                                  .difficultBreathe),
-                                            ),
-                                            leading: Text(
-                                                "Difficulty in breathing",
-                                                style:
-                                                    theme.textTheme.labelSmall),
-                                          ),
-                                          ListTile(
-                                            trailing: Text(
-                                              getYesNoValue(state
-                                                  .symptoms[index]
-                                                  .coughAndCold),
-                                            ),
-                                            leading: Text("Cough and cold",
-                                                style:
-                                                    theme.textTheme.labelSmall),
-                                          ),
-                                          Padding(
-                                            padding: defaultPadding.copyWith(
-                                                bottom: 5),
-                                            child: Text(
-                                              'Other Problems:',
-                                              style: theme.textTheme.labelSmall
-                                                  ?.copyWith(
-                                                      fontWeight:
-                                                          FontWeight.w600),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: defaultPadding.copyWith(
-                                                bottom: 10),
-                                            child: Text(
-                                              state.symptoms[index]
-                                                      .otherProblems ??
-                                                  "",
-                                              style: theme.textTheme.labelSmall
-                                                  ?.copyWith(
-                                                      fontWeight:
-                                                          FontWeight.w600),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: defaultPadding.copyWith(
-                                              bottom: 10,
-                                            ),
-                                            child: RichText(
-                                                text: TextSpan(
-                                                    text: 'Comments: ',
+                                    state.symptoms[index].healthCondition == 3
+                                        ? ShadowContainer(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                ListTile(
+                                                  trailing: Text(
+                                                    LocaleKeys
+                                                        .label_postnatal
+                                                        .tr(),
+                                                  ),
+                                                  leading: Text(
+                                                      "Health Condition",
+                                                      style: theme.textTheme
+                                                          .labelSmall),
+                                                ),
+                                                ListTile(
+                                                  trailing: Text(
+                                                    getYesNoValue(state
+                                                        .symptoms[index]
+                                                        .headache),
+                                                  ),
+                                                  leading: Text(
+                                                      LocaleKeys.label_headache
+                                                          .tr(),
+                                                      style: theme.textTheme
+                                                          .labelSmall),
+                                                ),
+                                                ListTile(
+                                                  trailing: Text(
+                                                    getYesNoValue(state
+                                                        .symptoms[index]
+                                                        .vaginaBleed),
+                                                  ),
+                                                  leading: Text(
+                                                      LocaleKeys.label_bleeding
+                                                          .tr(),
+                                                      style: theme.textTheme
+                                                          .labelSmall),
+                                                ),
+                                                ListTile(
+                                                  trailing: Text(
+                                                    getYesNoValue(state
+                                                        .symptoms[index]
+                                                        .trembleOrFaint),
+                                                  ),
+                                                  leading: Text(
+                                                      LocaleKeys.label_faint
+                                                          .tr(),
+                                                      style: theme.textTheme
+                                                          .labelSmall),
+                                                ),
+                                                ListTile(
+                                                  trailing: Text(
+                                                    getYesNoValue(state
+                                                        .symptoms[index].fever),
+                                                  ),
+                                                  leading: Text(
+                                                      LocaleKeys.label_fever
+                                                          .tr(),
+                                                      style: theme.textTheme
+                                                          .labelSmall),
+                                                ),
+                                                ListTile(
+                                                  trailing: Text(
+                                                    getYesNoValue(state
+                                                        .symptoms[index]
+                                                        .lowerAbdominalPain),
+                                                  ),
+                                                  leading: Text(
+                                                      LocaleKeys
+                                                          .label_abdominal_pain
+                                                          .tr(),
+                                                      style: theme.textTheme
+                                                          .labelSmall),
+                                                ),
+                                                ListTile(
+                                                  trailing: Text(
+                                                    getYesNoValue(state
+                                                        .symptoms[index]
+                                                        .feverDegree),
+                                                  ),
+                                                  leading: Text(
+                                                      LocaleKeys
+                                                          .label_fever_degrees
+                                                          .tr(),
+                                                      style: theme.textTheme
+                                                          .labelSmall),
+                                                ),
+                                                ListTile(
+                                                  trailing: Text(
+                                                    getYesNoValue(state
+                                                        .symptoms[index]
+                                                        .difficultBreathe),
+                                                  ),
+                                                  leading: Text(
+                                                      LocaleKeys.label_breathing
+                                                          .tr(),
+                                                      style: theme.textTheme
+                                                          .labelSmall),
+                                                ),
+                                                ListTile(
+                                                  trailing: Text(
+                                                    getYesNoValue(state
+                                                        .symptoms[index]
+                                                        .coughAndCold),
+                                                  ),
+                                                  leading: Text(
+                                                      LocaleKeys
+                                                          .label_cough_cold
+                                                          .tr(),
+                                                      style: theme.textTheme
+                                                          .labelSmall),
+                                                ),
+                                                Padding(
+                                                  padding: defaultPadding
+                                                      .copyWith(bottom: 5),
+                                                  child: Text(
+                                                    LocaleKeys
+                                                        .label_other_problems
+                                                        .tr(),
                                                     style: theme
                                                         .textTheme.labelSmall
                                                         ?.copyWith(
-                                                            fontSize: 14,
                                                             fontWeight:
                                                                 FontWeight
-                                                                    .w400),
-                                                    children: [
-                                                  TextSpan(
-                                                    text: state.symptoms[index]
-                                                            .comments ??
-                                                        '',
+                                                                    .w600),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: defaultPadding
+                                                      .copyWith(bottom: 10),
+                                                  child: Text(
+                                                    state.symptoms[index]
+                                                            .otherProblems ??
+                                                        " N/A",
                                                     style: theme
                                                         .textTheme.labelSmall
                                                         ?.copyWith(
-                                                            fontSize: 14,
                                                             fontWeight:
                                                                 FontWeight
-                                                                    .w400),
-                                                  )
-                                                ])),
+                                                                    .w600),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      defaultPadding.copyWith(
+                                                    bottom: 10,
+                                                  ),
+                                                  child: RichText(
+                                                      text: TextSpan(
+                                                          text: "${LocaleKeys
+                                                              .label_comments
+                                                              .tr()} :",
+                                                          style: theme.textTheme
+                                                              .labelSmall
+                                                              ?.copyWith(
+                                                                  fontSize: 14,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400),
+                                                          children: [
+                                                        TextSpan(
+                                                          text: state
+                                                                  .symptoms[
+                                                                      index]
+                                                                  .comments ??
+                                                              ' N/A',
+                                                          style: theme.textTheme
+                                                              .labelSmall
+                                                              ?.copyWith(
+                                                                  fontSize: 14,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400),
+                                                        )
+                                                      ])),
+                                                )
+                                              ],
+                                            ),
                                           )
-                                        ],
-                                      ),
-                                    )
+                                        : state.symptoms[index]
+                                                    .healthCondition ==
+                                                1
+                                            ? ShadowContainer(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    ListTile(
+                                                      trailing: Text(
+                                                          LocaleKeys
+                                                              .label_pregnancy
+                                                              .tr()
+                                                      ),
+                                                      leading: Text(
+                                                          "Health Condition",
+                                                          style: theme.textTheme
+                                                              .labelSmall),
+                                                    ),
+                                                    ListTile(
+                                                      trailing: Text(
+                                                        getYesNoValue(state
+                                                            .symptoms[index]
+                                                            .headache),
+                                                      ),
+                                                      leading: Text(
+                                                          LocaleKeys
+                                                              .label_headache
+                                                              .tr(),
+                                                          style: theme.textTheme
+                                                              .labelSmall),
+                                                    ),
+                                                    ListTile(
+                                                      trailing: Text(
+                                                        getYesNoValue(state
+                                                            .symptoms[index]
+                                                            .vaginaBleed),
+                                                      ),
+                                                      leading: Text(
+                                                          LocaleKeys
+                                                              .label_bleeding
+                                                              .tr(),
+                                                          style: theme.textTheme
+                                                              .labelSmall),
+                                                    ),
+                                                    ListTile(
+                                                      trailing: Text(
+                                                        getYesNoValue(state
+                                                            .symptoms[index]
+                                                            .trembleOrFaint),
+                                                      ),
+                                                      leading: Text(
+                                                          LocaleKeys.label_faint
+                                                              .tr(),
+                                                          style: theme.textTheme
+                                                              .labelSmall),
+                                                    ),
+                                                    ListTile(
+                                                      trailing: Text(
+                                                        getYesNoValue(state
+                                                            .symptoms[index]
+                                                            .eyesBlur),
+                                                      ),
+                                                      leading: Text(
+                                                          LocaleKeys.label_eyes_blurred
+                                                              .tr(),
+                                                          style: theme.textTheme
+                                                              .labelSmall),
+                                                    ),
+                                                    ListTile(
+                                                      trailing: Text(
+                                                        getYesNoValue(state
+                                                            .symptoms[index]
+                                                            .abdominalPain),
+                                                      ),
+                                                      leading: Text(
+                                                          LocaleKeys
+                                                              .label_month_of_pregnancy
+                                                              .tr(),
+                                                          style: theme.textTheme
+                                                              .labelSmall),
+                                                    ),
+                                                    ListTile(
+                                                      trailing: Text(
+                                                        getYesNoValue(state
+                                                            .symptoms[index]
+                                                            .feverDegree),
+                                                      ),
+                                                      leading: Text(
+                                                          LocaleKeys
+                                                              .label_fever_degrees
+                                                              .tr(),
+                                                          style: theme.textTheme
+                                                              .labelSmall),
+                                                    ),
+                                                    ListTile(
+                                                      trailing: Text(
+                                                        getYesNoValue(state
+                                                            .symptoms[index]
+                                                            .difficultBreathe),
+                                                      ),
+                                                      leading: Text(
+                                                          LocaleKeys
+                                                              .label_breathing
+                                                              .tr(),
+                                                          style: theme.textTheme
+                                                              .labelSmall),
+                                                    ),
+                                                    ListTile(
+                                                      trailing: Text(
+                                                        getYesNoValue(state
+                                                            .symptoms[index]
+                                                            .coughAndCold),
+                                                      ),
+                                                      leading: Text(
+                                                          LocaleKeys
+                                                              .label_cough_cold
+                                                              .tr(),
+                                                          style: theme.textTheme
+                                                              .labelSmall),
+                                                    ),
+                                                    Padding(
+                                                      padding: defaultPadding
+                                                          .copyWith(bottom: 5),
+                                                      child: Text(
+                                                        LocaleKeys
+                                                            .label_other_problems
+                                                            .tr(),
+                                                        style: theme.textTheme
+                                                            .labelSmall
+                                                            ?.copyWith(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600),
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding: defaultPadding
+                                                          .copyWith(bottom: 10),
+                                                      child: Text(
+                                                        state.symptoms[index]
+                                                                .otherProblems ??
+                                                            " N/A",
+                                                        style: theme.textTheme
+                                                            .labelSmall
+                                                            ?.copyWith(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600),
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding: defaultPadding
+                                                          .copyWith(
+                                                        bottom: 10,
+                                                      ),
+                                                      child: RichText(
+                                                          text: TextSpan(
+                                                              text: "${LocaleKeys
+                                                                  .label_comments
+                                                                  .tr()} :",
+                                                              style: theme
+                                                                  .textTheme
+                                                                  .labelSmall
+                                                                  ?.copyWith(
+                                                                      fontSize:
+                                                                          14,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w400),
+                                                              children: [
+                                                            TextSpan(
+                                                              text: state
+                                                                      .symptoms[
+                                                                          index]
+                                                                      .comments ??
+                                                                  ' N/A',
+                                                              style: theme
+                                                                  .textTheme
+                                                                  .labelSmall
+                                                                  ?.copyWith(
+                                                                      fontSize:
+                                                                          14,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w400),
+                                                            )
+                                                          ])),
+                                                    )
+                                                  ],
+                                                ),
+                                              )
+                                            : ShadowContainer(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    ListTile(
+                                                      trailing: Text(
+                                                        LocaleKeys
+                                                            .label_delivery_labor
+                                                                    .tr()
+                                                        ,
+                                                      ),
+                                                      leading: Text(
+                                                          "Health Condition",
+                                                          style: theme.textTheme
+                                                              .labelSmall),
+                                                    ),
+                                                    ListTile(
+                                                      trailing: Text(
+                                                        getYesNoValue(state
+                                                            .symptoms[index]
+                                                            .laborPain),
+                                                      ),
+                                                      leading: Text(
+                                                          LocaleKeys
+                                                              .label_labor_pain
+                                                              .tr(),
+                                                          style: theme.textTheme
+                                                              .labelSmall),
+                                                    ),
+                                                    ListTile(
+                                                      trailing: Text(
+                                                        getYesNoValue(state
+                                                            .symptoms[index]
+                                                            .cordProtrusion),
+                                                      ),
+                                                      leading: Text(
+                                                          LocaleKeys
+                                                              .label_cord_protrusion
+                                                              .tr(),
+                                                          style: theme.textTheme
+                                                              .labelSmall),
+                                                    ),
+                                                    ListTile(
+                                                      trailing: Text(
+                                                        getYesNoValue(state
+                                                            .symptoms[index]
+                                                            .trembleOrFaint),
+                                                      ),
+                                                      leading: Text(
+                                                          LocaleKeys.label_faint
+                                                              .tr(),
+                                                          style: theme.textTheme
+                                                              .labelSmall),
+                                                    ),
+                                                    ListTile(
+                                                      trailing: Text(
+                                                        getYesNoValue(state
+                                                            .symptoms[index]
+                                                            .excessiveBleedingBirth),
+                                                      ),
+                                                      leading: Text(
+                                                          LocaleKeys.label_baby_born
+                                                              .tr(),
+                                                          style: theme.textTheme
+                                                              .labelSmall),
+                                                    ),
+                                                    ListTile(
+                                                      trailing: Text(
+                                                        getYesNoValue(state
+                                                            .symptoms[index]
+                                                            .difficultBreathe),
+                                                      ),
+                                                      leading: Text(
+                                                          LocaleKeys
+                                                              .label_breathing
+                                                              .tr(),
+                                                          style: theme.textTheme
+                                                              .labelSmall),
+                                                    ),
+                                                    ListTile(
+                                                      trailing: Text(
+                                                        getYesNoValue(state
+                                                            .symptoms[index]
+                                                            .coughAndCold),
+                                                      ),
+                                                      leading: Text(
+                                                          LocaleKeys
+                                                              .label_cough_cold
+                                                              .tr(),
+                                                          style: theme.textTheme
+                                                              .labelSmall),
+                                                    ),
+                                                    Padding(
+                                                      padding: defaultPadding
+                                                          .copyWith(bottom: 5),
+                                                      child: Text(
+                                                        LocaleKeys
+                                                            .label_other_problems
+                                                            .tr(),
+                                                        style: theme.textTheme
+                                                            .labelSmall
+                                                            ?.copyWith(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600),
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding: defaultPadding
+                                                          .copyWith(bottom: 10),
+                                                      child: Text(
+                                                        state.symptoms[index]
+                                                                .otherProblems ??
+                                                            " N/A",
+                                                        style: theme.textTheme
+                                                            .labelSmall
+                                                            ?.copyWith(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600),
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding: defaultPadding
+                                                          .copyWith(
+                                                        bottom: 10,
+                                                      ),
+                                                      child: RichText(
+                                                          text: TextSpan(
+                                                              text: "${LocaleKeys
+                                                                  .label_comments
+                                                                  .tr()} :",
+                                                              style: theme
+                                                                  .textTheme
+                                                                  .labelSmall
+                                                                  ?.copyWith(
+                                                                      fontSize:
+                                                                          14,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w400),
+                                                              children: [
+                                                            TextSpan(
+                                                              text: state
+                                                                      .symptoms[
+                                                                          index]
+                                                                      .comments ??
+                                                                  ' N/A',
+                                                              style: theme
+                                                                  .textTheme
+                                                                  .labelSmall
+                                                                  ?.copyWith(
+                                                                      fontSize:
+                                                                          14,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w400),
+                                                            )
+                                                          ])),
+                                                    )
+                                                  ],
+                                                ),
+                                              )
                                   ],
                                 );
                               }),
@@ -263,7 +663,9 @@ class _SymptomsPAgeState extends State<SymptomsPAge> {
                                       }
                                     },
                                     child: Text(
-                                      'Assessment'.toUpperCase(),
+                                      LocaleKeys.label_assessment
+                                          .tr()
+                                          .toUpperCase(),
                                       style: theme.textTheme.labelSmall
                                           ?.copyWith(
                                               color: state == 0
@@ -283,9 +685,12 @@ class _SymptomsPAgeState extends State<SymptomsPAge> {
                                                 milliseconds: 600),
                                             curve: Curves.easeIn);
                                       }
+                                      context.read<SymptomsCubit>().getSymptoms(false);
                                     },
                                     child: Text(
-                                      'History'.toUpperCase(),
+                                      LocaleKeys.label_history
+                                          .tr()
+                                          .toUpperCase(),
                                       style: theme.textTheme.labelSmall
                                           ?.copyWith(
                                               color: state == 1
@@ -308,9 +713,9 @@ class _SymptomsPAgeState extends State<SymptomsPAge> {
 
   String getYesNoValue(int? value) {
     if (value == 0) {
-      return "No";
+      return LocaleKeys.label_no.tr();
     } else {
-      return "Yes";
+      return LocaleKeys.label_yes.tr();
     }
   }
 }

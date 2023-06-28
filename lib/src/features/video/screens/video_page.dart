@@ -12,14 +12,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:video_player/video_player.dart';
-import 'package:visibility_detector/visibility_detector.dart';
-
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../injection_container.dart';
+import '../../../../l10n/locale_keys.g.dart';
 import '../../../core/connection_checker/network_connection.dart';
 
 class VideoPage extends StatefulWidget {
@@ -30,47 +29,62 @@ class VideoPage extends StatefulWidget {
 }
 
 class _VideoPageState extends State<VideoPage> {
+
+  checkInternet()async{
+    if (await sl<NetworkInfo>().isConnected) {
+      context.read<VideoCubit>().getVideos(true);
+    } else {
+      context.read<VideoCubit>().getVideos(false);
+      BotToast.showText(
+          text: LocaleKeys.no_internet_connection.tr());
+    }
+  }
+
   @override
   void initState() {
-    context.read<VideoCubit>().getVideos(false);
+    checkInternet();
     super.initState();
   }
+
+
 
   @override
   void dispose() {
     super.dispose();
   }
 
+
   @override
   Widget build(BuildContext context) {
+
     return BlocConsumer<VideoCubit, VideoState>(
       listener: (context, state) {
-        if (state is VideoSuccessState && state.isRefreshed) {
-          BotToast.showText(text: 'Videos successfully refreshed');
-        }
+        // if (state is VideoSuccessState && state.isRefreshed) {
+        //   BotToast.showText(text: LocaleKeys.msg_video_fetch_success.tr());
+        // }
       },
-      builder: (context, state) {
-        if (state is VideoLoadingState) {
+      builder: (ct, st) {
+        if (st is VideoLoadingState) {
           return ShimmerLoading(boxHeight: 200.h, itemCount: 4);
-        } else if (state is VideoSuccessState) {
+        } else if (st is VideoSuccessState) {
           final bool isEnglish =
               EasyLocalization.of(context)?.currentLocale?.languageCode == 'en';
-
-          return VideoListPage(
-            isEnglish: isEnglish,
-            list: state.data,
-          );
+              return VideoListPage(
+                isEnglish: isEnglish,
+                list: st.data,
+              );
         } else {
           return Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text("Something Went Wrong!"),
+              Text(LocaleKeys.error_msg_someting_went_wrong.tr()),
               IconButton(
                   onPressed: () async {
                     if (await sl<NetworkInfo>().isConnected) {
                       context.read<VideoCubit>().getVideos(true);
                     } else {
-                      BotToast.showText(text: 'No Internet Connection !');
+                      BotToast.showText(
+                          text: LocaleKeys.no_internet_connection.tr());
                     }
                   },
                   icon: Icon(
@@ -90,6 +104,7 @@ class VideoListPage extends StatefulWidget {
   // final List videoPlayerController;
   final List<VideoModel> list;
   final bool isEnglish;
+
   const VideoListPage({
     Key? key,
     required this.list,
@@ -118,7 +133,7 @@ class _VideoListPageState extends State<VideoListPage> {
         if (await sl<NetworkInfo>().isConnected) {
           context.read<VideoCubit>().getVideos(true);
         } else {
-          BotToast.showText(text: 'No Internet Connection !');
+          BotToast.showText(text: LocaleKeys.no_internet_connection.tr());
         }
       },
       child: ListView.separated(
@@ -135,20 +150,20 @@ class _VideoListPageState extends State<VideoListPage> {
                           widget.list, widget.list[index], index)));
                 },
                 child: ShadowContainer(
-                  padding: const EdgeInsets.all(10),
+                  padding: REdgeInsets.all(10),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(
                           width: 100.w,
-                          height: 100.h,
+                          height: 100.w,
                           child: Stack(
                             children: [
                               CachedNetworkImage(
                                 fit: BoxFit.cover,
                                 imageUrl: widget.list[index].thumbnail,
                                 placeholder: (ctx, url) => Container(
-                                  height: 100.h,
+                                  height: 100.w,
                                   width: 100.w,
                                   color: AppColors.accentGrey,
                                 ),

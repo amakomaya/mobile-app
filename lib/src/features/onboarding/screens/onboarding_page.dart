@@ -1,12 +1,15 @@
+import 'package:aamako_maya/l10n/locale_keys.g.dart';
 import 'package:aamako_maya/src/core/app_assets/app_assets.dart';
 import 'package:aamako_maya/src/core/theme/app_colors.dart';
 import 'package:aamako_maya/src/core/widgets/buttons/primary_action_button.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
 import 'package:aamako_maya/src/features/authentication/screens/login/login_page.dart';
 import 'package:aamako_maya/src/features/onboarding/bloc/onboard_bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({Key? key}) : super(key: key);
@@ -46,7 +49,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(left: 18.0),
+                            padding: REdgeInsets.only(left: 18.0),
                             child: Image.asset(
                               AppAssets.logo,
                               height: 197.h,
@@ -63,13 +66,13 @@ class _OnboardingPageState extends State<OnboardingPage> {
                               height: 43.h,
                               width: 104.w,
                               decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(50),
-                                      bottomLeft: Radius.circular(50)),
+                                  borderRadius:  BorderRadius.only(
+                                      topLeft: Radius.circular(50.r),
+                                      bottomLeft: Radius.circular(50.r)),
                                   color: AppColors.primaryRed.withOpacity(0.2)),
                               child: Center(
                                 child: Text(
-                                  'SKIP',
+                                 LocaleKeys.label_skip.tr(),
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyMedium!
@@ -89,7 +92,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                               itemCount: _onboardList.length,
                               itemBuilder: (context, index) {
                                 return Padding(
-                                  padding: const EdgeInsets.symmetric(
+                                  padding:REdgeInsets.symmetric(
                                       horizontal: 18.0, vertical: 10),
                                   child: Column(
                                     children: [
@@ -137,7 +140,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                                   scrollDirection: Axis.horizontal,
                                   itemBuilder: (context, index) {
                                     return Container(
-                                      margin: const EdgeInsets.only(right: 7),
+                                      margin: REdgeInsets.only(right: 7),
                                       height: 8.h,
                                       width: 8.h,
                                       decoration: BoxDecoration(
@@ -158,8 +161,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
                               width: 185.w,
                               height: 50.h,
                               title: value == _onboardList.length - 1
-                                  ? 'Continue'
-                                  : 'Next',
+                                  ? LocaleKeys.label_continue.tr()
+                                  : LocaleKeys.label_next.tr(),
                               onpress: value == _onboardList.length - 1
                                   ? () => Navigator.of(context).push(
                                         MaterialPageRoute(
@@ -167,7 +170,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                                         ),
                                       )
                                   : () => _controller.nextPage(
-                                        duration: const Duration(seconds: 2),
+                                        duration: const Duration(seconds: 1),
                                         curve: Curves.decelerate,
                                       ),
                             );

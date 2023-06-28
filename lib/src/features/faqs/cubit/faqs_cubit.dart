@@ -5,7 +5,6 @@ import 'package:aamako_maya/src/features/faqs/model/faqs_model.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FaqsCubit extends Cubit<FaqsState> {

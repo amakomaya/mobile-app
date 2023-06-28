@@ -12,19 +12,14 @@ import 'package:aamako_maya/src/features/medication/screen/medicationpage.dart';
 import 'package:aamako_maya/src/features/pnc/screens/pnc_page.dart';
 import 'package:aamako_maya/src/features/qrcode/qr.dart';
 import 'package:aamako_maya/src/features/video/screens/video_page.dart';
-import 'package:bot_toast/bot_toast.dart';
 import 'package:easy_localization/easy_localization.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hive/hive.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../l10n/locale_keys.g.dart';
-import '../../core/strings/app_strings.dart';
-import '../../core/widgets/buttons/localization_button.dart';
 import '../../core/widgets/drawer/drawer_widget.dart';
-import '../audio/cubit/audio_cubit.dart';
 import '../audio/screens/audio_page.dart';
 import '../authentication/drawer_cubit/drawer_cubit.dart';
 import '../card/card_page.dart';
@@ -33,8 +28,6 @@ import '../home/screens/homepage.dart';
 import '../shop/shop_page.dart';
 import '../siren/siren_page.dart';
 import '../symptoms/screen/symptomspage.dart';
-import '../video/cubit/video_cubit.dart';
-import '../weekly_tips/cubit/weekly_tips_cubit.dart';
 import '../weekly_tips/weekly_tips_page.dart';
 
 class CustomBottomNavigation extends StatefulWidget {
@@ -45,7 +38,14 @@ class CustomBottomNavigation extends StatefulWidget {
 }
 
 class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
+
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,12 +88,11 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                                     .read<NavigationIndexCubit>()
                                     .changeIndex(
                                         index: 0,
-                                        titleEn: 'Home',
-                                        titleNp: AppStrings.home);
+                                        titleEn: "Home",
+                                        titleNp: "होम");
                                 context
                                     .read<DrawerCubit>()
                                     .checkDrawerSelection(0);
-                                context.read<GetUserCubit>().getUserFromLocal();
                               },
                             ),
                             label: ''),
@@ -105,13 +104,12 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                                     .read<NavigationIndexCubit>()
                                     .changeIndex(
                                         index: 1,
-                                        titleNp: AppStrings.audio,
+                                        titleNp: "अडियो",
                                         titleEn: "Audio");
 
                                 context
                                     .read<DrawerCubit>()
                                     .checkDrawerSelection(-1);
-                                context.read<GetUserCubit>().getUserFromLocal();
                               },
                               icon: ImageIcon(
                                 const AssetImage(
@@ -129,13 +127,13 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                                 context
                                     .read<NavigationIndexCubit>()
                                     .changeIndex(
-                                        titleNp: AppStrings.video,
+                                        titleNp: "भिडियो",
                                         index: 2,
                                         titleEn: 'Video');
                                 context
                                     .read<DrawerCubit>()
                                     .checkDrawerSelection(-1);
-                                context.read<GetUserCubit>().getUserFromLocal();
+
                               },
                               icon: ImageIcon(
                                 const AssetImage("assets/images/video.png"),
@@ -159,113 +157,16 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                                   context
                                       .read<NavigationIndexCubit>()
                                       .changeIndex(
-                                          titleNp: AppStrings.weeklytips,
+                                          titleNp: "साप्ताहिक सुझावहरू",
                                           index: 3,
                                           titleEn: 'Weekly Tips');
                                   context
                                       .read<DrawerCubit>()
                                       .checkDrawerSelection(-1);
-                                  context
-                                      .read<GetUserCubit>()
-                                      .getUserFromLocal();
                                 }),
                             label: ''),
                       ],
                     ));
-                return SizedBox(
-                  height: 60.h,
-                  child: BottomAppBar(
-                      color: Colors.white,
-                      elevation: 4,
-                      notchMargin: 7,
-                      shape: const CircularNotchedRectangle(),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          IconButton(
-                            iconSize: 35.sm,
-                            padding: const EdgeInsets.only(right: 28.0),
-                            icon: ImageIcon(
-                              const AssetImage("assets/images/home1.png"),
-                              color:
-                                  state.index == 0 ? Colors.red : Colors.grey,
-                            ),
-                            onPressed: () {
-                              context.read<NavigationIndexCubit>().changeIndex(
-                                  index: 0,
-                                  titleEn: 'Home',
-                                  titleNp: AppStrings.home);
-                              context
-                                  .read<DrawerCubit>()
-                                  .checkDrawerSelection(0);
-                            },
-                          ),
-                          IconButton(
-                            iconSize: 35.sm,
-                            padding: const EdgeInsets.only(right: 28.0),
-                            icon: ImageIcon(
-                              const AssetImage("assets/images/audio.png"),
-                              color:
-                                  state.index == 1 ? Colors.red : Colors.grey,
-                            ),
-                            onPressed: () {
-                              context.read<NavigationIndexCubit>().changeIndex(
-                                  index: 1,
-                                  titleNp: AppStrings.audio,
-                                  titleEn: "Audio");
-
-                              context
-                                  .read<DrawerCubit>()
-                                  .checkDrawerSelection(-1);
-                            },
-                          ),
-                          IconButton(
-                            iconSize: 35.sm,
-                            padding: const EdgeInsets.only(right: 28.0),
-                            icon: ImageIcon(
-                              const AssetImage("assets/images/video.png"),
-                              color:
-                                  state.index == 2 ? Colors.red : Colors.grey,
-                            ),
-                            onPressed: () {
-                              // context
-                              //     .read<VideoCubit>()
-                              //     .getVideos(isRefreshed: true);
-
-                              context.read<NavigationIndexCubit>().changeIndex(
-                                  titleNp: AppStrings.video,
-                                  index: 2,
-                                  titleEn: 'Video');
-                              context
-                                  .read<DrawerCubit>()
-                                  .checkDrawerSelection(-1);
-                            },
-                          ),
-                          IconButton(
-                            alignment: Alignment.center,
-                            iconSize: 35.sm,
-                            padding: const EdgeInsets.only(right: 28.0),
-                            icon: ImageIcon(
-                              const AssetImage(
-                                "assets/images/text.png",
-                              ),
-                              color:
-                                  state.index == 3 ? Colors.red : Colors.grey,
-                            ),
-                            onPressed: () {
-                              context.read<NavigationIndexCubit>().changeIndex(
-                                  titleNp: AppStrings.weeklytips,
-                                  index: 3,
-                                  titleEn: 'Weekly Tips');
-                              context
-                                  .read<DrawerCubit>()
-                                  .checkDrawerSelection(-1);
-                            },
-                          )
-                        ],
-                      )),
-                );
               },
             );
           }),
@@ -279,10 +180,10 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                   clipBehavior: Clip.none,
                   children: [
                     PrimaryAppBar(
-                      scaffoldKey: _scaffoldKey,
-                      title: isEnglish
-                          ? navState.appbarTitleEn
-                          : navState.appbarTitleNp,
+                          scaffoldKey: _scaffoldKey,
+                          title: isEnglish
+                              ? navState.appbarTitleEn
+                              : navState.appbarTitleNp,
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 70.h),
@@ -319,7 +220,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                           QrCode(),
 
                           //16
-                          Apointment()
+                          // Apointment()
                         ],
                       ),
                     ),
@@ -337,8 +238,9 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
                       state.index == 4 ? AppColors.primaryRed : Colors.white,
                   isExtended: true,
                   onPressed: () {
-                    context.read<NavigationIndexCubit>().changeIndex(
-                        index: 4, titleNp: 'शप', titleEn: "Shopping");
+                    context
+                        .read<NavigationIndexCubit>()
+                        .changeIndex(index: 4, titleEn: "Shopping", titleNp: "किनमेल");
                   },
                   clipBehavior: Clip.none,
                   child: Icon(

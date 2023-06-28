@@ -1,12 +1,15 @@
 import 'dart:convert';
 
 import 'package:aamako_maya/src/core/network_services/urls.dart';
+import 'package:aamako_maya/src/features/ancs/model/new_report_model.dart';
 import 'package:aamako_maya/src/features/authentication/local_storage/authentication_local_storage.dart';
 import 'package:aamako_maya/src/features/medication/model/medication_model.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../ancs/model/information_model.dart';
 
 class MedicationCubit extends Cubit<MedicationState> {
   final Dio dio;
@@ -17,21 +20,21 @@ class MedicationCubit extends Cubit<MedicationState> {
 
   void getMedication(bool isRefreshed) async {
     emit(MedicationLoading());
-    String token = '4a66f714-9124-4cd1-a0fa-e48789021600';
-    final response = prefs.getString('medication');
+    final AuthLocalData _localData = AuthLocalData();
+    String? token = await _localData.getTokenFromocal();
+    final response = prefs.getString('medication_data');
     if (response != null && isRefreshed == false) {
-      final medication = jsonDecode(response) as List;
-      final data = medication.map((e) => Medicationmodel.fromJson(e)).toList();
+      final medication = jsonDecode(response);
+      final data = NewReportModel.fromJson(medication);
       emit(MedicationSuccess(data));
     } else {
       try {
-        final response = await dio.get("${Urls.medicationUrl}/$token");
+        final response = await dio.get("${Urls.medicationUrls}", options:  Options(
+          headers: {"token": "$token"},
+        ));
         if (response.statusCode == 200) {
-          final medication = response.data as List;
-          await prefs.setString('medication', jsonEncode(medication));
-
-          List<Medicationmodel> list =
-              (medication).map((e) => Medicationmodel.fromJson(e)).toList();
+          await prefs.setString('medication_data', jsonEncode(response.data));
+          NewReportModel list = NewReportModel.fromJson(response.data);
 
           emit(MedicationSuccess(list));
         } else {
@@ -50,7 +53,7 @@ abstract class MedicationState extends Equatable {
 }
 
 class MedicationSuccess extends MedicationState {
-  final List<Medicationmodel>? data;
+  final NewReportModel data;
   MedicationSuccess(this.data);
   @override
   List<Object?> get props => [data];

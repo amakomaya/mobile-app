@@ -12,6 +12,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../injection_container.dart';
+import '../../ancs/model/information_model.dart';
+import '../../ancs/model/new_report_model.dart';
 import '../../authentication/local_storage/authentication_local_storage.dart';
 
 //this is cubit (class)
@@ -27,22 +29,21 @@ class DeliverCubit extends Cubit<DeliveryState> {
   void getDelivery(bool isRefreshed) async {
     emit(DeliveryLoadingState());
     // String token = await local.getTokenFromocal();
-    String token = "4a66f714-9124-4cd1-a0fa-e48789021600";
-
-    final response = prefs.getString('delivery');
+    final AuthLocalData _localData = AuthLocalData();
+    String? token = await _localData.getTokenFromocal();
+    final response = prefs.getString('delivery_data');
     if (response != null && isRefreshed == false) {
-      final delivery = jsonDecode(response) as List;
-      final data = (delivery).map((e) => Deliverymodel.fromJson(e)).toList();
+      final delivery = jsonDecode(response);
+      final data =  NewReportModel.fromJson(delivery);
       emit(DeliverySuccessState(data));
     } else {
       try {
-        final response = await dio.get("${Urls.deliveryUrl}/$token");
+        final response = await dio.get("${Urls.deliveryUrls}", options:  Options(
+          headers: {"token": "$token"},
+        ));
         if (response.statusCode == 200) {
-          final delivery = response.data as List;
-          prefs.setString('delivery', jsonEncode(delivery));
-          List<Deliverymodel> list =
-              (delivery).map((e) => Deliverymodel.fromJson(e)).toList();
-
+          prefs.setString('delivery_data', jsonEncode(response.data));
+          NewReportModel list = NewReportModel.fromJson( response.data);
           emit(DeliverySuccessState(list));
         } else {
           emit(DeliveryFailureState());
@@ -52,6 +53,8 @@ class DeliverCubit extends Cubit<DeliveryState> {
       }
     }
   }
+
+
 }
 
 class DeliveryState extends Equatable {
@@ -60,7 +63,7 @@ class DeliveryState extends Equatable {
 }
 
 class DeliverySuccessState extends DeliveryState {
-  final List<Deliverymodel> data;
+  final NewReportModel data;
   DeliverySuccessState(this.data);
   @override
   List<Object?> get props => [data];

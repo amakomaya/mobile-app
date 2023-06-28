@@ -1,12 +1,15 @@
 import 'dart:convert';
 
 import 'package:aamako_maya/src/core/network_services/urls.dart';
+import 'package:aamako_maya/src/features/ancs/model/new_report_model.dart';
 import 'package:aamako_maya/src/features/authentication/local_storage/authentication_local_storage.dart';
 import 'package:aamako_maya/src/features/labtest/model/labtest_model.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../ancs/model/information_model.dart';
 
 class LabtestCubit extends Cubit<LabtestState> {
   Dio dio;
@@ -17,22 +20,21 @@ class LabtestCubit extends Cubit<LabtestState> {
   void getlabtest(bool isRefreshed) async {
     emit(LabtestLoading());
     // String token = await local.getTokenFromocal();s
-    String token = "4a66f714-9124-4cd1-a0fa-e48789021600";
-
-    final response = prefs.getString('labtest');
+    final AuthLocalData _localData = AuthLocalData();
+    String? token = await _localData.getTokenFromocal();
+    final response = prefs.getString('labtest_data');
     if (response != null && isRefreshed == false) {
-      final labtest = (jsonDecode(response) as List)
-          .map((e) => Labtestmodel.fromJson(e))
-          .toList();
-      emit(LabtestSuccess(labtest));
+      final labtest = jsonDecode(response);
+      final data =  NewReportModel.fromJson(labtest);
+      emit(LabtestSuccess(data));
     } else {
       try {
-        final response = await dio.get("${Urls.labtestUrl}/$token");
+        final response = await dio.get("${Urls.labtestUrls}", options:  Options(
+          headers: {"token": "$token"},
+        ));
         if (response.statusCode == 200) {
-          final labtest = response.data as List;
-          prefs.setString('labtest', jsonEncode(labtest));
-          List<Labtestmodel> list =
-              labtest.map((e) => Labtestmodel.fromJson(e)).toList();
+          prefs.setString('labtest_data', jsonEncode(response.data));
+        NewReportModel list = NewReportModel.fromJson(response.data);
           emit(LabtestSuccess(list));
         } else {
           emit(LabtestFailure());
@@ -42,6 +44,8 @@ class LabtestCubit extends Cubit<LabtestState> {
       }
     }
   }
+
+
 }
 
 abstract class LabtestState extends Equatable {
@@ -56,7 +60,7 @@ class LabtestInitial extends LabtestState {}
 class LabtestLoading extends LabtestState {}
 
 class LabtestSuccess extends LabtestState {
-  final List<Labtestmodel> data;
+  final NewReportModel data;
 
   LabtestSuccess(this.data);
   @override

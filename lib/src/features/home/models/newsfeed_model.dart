@@ -18,6 +18,10 @@ class NewsFeedModel {
     this.urlToVideo,
     this.urlToImage,
     this.publishedAt,
+    this.type,
+    this.desc,
+    this.createdAt,
+    this.updatedAt,
   });
 
   int? id;
@@ -27,15 +31,23 @@ class NewsFeedModel {
   String? urlToVideo;
   String? urlToImage;
   String? publishedAt;
+  String? type;
+  String? desc;
+  String? createdAt;
+  String? updatedAt;
 
   factory NewsFeedModel.fromJson(Map<String, dynamic> json) => NewsFeedModel(
         id: json["id"],
         author: json["author"],
         title: json["title"],
         url: json["url"],
-        urlToVideo: json["urlToVideo"],
-        urlToImage: json["urlToImage"],
-        publishedAt: json["publishedAt"],
+        urlToVideo: json["url_to_video"],
+        urlToImage: json["url_to_image"],
+        publishedAt: json["published_at"],
+        type: json["type"],
+        desc: json["desc"],
+        createdAt: json["created_at"],
+        updatedAt: json["updated_at"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -45,6 +57,10 @@ class NewsFeedModel {
         "url": url,
         "urlToVideo": urlToVideo,
         "urlToImage": urlToImage,
-        "publishedAt": publishedAt,
+        "published_at": publishedAt,
+        "type": type,
+        "desc": desc,
+        "created_at": createdAt,
+        "updated_at": updatedAt,
       };
 }

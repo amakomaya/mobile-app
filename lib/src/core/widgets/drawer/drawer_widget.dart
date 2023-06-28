@@ -1,42 +1,22 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:aamako_maya/l10n/locale_keys.g.dart';
 import 'package:aamako_maya/src/core/app_assets/app_assets.dart';
-import 'package:aamako_maya/src/core/snackbar/success_snackbar.dart';
 import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
-import 'package:aamako_maya/src/features/ancs/cubit/ancs_cubit.dart';
-
-import 'package:aamako_maya/src/features/ancs/screens/ancs_page.dart';
-import 'package:aamako_maya/src/features/authentication/model/user_model.dart';
 import 'package:aamako_maya/src/features/authentication/screens/login/login_page.dart';
 import 'package:aamako_maya/src/features/bottom_nav/cubit/cubit/navigation_index_cubit.dart';
-
-import 'package:aamako_maya/src/features/delivery/screen/delivery_page.dart';
-import 'package:aamako_maya/src/features/faqs/model/faqs_model.dart';
-import 'package:aamako_maya/src/features/faqs/screen/faqs_page.dart';
 import 'package:aamako_maya/src/features/fetch%20user%20data/cubit/get_user_cubit.dart';
-import 'package:aamako_maya/src/features/labtest/screen/labtestpage.dart';
-import 'package:aamako_maya/src/features/medication/screen/medicationpage.dart';
-import 'package:aamako_maya/src/features/pnc/screens/pnc_page.dart';
-import 'package:aamako_maya/src/features/symptoms/screen/symptomspage.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:easy_localization/easy_localization.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 
-import '../../../../l10n/locale_keys.g.dart';
-import '../../../features/authentication/authentication_cubit/auth_cubit.dart';
 import '../../../features/authentication/authentication_cubit/logout_cubit.dart';
 import '../../../features/authentication/drawer_cubit/drawer_cubit.dart';
-import '../../../features/authentication/local_storage/authentication_local_storage.dart';
-import '../../../features/bottom_nav/bottom_navigation.dart';
-import '../../constant/app_constants.dart';
-import '../../strings/app_strings.dart';
 import '../../theme/app_colors.dart';
 import '../helper_widgets/blank_space.dart';
 
@@ -80,25 +60,25 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           builder: (context, state) {
             return Container(
               color: Colors.white,
-              width: size.width * 0.8,
+              width: size.width * 0.8.sm,
               height: size.height,
               child: Stack(
                 children: [
                   Container(
                     height: 225.h,
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                         color: AppColors.primaryRed,
                         borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(25),
-                          bottomRight: Radius.circular(25),
+                          bottomLeft: Radius.circular(25.r),
+                          bottomRight: Radius.circular(25.r),
                         )),
                   ),
                   Padding(
-                      padding: EdgeInsets.only(
-                        top: 30.h,
+                      padding: REdgeInsets.only(
+                        top: 30,
                         left: 10,
                         right: 10,
-                        bottom: 39.h,
+                        bottom: 39,
                       ),
                       child: Column(
                         children: [
@@ -143,20 +123,16 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               day = differenceInCalendarDays(later, earlier)
                                   .toString();
 
-                              weeks = (int.parse(day) / 7).toStringAsFixed(0);
-                              days = (((int.parse(day)) -
-                                          (int.parse(weeks) * 7))
-                                      .isNegative)
-                                  ? 0.toString()
-                                  : ((int.parse(day)) - (int.parse(weeks) * 7))
-                                      .toString();
+                              weeks = ((int.parse(day) % 365) / 7).toStringAsFixed(0);
+                              days =( (int.parse(day) % 365) % 7 ).toString();
                             }
 
                             return Align(
                                 alignment: Alignment.topCenter,
                                 child: Text(weeks + ' weeks ' + days + ' days',
                                     style: theme.textTheme.titleSmall?.copyWith(
-                                        fontSize: 12, color: AppColors.white)));
+                                        fontSize: 12.sm,
+                                        color: AppColors.white)));
                           }),
                           VerticalSpace(15.h),
                           Expanded(
@@ -177,7 +153,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                           .changeIndex(
                                               index: 0,
                                               titleEn: 'Home',
-                                              titleNp: AppStrings.home);
+                                              titleNp: "होम");
                                     },
                                     leading: Image.asset(
                                       AppAssets.homeIcon,
@@ -203,17 +179,14 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                           .read<NavigationIndexCubit>()
                                           .changeIndex(
                                               index: 10,
-                                              titleNp: AppStrings.profile,
+                                              titleNp: "व्यक्तिगत विवरण",
                                               titleEn: 'Profile');
-                                      context
-                                          .read<GetUserCubit>()
-                                          .getUserFromLocal();
                                     },
                                     leading: Image.asset(
                                       AppAssets.profileIcon,
                                       height: 30.sm,
                                     ),
-                                    title: Text(LocaleKeys.profile.tr(),
+                                    title: Text( LocaleKeys.profile.tr(),
                                         style: theme.textTheme.titleSmall
                                             ?.copyWith(
                                                 color: state.index == 1
@@ -232,14 +205,15 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                           .read<NavigationIndexCubit>()
                                           .changeIndex(
                                               index: 13,
-                                              titleNp: AppStrings.symptoms,
+                                              titleNp: "लक्षण मूल्याङ्कन",
                                               titleEn: "Symptom Assessment");
                                     },
                                     leading: Image.asset(
                                       AppAssets.symptomIcon,
                                       height: 30.sm,
                                     ),
-                                    title: Text(LocaleKeys.symptoms.tr(),
+                                    title: Text(
+                                        LocaleKeys.symptom_assessment.tr(),
                                         style: theme.textTheme.titleSmall
                                             ?.copyWith(
                                                 color: state.index == 3
@@ -250,6 +224,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   //QR Code
                                   ListTile(
                                     onTap: (() {
+                                      Navigator.pop(context);
                                       context
                                           .read<DrawerCubit>()
                                           .checkDrawerSelection(4);
@@ -258,14 +233,14 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                           .read<NavigationIndexCubit>()
                                           .changeIndex(
                                               index: 15,
-                                              titleNp: AppStrings.qrcode,
+                                              titleNp:"QR कोड",
                                               titleEn: "QR Code");
                                     }),
                                     leading: Image.asset(
                                       AppAssets.cardIcon,
                                       height: 30.sm,
                                     ),
-                                    title: Text(LocaleKeys.qrcode.tr(),
+                                    title: Text(LocaleKeys.qr_code.tr(),
                                         style: theme.textTheme.titleSmall
                                             ?.copyWith(
                                                 color: state.index == 4
@@ -307,7 +282,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                       AppAssets.healthreportIcon,
                                       height: 30.sm,
                                     ),
-                                    title: Text(LocaleKeys.healthreport.tr(),
+                                    title: Text(LocaleKeys.health_reports.tr(),
                                         style: theme.textTheme.titleSmall),
                                     children: [
                                       ListTile(
@@ -328,11 +303,11 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                                   titleEn: 'ANC');
                                           context
                                               .read<GetUserCubit>()
-                                              .getUserFromLocal();
+                                              .getUserData();
                                         },
                                         title: Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 80, right: 50),
+                                          padding: REdgeInsets.only(
+                                              left: 80, right: 20),
                                           child: Text(LocaleKeys.anc.tr(),
                                               style: theme.textTheme.titleSmall
                                                   ?.copyWith(
@@ -356,11 +331,11 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                                   titleEn: 'Delivery');
                                           context
                                               .read<GetUserCubit>()
-                                              .getUserFromLocal();
+                                              .getUserData();
                                         },
                                         title: Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 80, right: 50),
+                                          padding: REdgeInsets.only(
+                                              left: 80, right: 20),
                                           child: Text(LocaleKeys.delivery.tr(),
                                               style: theme.textTheme.titleSmall
                                                   ?.copyWith(
@@ -384,11 +359,11 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                                   titleEn: 'Medication');
                                           context
                                               .read<GetUserCubit>()
-                                              .getUserFromLocal();
+                                              .getUserData();
                                         },
                                         title: Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 80, right: 50),
+                                          padding: REdgeInsets.only(
+                                              left: 80, right: 20),
                                           child: Text(
                                               LocaleKeys.medication.tr(),
                                               style: theme.textTheme.titleSmall
@@ -413,11 +388,11 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                                   titleEn: 'Postnatal Care');
                                           context
                                               .read<GetUserCubit>()
-                                              .getUserFromLocal();
+                                              .getUserData();
                                         },
                                         title: Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 80, right: 50),
+                                          padding: REdgeInsets.only(
+                                              left: 80, right: 20),
                                           child: Text(LocaleKeys.pnc.tr(),
                                               style: theme.textTheme.titleSmall
                                                   ?.copyWith(
@@ -442,12 +417,12 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                                   titleEn: 'Lab Test');
                                           context
                                               .read<GetUserCubit>()
-                                              .getUserFromLocal();
+                                              .getUserData();
                                         },
                                         title: Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 80, right: 50),
-                                          child: Text(LocaleKeys.labtest.tr(),
+                                          padding: REdgeInsets.only(
+                                              left: 80, right: 20),
+                                          child: Text(LocaleKeys.lab_test.tr(),
                                               style: theme.textTheme.titleSmall
                                                   ?.copyWith(
                                                       color: state.index == 9
@@ -470,7 +445,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                           .read<NavigationIndexCubit>()
                                           .changeIndex(
                                               titleNp:
-                                                  'बारम्बार सोधिने प्रश्न ',
+                                                  'बारम्बार सोधिने प्रश्नहरू',
                                               index: 12,
                                               titleEn: 'FAQs');
                                     },
@@ -478,7 +453,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                       AppAssets.faqsIcon,
                                       height: 30.sm,
                                     ),
-                                    title: Text(LocaleKeys.faq.tr(),
+                                    title: Text(LocaleKeys.faqs.tr(),
                                         style: theme.textTheme.titleSmall
                                             ?.copyWith(
                                                 color: state.index == 10
@@ -489,11 +464,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   Align(
                                     alignment: Alignment.bottomLeft,
                                     child: Padding(
-                                      padding:
-                                          const EdgeInsets.only(left: 12.0),
+                                      padding: REdgeInsets.only(left: 12.0),
                                       child: TextButton.icon(
                                           label: Text(
-                                            LocaleKeys.logout.tr(),
+                                            LocaleKeys.label_logout.tr(),
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .titleSmall,
@@ -502,7 +476,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                             context
                                                 .read<NavigationIndexCubit>()
                                                 .changeIndex(
-                                                    titleNp: AppStrings.home,
+                                                    titleNp: "होम",
                                                     index: 0,
                                                     titleEn: 'Home');
                                             context

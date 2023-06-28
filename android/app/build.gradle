@@ -46,18 +46,29 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.example.aamako_maya"
+        applicationId "com.amakomaya_version2"
         minSdkVersion 21
         targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
 
+    signingConfigs {
+        amakomayaRelease {
+            storeFile rootProject.file("D:\\office file\\amakomaya\\amakomaya.jks")
+            keyAlias 'amakomaya'
+            keyPassword 'test123'
+            storePassword 'test123'
+        }
+
+    }
+
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.amakomayaRelease
+//            signingConfig signingConfigs.debug
         }
     }
 }

@@ -5,7 +5,6 @@ import 'package:hive/hive.dart';
 
 import 'dart:convert';
 
-
 UserModel userModelFromJson(String str) => UserModel.fromJson(json.decode(str));
 
 String userModelToJson(UserModel data) => json.encode(data.toJson());
@@ -17,6 +16,8 @@ class UserModel extends HiveObject {
     this.height,
     this.districtId,
     this.municipalityId,
+    this.districtName,
+    this.provinceName,
     this.ward,
     this.tole,
     this.phone,
@@ -29,6 +30,13 @@ class UserModel extends HiveObject {
     this.hpMunicipality,
     this.hpWard,
     this.chronicIllness,
+    this.district,
+    this.municipalityName,
+    this.streetName,
+    this.haveDiseasePreviously,
+    this.pregnantTimes,
+    this.currentHealthPost,
+    this.modeType,
     this.currentHealthpost,
     this.noOfPregnantBefore,
     this.moolDartaNo,
@@ -45,6 +53,10 @@ class UserModel extends HiveObject {
   String? height;
   int? districtId;
   int? municipalityId;
+  String? districtName;
+  String? municipalityName;
+  String? provinceName;
+
   String? ward;
   String? tole;
   dynamic phone;
@@ -60,6 +72,12 @@ class UserModel extends HiveObject {
   int? hpWard;
 
   String? chronicIllness;
+  String? district;
+  String? streetName;
+  String? haveDiseasePreviously;
+  int? pregnantTimes;
+  String? currentHealthPost;
+  String? modeType;
 
   String? currentHealthpost;
 
@@ -106,6 +124,15 @@ class UserModel extends HiveObject {
         healthWorkerPost: json["health_worker_post"],
         healthWorkerPhone: json["health_worker_phone"],
         registerAs: json["register_as"],
+        district: json["district"],
+        provinceName: json["province_name"],
+        municipalityName: json["municipality_name"],
+        districtName: json["district_name"],
+        streetName: json["street_name"],
+        haveDiseasePreviously: json["have_disease_previously"],
+        pregnantTimes: json["pregnant_times"],
+        currentHealthPost: json["current_health_post"],
+        modeType: json["mode_type"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -135,5 +162,14 @@ class UserModel extends HiveObject {
         "health_worker_post": healthWorkerPost,
         "health_worker_phone": healthWorkerPhone,
         "register_as": registerAs,
+        "district": district,
+        "municipality_name": municipalityName,
+        "district_name": districtName,
+        "province_name": provinceName,
+        "street_name": streetName,
+        "have_disease_previously": haveDiseasePreviously,
+        "pregnant_times": pregnantTimes,
+        "current_health_post": currentHealthPost,
+        "mode_type": modeType,
       };
 }
