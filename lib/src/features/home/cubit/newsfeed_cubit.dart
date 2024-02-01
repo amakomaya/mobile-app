@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:aamako_maya/src/core/cache/news_feed/cache_values.dart';
-import 'package:aamako_maya/src/core/network_services/urls.dart';
+import 'package:Amakomaya/src/core/cache/news_feed/cache_values.dart';
+import 'package:Amakomaya/src/core/network_services/urls.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
@@ -18,32 +18,34 @@ class NewsfeedCubit extends Cubit<NewsfeedState> {
 
   final SharedPreferences _prefs;
 
-  NewsfeedCubit(Dio dio, SharedPreferences prefs, NewsFeedCache cache)
+  NewsfeedCubit(Dio dio, SharedPreferences prefs)
       : _dio = dio,
         _prefs = prefs,
         super(NewsFeedInitial());
-  final AuthLocalData _localData = AuthLocalData();
 
   void getNewsFeed(bool isRefreshed) async {
-    final response = _prefs.getString('newsfeeds');
+    final response = _prefs.getString('newsfeedData');
     if (response != null && isRefreshed == false) {
-      final newsfeed = jsonDecode(response) as List;
-      final data = newsfeed.map((e) => NewsFeedModel.fromJson(e)).toList();
+      final data = NewsFeedModel.fromJson(jsonDecode(response));
+      _prefs.remove("user_mode");
+      _prefs.setString("user_mode", data.userDetail.userMode);
       emit(NewsfeedSuccess(data, isRefreshed));
     } else {
+      final AuthLocalData _localData = AuthLocalData();
       String? token = await _localData.getTokenFromocal();
       try {
-        final response = await _dio.get("${Urls.newsFeedUrl}", options:  Options(
-          headers: {"token": "$token"},
-        ));
+        final response = await _dio.get("${Urls.newsFeedUrl}",
+            options: Options(
+              headers: {"token": "$token"},
+            ));
+        emit(NewsFeedLoading());
         if (response.statusCode == 200) {
-          final news = response.data as List;
-          await _prefs.setString('newsfeeds', jsonEncode(news));
-          final data = (response.data as List)
-              .map((json) => NewsFeedModel.fromJson(json))
-              .toList();
+          await _prefs.setString('newsfeedData', jsonEncode(response.data));
+          NewsFeedModel newsFeedModel = NewsFeedModel.fromJson(response.data);
           print("statetssss fdfdf");
-          emit(NewsfeedSuccess(data, isRefreshed));
+          _prefs.remove("user_mode");
+          _prefs.setString("user_mode", newsFeedModel.userDetail.userMode);
+          emit(NewsfeedSuccess(newsFeedModel, isRefreshed));
         } else {
           emit(NewsfeedFailure());
         }
@@ -67,7 +69,7 @@ class NewsFeedLoading extends NewsfeedState {
 }
 
 class NewsfeedSuccess extends NewsfeedState {
-  final List<NewsFeedModel> newsfeed;
+  final NewsFeedModel newsfeed;
   final bool isRefreshed;
 
   NewsfeedSuccess(this.newsfeed, this.isRefreshed);

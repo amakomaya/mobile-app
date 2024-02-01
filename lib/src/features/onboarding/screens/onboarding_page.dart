@@ -1,10 +1,10 @@
-import 'package:aamako_maya/l10n/locale_keys.g.dart';
-import 'package:aamako_maya/src/core/app_assets/app_assets.dart';
-import 'package:aamako_maya/src/core/theme/app_colors.dart';
-import 'package:aamako_maya/src/core/widgets/buttons/primary_action_button.dart';
-import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
-import 'package:aamako_maya/src/features/authentication/screens/login/login_page.dart';
-import 'package:aamako_maya/src/features/onboarding/bloc/onboard_bloc.dart';
+import 'package:Amakomaya/l10n/locale_keys.g.dart';
+import 'package:Amakomaya/src/core/app_assets/app_assets.dart';
+import 'package:Amakomaya/src/core/theme/app_colors.dart';
+import 'package:Amakomaya/src/core/widgets/buttons/primary_action_button.dart';
+import 'package:Amakomaya/src/core/widgets/helper_widgets/blank_space.dart';
+import 'package:Amakomaya/src/features/authentication/screens/login/login_page.dart';
+import 'package:Amakomaya/src/features/onboarding/bloc/onboard_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

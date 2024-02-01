@@ -5,7 +5,12 @@ class DistrictModel {
   String? districtNameNP;
   String? districtCode;
 
-  DistrictModel({this.id, this.provinceId, this.districtName, this.districtNameNP, this.districtCode});
+  DistrictModel(
+      {this.id,
+      this.provinceId,
+      this.districtName,
+      this.districtNameNP,
+      this.districtCode});
 
   DistrictModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];

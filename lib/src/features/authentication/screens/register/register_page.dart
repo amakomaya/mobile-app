@@ -1,10 +1,10 @@
-import 'package:aamako_maya/src/core/widgets/border_container.dart';
-import 'package:aamako_maya/src/core/widgets/buttons/localization_button.dart';
-import 'package:aamako_maya/src/core/widgets/buttons/primary_action_button.dart';
-import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
-import 'package:aamako_maya/src/core/widgets/scaffold/primary_appBar.dart';
-import 'package:aamako_maya/src/features/authentication/widgets/register_fields_section.dart';
-import 'package:bot_toast/bot_toast.dart';
+import 'package:Amakomaya/src/core/theme/app_colors.dart';
+import 'package:Amakomaya/src/core/widgets/border_container.dart';
+import 'package:Amakomaya/src/core/widgets/buttons/localization_button.dart';
+import 'package:Amakomaya/src/core/widgets/buttons/primary_action_button.dart';
+import 'package:Amakomaya/src/core/widgets/helper_widgets/blank_space.dart';
+import 'package:Amakomaya/src/core/widgets/scaffold/primary_appBar.dart';
+import 'package:Amakomaya/src/features/authentication/widgets/register_fields_section.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -27,7 +27,7 @@ class _RegisterPageState extends State<RegisterPage> {
     List<RegisterAsModel> registerAs = [
       RegisterAsModel(
         id: 1,
-        text: LocaleKeys.label_prepare_pregnancy.tr(),
+        text: LocaleKeys.label_women_health.tr(),
         value: "planning",
         image: Image.asset(
           'assets/images/logo/item1.png',
@@ -73,9 +73,9 @@ class _RegisterPageState extends State<RegisterPage> {
                         padding: REdgeInsets.only(left: 18.0, bottom: 12),
                         child: Text(
                           LocaleKeys.label_register.tr(),
-                          style: const TextStyle(
+                          style:  TextStyle(
                               fontFamily: 'lato',
-                              fontSize: 22,
+                              fontSize: 18.sm,
                               color: Colors.white),
                         ),
                       ),
@@ -90,18 +90,19 @@ class _RegisterPageState extends State<RegisterPage> {
                   children: [
                     Text(
                       LocaleKeys.label_choose_option_your_need.tr(),
-                      style: TextStyle(fontSize: 17.sm, fontFamily: 'lato'),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 18.sm, fontFamily: 'lato'),
                     )
                   ],
                 ),
                 SizedBox(
-                  height: 10.h,
+                  height: 5.h,
                 ),
                 Padding(
                   padding: REdgeInsets.all(10.0),
                   child: Card(
                     child: Padding(
-                      padding: const EdgeInsets.all(12.0),
+                      padding:REdgeInsets.all(12.0),
                       child: ListView.separated(
                         shrinkWrap: true,
                         separatorBuilder: (c, i) => VerticalSpace(5.h),
@@ -109,12 +110,12 @@ class _RegisterPageState extends State<RegisterPage> {
                         itemBuilder: (c, inde) {
                           return GestureDetector(
                             onTap: () {
-                              selected.value = 1;
-                              if (inde == 0 || inde == 2) {
-                                BotToast.showText(
-                                    text: LocaleKeys
-                                        .msg_option_unavailable.tr());
-                              }
+                              selected.value = inde;
+                              // if (inde == 0 || inde == 2) {
+                              //   BotToast.showText(
+                              //       text: LocaleKeys
+                              //           .msg_option_unavailable.tr());
+                              // }
                             },
                             child: Padding(
                               padding: REdgeInsets.all(8.0),
@@ -124,11 +125,11 @@ class _RegisterPageState extends State<RegisterPage> {
                                     return BorderContainer(
                                         hasBorder: true,
                                         color: i == inde
-                                            ? Colors.black
+                                            ? AppColors.primaryRed
                                             : Colors.grey,
                                         margin: defaultPadding,
                                         padding: defaultPadding.copyWith(
-                                            top: 15.h, bottom: 15.h),
+                                            top: 15.r, bottom: 15.r),
                                         width: size.width,
                                         child: SingleChildScrollView(
                                           child: Row(
@@ -170,7 +171,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     onpress: () {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (ctx) => RegisterSection(
-                              registerAs: registerAs[selected.value].text)));
+                              registerAs: registerAs[selected.value].text, selectedIndex: selected.value,)));
                     },
                     title: LocaleKeys.label_next.tr()),
               ],

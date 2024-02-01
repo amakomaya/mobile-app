@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:aamako_maya/l10n/locale_keys.g.dart';
-import 'package:aamako_maya/src/features/authentication/cubit/toggle_district_municipality.dart';
-import 'package:aamako_maya/src/features/authentication/model/municipality_district_model.dart';
+import 'package:Amakomaya/l10n/locale_keys.g.dart';
+import 'package:Amakomaya/src/features/authentication/cubit/toggle_district_municipality.dart';
+import 'package:Amakomaya/src/features/authentication/model/municipality_district_model.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

@@ -1,4 +1,4 @@
-import 'package:aamako_maya/src/features/symptoms/model/assessment_model.dart';
+import 'package:Amakomaya/src/features/symptoms/model/assessment_model.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 import '../../../../l10n/locale_keys.g.dart';
@@ -16,7 +16,7 @@ List<DeliveryModel> postnatal = [
       isSelected: false,
       problem: "Smelling water from vagina or lower abdominal pain", problemNp: 'पाठेघरबाट पानी बग्नु वा तल्लो पेट दुख्नु '),
   DeliveryModel( key: 'fever_degree',
-      id: 6, isSelected: false, problem: "Fever above 100.4 degrees", problemNp: '100.4 डिग्री भन्दा माथि ज्वरो आउनु '),
+      id: 6, isSelected: false, problem: "Fever above 100.4 degrees", problemNp: ' १००.४ डिग्री भन्दा माथि ज्वरो आउनु '),
   DeliveryModel(    key: 'breathing_difficulty',
 
       id: 7, isSelected: false, problem:"Difficulty in breathing", problemNp: 'सास फेर्न गाह्रो हुनु'),
@@ -35,7 +35,7 @@ List<DeliveryModel> pregnancy = [
       isSelected: false,
       problem: "Abdominal pain in the first month of pregnancy", problemNp: 'गर्भावस्थाको पहिलो महिनामा पेट दुख्नु '),
   DeliveryModel(key: 'fever_degree',
-      id: 6, isSelected: false, problem: "Fever above 100.4 degrees", problemNp: '100.4 डिग्री भन्दा माथि ज्वरो आउनु '),
+      id: 6, isSelected: false, problem: "Fever above 100.4 degrees", problemNp: '१००.४ डिग्री भन्दा माथि ज्वरो आउनु '),
   DeliveryModel(    key: 'breathing_difficulty',
 
       id: 7, isSelected: false, problem:"Difficulty in breathing", problemNp: 'सास फेर्न गाह्रो हुनु'),

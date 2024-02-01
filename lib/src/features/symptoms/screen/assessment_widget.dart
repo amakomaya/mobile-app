@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:aamako_maya/src/core/padding/padding.dart';
-import 'package:aamako_maya/src/core/theme/app_colors.dart';
-import 'package:aamako_maya/src/core/widgets/buttons/primary_action_button.dart';
-import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
-import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
-import 'package:aamako_maya/src/features/symptoms/cubit/symptoms_cubit.dart';
-import 'package:aamako_maya/src/features/symptoms/model/assessment_model.dart';
+import 'package:Amakomaya/src/core/padding/padding.dart';
+import 'package:Amakomaya/src/core/theme/app_colors.dart';
+import 'package:Amakomaya/src/core/widgets/buttons/primary_action_button.dart';
+import 'package:Amakomaya/src/core/widgets/helper_widgets/blank_space.dart';
+import 'package:Amakomaya/src/core/widgets/helper_widgets/shadow_container.dart';
+import 'package:Amakomaya/src/features/symptoms/cubit/symptoms_cubit.dart';
+import 'package:Amakomaya/src/features/symptoms/model/assessment_model.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -112,7 +112,11 @@ class _AssessmentWidgetState extends State<AssessmentWidget> {
             VerticalSpace(30.h),
             if (_dropdownValue != null) ...[
               Text(
-                '$_dropdownValue ${LocaleKeys.label_danger_signs.tr()}',
+                _dropdownValue == "Postnatal"
+                    ? LocaleKeys.label_postnatal_danger_signs.tr()
+                    : _dropdownValue == "Delivery"
+                        ? LocaleKeys.label_delivery_danger_signs.tr()
+                        : LocaleKeys.label_pregnancy_danger_signs.tr(),
                 style: theme.textTheme.headlineMedium?.copyWith(
                     fontWeight: FontWeight.bold, color: AppColors.primaryRed),
               ),
@@ -240,7 +244,8 @@ class _AssessmentWidgetState extends State<AssessmentWidget> {
                         proceed = null;
                       }
                       if (proceed == null) {
-                        SharedPreferences prefs = await SharedPreferences.getInstance();
+                        SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
                         prefs.remove("symptoms_history");
                         try {
                           BotToast.showLoading();
@@ -252,16 +257,15 @@ class _AssessmentWidgetState extends State<AssessmentWidget> {
                           //     SnackBar(content: Text(resp.toString())));
                           BotToast.closeAllLoading();
                           BotToast.showText(text: resp.toString());
-                          BotToast.showText(
-                              text: "Successfully Updated");
+                          BotToast.showText(text: "Successfully Updated");
                         } on ApiException catch (e) {
                           BotToast.closeAllLoading();
                           BotToast.showText(text: e.message.toString());
                         }
                         other_symptoms.text = "";
                         clearAll();
-                        scrollController.jumpTo(scrollController
-                            .position.minScrollExtent);
+                        scrollController
+                            .jumpTo(scrollController.position.minScrollExtent);
                         setState(() {});
                       } else {
                         BotToast.showText(

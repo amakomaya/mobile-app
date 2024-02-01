@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:aamako_maya/src/core/connection_checker/network_connection.dart';
-import 'package:aamako_maya/src/features/authentication/authentication_repository/authentication_repo.dart';
-import 'package:aamako_maya/src/features/authentication/model/login_request_model.dart';
-import 'package:aamako_maya/src/features/authentication/model/user_model.dart';
+import 'package:Amakomaya/src/core/connection_checker/network_connection.dart';
+import 'package:Amakomaya/src/features/authentication/authentication_repository/authentication_repo.dart';
+import 'package:Amakomaya/src/features/authentication/model/login_request_model.dart';
+import 'package:Amakomaya/src/features/authentication/model/user_model.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
@@ -77,7 +77,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
           throw ApiException(response.data.toString());
         }
       } on DioError catch (e) {
-        throw ApiException(e.message);
+        throw ApiException(e.message ?? "");
       }
     } else {
       ApiException('No Internet Connection!');

@@ -13,6 +13,7 @@ class AppAssets {
   static const symptomIcon = '$drawerBase/symptoms.png';
   static const profileIcon = '$drawerBase/profile1.png';
   static const appoitnmentIcon = '$drawerBase/appointment.png';
+  static const appoitnmentWhiteIcon = '$drawerBase/appointment_white.png';
   static const homeIcon = '$drawerBase/home.png';
 
   //app images

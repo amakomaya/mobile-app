@@ -1,8 +1,4 @@
-import 'package:aamako_maya/l10n/locale_keys.g.dart';
-import 'package:aamako_maya/src/core/padding/padding.dart';
-import 'package:aamako_maya/src/core/theme/app_colors.dart';
-import 'package:aamako_maya/src/features/audio/cubit/audio_cubit.dart';
-import 'package:aamako_maya/src/features/audio/model/audio_model.dart';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -15,10 +11,15 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../../../injection_container.dart';
+import '../../../../l10n/locale_keys.g.dart';
 import '../../../core/connection_checker/network_connection.dart';
+import '../../../core/padding/padding.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/drawer/drawer_widget.dart';
 import '../../../core/widgets/helper_widgets/blank_space.dart';
 import '../../fetch user data/cubit/get_user_cubit.dart';
+import '../cubit/audio_cubit.dart';
+import '../model/audio_model.dart';
 import '../widgets/audio_container_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -359,34 +360,59 @@ class _AudioPlayerSectionState extends State<AudioPlayerSection>
                                             );
                                           }),
                                       VerticalSpace(10.h),
-                                      ValueListenableBuilder(
-                                          valueListenable: dur,
-                                          builder: (c, cc, ccc) {
-                                            print(
-                                                dur.value.toString() + "dffd");
-                                            return ValueListenableBuilder(
-                                                valueListenable: pos,
-                                                builder: (context, c, g) {
-                                                  return Slider.adaptive(
-                                                    activeColor:
-                                                        AppColors.primaryRed,
-                                                    inactiveColor: Colors.white,
-                                                    max: dur.value.inSeconds
-                                                        .toDouble(),
-                                                    min: 0,
-                                                    value: pos.value.inSeconds
-                                                        .toDouble(),
-                                                    onChanged:
-                                                        (double value) async {
-                                                      final position = Duration(
-                                                          seconds:
-                                                              value.toInt());
-                                                      await _audioPlayer
-                                                          .seek(position);
+                                      Row(
+                                        children: [
+                                          ValueListenableBuilder(
+                                              valueListenable: dur,
+                                              builder: (c, cc, ccc) {
+                                                print(
+                                                    dur.value.toString() + "dffd");
+                                                return ValueListenableBuilder(
+                                                    valueListenable: pos,
+                                                    builder: (context, c, g) {
+                                                      return Slider.adaptive(
+                                                        activeColor:
+                                                            AppColors.primaryRed,
+                                                        inactiveColor: Colors.white,
+                                                        max: dur.value.inSeconds
+                                                            .toDouble(),
+                                                        min: 0,
+                                                        value: pos.value.inSeconds
+                                                            .toDouble(),
+                                                        onChanged:
+                                                            (double value) async {
+                                                          final position = Duration(
+                                                              seconds:
+                                                                  value.toInt());
+                                                          await _audioPlayer
+                                                              .seek(position);
+                                                        },
+                                                      );
+                                                    });
+                                              }),
+                                          ValueListenableBuilder<bool>(
+                                              valueListenable: isPlaying,
+                                              builder: (context, s, c) {
+                                                return IconButton(
+                                                    padding:
+                                                    REdgeInsets.only(right: 10),
+                                                    onPressed: () async {
+                                                      if (isPlaying.value) {
+                                                        await _audioPlayer.pause();
+                                                      } else {
+                                                        await _audioPlayer.resume();
+                                                      }
                                                     },
-                                                  );
-                                                });
-                                          }),
+                                                    icon: Icon(
+                                                      isPlaying.value
+                                                          ? Icons.pause_circle_filled
+                                                          : Icons.play_circle,
+                                                      size: 50.sm,
+                                                      color: Colors.grey,
+                                                    ));
+                                              }),
+                                        ],
+                                      ),
                                       ValueListenableBuilder(
                                           valueListenable: dur,
                                           builder: (context, f, ff) {
@@ -415,28 +441,7 @@ class _AudioPlayerSectionState extends State<AudioPlayerSection>
                                           }),
                                     ],
                                   ),
-                                  Spacer(),
-                                  ValueListenableBuilder<bool>(
-                                      valueListenable: isPlaying,
-                                      builder: (context, s, c) {
-                                        return IconButton(
-                                            padding:
-                                                REdgeInsets.only(right: 10),
-                                            onPressed: () async {
-                                              if (isPlaying.value) {
-                                                await _audioPlayer.pause();
-                                              } else {
-                                                await _audioPlayer.resume();
-                                              }
-                                            },
-                                            icon: Icon(
-                                              isPlaying.value
-                                                  ? Icons.pause_circle_filled
-                                                  : Icons.play_circle,
-                                              size: 50.sm,
-                                              color: Colors.grey,
-                                            ));
-                                      }),
+
                                 ],
                               ),
                             ],

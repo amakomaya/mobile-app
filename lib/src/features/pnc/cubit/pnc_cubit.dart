@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:aamako_maya/src/core/network_services/urls.dart';
-import 'package:aamako_maya/src/features/ancs/model/ancs_model.dart';
-import 'package:aamako_maya/src/features/ancs/model/new_report_model.dart';
-import 'package:aamako_maya/src/features/pnc/model/pnc_model.dart';
+import 'package:Amakomaya/src/core/network_services/urls.dart';
+import 'package:Amakomaya/src/features/ancs/model/ancs_model.dart';
+import 'package:Amakomaya/src/features/ancs/model/new_report_model.dart';
+import 'package:Amakomaya/src/features/pnc/model/pnc_model.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';

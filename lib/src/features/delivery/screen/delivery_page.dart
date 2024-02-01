@@ -1,13 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:aamako_maya/src/core/padding/padding.dart';
-import 'package:aamako_maya/src/core/theme/app_colors.dart';
-import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
-import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
-import 'package:aamako_maya/src/core/widgets/loading_shimmer/shimmer_loading.dart';
-import 'package:aamako_maya/src/features/delivery/cubit/delivery_cubit.dart';
-import 'package:aamako_maya/src/features/fetch%20user%20data/cubit/get_user_cubit.dart';
-import 'package:aamako_maya/src/features/medication/cubit/medication_cubit.dart';
+import 'package:Amakomaya/src/core/padding/padding.dart';
+import 'package:Amakomaya/src/core/theme/app_colors.dart';
+import 'package:Amakomaya/src/core/widgets/helper_widgets/blank_space.dart';
+import 'package:Amakomaya/src/core/widgets/helper_widgets/shadow_container.dart';
+import 'package:Amakomaya/src/core/widgets/loading_shimmer/shimmer_loading.dart';
+import 'package:Amakomaya/src/features/delivery/cubit/delivery_cubit.dart';
+import 'package:Amakomaya/src/features/fetch%20user%20data/cubit/get_user_cubit.dart';
+import 'package:Amakomaya/src/features/medication/cubit/medication_cubit.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -65,7 +65,7 @@ class _DeliveryPageState extends State<DeliveryPage> {
       builder: (userCtx, userState) {
         return (userState is GetUserSuccess &&
             (userState.user.tole?.isEmpty ?? true))
-            ? Text(LocaleKeys.error_msg_not_complete_profile.tr())
+            ? Text(LocaleKeys.error_msg_not_complete_profile.tr(),textAlign: TextAlign.center,)
             : BlocProvider(
           create: (context) => TogglePageViewCubit(),
           child: Builder(builder: (context) {

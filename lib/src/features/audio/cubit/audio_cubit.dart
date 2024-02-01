@@ -1,12 +1,13 @@
 import 'dart:convert';
 
-import 'package:aamako_maya/src/core/network_services/urls.dart';
-import 'package:aamako_maya/src/features/audio/model/audio_model.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../core/network_services/urls.dart';
+import '../model/audio_model.dart';
 
 class AudioCubit extends Cubit<AudioState> {
   final Dio _dio;
@@ -19,7 +20,7 @@ class AudioCubit extends Cubit<AudioState> {
   void getAudio(bool isRefreshed) async {
 
     final response = _prefs.getString('audios');
-
+    emit(AudioLoadingState());
     if (response != null && isRefreshed == false) {
       final audios = jsonDecode(response) as List;
       final data = audios.map((e) => AudioModel.fromJson(e)).toList();

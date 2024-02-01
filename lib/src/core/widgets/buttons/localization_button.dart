@@ -1,6 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LocalizationButton extends StatelessWidget {
@@ -23,14 +22,15 @@ class LocalizationButton extends StatelessWidget {
           return [
             PopupMenuItem(
                 onTap: ()  {
-                   context.setLocale(const Locale('en', ''));
+                   context.setLocale(  Locale('en'),
+                   );
                 },
                 child: const Text('English')),
             PopupMenuItem(
                 onTap: ()  {
-                   context.setLocale(const Locale('ne', ''));
+                   context.setLocale( Locale('ne'));
                 },
-                child: const Text('Nepali')),
+                child: const Text('नेपाली')),
           ];
         });
   }

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:aamako_maya/src/features/bottom_nav/bottom_navigation.dart';
+import 'package:Amakomaya/src/features/bottom_nav/bottom_navigation.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

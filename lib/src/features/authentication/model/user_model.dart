@@ -12,10 +12,14 @@ String userModelToJson(UserModel data) => json.encode(data.toJson());
 class UserModel extends HiveObject {
   UserModel({
     this.name,
+    this.firstName,
+    this.middleName,
+    this.lastName,
     this.age,
     this.height,
     this.districtId,
     this.municipalityId,
+    this.dobChild,
     this.districtName,
     this.provinceName,
     this.ward,
@@ -49,6 +53,9 @@ class UserModel extends HiveObject {
   });
 
   String? name;
+  String? firstName;
+  String? middleName;
+  String? lastName;
   int? age;
   String? height;
   int? districtId;
@@ -56,6 +63,7 @@ class UserModel extends HiveObject {
   String? districtName;
   String? municipalityName;
   String? provinceName;
+  String? dobChild;
 
   String? ward;
   String? tole;
@@ -99,7 +107,11 @@ class UserModel extends HiveObject {
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
         name: json["name"],
+    firstName: json["first_name"],
+    middleName: json["middle_name"],
+    lastName: json["last_name"],
         age: json["age"],
+    dobChild: json["dobChild"],
         height: json["height"],
         districtId: json["district_id"],
         municipalityId: json["municipality_id"],
@@ -137,8 +149,12 @@ class UserModel extends HiveObject {
 
   Map<String, dynamic> toJson() => {
         "name": name,
+        "first_name": firstName,
+        "middle_name": middleName,
+        "last_name": lastName,
         "age": age,
         "height": height,
+        "dobChild": dobChild,
         "district_id": districtId,
         "municipality_id": municipalityId,
         "ward": ward,

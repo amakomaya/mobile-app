@@ -1,9 +1,9 @@
-import 'package:aamako_maya/src/core/padding/padding.dart';
-import 'package:aamako_maya/src/core/theme/app_colors.dart';
-import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
-import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
-import 'package:aamako_maya/src/core/widgets/loading_shimmer/shimmer_loading.dart';
-import 'package:aamako_maya/src/features/faqs/cubit/faqs_cubit.dart';
+import 'package:Amakomaya/src/core/padding/padding.dart';
+import 'package:Amakomaya/src/core/theme/app_colors.dart';
+import 'package:Amakomaya/src/core/widgets/helper_widgets/blank_space.dart';
+import 'package:Amakomaya/src/core/widgets/helper_widgets/shadow_container.dart';
+import 'package:Amakomaya/src/core/widgets/loading_shimmer/shimmer_loading.dart';
+import 'package:Amakomaya/src/features/faqs/cubit/faqs_cubit.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';

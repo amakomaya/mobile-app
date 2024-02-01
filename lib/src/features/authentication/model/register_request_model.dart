@@ -18,6 +18,7 @@ class RegisterRequestModel {
   String? latitude;
   String? createdAt;
   String? updatedAt;
+  String? dobChild;
 
   RegisterRequestModel(
       {this.name,
@@ -36,6 +37,7 @@ class RegisterRequestModel {
       this.longitude,
       this.latitude,
       this.createdAt,
+      this.dobChild,
       this.updatedAt});
 
   RegisterRequestModel.fromJson(Map<String, dynamic> json) {
@@ -57,6 +59,7 @@ class RegisterRequestModel {
     latitude = json['latitude'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
+    dobChild = json['dobChild'];
   }
 
   Map<String, dynamic> toJson() {
@@ -78,6 +81,7 @@ class RegisterRequestModel {
     data['latitude'] = latitude;
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
+    data['dobChild'] = dobChild;
     return data;
   }
 
@@ -97,6 +101,7 @@ class RegisterRequestModel {
           String? password,
           String? longitude,
           String? latitude,
+          String? dobChild,
           String? createdAt,
           String? updatedAt}) =>
       RegisterRequestModel(
@@ -111,6 +116,7 @@ class RegisterRequestModel {
           password: password,
           phone: phone,
           registerAs: registerAs,
+          dobChild: dobChild,
           updatedAt: updatedAt,
           username: username,
           createdAt: createdAt,

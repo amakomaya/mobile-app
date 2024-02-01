@@ -1,11 +1,11 @@
-import 'package:aamako_maya/src/core/padding/padding.dart';
-import 'package:aamako_maya/src/core/theme/app_colors.dart';
-import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
-import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
-import 'package:aamako_maya/src/core/widgets/loading_shimmer/shimmer_loading.dart';
-import 'package:aamako_maya/src/features/fetch%20user%20data/cubit/get_user_cubit.dart';
+import 'package:Amakomaya/src/core/padding/padding.dart';
+import 'package:Amakomaya/src/core/theme/app_colors.dart';
+import 'package:Amakomaya/src/core/widgets/helper_widgets/blank_space.dart';
+import 'package:Amakomaya/src/core/widgets/helper_widgets/shadow_container.dart';
+import 'package:Amakomaya/src/core/widgets/loading_shimmer/shimmer_loading.dart';
+import 'package:Amakomaya/src/features/fetch%20user%20data/cubit/get_user_cubit.dart';
 
-import 'package:aamako_maya/src/features/labtest/cubit/labtest_cubit.dart';
+import 'package:Amakomaya/src/features/labtest/cubit/labtest_cubit.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -60,7 +60,7 @@ class _LabtestpageState extends State<Labtestpage> {
       builder: (userCtx, userState) {
         return (userState is GetUserSuccess &&
             (userState.user.tole?.isEmpty ?? true))
-            ? Text(LocaleKeys.msg_please_complete_profile_first.tr())
+            ? Text(LocaleKeys.msg_please_complete_profile_first.tr(),textAlign: TextAlign.center,)
             : BlocBuilder<AuthenticationCubit, AuthenticationState>(
           builder: (authContext, authState) {
             return BlocProvider(

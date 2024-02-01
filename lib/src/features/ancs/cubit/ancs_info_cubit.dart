@@ -1,8 +1,5 @@
 import 'dart:convert';
 
-import 'package:aamako_maya/src/core/network_services/urls.dart';
-import 'package:aamako_maya/src/features/ancs/model/ancs_model.dart';
-import 'package:aamako_maya/src/features/ancs/model/new_report_model.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
@@ -10,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../core/network_services/urls.dart';
 import '../../authentication/local_storage/authentication_local_storage.dart';
 import '../model/information_model.dart';
 

@@ -20,24 +20,24 @@ field_phone_number	Enter Your Phone Number/Username	फोन नम्बर/�
 field_password	Enter Your Password	पासवर्ड लेख्नुहोस् 
 label_create_account	Create an Account	कृपया खाता खोल्नुहोस्
 warning_msg_username_no_empty	Username can not be empty	प्रयोगकर्ताको नाम आवश्यक 
-label_login_with_qr	Login with QR code	QR कोडको साथ लगइन गर्नुहोस्
+label_login_with_qr	Login with QR code	QR कोडको सहयोगले लगइन गर्नुहोस्
 label_not_regester_yet	Not registered yet?	दर्ता गर्नुभएको छैन?
 label_call	Call	सम्पर्क  गर्नुहोस्
 label_contact_num	NTC : 9761663394 / NCELL : 9802333446	NTC : ९७६१६६३३९४ / NCELL : ९८०२३३३४४६
 label_enquiry	for an enquiry	सोधपुछको लागि
-msg_username_min_length	Username must be at least 5 characters	प्रयोगकर्ताको नाम कम्तिमा ५ क्यारेक्टर हुनुपर्छ
-msg_password_min_length	Password must be at least 5 characters	पासवर्ड कम्तिमा ५ क्यारेक्टर हुनुपर्छ
+msg_username_min_length	Username must be at least 5 characters	प्रयोगकर्ताको नाम कम्तिमा ५ अक्षरको हुनुपर्छ
+msg_password_min_length	Password must be at least 5 characters	पासवर्ड कम्तिमा ५ अक्षरको हुनुपर्छ
 label_logout	Logout	लग- आउट गर्नुहोस् 
 label_register	Register	दर्ता गर्नुहोस्
 label_mobile_num	Mobile Number	मोबाइल नम्बर
 label_lmp	LMP 	अन्तिम महिनावारीको पहिलो दिन
 label_already_have_account	Already have an account ?	"पहिले नै दर्ता छ ?
 label_go_to_login	Go to login	लगइनमा जानुहोस्
-msg_name_min_length	Name must contain more than 3 characters	नाममा ३ भन्दा बढी क्यारेक्टर हुनुपर्छ
+msg_name_min_length	Name must contain more than 3 characters	नाममा ३ भन्दा बढी अक्षर हुनुपर्छ
 warning_msg_mobile_num_no_empty	Mobile number can't not be empty	मोबाइल नम्बर खाली हुन सक्दैन
 error_msg_invalid_mobile_num	Invalid mobile number	अवैध मोबाइल नम्बर
 warning_msg_password_no_empty	Password can't not be empty	पासवर्ड लेख्नुहोस् 
-msg_password_min_length	Password must contain more than 5 characters	पासवर्डमा ५ भन्दा बढी क्यारेक्टर हुनुपर्छ
+msg_password_min_length	Password must contain more than 5 characters	पासवर्डमा ५ भन्दा बढी अक्षरको हुनुपर्छ
 label_personal_details	Your Personal Details	तपाईंको व्यक्तिगत विवरणहरू
 label_distrct	District	जिल्ला
 label_age	Age	उमेर

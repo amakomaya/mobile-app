@@ -1,0 +1,59 @@
+Key	English	Nepali
+label_first_name	First Name	पहिलो नाम
+label_middle_name	Middle Name	बीचको नाम
+label_last_name	Last Name	थर
+label_dob	Date of Birth	जन्म मिति
+label_gender	Gender	लिङ्ग
+label_email	Email	ई-मेल
+msg_no_booking_available	No Bookings Available	कुनै बुकिङ उपलब्ध छैन
+label_scheme	Scheme	स्किम
+label_paying	Paying	पेइङ सेवा
+label_select_doctor	Select Doctor	डाक्टर छान्नुहोस
+label_general_service	General Service	जेनरल सेवा
+label_select_general_service	Select General Service	जेनरल अन्तरगतका सेवाहरु
+label_appointment_date	Appointment Date	अनलाईन बुकिङ गरिएको मिति
+label_booking_type	Booking Type	बुकिङको प्रकार
+label_new	New	नयाँ बुकिङ
+label_followup	Followup	पुरानो फलो-अप
+label_client_id	Client ID	सेवाग्राहीको ID नम्बर
+label_booking_date	Booking Date	बुकिङ गरिएको मिति
+label_amount	Amount	टिकट शुल्क
+label_status	Status	अवस्था
+label_booking	Booking	बुकिङ
+label_choose_appointment_date	Choose Appointment Date	टिकट बुक गर्ने मिति छान्नुहोस। 
+label_choose_scheme	Choose Scheme	स्किम छनोट गर्नुहोस
+label_paying_esh	Paying (ESH)	पेइड
+label_general	General	जेनरल
+label_paying_method	Payment Method	शूल्क भुक्तानी गर्ने तरिका
+label_confirm_pay	Confirm and Pay	पुष्टि गर्नुहोस् र भुक्तानी गर्नुहोस्
+label_appointment_booking	Appointment Booking	अपोइन्टमेन्ट बुकिङ
+label_appointment_history	Appointment History	अपोइन्टमेन्ट हिस्ट्रि
+placeholder_please_enter_first_name	Please Enter First Name	कृपया पहिलो नाम लेख्नुहोस
+msg_first_name_cannot_be_empty	First Name cannot be empty	पहिलो नाम अनिबार्य लेख्नुहोस
+placeholder_please_enter_middle_name	Please Enter Middle Name	कृपया बीचको नाम लेख्नुहोस
+placeholder_please_enter_last_name	Please Enter Last Name	कृपया थर लेख्नुहोस
+msg_last_name_cannot_be_empty	Last Name cannot be empty	थर अनिबार्य लेख्नुहोस
+placeholder_please_enter_date_of_birth	Please Enter Date of Birth	कृपया जन्म मिति लेख्नुहोस
+msg_select_gender	Select Gender	कृपया लिङ्ग छान्नुहोस
+placeholder_please_enter_email	Please Enter Email	कृपया इ-मेल लेख्नुहोस
+placeholder_please_enter_mobile_number	Please Enter Mobile Number	कृपया मोबाइल नं. लेख्नुहोस
+placeholder_please_enter_ward_number	Please Enter Ward Number	कृपया वडा नं. लेख्नुहोस
+placeholder_please_enter_tole	Please Enter Tole	कृपया टोलको नाम लेख्नुहोस
+placeholder_please_enter_client_id	Please Enter Client Id	कृपया सेवाग्रहीको आईडी लेख्नुहोस्
+msg_client_id_cannot_be_empty	Client id cannot be empty	सेवाग्रहीको आईडी अनिबार्य लेख्नुहोस्
+label_proceed_to_pay	Proceed to Pay	अनलाईन मार्फत भुक्तानी गर्न अगाडि बढ्नुहोस
+label_personal_information	Personal Information	व्यक्तिगत विवरण
+label_total_amount	Total Amount	कुल रकम
+msg_do_you_want_to_book_your_appointment_now  	Do you want to book your appointment now?  	के तपाई अहिले आफ्नो अपोइन्टमेन्ट बुक गर्न चाहनुहुन्छ?
+label_for_myself 	For MySelf	मेरो लागि हो
+label_for_other	For Other	अन्य ब्यक्तिको लागि हो
+label_checkout	Checkout	रकम भुक्तानी गर्नुहोस।
+label_connect_fonepay	Connecting To Fonepay	फोन पे मार्फत रकम भुक्तानी हुँदै छ।
+label_terms_conditions	By clicking in confirm and pay, you are in agreement of Terms and Conditions	भुक्तानीको लागि सुनिश्चित गर्नुहोसमा क्लिक गर्दा, फोन-पे सेवा ले तोकेको सर्त र सम्झौता मान्य भएको बुझिने छ। 
+label_fone_pay	FonePay	फोन पे मार्फत रकम भुक्तानी हुँदै छ।
+msg_no_booking_record	No Booking Records Found!	बुकिङ गरिएको कुनै बिवरण प्राप्त भएन 
+label_optional	(Optional)	(स्वेच्छिक)
+label_male	Male	पुरुष
+label_female	Female	महिला
+label_others	Others	अन्य
+label_mobile_number	Mobile Number	मोबाइल नं.

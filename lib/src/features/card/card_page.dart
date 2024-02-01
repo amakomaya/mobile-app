@@ -1,6 +1,6 @@
-import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
-import 'package:aamako_maya/src/features/authentication/local_storage/authentication_local_storage.dart';
-import 'package:aamako_maya/src/features/card/card_cubit.dart';
+import 'package:Amakomaya/src/core/widgets/helper_widgets/blank_space.dart';
+import 'package:Amakomaya/src/features/authentication/local_storage/authentication_local_storage.dart';
+import 'package:Amakomaya/src/features/card/card_cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,7 +26,7 @@ class _CardPageState extends State<CardPage> {
           builder: (context, state) {
             print(state + " QRCODE");
 
-            return QrImage(
+            return QrImageView(
               data: state,
               version: QrVersions.auto,
               size: 200.sm,

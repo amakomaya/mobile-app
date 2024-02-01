@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:aamako_maya/src/core/network_services/urls.dart';
-import 'package:aamako_maya/src/features/authentication/local_storage/authentication_local_storage.dart';
-import 'package:aamako_maya/src/features/symptoms/model/assessment_model.dart';
-import 'package:aamako_maya/src/features/symptoms/model/symptoms_model.dart';
+import 'package:Amakomaya/src/core/network_services/urls.dart';
+import 'package:Amakomaya/src/features/authentication/local_storage/authentication_local_storage.dart';
+import 'package:Amakomaya/src/features/symptoms/model/assessment_model.dart';
+import 'package:Amakomaya/src/features/symptoms/model/symptoms_model.dart';
 import 'package:bloc/bloc.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:dio/dio.dart';
@@ -52,7 +52,7 @@ class SymptomsCubit extends Cubit<SymptomsState> {
         throw ApiException(response.data.toString());
       }
     } on DioError catch (e) {
-      throw ApiException(e.message);
+      throw ApiException(e.message ?? "");
     }
   }
 

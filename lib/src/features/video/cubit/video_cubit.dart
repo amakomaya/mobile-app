@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:aamako_maya/src/features/video/model/video_model.dart';
-import 'package:aamako_maya/src/features/video/repository/videoes_repository.dart';
+import 'package:Amakomaya/src/features/video/model/video_model.dart';
+import 'package:Amakomaya/src/features/video/repository/videoes_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -21,7 +21,7 @@ class VideoCubit extends Cubit<VideoState> {
         super(VideoInitialState());
 
   void getVideos(bool isRefreshed) async {
-    
+    emit(VideoLoadingState());
     final response = _prefs.getString('videos');
 
     if (response != null && isRefreshed == false) {

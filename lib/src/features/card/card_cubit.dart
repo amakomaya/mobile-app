@@ -1,4 +1,4 @@
-import 'package:aamako_maya/src/features/authentication/local_storage/authentication_local_storage.dart';
+import 'package:Amakomaya/src/features/authentication/local_storage/authentication_local_storage.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CardCubit extends Cubit<String> {

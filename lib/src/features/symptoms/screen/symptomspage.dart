@@ -1,7 +1,7 @@
-import 'package:aamako_maya/src/core/theme/app_colors.dart';
-import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
-import 'package:aamako_maya/src/core/widgets/loading_shimmer/shimmer_loading.dart';
-import 'package:aamako_maya/src/features/symptoms/cubit/symptoms_cubit.dart';
+import 'package:Amakomaya/src/core/theme/app_colors.dart';
+import 'package:Amakomaya/src/core/widgets/helper_widgets/blank_space.dart';
+import 'package:Amakomaya/src/core/widgets/loading_shimmer/shimmer_loading.dart';
+import 'package:Amakomaya/src/features/symptoms/cubit/symptoms_cubit.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -666,11 +666,12 @@ class _SymptomsPAgeState extends State<SymptomsPAge> {
                                       LocaleKeys.label_assessment
                                           .tr()
                                           .toUpperCase(),
-                                      style: theme.textTheme.labelSmall
-                                          ?.copyWith(
-                                              color: state == 0
-                                                  ? AppColors.primaryRed
-                                                  : Colors.black),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge
+                                          ?.copyWith(fontSize: 14.sm, color:state == 0
+                                          ? AppColors.primaryRed
+                                          : Colors.black),
                                     )),
                               ),
                               Expanded(
@@ -691,11 +692,12 @@ class _SymptomsPAgeState extends State<SymptomsPAge> {
                                       LocaleKeys.label_history
                                           .tr()
                                           .toUpperCase(),
-                                      style: theme.textTheme.labelSmall
-                                          ?.copyWith(
-                                              color: state == 1
-                                                  ? AppColors.primaryRed
-                                                  : Colors.black),
+                                      style:Theme.of(context)
+                                          .textTheme
+                                          .labelLarge
+                                          ?.copyWith(fontSize: 14.sm, color:state == 1
+                                          ? AppColors.primaryRed
+                                          : Colors.black),
                                     )),
                               ),
                             ],

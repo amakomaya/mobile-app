@@ -1,9 +1,9 @@
-import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../padding/padding.dart';
+import '../helper_widgets/blank_space.dart';
 
 class ShimmerLoading extends StatelessWidget {
   final int itemCount;

@@ -1,6 +1,6 @@
-import 'package:aamako_maya/src/core/widgets/textfield/primary_textfield.dart';
-import 'package:aamako_maya/src/features/authentication/cubit/district_municipality_cubit.dart';
-import 'package:aamako_maya/src/features/fetch%20user%20data/cubit/get_user_cubit.dart';
+import 'package:Amakomaya/src/core/widgets/textfield/primary_textfield.dart';
+import 'package:Amakomaya/src/features/authentication/cubit/district_municipality_cubit.dart';
+import 'package:Amakomaya/src/features/fetch%20user%20data/cubit/get_user_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

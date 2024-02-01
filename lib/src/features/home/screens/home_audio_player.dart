@@ -1,4 +1,4 @@
-import 'package:aamako_maya/src/core/padding/padding.dart';
+import 'package:Amakomaya/src/core/padding/padding.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';

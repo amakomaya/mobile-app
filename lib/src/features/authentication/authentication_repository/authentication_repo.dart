@@ -1,7 +1,8 @@
 import 'dart:convert';
 
-import 'package:aamako_maya/src/features/authentication/local_storage/authentication_local_storage.dart';
-import 'package:aamako_maya/src/features/authentication/model/forget_password_model.dart';
+import 'package:Amakomaya/src/features/appointment_booking/cubit/scheme_cubit.dart';
+import 'package:Amakomaya/src/features/authentication/local_storage/authentication_local_storage.dart';
+import 'package:Amakomaya/src/features/authentication/model/forget_password_model.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,12 +17,14 @@ class AuthenticationRepository {
   SharedPreferences prefs;
   AuthLocalData local;
   DistrictMunicipality dis;
+  Scheme scheme;
 
   AuthenticationRepository(
     this.dio,
     this.prefs,
     this.dis,
     this.local,
+    this.scheme,
   );
   Response? response;
 

@@ -1,12 +1,12 @@
-import 'package:aamako_maya/src/core/padding/padding.dart';
-import 'package:aamako_maya/src/core/theme/app_colors.dart';
-import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
-import 'package:aamako_maya/src/features/audio/model/audio_model.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import '../../../core/app_assets/app_assets.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/helper_widgets/blank_space.dart';
 import '../../../core/widgets/helper_widgets/shadow_container.dart';
+import '../model/audio_model.dart';
 
 class AudioContainerWidget extends StatelessWidget {
   final AudioModel audio;

@@ -5,12 +5,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../l10n/locale_keys.g.dart';
 
 List<String> bloodGroups = ["A +ve", "A -ve", "B +ve", "B -ve", "O +ve", "O -ve", "AB +ve", "AB -ve"];
+List<String> gender = ["Male", "Female", "Others"];
 
 class CustomDropDown extends StatelessWidget {
   const CustomDropDown({
     Key? key,
     required this.controller,
     this.isEditable = false,
+    this.isFromGender = false,
     required this.items,
     required this.onChanged,
   }) : super(key: key);
@@ -18,6 +20,7 @@ class CustomDropDown extends StatelessWidget {
   final TextEditingController controller;
   final List<String> items;
   final bool isEditable;
+  final bool? isFromGender;
   final Function(String? v)? onChanged;
 
   Widget build(BuildContext context) {
@@ -30,8 +33,9 @@ class CustomDropDown extends StatelessWidget {
             BoxShadow(color: Colors.grey, offset: Offset(1, 1), blurRadius: 2)
           ]),
       child: DropdownButtonFormField(
-          hint: Text(
+          hint: Text( isFromGender==true ?  LocaleKeys.msg_select_gender.tr() :
             LocaleKeys.label_select_blood_group.tr(),
+
             style: TextStyle(color: Colors.grey),
           ),
           icon: Visibility(

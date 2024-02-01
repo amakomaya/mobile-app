@@ -1,16 +1,16 @@
 import 'dart:async';
 
-import 'package:aamako_maya/l10n/locale_keys.g.dart';
+import 'package:Amakomaya/l10n/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:aamako_maya/src/core/padding/padding.dart';
-import 'package:aamako_maya/src/core/snackbar/error_snackbar.dart';
-import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
-import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
-import 'package:aamako_maya/src/features/authentication/model/register_request_model.dart';
-import 'package:aamako_maya/src/features/authentication/screens/login/login_page.dart';
-import 'package:aamako_maya/src/features/authentication/widgets/complete_profile_section.dart';
-import 'package:aamako_maya/src/features/bottom_nav/bottom_navigation.dart';
+import 'package:Amakomaya/src/core/padding/padding.dart';
+import 'package:Amakomaya/src/core/snackbar/error_snackbar.dart';
+import 'package:Amakomaya/src/core/widgets/helper_widgets/blank_space.dart';
+import 'package:Amakomaya/src/core/widgets/helper_widgets/shadow_container.dart';
+import 'package:Amakomaya/src/features/authentication/model/register_request_model.dart';
+import 'package:Amakomaya/src/features/authentication/screens/login/login_page.dart';
+import 'package:Amakomaya/src/features/authentication/widgets/complete_profile_section.dart';
+import 'package:Amakomaya/src/features/bottom_nav/bottom_navigation.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +29,8 @@ import '../authentication_cubit/auth_cubit.dart';
 
 class RegisterSection extends StatefulWidget {
   final String registerAs;
-  const RegisterSection({Key? key, required this.registerAs}) : super(key: key);
+  final int selectedIndex;
+  const RegisterSection({Key? key, required this.registerAs ,required this.selectedIndex}) : super(key: key);
   @override
   State<RegisterSection> createState() => _RegisterSectionState();
 }
@@ -40,6 +41,7 @@ class _RegisterSectionState extends State<RegisterSection> {
   final _phone = TextEditingController();
   final _password = TextEditingController();
   final _lmp = TextEditingController();
+  final _dobChild = TextEditingController();
   picker.NepaliDateTime? picked;
   final _formKey = GlobalKey<FormState>();
 
@@ -84,7 +86,7 @@ class _RegisterSectionState extends State<RegisterSection> {
                       children: [
                         Padding(
                           padding:REdgeInsets.only(left: 18, bottom: 12),
-                          child: Text(LocaleKeys.label_register.tr(),
+                          child: Text("${LocaleKeys.label_register.tr()}",
                             style: Theme.of(context).textTheme.displaySmall,
                           ),
                         ),
@@ -125,8 +127,8 @@ class _RegisterSectionState extends State<RegisterSection> {
                                   border: InputBorder.none,
                                 ),
                               )),
-                          VerticalSpace(20.h),
-                          ShadowContainer(
+                          widget.selectedIndex==0 ?VerticalSpace(0.h): VerticalSpace(20.h),
+                          widget.selectedIndex==0 ? SizedBox():ShadowContainer(
                               width: size.width,
                               padding:
                                   defaultPadding.copyWith(top: 6.h, bottom: 6.h),
@@ -142,23 +144,24 @@ class _RegisterSectionState extends State<RegisterSection> {
                                   );
 
                                   if (picked != null) {
-                                    _lmp.text = formatter.format(picked!);
+                                    widget.selectedIndex == 1?
+                                    _lmp.text = formatter.format(picked!) : _dobChild.text = formatter.format(picked!) ;
                                   }
                                 },
                                 readOnly: true,
                                 cursorColor: AppColors.primaryRed,
                                 keyboardType: TextInputType.phone,
-                                controller: _lmp,
+                                controller:  widget.selectedIndex == 1?  _lmp : _dobChild,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
-                                    return  LocaleKeys.warning_msg_lmp_no_empty.tr();
+                                    return  widget.selectedIndex == 1 ? LocaleKeys.warning_msg_lmp_no_empty.tr() : "Date of Child Birth can not be Empty";
                                   }
 
                                   return null;
                                 },
                                 decoration: InputDecoration(
                                   labelStyle: TextStyle(color: AppColors.black),
-                                  label: Text( LocaleKeys.label_lmp.tr()),
+                                  label: Text(  widget.selectedIndex == 1 ? LocaleKeys.label_lmp.tr() : "Date of Child Birth"),
 
                                   // enabled: false,
                                   border: InputBorder.none,
@@ -227,8 +230,8 @@ class _RegisterSectionState extends State<RegisterSection> {
                                 context.read<AuthenticationCubit>().register(
                                     user: RegisterRequestModel(
                                         age: 0,
-                                        createdAt: _lmp.text.trim(),
-                                        updatedAt: _lmp.text.trim(),
+                                        createdAt: "",
+                                        updatedAt: "",
                                         name: _name.text.trim(),
                                         password: _password.text.trim(),
                                         username: _phone.text.trim(),
@@ -241,6 +244,7 @@ class _RegisterSectionState extends State<RegisterSection> {
                                         latitude: "",
                                         longitude: "",
                                         municipalityId: 0,
+                                        dobChild: _dobChild.text.trim(),
                                         registerAs: widget.registerAs,
                                         tole: ""));
                               }
@@ -254,6 +258,9 @@ class _RegisterSectionState extends State<RegisterSection> {
                             TextSpan(
                                 text: LocaleKeys.label_already_have_account.tr() ,
                                 style: Theme.of(context).textTheme.bodySmall),
+                                TextSpan(
+                                    text: " " ,
+                                    style: Theme.of(context).textTheme.bodySmall),
                             TextSpan(
                               text: LocaleKeys.label_go_to_login.tr(),
                               style: Theme.of(context)

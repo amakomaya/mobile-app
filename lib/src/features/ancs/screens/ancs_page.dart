@@ -1,15 +1,5 @@
 import 'dart:convert';
 
-import 'package:aamako_maya/injection_container.dart';
-import 'package:aamako_maya/src/core/theme/custom_theme.dart';
-import 'package:aamako_maya/src/core/widgets/drawer/drawer_widget.dart';
-import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
-import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
-import 'package:aamako_maya/src/core/widgets/loading_shimmer/shimmer_loading.dart';
-import 'package:aamako_maya/src/features/ancs/cubit/ancs_cubit.dart';
-import 'package:aamako_maya/src/features/ancs/model/ancs_model.dart';
-import 'package:aamako_maya/src/features/fetch%20user%20data/cubit/get_user_cubit.dart';
-import 'package:aamako_maya/src/features/labtest/cubit/toggle_page_view_cubit.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,14 +15,21 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../injection_container.dart';
 import '../../../../l10n/locale_keys.g.dart';
 import '../../../core/connection_checker/network_connection.dart';
 import '../../../core/padding/padding.dart';
 import '../../../core/snackbar/error_snackbar.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/helper_widgets/blank_space.dart';
+import '../../../core/widgets/helper_widgets/shadow_container.dart';
+import '../../../core/widgets/loading_shimmer/shimmer_loading.dart';
 import '../../authentication/authentication_cubit/auth_cubit.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../fetch user data/cubit/get_user_cubit.dart';
+import '../../labtest/cubit/toggle_page_view_cubit.dart';
+import '../cubit/ancs_cubit.dart';
 import '../cubit/ancs_info_cubit.dart';
 
 class AncsPage extends StatefulWidget {
@@ -64,7 +61,7 @@ class _AncsPageState extends State<AncsPage> {
       builder: (userCtx, userState) {
         return (userState is GetUserSuccess &&
                 (userState.user.tole?.isEmpty ?? true))
-            ? Text(LocaleKeys.msg_please_complete_profile_first.tr())
+            ? Text(LocaleKeys.msg_please_complete_profile_first.tr(),textAlign: TextAlign.center,)
             : BlocProvider(
                 create: (context) => TogglePageViewCubit(),
                 child: Builder(builder: (context) {

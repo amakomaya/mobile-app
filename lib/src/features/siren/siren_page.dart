@@ -1,9 +1,9 @@
 import 'dart:typed_data';
 
-import 'package:aamako_maya/src/core/padding/padding.dart';
-import 'package:aamako_maya/src/core/theme/app_colors.dart';
-import 'package:aamako_maya/src/core/widgets/buttons/primary_action_button.dart';
-import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
+import 'package:Amakomaya/src/core/padding/padding.dart';
+import 'package:Amakomaya/src/core/theme/app_colors.dart';
+import 'package:Amakomaya/src/core/widgets/buttons/primary_action_button.dart';
+import 'package:Amakomaya/src/core/widgets/helper_widgets/blank_space.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

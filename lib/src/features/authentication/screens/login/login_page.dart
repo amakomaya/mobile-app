@@ -1,13 +1,13 @@
 import 'dart:async';
 
-import 'package:aamako_maya/src/core/padding/padding.dart';
-import 'package:aamako_maya/src/core/widgets/border_container.dart';
-import 'package:aamako_maya/src/core/widgets/buttons/primary_action_button.dart';
-import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
-import 'package:aamako_maya/src/core/widgets/textfield/primary_textfield.dart';
-import 'package:aamako_maya/src/features/authentication/model/login_request_model.dart';
-import 'package:aamako_maya/src/features/authentication/screens/login/qr_code_page.dart';
-import 'package:aamako_maya/src/features/authentication/screens/register/register_page.dart';
+import 'package:Amakomaya/src/core/padding/padding.dart';
+import 'package:Amakomaya/src/core/widgets/border_container.dart';
+import 'package:Amakomaya/src/core/widgets/buttons/primary_action_button.dart';
+import 'package:Amakomaya/src/core/widgets/helper_widgets/blank_space.dart';
+import 'package:Amakomaya/src/core/widgets/textfield/primary_textfield.dart';
+import 'package:Amakomaya/src/features/authentication/model/login_request_model.dart';
+import 'package:Amakomaya/src/features/authentication/screens/login/qr_code_page.dart';
+import 'package:Amakomaya/src/features/authentication/screens/register/register_page.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
@@ -278,7 +278,7 @@ class _LoginPageState extends State<LoginPage> {
                       recognizer: TapGestureRecognizer()
                         ..onTap = () => Navigator.of(context).push(
                             MaterialPageRoute(
-                                builder: (ctx) => const RegisterPage())),
+                                builder: (ctx) =>  RegisterPage())),
                     ),
                   ])),
                   VerticalSpace(5.h),

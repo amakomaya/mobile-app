@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:aamako_maya/src/core/network_services/urls.dart';
-import 'package:aamako_maya/src/features/authentication/model/municipality_district_model.dart';
+import 'package:Amakomaya/src/core/network_services/urls.dart';
+import 'package:Amakomaya/src/features/authentication/model/municipality_district_model.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
@@ -73,7 +73,7 @@ class DistrictMunicipality {
     try {
       final response = await Future.wait(
           [dio.get(Urls.getDistrict), dio.get(Urls.getMunicipality),dio.get(Urls.getProvince)]);
-
+      print("aaaaaa setsx ${jsonEncode(response[0].data)}");
      final result= await prefs.setString('district', jsonEncode(response[0].data));
     final result1=  await prefs.setString('municipality', jsonEncode(response[1].data));
     final result2=  await prefs.setString('province', jsonEncode(response[2].data));

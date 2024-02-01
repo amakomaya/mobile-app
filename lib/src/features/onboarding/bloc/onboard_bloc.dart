@@ -1,4 +1,4 @@
-import 'package:aamako_maya/src/features/onboarding/models/onboarding_model.dart';
+import 'package:Amakomaya/src/features/onboarding/models/onboarding_model.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/rendering.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';

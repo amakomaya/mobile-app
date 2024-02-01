@@ -1,8 +1,10 @@
-import 'package:aamako_maya/src/core/padding/padding.dart';
-import 'package:aamako_maya/src/core/theme/app_colors.dart';
-import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../padding/padding.dart';
+import '../../theme/app_colors.dart';
+import '../helper_widgets/blank_space.dart';
 
 typedef ValidatorFunc = String? Function(String?);
 
@@ -20,6 +22,7 @@ class PrimaryTextField extends StatelessWidget {
   final double? height;
   final double? width;
   final bool? isPhone;
+  final int? maxLength;
   final bool? readOnly;
   final EdgeInsetsGeometry? boxMargin;
   final EdgeInsetsGeometry? textPadding;
@@ -32,6 +35,7 @@ class PrimaryTextField extends StatelessWidget {
       this.onTap,
       this.readOnly,
       this.height,
+      this.maxLength,
       this.width,
       this.isPhone,
       this.padding,
@@ -78,6 +82,7 @@ class PrimaryTextField extends StatelessWidget {
             child: TextFormField(
               enabled: isEditable,
               onTap: onTap,
+              maxLength: maxLength ?? null,
               readOnly: readOnly ?? false,
               keyboardType: isPhone != null && isPhone == true
                   ? TextInputType.phone
@@ -91,6 +96,7 @@ class PrimaryTextField extends StatelessWidget {
                   : FocusScope.of(context).unfocus(),
               validator: validator,
               decoration: InputDecoration(
+                  isDense: true,
                   suffixIcon: GestureDetector(
                     onTap: sufixTap,
                     child: Icon(
@@ -98,11 +104,18 @@ class PrimaryTextField extends StatelessWidget {
                       color: Colors.grey,
                     ),
                   ),
+                  errorStyle:
+                  TextStyle(fontSize: 10.sp, color: Colors.red.shade800),
+                  errorMaxLines: 2,
+                  counterText: "",
                   hintText: hintText,
                   hintStyle: Theme.of(context)
                       .textTheme
                       .labelSmall
                       ?.copyWith(color: Colors.grey),
+                  errorBorder: OutlineInputBorder(
+                      borderSide:
+                      BorderSide(width: 1.0.w, color: AppColors.primaryRed)),
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
                       borderSide:

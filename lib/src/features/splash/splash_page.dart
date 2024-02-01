@@ -1,7 +1,7 @@
-import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
-import 'package:aamako_maya/src/features/authentication/local_storage/authentication_local_storage.dart';
-import 'package:aamako_maya/src/features/authentication/screens/login/login_page.dart';
-import 'package:aamako_maya/src/features/onboarding/screens/onboarding_page.dart';
+import 'package:Amakomaya/src/core/widgets/helper_widgets/blank_space.dart';
+import 'package:Amakomaya/src/features/authentication/local_storage/authentication_local_storage.dart';
+import 'package:Amakomaya/src/features/authentication/screens/login/login_page.dart';
+import 'package:Amakomaya/src/features/onboarding/screens/onboarding_page.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

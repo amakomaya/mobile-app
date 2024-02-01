@@ -1,15 +1,15 @@
-import 'package:aamako_maya/l10n/locale_keys.g.dart';
-import 'package:aamako_maya/src/core/padding/padding.dart';
-import 'package:aamako_maya/src/core/theme/app_colors.dart';
-import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
-import 'package:aamako_maya/src/core/widgets/textfield/primary_textfield.dart';
-import 'package:aamako_maya/src/features/authentication/cubit/district_municipality_cubit.dart';
-import 'package:aamako_maya/src/features/authentication/widgets/custom_dropdown.dart';
+import 'package:Amakomaya/l10n/locale_keys.g.dart';
+import 'package:Amakomaya/src/core/padding/padding.dart';
+import 'package:Amakomaya/src/core/theme/app_colors.dart';
+import 'package:Amakomaya/src/core/widgets/helper_widgets/shadow_container.dart';
+import 'package:Amakomaya/src/core/widgets/textfield/primary_textfield.dart';
+import 'package:Amakomaya/src/features/authentication/cubit/district_municipality_cubit.dart';
+import 'package:Amakomaya/src/features/authentication/widgets/custom_dropdown.dart';
 
-import 'package:aamako_maya/src/features/authentication/widgets/municipality_dropdown_widget.dart';
-import 'package:aamako_maya/src/features/authentication/widgets/province_dropdown_widget.dart';
-import 'package:aamako_maya/src/features/fetch%20user%20data/cubit/get_user_cubit.dart';
-import 'package:aamako_maya/src/features/symptoms/cubit/symptoms_cubit.dart';
+import 'package:Amakomaya/src/features/authentication/widgets/municipality_dropdown_widget.dart';
+import 'package:Amakomaya/src/features/authentication/widgets/province_dropdown_widget.dart';
+import 'package:Amakomaya/src/features/fetch%20user%20data/cubit/get_user_cubit.dart';
+import 'package:Amakomaya/src/features/symptoms/cubit/symptoms_cubit.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -37,6 +37,7 @@ class _CompleteProfileSectionState extends State<CompleteProfileSection> {
   final TextEditingController _age = TextEditingController();
   final TextEditingController _tole = TextEditingController();
   final TextEditingController _ward = TextEditingController();
+  final TextEditingController _dobChild = TextEditingController();
   final TextEditingController _phone = TextEditingController();
   final TextEditingController _district = TextEditingController();
   final TextEditingController _municipality = TextEditingController();
@@ -55,13 +56,22 @@ class _CompleteProfileSectionState extends State<CompleteProfileSection> {
   picker.NepaliDateTime? picked;
   final ScrollController scrollController = ScrollController();
   var isEdit = false;
-  var isPreparingforPregnancy = false;
+  var isPreparingforPregnancy = true;
   final TextEditingController _lmp = TextEditingController();
+  String userMode = "";
 
   @override
   void initState() {
     context.read<DistrictMunicipalityCubit>().startDistrictMunicipalityFetch();
     super.initState();
+    callApi();
+  }
+
+  callApi() async {
+    await context.read<GetUserCubit>()
+      ..getUserData();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    userMode = prefs.getString('user_mode') ?? "";
   }
 
   @override
@@ -70,6 +80,7 @@ class _CompleteProfileSectionState extends State<CompleteProfileSection> {
       listener: (context, state) {
         if (state is GetUserSuccess) {
           _name.text = state.user.name ?? '';
+          _dobChild.text = state.user.dobChild ?? '';
           _age.text = (state.user.age ?? '').toString();
           _lmp.text = state.user.lmpDateNp ?? '';
           _phone.text = state.user.phone.toString();
@@ -84,7 +95,7 @@ class _CompleteProfileSectionState extends State<CompleteProfileSection> {
           _provinceID.text = "0";
           _districtID.text = (0).toString();
           _municipalityID.text = (0).toString();
-          _district.text = state.user.districtName ?? "" ;
+          _district.text = state.user.districtName ?? "";
           _municipality.text = state.user.municipalityName ?? "";
           _province.text = state.user.provinceName ?? "";
         }
@@ -131,32 +142,71 @@ class _CompleteProfileSectionState extends State<CompleteProfileSection> {
                         return null;
                       },
                     ),
-                    VerticalSpace(20.h),
-                    PrimaryTextField(
-                      isEditable: isEdit,
-                      readOnly: true,
-                      onTap: () async {
-                        picked = await picker.showMaterialDatePicker(
-                          context: context,
-                          initialDate: picker.NepaliDateTime.now(),
-                          firstDate: picker.NepaliDateTime(2000),
-                          lastDate: picker.NepaliDateTime.now(),
-                          initialDatePickerMode: DatePickerMode.day,
-                        );
+                    userMode == "pregnancy"
+                        ? Column(
+                            children: [
+                              VerticalSpace(20.h),
+                              PrimaryTextField(
+                                isEditable: isEdit,
+                                readOnly: true,
+                                onTap: () async {
+                                  picked = await picker.showMaterialDatePicker(
+                                    context: context,
+                                    initialDate: picker.NepaliDateTime.now(),
+                                    firstDate: picker.NepaliDateTime(2000),
+                                    lastDate: picker.NepaliDateTime.now(),
+                                    initialDatePickerMode: DatePickerMode.day,
+                                  );
 
-                        if (picked != null) {
-                          _lmp.text = formatter.format(picked!);
-                        }
-                      },
-                      controller: _lmp,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return LocaleKeys.warning_msg_lmp_no_empty.tr();
-                        }
-                        return null;
-                      },
-                      labelText: LocaleKeys.lable_lmp_date.tr(),
-                    ),
+                                  if (picked != null) {
+                                    _lmp.text = formatter.format(picked!);
+                                  }
+                                },
+                                controller: _lmp,
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return LocaleKeys.warning_msg_lmp_no_empty
+                                        .tr();
+                                  }
+                                  return null;
+                                },
+                                labelText: LocaleKeys.lable_lmp_date.tr(),
+                              ),
+                            ],
+                          )
+                        : SizedBox(),
+                    userMode == "growth of child"
+                        ? Column(
+                            children: [
+                              VerticalSpace(20.h),
+                              PrimaryTextField(
+                                isEditable: isEdit,
+                                readOnly: true,
+                                onTap: () async {
+                                  picked = await picker.showMaterialDatePicker(
+                                    context: context,
+                                    initialDate: picker.NepaliDateTime.now(),
+                                    firstDate: picker.NepaliDateTime(2000),
+                                    lastDate: picker.NepaliDateTime.now(),
+                                    initialDatePickerMode: DatePickerMode.day,
+                                  );
+
+                                  if (picked != null) {
+                                    _dobChild.text = formatter.format(picked!);
+                                  }
+                                },
+                                controller: _dobChild,
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return "Date of child birth cannot be empty";
+                                  }
+                                  return null;
+                                },
+                                labelText: "Date of Child Birth",
+                              ),
+                            ],
+                          )
+                        : SizedBox(),
                   ]),
                   VerticalSpace(20.h),
                   Container(
@@ -205,7 +255,7 @@ class _CompleteProfileSectionState extends State<CompleteProfileSection> {
                       districtController: _district,
                       municipalityController: _municipality,
                       controller: _province,
-                      provinceId:  0,
+                      provinceId: 0,
                     ),
                     VerticalSpace(20.h),
                     DistrictDropdownListWidget(
@@ -217,7 +267,7 @@ class _CompleteProfileSectionState extends State<CompleteProfileSection> {
                         }
                         return null;
                       },
-                      provinceId:  0,
+                      provinceId: 0,
                       controller: _district,
                       districtId: state.user.districtId ?? 0,
                       municipalityController: _municipality,
@@ -245,7 +295,7 @@ class _CompleteProfileSectionState extends State<CompleteProfileSection> {
                       validator: (value) {
                         if (value!.isEmpty) {
                           return LocaleKeys.warning_msg_ward_no_empty.tr();
-                        } else if( int.parse(value) > 33){
+                        } else if (int.parse(value) > 33) {
                           return LocaleKeys.warning_msg_ward_no_exceed.tr();
                         }
                         return null;
@@ -277,122 +327,142 @@ class _CompleteProfileSectionState extends State<CompleteProfileSection> {
                       },
                     ),
                   ]),
-                  VerticalSpace(40.h),
-                  Text(
-                    LocaleKeys.label_other_info.tr(),
-                    style: Theme.of(context)
-                        .textTheme
-                        .labelLarge
-                        ?.copyWith(fontSize: 16, color: Colors.red),
-                  ),
-                  VerticalSpace(20.h),
-                  PrimaryTextField(
-                    isEditable: isEdit,
-                    controller: _disease,
-                    labelText: LocaleKeys.label_have_disease_prev.tr(),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return LocaleKeys.warning_msg_disease_prev_no_empty
-                            .tr();
-                      }
-                      return null;
-                    },
-                  ),
-                  VerticalSpace(20.h),
-                  PrimaryTextField(
-                    isEditable: isEdit,
-                    controller: _numberOfPregnancy,
-                    isPhone: true,
-                    labelText: LocaleKeys.label_no_of_pregnant_before.tr(),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return LocaleKeys.warning_msg_pregnant_before_no_empty
-                            .tr();
-                      }
-                      else if( int.parse(value) > 5){
-                        return LocaleKeys.warning_msg_pregnant_before_exceed.tr();
-                      }
-                      return null;
-                    },
-                  ),
-                  VerticalSpace(20.h),
-                  PrimaryTextField(
-                    isEditable: isEdit,
-                    controller: _heightIncm,
-                    labelText: LocaleKeys.label_height.tr(),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return LocaleKeys.warning_msg_height_no_empty.tr();
-                      }
-                      return null;
-                    },
-                  ),
-                  VerticalSpace(20.h),
-                  PrimaryTextField(
-                    isEditable: isEdit,
-                    controller: _husbandName,
-                    labelText: LocaleKeys.label_husband_name.tr(),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return LocaleKeys.warning_msg_husband_name_no_empty
-                            .tr();
-                      }
-                      return null;
-                    },
-                  ),
-                  VerticalSpace(20.h),
-                  PrimaryTextField(
-                    isEditable: isEdit,
-                    controller: _currentHealthPostName,
-                    labelText: LocaleKeys.label_health_post.tr(),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return LocaleKeys.warning_msg_health_post_no_empty.tr();
-                      }
-                      return null;
-                    },
-                  ),
-                  VerticalSpace(30.h),
-                  VerticalSpace(20.h),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 22),
-                    child: Column(
-                      children: [
-                        Container(
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            LocaleKeys.label_mode.tr(),
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelMedium
-                                ?.copyWith(fontSize: 16),
-                          ),
-                        ),
-                        VerticalSpace(10.h),
-                        SwitchWidget(
-                            onTap: () {
-                              if (isEdit) {
-                                isPreparingforPregnancy = false;
-                                setState(() {});
-                              }
-                            },
-                            isPreparingforPregnancy: isPreparingforPregnancy,
-                            label: LocaleKeys.label_prepare_pregnancy.tr()),
-                        VerticalSpace(
-                          10,
-                        ),
-                        SwitchWidget(
-                            onTap: () {
-                              if (isEdit) {
-                                isPreparingforPregnancy = true;
-                                setState(() {});
-                              }
-                            },
-                            isPreparingforPregnancy: !isPreparingforPregnancy,
-                            label: LocaleKeys.label_growth_of_child.tr()),
-                      ],
-                    ),
-                  ),
+                  userMode == "pregnancy"
+                      ? Column(
+                          children: [
+                            VerticalSpace(40.h),
+                            Text(
+                              LocaleKeys.label_other_info.tr(),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelLarge
+                                  ?.copyWith(fontSize: 16, color: Colors.red),
+                            ),
+                            VerticalSpace(20.h),
+                            PrimaryTextField(
+                              isEditable: isEdit,
+                              controller: _disease,
+                              labelText:
+                                  LocaleKeys.label_have_disease_prev.tr(),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return LocaleKeys
+                                      .warning_msg_disease_prev_no_empty
+                                      .tr();
+                                }
+                                return null;
+                              },
+                            ),
+                            VerticalSpace(20.h),
+                            PrimaryTextField(
+                              isEditable: isEdit,
+                              controller: _numberOfPregnancy,
+                              isPhone: true,
+                              labelText:
+                                  LocaleKeys.label_no_of_pregnant_before.tr(),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return LocaleKeys
+                                      .warning_msg_pregnant_before_no_empty
+                                      .tr();
+                                } else if (int.parse(value) > 5) {
+                                  return LocaleKeys
+                                      .warning_msg_pregnant_before_exceed
+                                      .tr();
+                                }
+                                return null;
+                              },
+                            ),
+                            VerticalSpace(20.h),
+                            PrimaryTextField(
+                              isEditable: isEdit,
+                              controller: _heightIncm,
+                              labelText: LocaleKeys.label_height.tr(),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return LocaleKeys.warning_msg_height_no_empty
+                                      .tr();
+                                }
+                                return null;
+                              },
+                            ),
+                            VerticalSpace(20.h),
+                            PrimaryTextField(
+                              isEditable: isEdit,
+                              controller: _husbandName,
+                              labelText: LocaleKeys.label_husband_name.tr(),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return LocaleKeys
+                                      .warning_msg_husband_name_no_empty
+                                      .tr();
+                                }
+                                return null;
+                              },
+                            ),
+                            VerticalSpace(20.h),
+                            PrimaryTextField(
+                              isEditable: isEdit,
+                              controller: _currentHealthPostName,
+                              labelText: LocaleKeys.label_health_post.tr(),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return LocaleKeys
+                                      .warning_msg_health_post_no_empty
+                                      .tr();
+                                }
+                                return null;
+                              },
+                            ),
+                            VerticalSpace(30.h),
+                            VerticalSpace(20.h),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 22),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      LocaleKeys.label_mode.tr(),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelMedium
+                                          ?.copyWith(fontSize: 16),
+                                    ),
+                                  ),
+                                  VerticalSpace(10.h),
+                                  SwitchWidget(
+                                      onTap: () {
+                                        if (isEdit) {
+                                          isPreparingforPregnancy = true;
+                                          setState(() {});
+                                        }
+                                      },
+                                      isPreparingforPregnancy:
+                                          isPreparingforPregnancy,
+                                      label: LocaleKeys.label_prepare_pregnancy
+                                          .tr()),
+                                  VerticalSpace(
+                                    10,
+                                  ),
+                                  SwitchWidget(
+                                      onTap: () {
+                                        if (isEdit) {
+                                          isPreparingforPregnancy = false;
+                                          setState(() {});
+                                        }
+                                      },
+                                      isPreparingforPregnancy:
+                                          !isPreparingforPregnancy,
+                                      label: LocaleKeys.label_growth_of_child
+                                          .tr()),
+                                ],
+                              ),
+                            ),
+                          ],
+                        )
+                      : SizedBox(),
                   VerticalSpace(50.h),
                   if (!isEdit)
                     PrimaryActionButton(
@@ -419,6 +489,7 @@ class _CompleteProfileSectionState extends State<CompleteProfileSection> {
                                           .postUserData(
                                             name: _name.text,
                                             wardno: _ward.text,
+                                            dobChild: _dobChild.text,
                                             age: int.parse(_age.text),
                                             provinceName: _province.text,
                                             mobile_number: _phone.text,
@@ -426,11 +497,12 @@ class _CompleteProfileSectionState extends State<CompleteProfileSection> {
                                             bloodgroup: _bloodgroup.text,
                                             districtName: _district.text,
                                             municipalityName:
-                                            _municipality.text,
+                                                _municipality.text,
                                             tole: _tole.text,
                                             disease: _disease.text,
                                             heightIncm: _heightIncm.text,
-                                            numberOfPregnancy:int.parse( _numberOfPregnancy.text),
+                                            numberOfPregnancy: int.parse(
+                                                _numberOfPregnancy.text),
                                             husbandName: _husbandName.text,
                                             currentHealthPost:
                                                 _currentHealthPostName.text,
@@ -438,33 +510,31 @@ class _CompleteProfileSectionState extends State<CompleteProfileSection> {
                                                 ? "Preparing for Pregnancy"
                                                 : "Growth of Child",
                                           );
-                                      print("datasss ${_district.text}");
-                                      print("datasss ${_municipality.text}");
-                                      print("datasss ${_province.text}");
-
                                       // await Future.delayed(Duration(seconds: 2));
                                       BotToast.closeAllLoading();
                                       BotToast.showText(
                                           text: LocaleKeys
                                               .msg_updated_profile_success
                                               .tr());
-                                      SharedPreferences prefs = await SharedPreferences.getInstance();
+                                      SharedPreferences prefs =
+                                          await SharedPreferences.getInstance();
                                       prefs.remove("user_data");
                                       isEdit = false;
                                       scrollController.jumpTo(scrollController
                                           .position.minScrollExtent);
-                                      await context
-                                          .read<GetUserCubit>()..getUserData();
+                                      await context.read<GetUserCubit>()
+                                        ..getUserData();
                                       setState(() {});
                                     } on ApiException catch (e) {
                                       BotToast.closeAllLoading();
                                       BotToast.showText(
                                           text: e.message.toString());
                                     }
-                                  }
-                                  else{
+                                  } else {
                                     BotToast.showText(
-                                        text: LocaleKeys.warning_msg_fill_all_field.tr());
+                                        text: LocaleKeys
+                                            .warning_msg_fill_all_field
+                                            .tr());
                                   }
                                 } else {
                                   BotToast.showText(
@@ -519,7 +589,7 @@ class SwitchWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          !isPreparingforPregnancy
+          isPreparingforPregnancy
               ? Icon(
                   Icons.radio_button_checked,
                   color: AppColors.primaryRed.withOpacity(0.7),

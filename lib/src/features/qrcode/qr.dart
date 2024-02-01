@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
-import 'package:aamako_maya/src/features/card/card_cubit.dart';
-import 'package:aamako_maya/src/features/fetch%20user%20data/cubit/get_user_cubit.dart';
+import 'package:Amakomaya/src/features/card/card_cubit.dart';
+import 'package:Amakomaya/src/features/fetch%20user%20data/cubit/get_user_cubit.dart';
 import 'package:another_flushbar/flushbar_helper.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -142,7 +142,7 @@ class _QrCodeState extends State<QrCode> {
                       print(state + " Basyal generating qr code");
 
                       return Center(
-                        child: QrImage(
+                        child: QrImageView(
                           data: state,
                           version: QrVersions.auto,
                           size: 200.sm,

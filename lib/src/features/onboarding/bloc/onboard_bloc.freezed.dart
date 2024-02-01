@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'onboard_bloc.dart';
 
@@ -24,8 +24,8 @@ mixin _$OnboardEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? started,
-    TResult Function()? onboardStart,
+    TResult? Function()? started,
+    TResult? Function()? onboardStart,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -43,8 +43,8 @@ mixin _$OnboardEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_Started value)? started,
-    TResult Function(_StartOnboard value)? onboardStart,
+    TResult? Function(_Started value)? started,
+    TResult? Function(_StartOnboard value)? onboardStart,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -60,16 +60,18 @@ mixin _$OnboardEvent {
 abstract class $OnboardEventCopyWith<$Res> {
   factory $OnboardEventCopyWith(
           OnboardEvent value, $Res Function(OnboardEvent) then) =
-      _$OnboardEventCopyWithImpl<$Res>;
+      _$OnboardEventCopyWithImpl<$Res, OnboardEvent>;
 }
 
 /// @nodoc
-class _$OnboardEventCopyWithImpl<$Res> implements $OnboardEventCopyWith<$Res> {
+class _$OnboardEventCopyWithImpl<$Res, $Val extends OnboardEvent>
+    implements $OnboardEventCopyWith<$Res> {
   _$OnboardEventCopyWithImpl(this._value, this._then);
 
-  final OnboardEvent _value;
   // ignore: unused_field
-  final $Res Function(OnboardEvent) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 }
 
 /// @nodoc
@@ -80,13 +82,11 @@ abstract class _$$_StartedCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_StartedCopyWithImpl<$Res> extends _$OnboardEventCopyWithImpl<$Res>
+class __$$_StartedCopyWithImpl<$Res>
+    extends _$OnboardEventCopyWithImpl<$Res, _$_Started>
     implements _$$_StartedCopyWith<$Res> {
   __$$_StartedCopyWithImpl(_$_Started _value, $Res Function(_$_Started) _then)
-      : super(_value, (v) => _then(v as _$_Started));
-
-  @override
-  _$_Started get _value => super._value as _$_Started;
+      : super(_value, _then);
 }
 
 /// @nodoc
@@ -120,8 +120,8 @@ class _$_Started implements _Started {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? started,
-    TResult Function()? onboardStart,
+    TResult? Function()? started,
+    TResult? Function()? onboardStart,
   }) {
     return started?.call();
   }
@@ -151,8 +151,8 @@ class _$_Started implements _Started {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_Started value)? started,
-    TResult Function(_StartOnboard value)? onboardStart,
+    TResult? Function(_Started value)? started,
+    TResult? Function(_StartOnboard value)? onboardStart,
   }) {
     return started?.call(this);
   }
@@ -184,14 +184,11 @@ abstract class _$$_StartOnboardCopyWith<$Res> {
 
 /// @nodoc
 class __$$_StartOnboardCopyWithImpl<$Res>
-    extends _$OnboardEventCopyWithImpl<$Res>
+    extends _$OnboardEventCopyWithImpl<$Res, _$_StartOnboard>
     implements _$$_StartOnboardCopyWith<$Res> {
   __$$_StartOnboardCopyWithImpl(
       _$_StartOnboard _value, $Res Function(_$_StartOnboard) _then)
-      : super(_value, (v) => _then(v as _$_StartOnboard));
-
-  @override
-  _$_StartOnboard get _value => super._value as _$_StartOnboard;
+      : super(_value, _then);
 }
 
 /// @nodoc
@@ -225,8 +222,8 @@ class _$_StartOnboard implements _StartOnboard {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? started,
-    TResult Function()? onboardStart,
+    TResult? Function()? started,
+    TResult? Function()? onboardStart,
   }) {
     return onboardStart?.call();
   }
@@ -256,8 +253,8 @@ class _$_StartOnboard implements _StartOnboard {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_Started value)? started,
-    TResult Function(_StartOnboard value)? onboardStart,
+    TResult? Function(_Started value)? started,
+    TResult? Function(_StartOnboard value)? onboardStart,
   }) {
     return onboardStart?.call(this);
   }
@@ -294,8 +291,8 @@ mixin _$OnboardState {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(bool isLoading, Exception? error)? initial,
-    TResult Function(
+    TResult? Function(bool isLoading, Exception? error)? initial,
+    TResult? Function(
             bool isLoading, Exception? error, List<WizardModel> onboardList)?
         success,
   }) =>
@@ -317,8 +314,8 @@ mixin _$OnboardState {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_OnboardSuccess value)? success,
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_OnboardSuccess value)? success,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -338,33 +335,37 @@ mixin _$OnboardState {
 abstract class $OnboardStateCopyWith<$Res> {
   factory $OnboardStateCopyWith(
           OnboardState value, $Res Function(OnboardState) then) =
-      _$OnboardStateCopyWithImpl<$Res>;
+      _$OnboardStateCopyWithImpl<$Res, OnboardState>;
+  @useResult
   $Res call({bool isLoading, Exception? error});
 }
 
 /// @nodoc
-class _$OnboardStateCopyWithImpl<$Res> implements $OnboardStateCopyWith<$Res> {
+class _$OnboardStateCopyWithImpl<$Res, $Val extends OnboardState>
+    implements $OnboardStateCopyWith<$Res> {
   _$OnboardStateCopyWithImpl(this._value, this._then);
 
-  final OnboardState _value;
   // ignore: unused_field
-  final $Res Function(OnboardState) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? isLoading = freezed,
+    Object? isLoading = null,
     Object? error = freezed,
   }) {
     return _then(_value.copyWith(
-      isLoading: isLoading == freezed
+      isLoading: null == isLoading
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
               as bool,
-      error: error == freezed
+      error: freezed == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
               as Exception?,
-    ));
+    ) as $Val);
   }
 }
 
@@ -375,29 +376,29 @@ abstract class _$$_InitialCopyWith<$Res>
           _$_Initial value, $Res Function(_$_Initial) then) =
       __$$_InitialCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({bool isLoading, Exception? error});
 }
 
 /// @nodoc
-class __$$_InitialCopyWithImpl<$Res> extends _$OnboardStateCopyWithImpl<$Res>
+class __$$_InitialCopyWithImpl<$Res>
+    extends _$OnboardStateCopyWithImpl<$Res, _$_Initial>
     implements _$$_InitialCopyWith<$Res> {
   __$$_InitialCopyWithImpl(_$_Initial _value, $Res Function(_$_Initial) _then)
-      : super(_value, (v) => _then(v as _$_Initial));
+      : super(_value, _then);
 
-  @override
-  _$_Initial get _value => super._value as _$_Initial;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? isLoading = freezed,
+    Object? isLoading = null,
     Object? error = freezed,
   }) {
     return _then(_$_Initial(
-      isLoading: isLoading == freezed
+      isLoading: null == isLoading
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
               as bool,
-      error: error == freezed
+      error: freezed == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
               as Exception?,
@@ -426,18 +427,17 @@ class _$_Initial implements _Initial {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_Initial &&
-            const DeepCollectionEquality().equals(other.isLoading, isLoading) &&
-            const DeepCollectionEquality().equals(other.error, error));
+            (identical(other.isLoading, isLoading) ||
+                other.isLoading == isLoading) &&
+            (identical(other.error, error) || other.error == error));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(isLoading),
-      const DeepCollectionEquality().hash(error));
+  int get hashCode => Object.hash(runtimeType, isLoading, error);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_InitialCopyWith<_$_Initial> get copyWith =>
       __$$_InitialCopyWithImpl<_$_Initial>(this, _$identity);
 
@@ -455,8 +455,8 @@ class _$_Initial implements _Initial {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(bool isLoading, Exception? error)? initial,
-    TResult Function(
+    TResult? Function(bool isLoading, Exception? error)? initial,
+    TResult? Function(
             bool isLoading, Exception? error, List<WizardModel> onboardList)?
         success,
   }) {
@@ -490,8 +490,8 @@ class _$_Initial implements _Initial {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_OnboardSuccess value)? success,
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_OnboardSuccess value)? success,
   }) {
     return initial?.call(this);
   }
@@ -531,36 +531,35 @@ abstract class _$$_OnboardSuccessCopyWith<$Res>
           _$_OnboardSuccess value, $Res Function(_$_OnboardSuccess) then) =
       __$$_OnboardSuccessCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({bool isLoading, Exception? error, List<WizardModel> onboardList});
 }
 
 /// @nodoc
 class __$$_OnboardSuccessCopyWithImpl<$Res>
-    extends _$OnboardStateCopyWithImpl<$Res>
+    extends _$OnboardStateCopyWithImpl<$Res, _$_OnboardSuccess>
     implements _$$_OnboardSuccessCopyWith<$Res> {
   __$$_OnboardSuccessCopyWithImpl(
       _$_OnboardSuccess _value, $Res Function(_$_OnboardSuccess) _then)
-      : super(_value, (v) => _then(v as _$_OnboardSuccess));
+      : super(_value, _then);
 
-  @override
-  _$_OnboardSuccess get _value => super._value as _$_OnboardSuccess;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? isLoading = freezed,
+    Object? isLoading = null,
     Object? error = freezed,
-    Object? onboardList = freezed,
+    Object? onboardList = null,
   }) {
     return _then(_$_OnboardSuccess(
-      isLoading: isLoading == freezed
+      isLoading: null == isLoading
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
               as bool,
-      error: error == freezed
+      error: freezed == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
               as Exception?,
-      onboardList: onboardList == freezed
+      onboardList: null == onboardList
           ? _value._onboardList
           : onboardList // ignore: cast_nullable_to_non_nullable
               as List<WizardModel>,
@@ -585,6 +584,7 @@ class _$_OnboardSuccess implements _OnboardSuccess {
   final List<WizardModel> _onboardList;
   @override
   List<WizardModel> get onboardList {
+    if (_onboardList is EqualUnmodifiableListView) return _onboardList;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_onboardList);
   }
@@ -599,21 +599,20 @@ class _$_OnboardSuccess implements _OnboardSuccess {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_OnboardSuccess &&
-            const DeepCollectionEquality().equals(other.isLoading, isLoading) &&
-            const DeepCollectionEquality().equals(other.error, error) &&
+            (identical(other.isLoading, isLoading) ||
+                other.isLoading == isLoading) &&
+            (identical(other.error, error) || other.error == error) &&
             const DeepCollectionEquality()
                 .equals(other._onboardList, _onboardList));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(isLoading),
-      const DeepCollectionEquality().hash(error),
+  int get hashCode => Object.hash(runtimeType, isLoading, error,
       const DeepCollectionEquality().hash(_onboardList));
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_OnboardSuccessCopyWith<_$_OnboardSuccess> get copyWith =>
       __$$_OnboardSuccessCopyWithImpl<_$_OnboardSuccess>(this, _$identity);
 
@@ -631,8 +630,8 @@ class _$_OnboardSuccess implements _OnboardSuccess {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(bool isLoading, Exception? error)? initial,
-    TResult Function(
+    TResult? Function(bool isLoading, Exception? error)? initial,
+    TResult? Function(
             bool isLoading, Exception? error, List<WizardModel> onboardList)?
         success,
   }) {
@@ -666,8 +665,8 @@ class _$_OnboardSuccess implements _OnboardSuccess {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_OnboardSuccess value)? success,
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_OnboardSuccess value)? success,
   }) {
     return success?.call(this);
   }

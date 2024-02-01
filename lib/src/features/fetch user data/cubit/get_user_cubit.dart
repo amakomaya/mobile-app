@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:aamako_maya/src/features/authentication/local_storage/authentication_local_storage.dart';
-import 'package:aamako_maya/src/features/authentication/model/user_model.dart';
-import 'package:aamako_maya/src/features/symptoms/cubit/symptoms_cubit.dart';
+import 'package:Amakomaya/src/features/authentication/local_storage/authentication_local_storage.dart';
+import 'package:Amakomaya/src/features/authentication/model/user_model.dart';
+import 'package:Amakomaya/src/features/symptoms/cubit/symptoms_cubit.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
@@ -30,13 +30,13 @@ class GetUserCubit extends Cubit<GetUserState> {
   // }
     void getUserData() async {
       var token = await local.getTokenFromocal();
-      final response = prefs.getString('user_data');
-    if (response != null) {
-      final userData = jsonDecode(response);
-      final data = UserModel.fromJson(userData);
-      userModelData = data;
-      emit(GetUserSuccess(data));
-    } else {
+      // final response = prefs.getString('user_data');
+    // if (response != null) {
+    //   final userData = jsonDecode(response);
+    //   final data = UserModel.fromJson(userData);
+    //   userModelData = data;
+    //   emit(GetUserSuccess(data));
+    // } else {
       try {
         final response = await dio.get("${Urls.profileUrl}",
             options: Options(
@@ -53,7 +53,7 @@ class GetUserCubit extends Cubit<GetUserState> {
       } on DioError catch (_) {
         emit(GetUserFailure());
       }
-    }
+    // }
   }
 
   Future<void> postUserData(
@@ -65,6 +65,7 @@ class GetUserCubit extends Cubit<GetUserState> {
       required String municipalityName,
       required String provinceName,
       required String wardno,
+      required String dobChild,
       required String tole,
       required String mobile_number,
       required String heightIncm,
@@ -77,6 +78,7 @@ class GetUserCubit extends Cubit<GetUserState> {
     var body = {
       "name": name,
       "age": age,
+      "dobChild": dobChild,
       "lmp_date_np": lmp_date,
       "district_name": districtName,
       "municipality_name": municipalityName,
@@ -105,7 +107,7 @@ class GetUserCubit extends Cubit<GetUserState> {
         throw ApiException(response.data.toString());
       }
     } on DioError catch (e) {
-      throw ApiException(e.message);
+      throw ApiException(e.message ?? "");
     }
   }
 }

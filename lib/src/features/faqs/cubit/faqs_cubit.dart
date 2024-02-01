@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:aamako_maya/src/core/network_services/urls.dart';
-import 'package:aamako_maya/src/features/faqs/model/faqs_model.dart';
+import 'package:Amakomaya/src/core/network_services/urls.dart';
+import 'package:Amakomaya/src/features/faqs/model/faqs_model.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';

@@ -1,4 +1,4 @@
-import 'package:aamako_maya/src/features/authentication/model/municipality_district_model.dart';
+import 'package:Amakomaya/src/features/authentication/model/municipality_district_model.dart';
 import 'package:bloc/bloc.dart';
 
 

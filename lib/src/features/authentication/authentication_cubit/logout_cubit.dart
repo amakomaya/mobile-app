@@ -35,6 +35,7 @@ class LoggedOutCubit extends Cubit<LoggedOutState> {
         prefs.remove("medication_info_data");
         prefs.remove("symptoms_history");
         prefs.remove("user_data");
+        prefs.remove("user_mode");
 
       emit(const LoggedOutState(true, false));
     } catch (e) {

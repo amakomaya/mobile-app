@@ -1,11 +1,11 @@
-import 'package:aamako_maya/src/core/padding/padding.dart';
-import 'package:aamako_maya/src/core/theme/app_colors.dart';
-import 'package:aamako_maya/src/core/widgets/helper_widgets/blank_space.dart';
-import 'package:aamako_maya/src/core/widgets/helper_widgets/shadow_container.dart';
-import 'package:aamako_maya/src/core/widgets/loading_shimmer/shimmer_loading.dart';
-import 'package:aamako_maya/src/features/video/cubit/video_cubit.dart';
-import 'package:aamako_maya/src/features/video/model/video_model.dart';
-import 'package:aamako_maya/src/features/video/screens/video_playing_page.dart';
+import 'package:Amakomaya/src/core/padding/padding.dart';
+import 'package:Amakomaya/src/core/theme/app_colors.dart';
+import 'package:Amakomaya/src/core/widgets/helper_widgets/blank_space.dart';
+import 'package:Amakomaya/src/core/widgets/helper_widgets/shadow_container.dart';
+import 'package:Amakomaya/src/core/widgets/loading_shimmer/shimmer_loading.dart';
+import 'package:Amakomaya/src/features/video/cubit/video_cubit.dart';
+import 'package:Amakomaya/src/features/video/model/video_model.dart';
+import 'package:Amakomaya/src/features/video/screens/video_playing_page.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -29,73 +29,79 @@ class VideoPage extends StatefulWidget {
 }
 
 class _VideoPageState extends State<VideoPage> {
-
-  checkInternet()async{
+  checkInternet(BuildContext ct) async {
     if (await sl<NetworkInfo>().isConnected) {
-      context.read<VideoCubit>().getVideos(true);
     } else {
-      context.read<VideoCubit>().getVideos(false);
-      BotToast.showText(
-          text: LocaleKeys.no_internet_connection.tr());
+      ct.read<VideoCubit>().getVideos(false);
+      BotToast.showText(text: LocaleKeys.no_internet_connection.tr());
     }
   }
 
   @override
   void initState() {
-    checkInternet();
+    // checkInternet();
     super.initState();
   }
-
-
 
   @override
   void dispose() {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
-
-    return BlocConsumer<VideoCubit, VideoState>(
-      listener: (context, state) {
-        // if (state is VideoSuccessState && state.isRefreshed) {
-        //   BotToast.showText(text: LocaleKeys.msg_video_fetch_success.tr());
-        // }
-      },
-      builder: (ct, st) {
-        if (st is VideoLoadingState) {
-          return ShimmerLoading(boxHeight: 200.h, itemCount: 4);
-        } else if (st is VideoSuccessState) {
-          final bool isEnglish =
-              EasyLocalization.of(context)?.currentLocale?.languageCode == 'en';
-              return VideoListPage(
-                isEnglish: isEnglish,
-                list: st.data,
-              );
-        } else {
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(LocaleKeys.error_msg_someting_went_wrong.tr()),
-              IconButton(
-                  onPressed: () async {
-                    if (await sl<NetworkInfo>().isConnected) {
-                      context.read<VideoCubit>().getVideos(true);
-                    } else {
-                      BotToast.showText(
-                          text: LocaleKeys.no_internet_connection.tr());
-                    }
-                  },
-                  icon: Icon(
-                    Icons.refresh,
-                    size: 22.sm,
-                    color: Colors.black,
-                  ))
-            ],
-          );
-        }
-      },
+    return BlocProvider(
+      create: (context) => sl<VideoCubit>()..getVideos(true),
+      child: BlocConsumer<VideoCubit, VideoState>(
+        listener: (context, state) {
+          // if (state is VideoSuccessState && state.isRefreshed) {
+          //   BotToast.showText(text: LocaleKeys.msg_video_fetch_success.tr());
+          // }
+        },
+        builder: (ct, st) {
+          checkInternet(ct);
+          if (st is VideoLoadingState) {
+            return Center(
+              child: CircularProgressIndicator(
+                color: Colors.red,
+              ),
+            );
+          } else if (st is VideoSuccessState) {
+            final bool isEnglish =
+                EasyLocalization.of(context)?.currentLocale?.languageCode ==
+                    'en';
+            return VideoListPage(
+              isEnglish: isEnglish,
+              list: st.data,
+            );
+          } else if(st is VideoFailureState) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(LocaleKeys.error_msg_someting_went_wrong.tr()),
+                IconButton(
+                    onPressed: () async {
+                      if (await sl<NetworkInfo>().isConnected) {
+                        ct.read<VideoCubit>().getVideos(true);
+                      } else {
+                        ct.read<VideoCubit>().getVideos(false);
+                        BotToast.showText(
+                            text: LocaleKeys.no_internet_connection.tr());
+                      }
+                    },
+                    icon: Icon(
+                      Icons.refresh,
+                      size: 22.sm,
+                      color: Colors.black,
+                    ))
+              ],
+            );
+          }
+          else{
+            return SizedBox();
+          }
+        },
+      ),
     );
   }
 }

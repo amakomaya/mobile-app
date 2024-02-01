@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:aamako_maya/src/core/network_services/urls.dart';
-import 'package:aamako_maya/src/features/video/model/video_model.dart';
-import 'package:aamako_maya/src/features/weekly_tips/model/weekly_tips_model.dart';
+import 'package:Amakomaya/src/core/network_services/urls.dart';
+import 'package:Amakomaya/src/features/video/model/video_model.dart';
+import 'package:Amakomaya/src/features/weekly_tips/model/weekly_tips_model.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

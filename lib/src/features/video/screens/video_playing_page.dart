@@ -1,6 +1,6 @@
-import 'package:aamako_maya/src/core/padding/padding.dart';
-import 'package:aamako_maya/src/core/theme/app_colors.dart';
-import 'package:aamako_maya/src/features/video/model/video_model.dart';
+import 'package:Amakomaya/src/core/padding/padding.dart';
+import 'package:Amakomaya/src/core/theme/app_colors.dart';
+import 'package:Amakomaya/src/features/video/model/video_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/cupertino.dart';

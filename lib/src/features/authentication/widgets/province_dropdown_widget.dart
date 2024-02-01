@@ -1,17 +1,19 @@
 
 import 'dart:convert';
 
-import 'package:aamako_maya/l10n/locale_keys.g.dart';
-import 'package:aamako_maya/src/core/widgets/textfield/primary_textfield.dart';
-import 'package:aamako_maya/src/features/authentication/model/municipality_district_model.dart';
+import 'package:Amakomaya/l10n/locale_keys.g.dart';
+import 'package:Amakomaya/src/core/widgets/textfield/primary_textfield.dart';
+import 'package:Amakomaya/src/features/authentication/model/municipality_district_model.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../injection_container.dart';
 import '../../../core/padding/padding.dart';
 import '../../../core/widgets/helper_widgets/shadow_container.dart';
+import '../cubit/district_municipality_cubit.dart';
 import '../cubit/toggle_district_municipality.dart';
 
 
@@ -43,7 +45,7 @@ class _ProvinceDropDownListWidgetState
     extends State<ProvinceDropDownListWidget> {
   List<ProvinceModel> province = [];
 
-  void getDistrict() async {
+  void getProvice() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final response = prefs.getString('province');
     if (response != null) {
@@ -53,10 +55,9 @@ class _ProvinceDropDownListWidgetState
       province = data;
     }
   }
-
   @override
   void initState() {
-    getDistrict();
+    getProvice();
     super.initState();
   }
 

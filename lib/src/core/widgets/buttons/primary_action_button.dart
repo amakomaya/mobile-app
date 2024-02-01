@@ -1,6 +1,7 @@
-import 'package:aamako_maya/src/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../theme/app_colors.dart';
 
 class PrimaryActionButton extends StatelessWidget {
   final VoidCallback onpress;
@@ -47,6 +48,7 @@ class PrimaryActionButton extends StatelessWidget {
                       style: Theme.of(context).textTheme.labelSmall!.copyWith(
                           fontSize: 18.sm,
                           color: AppColors.white,
+                          letterSpacing: 0.0,
                           fontWeight: FontWeight.w600),
                     ),
                   ),

@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:aamako_maya/src/core/connection_checker/network_connection.dart';
-import 'package:aamako_maya/src/features/weekly_tips/model/weekly_tips_model.dart';
-import 'package:aamako_maya/src/features/weekly_tips/repository/weekly_tips_repository.dart';
+import 'package:Amakomaya/src/core/connection_checker/network_connection.dart';
+import 'package:Amakomaya/src/features/weekly_tips/model/weekly_tips_model.dart';
+import 'package:Amakomaya/src/features/weekly_tips/repository/weekly_tips_repository.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,13 +28,13 @@ class WeeklyTipsCubit extends Cubit<WeeklyTipsState> {
         super(WeeklyTipsInitial());
 
   void getWeeklyTips(bool isRefreshed) async {
-  
+    emit(WeeklyTipsLoading());
     final response = _prefs.getString('weeklyTips');
     if (response != null && isRefreshed == false) {
       final weekly = jsonDecode(response) as List;
       final List<WeeklyTips> data =
           weekly.map((json) => WeeklyTips.fromJson(json)).toList();
-      emit(WeeklyTipsSucces(data,isRefreshed));
+      emit(WeeklyTipsSucces(data, isRefreshed));
     } else {
       try {
         final List<WeeklyTips> response = await _repo.getWeeklyTips();
@@ -57,7 +57,9 @@ class WeeklyTipsLoading extends WeeklyTipsState {
 class WeeklyTipsSucces extends WeeklyTipsState {
   final List<WeeklyTips> data;
   final bool isRefreshed;
+
   WeeklyTipsSucces(this.data, this.isRefreshed);
+
   @override
   List<Object?> get props => [data];
 }
@@ -66,6 +68,7 @@ class WeeklyTipsFailure extends WeeklyTipsState {
   @override
   List<Object?> get props => [];
 }
+
 class WeeklyTipsInitial extends WeeklyTipsState {
   @override
   List<Object?> get props => [];

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:aamako_maya/src/core/network_services/urls.dart';
+import 'package:Amakomaya/src/core/network_services/urls.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
